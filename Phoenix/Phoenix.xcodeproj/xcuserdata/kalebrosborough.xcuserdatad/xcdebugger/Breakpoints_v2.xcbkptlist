@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "942BF785-6154-4067-BA89-77CA40DCAF77"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "66F595F7-4108-42C3-BF0D-B60CA21485CB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "_NSLayoutConstraintNumberExceedsLimit"
+            moduleName = "">
+            <Locations>
+               <Location
+                  uuid = "66F595F7-4108-42C3-BF0D-B60CA21485CB - d44ad8ed906fe1bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_NSLayoutConstraintNumberExceedsLimit"
+                  moduleName = "CoreAutoLayout"
+                  usesParentBreakpointCondition = "Yes"
+                  offsetFromSymbolStart = "0">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
