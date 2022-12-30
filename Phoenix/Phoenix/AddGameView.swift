@@ -173,8 +173,8 @@ struct AddGameView: View {
                 HStack {
                     Text("Genre")
                         .frame(width: 87, alignment: .leading)
-                    TextField("Action\\nAdventure\\nRPG", text: $genreInput)
-                    Text("A list of 3 genres that describe this game. Please separate with \\n so that formatting works on the game's detail page")
+                    TextEditor(text: $genreInput)
+                    Text("A list of 3 genres that describe this game. Please write each genre on a new line")
                         .frame(width: 290)
                 }
             }
@@ -203,9 +203,6 @@ struct AddGameView: View {
             .padding()
             
             Button(action: {
-                if iconOutput == "" {
-                    iconOutput = "PlaceholderIcon"
-                }
                 
                 let dateFormatter: DateFormatter = {
                     let formatter = DateFormatter()

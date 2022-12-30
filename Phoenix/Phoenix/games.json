@@ -1,173 +1,21 @@
 {
-    "games": [{
-        "name": "AM2R",
-        "icon": "AM2R_Icon",
-        "platform": "MAC",
-        "launcher": "open /Users/kalebrosborough/Applications/AM2R.app",
-        "metadata": {
-            "description": "AM2R, short for Another Metroid 2 Remake, is an action-adventure video game developed by Milton Guasti under the pseudonym DoctorM64, and released in August 2016 for Microsoft Windows, coinciding with the 30th anniversary of the Metroid series. It is an unofficial, enhanced remake of Nintendo's Game Boy game Metroid II: Return of Samus (1991), borrowing the art style and overall feeling of the Game Boy Advance game Metroid: Zero Mission (2004). Shortly after the game's release, Nintendo sent DMCA notices to websites hosting AM2R; download links to the game were removed from its official website, but Guasti said that he still planned to continue working on the game privately. In September 2016, Guasti ended the development of AM2R after he received a DMCA takedown request from Nintendo.",
-            "header_img": "AM2R",
-            "time_played": "51 Hours",
-            "last_played": "Yesterday",
-            "rating": "9 / 10",
-            "genre": "Metroidvania\nAdventure\nPlatformer",
-            "developer": "DoctorM64",
-            "publisher": "DoctorM64",
-            "release_date": "August 6, 2016"
-        }
-    },
+    "games": [
         {
-            "name": "Minecraft",
-            "icon": "Minecraft_Icon",
-            "platform": "MAC",
-            "launcher": "open /Applications/Minecraft.app",
-            "metadata": {
-                "description": "Minecraft focuses on allowing the player to explore, interact with, and modify a dynamically-generated map made of one-cubic-meter-sized blocks. In addition to blocks, the environment features plants, mobs, and items. Some activities in the game include mining for ore, fighting hostile mobs, and crafting new blocks and tools by gathering various resources found in the game. The game's open-ended model allows players to create structures, creations, and artwork on various multiplayer servers or their single-player maps. Other features include redstone circuits for logic computations and remote actions, minecarts and tracks, and a mysterious underworld called the Nether. A designated but completely optional goal of the game is to travel to a dimension called the End, and defeat the ender dragon.",
-                "header_img": "MC",
-                "time_played": "113 Hours",
-                "last_played": "November 16, 2022",
-                "rating": "9 / 10",
-                "genre": "Sandbox\nAdventure\nSimulator",
-                "developer": "Mojang Studios",
-                "publisher": "Mojang Studios",
-                "release_date": "November 18, 2011"
-            }
-        },
-        {
-            "name": "Dead Cells",
-            "icon": "DeadCells_Icon",
-            "platform": "STEAM",
-            "launcher": "open steam://run/588650",
-            "metadata": {
-                "description": "Dead Cells is a rogue-lite, metroidvania inspired, action-platformer. You'll explore a sprawling, ever-changing castle... assuming you’re able to fight your way past its keepers in 2D souls-lite combat. No checkpoints. Kill, die, learn, repeat.",
-                "header_img": "DC",
-                "time_played": "13 Hours",
-                "last_played": "November 30, 2022",
-                "rating": "8.5 / 10",
-                "genre": "Roguelike\nMetroidvania\nSouls-like",
-                "developer": "Evil Empire",
-                "publisher": "Motion Twin",
-                "release_date": "August 6, 2018"
-            }
-        },
-        {
-            "name": "Hades",
-            "icon": "Hades_Icon",
-            "platform": "STEAM",
-            "launcher": "open steam://run/1145360",
-            "metadata": {
-                "description": "A rogue-lite hack and slash dungeon crawler in which Zagreus, son of Hades the Greek god of the dead, attempts to escape his home and his oppressive father by fighting the souls of the dead through the various layers of the ever-shifting underworld, while getting to know and forging relationships with its inhabitants.",
-                "header_img": "HD",
-                "time_played": "13 Hours",
-                "last_played": "Today",
-                "rating": "9.0 / 10",
-                "genre": "Rogue-like\nAction\nRPG",
-                "developer": "Supergiant Games",
-                "publisher": "Supergiant Games",
-                "release_date": "December 10, 2019"
-            }
-        },
-        {
-            "name": "Hollow Knight",
-            "icon": "HollowKnight_Icon",
-            "platform": "STEAM",
-            "launcher": "open steam://run/367520",
-            "metadata": {
-                "description": "Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes. Explore twisting caverns, battle tainted creatures and befriend bizarre bugs, all in a classic, hand-drawn 2D style.\n\nA 2D metroidvania with an emphasis on close combat and exploration in which the player enters the once-prosperous now-bleak insect kingdom of Hallownest, travels through its various districts, meets friendly inhabitants, fights hostile ones and uncovers the kingdom's history while improving their combat abilities and movement arsenal by fighting bosses and accessing out-of-the-way areas.",
-                "header_img": "HK",
-                "time_played": "43 Hours",
-                "last_played": "Today",
-                "rating": "9.5 / 10",
-                "genre": "Metroidvania\nSouls-like\nAdventure",
-                "developer": "Team Cherry",
-                "publisher": "Team Cherry",
-                "release_date": "February 24, 2017"
-            }
-        },
-        {
-            "name": "Muck",
-            "icon": "Muck_Icon",
-            "platform": "STEAM",
-            "launcher": "open steam://run/1625450",
-            "metadata": {
-                "description": "Muck is a survival-roguelike. Collect resources, find items & build a base to survive for as long as you can.",
-                "header_img": "MUCK",
-                "time_played": "21 Hours",
-                "last_played": "October 25, 2022",
-                "rating": "6.5 / 10",
-                "genre": "Roguelike\nSurvival\nIndie",
-                "developer": "Dani",
-                "publisher": "Dani",
-                "release_date": "June 4, 2021"
-            }
-        },
-        {
-            "name": "Terraria",
-            "icon": "Terraria_Icon",
-            "platform": "STEAM",
-            "launcher": "open steam://run/105600",
-            "metadata": {
-                "description": "Dig, Fight, Explore, Build: The very world is at your fingertips as you fight for survival, fortune, and glory. Will you delve deep into cavernous expanses in search of treasure and raw materials with which to craft ever-evolving gear, machinery, and aesthetics? Perhaps you will choose instead to seek out ever-greater foes to test your mettle in combat? Maybe you will decide to construct your own city to house the host of mysterious allies you may encounter along your travels? In the World of Terraria, the choice is yours!",
-                "header_img": "TERA",
-                "time_played": "8 Hours",
-                "last_played": "October 28, 2022",
-                "rating": "8 / 10",
-                "genre": "Adventure\nSurvival\nRPG",
-                "developer": "Re-Logic",
-                "publisher": "Re-Logic",
-                "release_date": "May 16, 2011"
-            }
-        },
-        {
-            "name": "Metroid Dread",
-            "icon": "Ryujinx_Icon",
-            "platform": "EMUL",
             "launcher": "",
             "metadata": {
-                "description": "Join intergalactic bounty hunter Samus Aran in her first new 2D Metroid story in 19 years. Samus’ story continues after the events of the Metroid Fusion game when she descends upon planet ZDR to investigate a mysterious transmission sent to the Galactic Federation. The remote planet has become overrun by vicious alien lifeforms and chilling mechanical menaces. Samus is more agile and capable than ever, but can she overcome the inhuman threat stalking the depths of ZDR?",
-                "header_img": "MD",
-                "time_played": "210 Hours",
-                "last_played": "December 15, 2022",
-                "rating": "10 / 10",
-                "genre": "Metroidvania\nHorror\nPlatformer",
-                "developer": "Mercury Steam",
-                "publisher": "Nintendo",
-                "release_date": "October 7, 2021"
-            }
-        },
-        {
-            "name": "The Legend of Zelda: Breath of the Wild",
-            "icon": "Cemu_Icon",
-            "platform": "EMUL",
-            "launcher": "",
-            "metadata": {
-                "description": "In this 3D open-world entry in the Zelda series, Link is awakened from a deep slumber without his past memories in the post-apocalyptic Kingdom of Hyrule, and sets off on a journey to defeat the ancient evil Calamity Ganon. Link treks, climbs and glides through fields, forests and mountain ranges while meeting and helping friendly folk and defeating enemies in order to gather up the strength to face Ganon.",
-                "header_img": "BOTW",
-                "time_played": "225 Hours",
-                "last_played": "October 23, 2022",
-                "rating": "10 / 10",
-                "genre": "Adventure\nRPG\nOpen World",
-                "developer": "Nintendo",
-                "publisher": "Nintendo",
-                "release_date": "March 3, 2017"
-            }
-        },
-        {
-            "name": "Castlevania: Symphony of the Night",
-            "icon": "OpenEmu_Icon",
-            "platform": "EMUL",
-            "launcher": "",
-            "metadata": {
-                "description": "A seminal 2D metroidvania in which after the events of Castlevania: Rondo of Blood (1993), a man named Alucard arrives at Dracula's castle after it rises from the rubble, and seeks to defeat the evil contained within it once and for all by exploring, fighting its inhabitants and collecting the various weapons and abilities hidden in its depths.",
-                "header_img": "SOTN",
-                "time_played": "5 Hours",
-                "last_played": "September 23, 2022",
-                "rating": "8 / 10",
-                "genre": "Metroidvania\nAdventure\nRPG",
-                "developer": "Konami",
-                "publisher": "Konami",
-                "release_date": "March 20, 1997"
-            }
+                "rating": "",
+                "release_date": "",
+                "time_played": "",
+                "last_played": "",
+                "developer": "",
+                "header_img": "",
+                "description": "",
+                "genre": "",
+                "publisher": ""
+            },
+            "icon": "",
+            "name": "Placeholder Game",
+            "platform": "NONE"
         }
     ]
 }
