@@ -1,14 +1,14 @@
-<h1 align="center">
+
+<p align="center">
   <br>
   <img src="Readme Images/Icon.png" alt="Phoenix app icon" width="100" height="100"/>
   <br>
-  <b>Phoenix Game Launcher</b>
+  <h1>Phoenix Game Launcher</h1>
+
+  Phoenix is an open-source game launcher for MacOS, created by Shock9616, written in SwiftUI. This launcher was inspired by projects like [Playnite](playnite.link) and [Lutris](lutris.net), and supports any game which can be launched from the command line. (So basically all of them!) It was designed to be small, fast, and not overly complicated. Phoenix is available on GitHub under the [MIT license](License.txt)
   <br>
-</h1>
-
-Phoenix is an open-source game launcher for MacOS, created by Shock9616, written in SwiftUI. This launcher was inspired by projects like [Playnite](playnite.link) and [Lutris](lutris.net), and supports any game which can be launched from the command line. (So basically all of them!) It was designed to be small, fast, and not overly complicated. Phoenix is available on GitHub under the [MIT license](License.txt)
-
-<img src="Readme Images/Screenshot1.png" alt="Screenshot of the app" width="800"/>
+  <img src="Readme Images/Screenshot1.png" alt="Screenshot of the app" width="800"/>
+</p>
 
 ## Compatibility
 
