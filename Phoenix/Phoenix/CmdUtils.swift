@@ -7,8 +7,8 @@
 
 import Foundation
 
-@discardableResult // Add to suppress warnings when you don't want/need a result
-func shell(_ command: String) throws -> String {
+//@discardableResult // Add to suppress warnings when you don't want/need a result
+func shell(_ command: String) throws {
     let task = Process()
     let pipe = Pipe()
     
@@ -20,8 +20,8 @@ func shell(_ command: String) throws -> String {
     
     try task.run()
     
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output = String(data: data, encoding: .utf8)!
-    
-    return output
+    pipe.fileHandleForReading.readabilityHandler = { fileHandle in
+        guard let line = String(data: fileHandle.availableData, encoding: .utf8) else { return }
+        print(line, terminator: "")
+    }
 }

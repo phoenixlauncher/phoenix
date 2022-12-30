@@ -16,7 +16,7 @@ struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @State var selectedGame: String?
     @State var refresh: Bool = false
-    @State private var addingGame: Bool = false
+    @State private var isAddingGame: Bool = false
 
     // The stuff that is actually on screen
     var body: some View {
@@ -26,13 +26,13 @@ struct ContentView: View {
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button(action: {
-                            addingGame.toggle()
+                            self.isAddingGame.toggle()
                         }, label: {
                             Label("New Game", systemImage: "plus")
                         })
-                        .sheet(isPresented: $addingGame, onDismiss: {
+                        .sheet(isPresented: $isAddingGame, onDismiss: {
                             // Refresh game list
-                            refresh.toggle()
+                            self.refresh.toggle()
                         }, content: {
                             AddGameView()
                         })
