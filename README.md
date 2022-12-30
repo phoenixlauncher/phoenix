@@ -7,7 +7,7 @@ ____
 
 Phoenix is an open-source game launcher for MacOS, created by Shock9616, written in SwiftUI. This launcher was inspired by projects like [Playnite](playnite.link) and [Lutris](lutris.net), and supports any game which can be launched from the command line. (So basically all of them!) It was designed to be small, fast, and not overly complicated. Phoenix is available on GitHub under the [MIT license](License.txt)
 
-![Screenshot of the app](Readme%20Images/Screenshot1.png)
+<img src="Readme Images/Screenshot1.png" alt="Screenshot of the app" width="800"/>
 
 ## Compatibility
 
@@ -19,7 +19,7 @@ To run this launcher, your Mac must be on at least MacOS 13.0 (Ventura). I did m
 
 Download the [latest release]() from the releases page. When you open the app, it will look like this:
 
-![Screenshot of the first time opening the app](Readme%20Images/Screenshot2.png)
+<img src="Readme Images/Screenshot2.png" alt="Screenshot of the first time opening the app" width="800"/>
 
 You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can. To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. (The above screenshot doesn't look very nice does it? 😅) Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the gear button on the right hand side of the window. When editing, leave everything at its default value except for the information you intend to change. 
 
