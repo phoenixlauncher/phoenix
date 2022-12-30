@@ -104,6 +104,10 @@ git clone git@github.com:Shock9616/Phoenix.git
 
 then open `Phoenix.xcodeproj` in Xcode. You can create a `.app` file by going to `Product > Archive` in the menu bar, clicking `Distribute App`, selecting `Copy App` and then saving the folder somewhere easy to find like your desktop. The app will be inside the folder and you can copy it into your applications folder and begin using it!
 
+## Updates
+
+If you want to be notified when new updates are released here, make sure you "watch" this repository at the top of the page. You can be notified of only new releases by clicking the arrow next to the button, selecting "Custom", and then selecting "Releases" and then "Apply"
+
 ## Contact
 
 For now, if you need to contact me for anything, you can email me at shock9616@gmail.com. If this project really takes off I will make a Discord server and update this section of the readme 🙂
