@@ -18,7 +18,7 @@ Phoenix is compatible with just about any game that can be run on MacOS as games
 
 To run this launcher, your Mac must be on at least MacOS 13.0 (Ventura). I did my best to make it compatible with Monterey, but with my very limited knowledge of Swift/SwiftUI I wasn't able to make it work without code that only works on MacOS 13. This may change in the future though as the launcher matures so if you aren't able to/haven't upgraded yet, not all hope is lost!
 
-Download the [latest release]() from the releases page and install the app like you would with any other. The first time you open the app, you will get an alert saying that your Mac can't check the app for Malicious software. This is because I'm a broke university student who can't afford an Apple Developer Program membership. I promise it's safe. Close the alert, right click the app in Finder, and select "open" from the menu. You'll get the same alert, but this time there will be an option to open anyways. When you open the app, it will look like this:
+Download the [latest release](https://github.com/Shock9616/Phoenix/releases) from the releases page and install the app like you would with any other. The first time you open the app, you will get an alert saying that your Mac can't check the app for Malicious software. This is because I'm a broke university student who can't afford an Apple Developer Program membership. I promise it's safe. Close the alert, right click the app in Finder, and select "open" from the menu. You'll get the same alert, but this time there will be an option to open anyways. When you open the app, it will look like this:
 
 <img src="Readme Images/Screenshot2.png" alt="Screenshot of the first time opening the app" width="800"/>
 
