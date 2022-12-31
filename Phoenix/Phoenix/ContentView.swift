@@ -46,6 +46,7 @@ struct ContentView: View {
             // Refresh detail view
             Text(String(refresh))
                 .hidden()
+            getGameNames()
         }
     }
 }
