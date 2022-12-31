@@ -10,7 +10,7 @@ import SwiftUI
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
 
-var games = loadGamesFromJSON().games.sorted()
+var games = loadGames().games.sorted()
 
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
@@ -43,7 +43,6 @@ struct ContentView: View {
             GameDetailView(selectedGame: $selectedGame, refresh: $refresh)
             Text(String(refresh))
                 .hidden()
-            getGameNames()
         }
     }
 }

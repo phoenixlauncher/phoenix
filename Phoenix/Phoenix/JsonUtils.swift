@@ -37,10 +37,9 @@ func parseACFFile(data: Data) -> [String: String] {
     return dict
 }
 
-func getGameNames() -> some View {
+func getGameNames() {
     let fileManager = FileManager.default
     let steamAppsDirectory = URL(fileURLWithPath: "~/Library/Application Support/Steam/steamapps", isDirectory: true)
-    
     // Create an NSOpenPanel instance
     let openPanel = NSOpenPanel()
     openPanel.canChooseFiles = false
@@ -48,12 +47,13 @@ func getGameNames() -> some View {
     openPanel.allowsMultipleSelection = false
     openPanel.directoryURL = steamAppsDirectory
     openPanel.prompt = "Select"
-    
+
     // Show the open panel
     if openPanel.runModal() == .OK {
+        print("inside")
         do {
             let appIDDirectories = try fileManager.contentsOfDirectory(at: openPanel.url!, includingPropertiesForKeys: nil)
-            var gameNames = ""
+            var games = [Game]()
             for appIDDirectory in appIDDirectories {
                 let appID = appIDDirectory.lastPathComponent
                 if appID.hasSuffix(".acf") {
@@ -61,32 +61,37 @@ func getGameNames() -> some View {
                     let manifestFileData = try Data(contentsOf: manifestFilePath)
                     let manifestDictionary = parseACFFile(data: manifestFileData)
                     if let appName = manifestDictionary["name"] {
-                        gameNames += appName + "\n"
+                        let game = Game(name: appName)
+                        games.append(game)
                     }
                 }
             }
-            print("gameNames:")
-            print(gameNames)
-            return Text(gameNames)
+            print(games)
+            let gamesList = GamesList(games: games)
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(gamesList) {
+                if let jsonString = String(data: encoded, encoding: .utf8) {
+                    writeGamesToJSON(data: jsonString)
+                }
+            }
         } catch {
             print("Error: Failed to read SteamApps directory at \(openPanel.url!)")
-            return Text("Error: Failed to read SteamApps directory")
         }
     } else {
-        return Text("Access denied")
+        print("Access denied")
     }
 }
-
-func loadGamesFromJSON() -> GamesList {
-    let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
-    // log to console the path to the file
-    print("Loading games from: \(url.path)")
     
-    var games: GamesList?
+    func loadGamesFromJSON() -> GamesList {
+        let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
+        // log to console the path to the file
+        print("Loading games from: \(url.path)")
+        
+        var games: GamesList?
         do {
             let jsonData = try Data(contentsOf: url)
             games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-    
+            
             return games ?? GamesList(games: [])
         } catch {
             print("Couldn't find games.json. Creating new one.")
@@ -108,52 +113,52 @@ func loadGamesFromJSON() -> GamesList {
                 print("Couldn't read from new 'games.json'")
             }
         }
-    
+        
         return GamesList(games: [])
-}
-
-func writeGamesToJSON(data: String) {
-    // If .../Application Support/Phoenix directory exists
-    if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", isDirectory: true).path) {
-        // If .../Application Support/Phoenix/games.json file exists
-        if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path) {
-            let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
-            do {
-                try data.write(to: url, atomically: true, encoding: .utf8)
-            } catch {
-                print("Could not write data to 'games.json'")
-            }
-        // If .../Application Support/Phoenix/games.json file DOESN'T exist
-        } else {
-            if FileManager.default.createFile(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path, contents: Data(data.utf8)) {
-                print("'games.json' created successfully.")
+    }
+    
+    func writeGamesToJSON(data: String) {
+        // If .../Application Support/Phoenix directory exists
+        if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", isDirectory: true).path) {
+            // If .../Application Support/Phoenix/games.json file exists
+            if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path) {
+                let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
+                do {
+                    try data.write(to: url, atomically: true, encoding: .utf8)
+                } catch {
+                    print("Could not write data to 'games.json'")
+                }
+                // If .../Application Support/Phoenix/games.json file DOESN'T exist
             } else {
-                print("'games.json' not created.")
+                if FileManager.default.createFile(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path, contents: Data(data.utf8)) {
+                    print("'games.json' created successfully.")
+                } else {
+                    print("'games.json' not created.")
+                }
             }
-        }
-        // If .../Application Support/Phoenix/cachedImages DOESN'T exist
-        if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/cachedImages", isDirectory: true).path) {
+            // If .../Application Support/Phoenix/cachedImages DOESN'T exist
+            if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/cachedImages", isDirectory: true).path) {
+                do {
+                    try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", conformingTo: .directory).path, withIntermediateDirectories: true)
+                } catch {
+                    print("Could not create directory")
+                }
+            }
+            // If .../Application Support/Phoenix directory DOESN'T exist
+        } else {
             do {
                 try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", conformingTo: .directory).path, withIntermediateDirectories: true)
+                try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/cachedImages", conformingTo: .directory).path, withIntermediateDirectories: true)
+                
+                if FileManager.default.createFile(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path, contents: Data(data.utf8)) {
+                    print("'games.json' created successfully.")
+                } else {
+                    print("'File' not created.")
+                }
             } catch {
                 print("Could not create directory")
             }
         }
-    // If .../Application Support/Phoenix directory DOESN'T exist
-    } else {
-        do {
-            try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", conformingTo: .directory).path, withIntermediateDirectories: true)
-            try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/cachedImages", conformingTo: .directory).path, withIntermediateDirectories: true)
-            
-            if FileManager.default.createFile(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path, contents: Data(data.utf8)) {
-                print("'games.json' created successfully.")
-            } else {
-                print("'File' not created.")
-            }
-        } catch {
-            print("Could not create directory")
-        }
+        
+        
     }
-    
-    
-}

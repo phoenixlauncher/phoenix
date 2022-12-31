@@ -57,3 +57,9 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
 
     return false
 }
+
+func loadGames() -> GamesList {
+    getGameNames()
+    let res = loadGamesFromJSON()
+    return res
+}
