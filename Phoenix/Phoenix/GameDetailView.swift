@@ -8,18 +8,31 @@
 import SwiftUI
 
 struct GameDetailView: View {
-    private func loadImageFromFile(filePath: String) -> NSImage? {
+    // TODO: make single loadImageFromFile() function to use here and in GameListView
+    /**
+     Loads an image from the file at the given file path.
+     
+     If the file at the given file path does not exist or there is an error
+     reading from the file, a placeholder image is returned.
+     
+     - Parameters:
+        - filePath: The file path of the image to load.
+     
+     - Returns: The image at the given file path, or a placeholder image if the
+                file could not be loaded.
+     */
+    private func loadImageFromFile(filePath: String) -> NSImage {
         do {
             if filePath != "" {
                 let imageData = try Data(contentsOf: URL(string: filePath)!)
-                return NSImage(data: imageData)
+                return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderHeader")
             } else {
-                return nil
+                return NSImage(imageLiteralResourceName: "PlaceholderHeader")
             }
         } catch {
             print("Error loading image : \(error)")
         }
-        return nil
+        return NSImage(imageLiteralResourceName: "PlaceholderHeader")
     }
     
     @State var editingGame: Bool = false
@@ -80,7 +93,7 @@ struct GameDetailView: View {
                             .font(.system(size: 24))
                     })
                     .sheet(isPresented: $editingGame, onDismiss: {
-                        // Refresh game list
+                        // Refresh game detail page
                         refresh.toggle()
                     }, content: {
                         let idx = games.firstIndex(where: { $0.name == selectedGame })

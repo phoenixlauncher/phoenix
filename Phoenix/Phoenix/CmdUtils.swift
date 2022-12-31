@@ -7,7 +7,16 @@
 
 import Foundation
 
-//@discardableResult // Add to suppress warnings when you don't want/need a result
+/**
+ Executes a command in the shell and prints the output to the
+ console.
+ 
+ - Parameters:
+    - command: The command to be executed in the shell
+ 
+ - Throws: An error if there was a problem executing the
+ command or reading from the pipe
+ */
 func shell(_ command: String) throws {
     let task = Process()
     let pipe = Pipe()

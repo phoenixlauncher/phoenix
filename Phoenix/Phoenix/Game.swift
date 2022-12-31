@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
     case MAC, STEAM, GOG, EPIC, EMUL, NONE
@@ -24,7 +25,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
     }
 }
 
-struct Game: Codable, Comparable {
+struct Game: Codable, Comparable, Hashable {
     var launcher: String
     var metadata: [String: String]
     var icon: String
@@ -39,6 +40,17 @@ struct Game: Codable, Comparable {
         self.platform = platform
     }
 
+    /**
+     Compares two `Game` objects based on their `name` property.
+     
+     - Parameters:
+        - lhs: The left-hand side of the comparison.
+        - rhs: The right-hand side of the comparison.
+     
+     - Returns: `true` if the `name` property of the left-hand side is
+                lexicographically less than the `name` property of the
+                right-hand side, `false` otherwise.
+     */
     static func < (lhs: Game, rhs: Game) -> Bool {
         lhs.name < rhs.name
     }
@@ -48,7 +60,16 @@ struct GamesList: Codable {
     var games: [Game]
 }
 
+/**
+ Check if the given array of games contains any games for the given platform
+ 
+ - Parameter arr: the array of games to search
+ - Parameter plat: the platform to search for
+ 
+ - Returns: A boolean for whether plat was found
+ */
 func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
+    // Check if arr has any games in it for plat
     for game in arr {
         if game.platform == plat {
             return true

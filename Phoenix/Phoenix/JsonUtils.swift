@@ -7,6 +7,11 @@
 
 import Foundation
 
+/**
+ Returns the URL for the application support directory for the current user.
+ 
+ - Returns: The URL for the application support directory.
+ */
 private func getApplicationSupportDirectory() -> URL {
     // find all possible Application Support directories for this user
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
@@ -15,6 +20,16 @@ private func getApplicationSupportDirectory() -> URL {
     return paths[0]
 }
 
+/**
+ Loads the games data from a JSON file named "games.json" in the "Phoenix"
+ directory under the application support directory.
+ 
+ - Returns: A `GamesList` object containing the games data (Empty if none can be
+            read from "games.json".
+ 
+ - Throws: An error if there was a problem reading from the JSON file or
+           decoding the data.
+ */
 func loadGamesFromJSON() -> GamesList {
     let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
     
@@ -48,6 +63,18 @@ func loadGamesFromJSON() -> GamesList {
         return GamesList(games: [])
 }
 
+/**
+ Writes the given data to a JSON file named "games.json" in the "Phoenix"
+ directory under the application support directory.
+ 
+ - Parameters:
+    - data: The data to write to the JSON file.
+ 
+ - Returns: Void.
+ 
+ - Throws: An error if there was a problem creating the directory or file, or
+           writing to the file.
+ */
 func writeGamesToJSON(data: String) {
     // If .../Application Support/Phoenix directory exists
     if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", isDirectory: true).path) {
