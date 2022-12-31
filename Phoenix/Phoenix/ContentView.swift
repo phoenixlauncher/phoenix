@@ -43,6 +43,7 @@ struct ContentView: View {
             GameDetailView(selectedGame: $selectedGame, refresh: $refresh)
             Text(String(refresh))
                 .hidden()
+            getGameNames()
         }
     }
 }
