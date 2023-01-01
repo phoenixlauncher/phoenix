@@ -47,7 +47,7 @@ func getGameNames() {
     openPanel.allowsMultipleSelection = false
     openPanel.directoryURL = steamAppsDirectory
     openPanel.prompt = "Select"
-
+    
     // Show the open panel
     if openPanel.runModal() == .OK {
         print("inside")
@@ -60,13 +60,30 @@ func getGameNames() {
                     let manifestFilePath = appIDDirectory
                     let manifestFileData = try Data(contentsOf: manifestFilePath)
                     let manifestDictionary = parseACFFile(data: manifestFileData)
-                    if let appName = manifestDictionary["name"] {
-                        let game = Game(name: appName)
-                        games.append(game)
-                    }
+                    let name = manifestDictionary["name"]
+                    let numberedAppID = manifestDictionary["appid"]
+                    let game = Game(
+                        appID: numberedAppID ?? "Unknown",
+                        launcher: "open steam://run/\(numberedAppID ?? "Unknown")",
+                        metadata: [
+                            "rating": "",
+                            "release_date": "",
+                            "time_played": "",
+                            "last_played": "",
+                            "developer": "",
+                            "header_img": "",
+                            "description": "",
+                            "genre": "",
+                            "publisher": ""
+                        ],
+                        icon: "PlaceholderIcon",
+                        name: name ?? "Unknown",
+                        platform: Platform.STEAM
+                    )
+                    print(game)
+                    games.append(game)
                 }
             }
-            print(games)
             let gamesList = GamesList(games: games)
             let encoder = JSONEncoder()
             if let encoded = try? encoder.encode(gamesList) {
@@ -81,7 +98,7 @@ func getGameNames() {
         print("Access denied")
     }
 }
-    
+
     func loadGamesFromJSON() -> GamesList {
         let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
         // log to console the path to the file

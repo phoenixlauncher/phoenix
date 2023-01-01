@@ -25,13 +25,15 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Game: Codable, Comparable {
+    var appID: String
     var launcher: String
     var metadata: [String: String]
     var icon: String
     var name: String
     var platform: Platform
 
-    init(launcher: String = "", metadata: [String: String] = [:], icon: String = "PlaceholderIcon", name: String, platform: Platform = Platform.NONE) {
+    init(appID: String = "", launcher: String = "", metadata: [String: String] = [:], icon: String = "PlaceholderIcon", name: String, platform: Platform = Platform.NONE) {
+        self.appID = appID
         self.launcher = launcher
         self.metadata = metadata
         self.icon = icon
