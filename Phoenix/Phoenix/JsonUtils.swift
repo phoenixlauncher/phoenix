@@ -38,71 +38,96 @@ func parseACFFile(data: Data) -> [String: String] {
 }
 
 func getGameNames() {
+    print("1: start func")
     let fileManager = FileManager.default
     let steamAppsPath = "~/Library/Application Support/Steam/steamapps"
-    let steamAppsDirectory = URL(fileURLWithPath: NSString(string: steamAppsPath).expandingTildeInPath, isDirectory: true)
-    let openPanel = NSOpenPanel()
-    openPanel.canChooseFiles = false
-    openPanel.canChooseDirectories = true
-    openPanel.allowsMultipleSelection = false
-    openPanel.directoryURL = steamAppsDirectory
-    openPanel.prompt = "Select"
-    
-    print("inside getGameNames()")
-    print(openPanel.directoryURL!)
-
-    // Show the open panel
-    let answer = openPanel.runModal()
-    print("test")
-    if answer == NSApplication.ModalResponse.OK {
-        print("after modal select")
+    let steamAppsDirectoryURL = URL(fileURLWithPath: NSString(string: steamAppsPath).expandingTildeInPath, isDirectory: true)
+    print(steamAppsDirectoryURL)
+    var bookmarkData: Data?
+    if fileManager.fileExists(atPath: steamAppsDirectoryURL.path) {
         do {
-            let appIDDirectories = try fileManager.contentsOfDirectory(at: openPanel.directoryURL!, includingPropertiesForKeys: nil)
-            var games = [Game]()
-            for appIDDirectory in appIDDirectories {
-                let appID = appIDDirectory.lastPathComponent
-                if appID.hasSuffix(".acf") {
-                    let manifestFilePath = appIDDirectory
-                    let manifestFileData = try Data(contentsOf: manifestFilePath)
-                    let manifestDictionary = parseACFFile(data: manifestFileData)
-                    let name = manifestDictionary["name"]
-                    let numberedAppID = manifestDictionary["appid"]
-                    let game = Game(
-                        appID: numberedAppID ?? "Unknown",
-                        launcher: "open steam://run/\(numberedAppID ?? "Unknown")",
-                        metadata: [
-                            "rating": "",
-                            "release_date": "",
-                            "time_played": "",
-                            "last_played": "",
-                            "developer": "",
-                            "header_img": "",
-                            "description": "",
-                            "genre": "",
-                            "publisher": ""
-                        ],
-                        icon: "PlaceholderIcon",
-                        name: name ?? "Unknown",
-                        platform: Platform.STEAM
-                    )
-                    print(game)
-                    games.append(game)
-                }
-            }
-            let gamesList = GamesList(games: games)
-            let encoder = JSONEncoder()
-            if let encoded = try? encoder.encode(gamesList) {
-                if let jsonString = String(data: encoded, encoding: .utf8) {
-                    writeGamesToJSON(data: jsonString)
-                }
-            }
+            bookmarkData = try steamAppsDirectoryURL.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
         } catch {
-            print("Error: Failed to read SteamApps directory at \(openPanel.directoryURL!)")
+            print("bookmark error")
         }
-    } else {
-        print("Access denied")
     }
-}
+    
+    print("2: after bookmark made")
+
+    if let bookmarkData = bookmarkData {
+        var isStale = false
+        do {
+            let securedSteamAppsDirectoryURL = try URL(resolvingBookmarkData: bookmarkData, options: .withoutUI, relativeTo: nil, bookmarkDataIsStale: &isStale)
+            if securedSteamAppsDirectoryURL.startAccessingSecurityScopedResource() {
+                // Use the securedSteamAppsDirectoryURL here
+                let openPanel = NSOpenPanel()
+                openPanel.canChooseFiles = false
+                openPanel.canChooseDirectories = true
+                openPanel.allowsMultipleSelection = false
+                openPanel.directoryURL = securedSteamAppsDirectoryURL
+                openPanel.prompt = "Select"
+                
+                print("inside getGameNames()")
+                print(openPanel.directoryURL!)
+                
+                // Show the open panel
+                let answer = openPanel.runModal()
+                print("test")
+                if answer == NSApplication.ModalResponse.OK {
+                    print("after modal select")
+                    do {
+                        let appIDDirectories = try fileManager.contentsOfDirectory(at: openPanel.directoryURL!, includingPropertiesForKeys: nil)
+                        var games = [Game]()
+                        for appIDDirectory in appIDDirectories {
+                            let appID = appIDDirectory.lastPathComponent
+                            if appID.hasSuffix(".acf") {
+                                let manifestFilePath = appIDDirectory
+                                let manifestFileData = try Data(contentsOf: manifestFilePath)
+                                let manifestDictionary = parseACFFile(data: manifestFileData)
+                                let name = manifestDictionary["name"]
+                                let numberedAppID = manifestDictionary["appid"]
+                                let game = Game(
+                                    appID: numberedAppID ?? "Unknown",
+                                    launcher: "open steam://run/\(numberedAppID ?? "Unknown")",
+                                    metadata: [
+                                        "rating": "",
+                                        "release_date": "",
+                                        "time_played": "",
+                                        "last_played": "",
+                                        "developer": "",
+                                        "header_img": "",
+                                        "description": "",
+                                        "genre": "",
+                                        "publisher": ""
+                                    ],
+                                    icon: "PlaceholderIcon",
+                                    name: name ?? "Unknown",
+                                    platform: Platform.STEAM
+                                )
+                                print(game)
+                                games.append(game)
+                            }
+                        }
+                        let gamesList = GamesList(games: games)
+                        let encoder = JSONEncoder()
+                        if let encoded = try? encoder.encode(gamesList) {
+                            if let jsonString = String(data: encoded, encoding: .utf8) {
+                                writeGamesToJSON(data: jsonString)
+                            }
+                        }
+                    } catch {
+                        print("Error: Failed to read SteamApps directory at \(openPanel.directoryURL!)")
+                    }
+                } else {
+                    print("Access denied")
+                }
+                securedSteamAppsDirectoryURL.stopAccessingSecurityScopedResource()
+            }
+                                } catch {
+                                    print("secured url error")
+                                }
+                                }
+                                }
 
     func loadGamesFromJSON() -> GamesList {
         let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
