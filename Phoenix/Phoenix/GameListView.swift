@@ -11,32 +11,6 @@ struct GameListView: View {
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     
-    /**
-     Loads an image from the file at the given file path.
-     
-     If the file at the given file path does not exist or there is an error
-     reading from the file, a placeholder image is returned.
-     
-     - Parameters:
-        - filePath: The file path of the image to load.
-     
-     - Returns: The image at the given file path, or a placeholder image if the
-                file could not be loaded.
-     */
-    private func loadImageFromFile(filePath: String) -> NSImage {
-        do {
-            if filePath != "" {
-                let imageData = try Data(contentsOf: URL(string: filePath)!)
-                return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderIcon")
-            } else {
-                return NSImage(imageLiteralResourceName: "PlaceholderIcon")
-            }
-        } catch {
-            print("Error loading image : \(error)")
-        }
-        return NSImage(imageLiteralResourceName: "PlaceholderIcon")
-    }
-    
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in

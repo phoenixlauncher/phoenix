@@ -13,7 +13,7 @@ import SwiftUI
  
  - Returns: The URL for the application support directory.
  */
-private func getApplicationSupportDirectory() -> URL {
+func getApplicationSupportDirectory() -> URL {
     // find all possible Application Support directories for this user
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     
@@ -99,33 +99,33 @@ func loadGamesFromJSON() -> GamesList {
     print("Loading games from: \(url.path)")
     
     var games: GamesList?
+    do {
+        let jsonData = try Data(contentsOf: url)
+        games = try JSONDecoder().decode(GamesList.self, from: jsonData)
+        
+        return games ?? GamesList(games: [])
+    } catch {
+        print("Couldn't find games.json. Creating new one.")
+        let jsonFileURL = Bundle.main.url(forResource: "games", withExtension: "json")
+        do {
+            let jsonData = try Data(contentsOf: jsonFileURL!)
+            let jsonString = String(decoding: jsonData, as: UTF8.self)
+            writeGamesToJSON(data: jsonString)
+        } catch {
+            print("Could not get data from 'games.json'")
+        }
+        
         do {
             let jsonData = try Data(contentsOf: url)
             games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-    
+            
             return games ?? GamesList(games: [])
         } catch {
-            print("Couldn't find games.json. Creating new one.")
-            let jsonFileURL = Bundle.main.url(forResource: "games", withExtension: "json")
-            do {
-                let jsonData = try Data(contentsOf: jsonFileURL!)
-                let jsonString = String(decoding: jsonData, as: UTF8.self)
-                writeGamesToJSON(data: jsonString)
-            } catch {
-                print("Could not get data from 'games.json'")
-            }
-            
-            do {
-                let jsonData = try Data(contentsOf: url)
-                games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-                
-                return games ?? GamesList(games: [])
-            } catch {
-                print("Couldn't read from new 'games.json'")
-            }
+            print("Couldn't read from new 'games.json'")
         }
+    }
     
-        return GamesList(games: [])
+    return GamesList(games: [])
 }
 
 /**
@@ -133,12 +133,12 @@ func loadGamesFromJSON() -> GamesList {
  directory under the application support directory.
  
  - Parameters:
-    - data: The data to write to the JSON file.
+ - data: The data to write to the JSON file.
  
  - Returns: Void.
  
  - Throws: An error if there was a problem creating the directory or file, or
-           writing to the file.
+ writing to the file.
  */
 func writeGamesToJSON(data: String) {
     // If .../Application Support/Phoenix directory exists
@@ -151,7 +151,7 @@ func writeGamesToJSON(data: String) {
             } catch {
                 print("Could not write data to 'games.json'")
             }
-        // If .../Application Support/Phoenix/games.json file DOESN'T exist
+            // If .../Application Support/Phoenix/games.json file DOESN'T exist
         } else {
             if FileManager.default.createFile(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path, contents: Data(data.utf8)) {
                 print("'games.json' created successfully.")
@@ -167,7 +167,7 @@ func writeGamesToJSON(data: String) {
                 print("Could not create directory")
             }
         }
-    // If .../Application Support/Phoenix directory DOESN'T exist
+        // If .../Application Support/Phoenix directory DOESN'T exist
     } else {
         do {
             try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", conformingTo: .directory).path, withIntermediateDirectories: true)

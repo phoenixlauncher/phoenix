@@ -8,33 +8,6 @@
 import SwiftUI
 
 struct GameDetailView: View {
-    // TODO: make single loadImageFromFile() function to use here and in GameListView
-    /**
-     Loads an image from the file at the given file path.
-     
-     If the file at the given file path does not exist or there is an error
-     reading from the file, a placeholder image is returned.
-     
-     - Parameters:
-        - filePath: The file path of the image to load.
-     
-     - Returns: The image at the given file path, or a placeholder image if the
-                file could not be loaded.
-     */
-    private func loadImageFromFile(filePath: String) -> NSImage {
-        do {
-            if filePath != "" {
-                let imageData = try Data(contentsOf: URL(string: filePath)!)
-                return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderHeader")
-            } else {
-                return NSImage(imageLiteralResourceName: "PlaceholderHeader")
-            }
-        } catch {
-            print("Error loading image : \(error)")
-        }
-        return NSImage(imageLiteralResourceName: "PlaceholderHeader")
-    }
-    
     @State var editingGame: Bool = false
     @State var showingAlert: Bool = false
     @Binding var selectedGame: String?
@@ -45,7 +18,6 @@ struct GameDetailView: View {
             GeometryReader { geometry in
                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                     let game = games[idx]
-//                    Image(try String(contentsOfFile: game.metadata["header_img"]!))
                     Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!) ?? NSImage(imageLiteralResourceName: "PlaceholderHeader"))
                         .resizable()
                         .scaledToFill()

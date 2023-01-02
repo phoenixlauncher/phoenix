@@ -32,7 +32,21 @@ struct Game: Codable, Comparable, Hashable {
     var name: String
     var platform: Platform
 
-    init(launcher: String = "", metadata: [String: String] = [:], icon: String = "PlaceholderIcon", name: String, platform: Platform = Platform.NONE) {
+    init(launcher: String = "",
+         metadata: [String: String] = [
+            "rating": "",
+            "release_date": "",
+            "time_played": "",
+            "last_played": "",
+            "developer": "",
+            "header_img": "PlaceholderHeader",
+            "description": "",
+            "genre": "",
+            "publisher": ""
+         ],
+         icon: String = "PlaceholderIcon",
+         name: String,
+         platform: Platform = Platform.NONE) {
         self.launcher = launcher
         self.metadata = metadata
         self.icon = icon
