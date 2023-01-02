@@ -48,9 +48,10 @@ func getGameNames() {
     openPanel.directoryURL = steamAppsDirectory
     openPanel.prompt = "Select"
     
+    print("inside getGameNames()")
     // Show the open panel
     if openPanel.runModal() == .OK {
-        print("inside")
+        print("after modal select")
         do {
             let appIDDirectories = try fileManager.contentsOfDirectory(at: openPanel.url!, includingPropertiesForKeys: nil)
             var games = [Game]()
