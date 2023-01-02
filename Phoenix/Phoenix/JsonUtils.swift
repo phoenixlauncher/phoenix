@@ -39,8 +39,8 @@ func parseACFFile(data: Data) -> [String: String] {
 
 func getGameNames() {
     let fileManager = FileManager.default
-    let steamAppsDirectory = URL(fileURLWithPath: "~/Library/Application Support/Steam/steamapps", isDirectory: true)
-    // Create an NSOpenPanel instance
+    let steamAppsPath = "~/Library/Application Support/Steam/steamapps"
+    let steamAppsDirectory = URL(fileURLWithPath: NSString(string: steamAppsPath).expandingTildeInPath, isDirectory: true)
     let openPanel = NSOpenPanel()
     openPanel.canChooseFiles = false
     openPanel.canChooseDirectories = true
@@ -49,11 +49,15 @@ func getGameNames() {
     openPanel.prompt = "Select"
     
     print("inside getGameNames()")
+    print(openPanel.directoryURL!)
+
     // Show the open panel
-    if openPanel.runModal() == .OK {
+    let answer = openPanel.runModal()
+    print("test")
+    if answer == NSApplication.ModalResponse.OK {
         print("after modal select")
         do {
-            let appIDDirectories = try fileManager.contentsOfDirectory(at: openPanel.url!, includingPropertiesForKeys: nil)
+            let appIDDirectories = try fileManager.contentsOfDirectory(at: openPanel.directoryURL!, includingPropertiesForKeys: nil)
             var games = [Game]()
             for appIDDirectory in appIDDirectories {
                 let appID = appIDDirectory.lastPathComponent
@@ -93,7 +97,7 @@ func getGameNames() {
                 }
             }
         } catch {
-            print("Error: Failed to read SteamApps directory at \(openPanel.url!)")
+            print("Error: Failed to read SteamApps directory at \(openPanel.directoryURL!)")
         }
     } else {
         print("Access denied")

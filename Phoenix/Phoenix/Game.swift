@@ -24,15 +24,31 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
     }
 }
 
-struct Game: Codable, Comparable {
+struct Game: Codable, Comparable, Hashable {
     var appID: String
     var launcher: String
     var metadata: [String: String]
     var icon: String
     var name: String
     var platform: Platform
-
-    init(appID: String = "", launcher: String = "", metadata: [String: String] = [:], icon: String = "PlaceholderIcon", name: String, platform: Platform = Platform.NONE) {
+    
+    init(
+        appID: String = "",
+        launcher: String = "",
+         metadata: [String: String] = [
+            "rating": "",
+            "release_date": "",
+            "time_played": "",
+            "last_played": "",
+            "developer": "",
+            "header_img": "PlaceholderHeader",
+            "description": "",
+            "genre": "",
+            "publisher": ""
+         ],
+         icon: String = "PlaceholderIcon",
+         name: String,
+         platform: Platform = Platform.NONE) {
         self.appID = appID
         self.launcher = launcher
         self.metadata = metadata
@@ -40,7 +56,7 @@ struct Game: Codable, Comparable {
         self.name = name
         self.platform = platform
     }
-
+    
     static func < (lhs: Game, rhs: Game) -> Bool {
         lhs.name < rhs.name
     }
