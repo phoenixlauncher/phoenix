@@ -39,30 +39,13 @@ func parseACFFile(data: Data) -> [String: String] {
 
 func getGameNames() {
     let fileManager = FileManager.default
-    var selectedDirectoryURL: URL?
-    loadBookmarks()
-    print(bookmarks.isEmpty)
-    if bookmarks.isEmpty == false {
-        print("not empty")
-        loadBookmarks()
-    }
-
-    if bookmarks.keys.isEmpty {
-        print("opening")
-        selectedDirectoryURL = openFolderSelection()
-        print("after")
-        saveBookmarksData()
-    }
-
-//    loadBookmarks()
-    // Use the URL from the bookmark
-    selectedDirectoryURL = bookmarks.keys.first
-    print("bookmarks count")
-    print(bookmarks.count)
+    let steamAppsPath = "~/Library/Application Support/Steam/steamapps"
+    let steamAppsDirectory = URL(fileURLWithPath: NSString(string: steamAppsPath).expandingTildeInPath, isDirectory: true)
+    let selectedDirectoryURL = steamAppsDirectory
 
     do {
         // Do the JSON mapping code and appending of games here
-        let appIDDirectories = try fileManager.contentsOfDirectory(at: selectedDirectoryURL!, includingPropertiesForKeys: nil)
+        let appIDDirectories = try fileManager.contentsOfDirectory(at: selectedDirectoryURL, includingPropertiesForKeys: nil)
         var games = [Game]()
         for appIDDirectory in appIDDirectories {
             let appID = appIDDirectory.lastPathComponent
