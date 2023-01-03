@@ -9,19 +9,21 @@ func openFolderSelection() -> URL? {
     openPanel.canChooseDirectories = true
     openPanel.canCreateDirectories = true
     openPanel.canChooseFiles = false
-    let result = openPanel.runModal()
-    if result == NSApplication.ModalResponse.OK {
-        let url = openPanel.url
-        storeFolderInBookmark(url: url!)
+//    let result = openPanel.runModal()
+//    if result == NSApplication.ModalResponse.OK {
+//        let url = openPanel.url
+    let steamAppsPath = "~/Library/Application Support/Steam/steamapps"
+    let steamAppsDirectory = URL(fileURLWithPath: NSString(string: steamAppsPath).expandingTildeInPath, isDirectory: true)
+    let url = steamAppsDirectory
+        storeFolderInBookmark(url: url)
         return url
-    }
-    return nil
+//    }
+//    return nil
 }
 
 func saveBookmarksData()
 {
     let path = getBookmarkPath()
-    print(path)
     NSKeyedArchiver.archiveRootObject(bookmarks, toFile: path)
 }
 
@@ -57,13 +59,13 @@ func getBookmarkPath() -> String {
 
 
 
-func loadBookmarks()
-{
+func loadBookmarks() {
     let path = getBookmarkPath()
-    bookmarks = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! [URL: Data]
-    for bookmark in bookmarks
-    {
-        restoreBookmark(bookmark)
+    if let bookmarksData = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? [URL: Data] {
+        bookmarks = bookmarksData
+        for bookmark in bookmarks {
+            restoreBookmark(bookmark)
+        }
     }
 }
 

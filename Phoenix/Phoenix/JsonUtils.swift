@@ -11,19 +11,19 @@ import SwiftUI
 private func getApplicationSupportDirectory() -> URL {
     // find all possible Application Support directories for this user
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-    
+
     // just send back the first one, which ought to be the only one
     return paths[0]
 }
 
 func parseACFFile(data: Data) -> [String: String] {
     let string = String(decoding: data, as: UTF8.self)
-    
+
     // Use a regular expression to extract the key-value pairs
     let pattern = "(\"[^\"]+\"\\s*\"[^\"]*\")"
     let regex = try! NSRegularExpression(pattern: pattern)
     let matches = regex.matches(in: string, range: NSRange(location: 0, length: string.count))
-    
+
     // Split the matches into key-value pairs and add them to the dictionary
     var dict = [String: String]()
     for match in matches {
@@ -33,36 +33,36 @@ func parseACFFile(data: Data) -> [String: String] {
         let value = keyValueArray[3]
         dict[key] = value
     }
-    
+
     return dict
 }
 
 func getGameNames() {
     let fileManager = FileManager.default
-    var selectedDirectoryURL : URL?
-    
+    var selectedDirectoryURL: URL?
+    loadBookmarks()
     print(bookmarks.isEmpty)
     if bookmarks.isEmpty == false {
-        print("loading")
+        print("not empty")
         loadBookmarks()
     }
-    
-    if bookmarks.isEmpty {
+
+    if bookmarks.keys.isEmpty {
         print("opening")
         selectedDirectoryURL = openFolderSelection()
         print("after")
         saveBookmarksData()
     }
-    
-    loadBookmarks()
+
+//    loadBookmarks()
     // Use the URL from the bookmark
     selectedDirectoryURL = bookmarks.keys.first
-    print("bookmarks keys")
-    print(bookmarks.keys)
-    
+    print("bookmarks count")
+    print(bookmarks.count)
+
     do {
         // Do the JSON mapping code and appending of games here
-        let appIDDirectories = try fileManager.contentsOfDirectory(at: selectedDirectoryURL!, includingPropertiesForKeys: nil)  
+        let appIDDirectories = try fileManager.contentsOfDirectory(at: selectedDirectoryURL!, includingPropertiesForKeys: nil)
         var games = [Game]()
         for appIDDirectory in appIDDirectories {
             let appID = appIDDirectory.lastPathComponent
@@ -78,7 +78,7 @@ func getGameNames() {
                     metadata: [
                         "rating": "",
                         "release_date": "",
-                        
+
                         "time_played": "",
                         "last_played": "",
                         "developer": "",
@@ -110,12 +110,12 @@ func getGameNames() {
         let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
         // log to console the path to the file
         print("Loading games from: \(url.path)")
-        
+
         var games: GamesList?
         do {
             let jsonData = try Data(contentsOf: url)
             games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-            
+
             return games ?? GamesList(games: [])
         } catch {
             print("Couldn't find games.json. Creating new one.")
@@ -127,20 +127,20 @@ func getGameNames() {
             } catch {
                 print("Could not get data from 'games.json'")
             }
-            
+
             do {
                 let jsonData = try Data(contentsOf: url)
                 games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-                
+
                 return games ?? GamesList(games: [])
             } catch {
                 print("Couldn't read from new 'games.json'")
             }
         }
-        
+
         return GamesList(games: [])
     }
-    
+
     func writeGamesToJSON(data: String) {
         // If .../Application Support/Phoenix directory exists
         if FileManager.default.fileExists(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", isDirectory: true).path) {
@@ -173,7 +173,7 @@ func getGameNames() {
             do {
                 try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix", conformingTo: .directory).path, withIntermediateDirectories: true)
                 try FileManager.default.createDirectory(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/cachedImages", conformingTo: .directory).path, withIntermediateDirectories: true)
-                
+
                 if FileManager.default.createFile(atPath: getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json", conformingTo: .json).path, contents: Data(data.utf8)) {
                     print("'games.json' created successfully.")
                 } else {
@@ -183,6 +183,6 @@ func getGameNames() {
                 print("Could not create directory")
             }
         }
-        
-        
+
+
     }
