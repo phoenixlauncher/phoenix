@@ -133,7 +133,7 @@ func loadGamesFromJSON() -> GamesList {
  directory under the application support directory.
  
  - Parameters:
- - data: The data to write to the JSON file.
+    - data: The data to write to the JSON file.
  
  - Returns: Void.
  
@@ -182,6 +182,4 @@ func writeGamesToJSON(data: String) {
             print("Could not create directory")
         }
     }
-    
-    
 }

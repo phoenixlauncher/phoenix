@@ -77,8 +77,9 @@ struct GamesList: Codable {
 /**
  Check if the given array of games contains any games for the given platform
  
- - Parameter arr: the array of games to search
- - Parameter plat: the platform to search for
+ - Parameters:
+    - arr: the array of games to search
+    - plat: the platform to search for
  
  - Returns: A boolean for whether plat was found
  */
