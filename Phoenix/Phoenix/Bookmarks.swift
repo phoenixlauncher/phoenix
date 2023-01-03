@@ -3,27 +3,25 @@ import Cocoa
 
 var bookmarks = [URL: Data]()
 
-func openFolderSelection() -> URL?
-{
+func openFolderSelection() -> URL? {
     let openPanel = NSOpenPanel()
     openPanel.allowsMultipleSelection = false
     openPanel.canChooseDirectories = true
     openPanel.canCreateDirectories = true
     openPanel.canChooseFiles = false
-    openPanel.begin
-        { (result) -> Void in
-            if result.rawValue == NSApplication.ModalResponse.OK.rawValue
-            {
-                let url = openPanel.url
-                storeFolderInBookmark(url: url!)
-            }
+    let result = openPanel.runModal()
+    if result == NSApplication.ModalResponse.OK {
+        let url = openPanel.url
+        storeFolderInBookmark(url: url!)
+        return url
     }
-    return openPanel.url
+    return nil
 }
 
 func saveBookmarksData()
 {
     let path = getBookmarkPath()
+    print(path)
     NSKeyedArchiver.archiveRootObject(bookmarks, toFile: path)
 }
 
@@ -41,12 +39,23 @@ func storeFolderInBookmark(url: URL)
     
 }
 
-func getBookmarkPath() -> String
-{
-    var url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as URL
-    url = url.appendingPathComponent("Bookmarks.dict")
-    return url.path
+//func getBookmarkPath() -> String
+//{
+//    var url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as URL
+//    url = url.appendingPathComponent("Bookmarks.dict")
+//    return url.path
+//}
+
+func getBookmarkPath() -> String {
+    let fileManager = FileManager.default
+    let supportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0] as URL
+    let phoenixDirectory = supportDirectory.appendingPathComponent("Phoenix")  // Add the 'Phoenix' directory to the Application Support directory URL
+    let url = phoenixDirectory.appendingPathComponent("Bookmarks.dict")  // Add the 'Bookmarks.dict' file to the 'Phoenix' directory URL
+    return url.path  // Return the path to the 'Bookmarks.dict' file
 }
+
+
+
 
 func loadBookmarks()
 {
