@@ -27,6 +27,15 @@ struct GameDetailView: View {
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     
+    static let color0 = Color(red: 0/255, green: 230/255, blue: 2/255);
+    static let color1 = Color(red: 14/255, green: 173/255, blue: 89/255);
+    static let color2 = Color(red: 0/255, green: 230/255, blue: 2/255);
+    static let color3 = Color(red: 79/255, green: 84/255, blue: 84/255);
+    static let color4 = Color(red: 55/255, green: 54/255, blue: 53/255);
+    
+    let playGradient = Gradient(colors: [color0, color1, color2]);
+    let settingsGradient = Gradient(colors: [color3, color4]);
+    
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
@@ -59,25 +68,31 @@ struct GameDetailView: View {
                             }
                         }
                     }, label: {
-                        Text("Play")
+                        Image(systemName: "play.fill")
                             .foregroundColor(Color.white)
-                            .font(.system(size: 20))
+                            .font(.system(size: 25))
+                        Text(" Play")
+                            .fontWeight(.medium)
+                            .foregroundColor(Color.white)
+                            .font(.system(size: 25))
                     })
                     .alert("No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")", isPresented: $showingAlert) {}
                     .buttonStyle(.plain)
-                    .frame(width: 125, height: 50)
-                    .background(Color.green)
+                    .frame(width: 175, height: 50)
+                    .background(LinearGradient(
+                        gradient: playGradient,
+                        startPoint: .init(x: 0, y: 0.5),
+                        endPoint: .init(x: 1, y: 0.5)
+                      ))
                     .cornerRadius(10)
-                    .padding()
-                    
-                    Spacer()
-                    
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
                     Button(action: {
                         editingGame.toggle()
                     }, label: {
                         Image(systemName: "gear")
+                            .fontWeight(.bold)
                             .foregroundColor(Color.white)
-                            .font(.system(size: 24))
+                            .font(.system(size: 27))
                     })
                     .sheet(isPresented: $editingGame, onDismiss: {
                         // Refresh game list
@@ -89,10 +104,13 @@ struct GameDetailView: View {
                     })
                     .buttonStyle(.plain)
                     .frame(width: 50, height: 50)
-                    .background(Color.gray)
+                    .background(LinearGradient(
+                        gradient: settingsGradient,
+                        startPoint: .init(x: 0.50, y: 0),
+                        endPoint: .init(x: 0.50, y: 1)
+                      ))
                     .cornerRadius(10)
-                    .padding()
-                }
+                }.padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
                 
                 HStack(alignment: .top, spacing: 100) {
                     VStack(alignment: .leading) {
@@ -107,14 +125,14 @@ struct GameDetailView: View {
                     HStack {
                         // Game Info
                         VStack(alignment: .leading) {
-                            Text("Time Played").padding(5)
-                            Text("Last Played").padding(5)
-                            Text("Platform").padding(5)
-                            Text("Rating").padding(5)
-                            Text("Genre\n\n").padding(5)
-                            Text("Developer").padding(5)
-                            Text("Publisher").padding(5)
-                            Text("Release Date").padding(5)
+                            Text("Time Played:").padding(5)
+                            Text("Last Played:").padding(5)
+                            Text("Platform:").padding(5)
+                            Text("Rating:").padding(5)
+                            Text("Genres:\n\n").padding(5)
+                            Text("Developer:").padding(5)
+                            Text("Publisher:").padding(5)
+                            Text("Release Date:").padding(5)
                         }
                         VStack(alignment: .leading) {
                             if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
@@ -145,7 +163,6 @@ struct GameDetailView: View {
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
                 }
-                .padding(.horizontal)
                 .padding(.top, 16.0)
             }
             .font(.system(size: 15))
