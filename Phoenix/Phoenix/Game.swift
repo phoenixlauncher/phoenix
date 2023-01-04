@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
     case MAC, STEAM, GOG, EPIC, EMUL, NONE
@@ -26,13 +25,16 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Game: Codable, Comparable, Hashable {
+    var appID: String
     var launcher: String
     var metadata: [String: String]
     var icon: String
     var name: String
     var platform: Platform
-
-    init(launcher: String = "",
+    
+init(
+        appID: String = "",
+        launcher: String = "",
          metadata: [String: String] = [
             "rating": "",
             "release_date": "",
@@ -47,6 +49,7 @@ struct Game: Codable, Comparable, Hashable {
          icon: String = "PlaceholderIcon",
          name: String,
          platform: Platform = Platform.NONE) {
+        self.appID = appID
         self.launcher = launcher
         self.metadata = metadata
         self.icon = icon
@@ -65,7 +68,7 @@ struct Game: Codable, Comparable, Hashable {
                 lexicographically less than the `name` property of the
                 right-hand side, `false` otherwise.
      */
-    static func < (lhs: Game, rhs: Game) -> Bool {
+     static func < (lhs: Game, rhs: Game) -> Bool {
         lhs.name < rhs.name
     }
 }
@@ -92,4 +95,10 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
     }
 
     return false
+}
+
+func loadGames() -> GamesList {
+    detectSteamGamesAndWriteToJSON()
+    let res = loadGamesFromJSON()
+    return res
 }
