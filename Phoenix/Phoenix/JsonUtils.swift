@@ -44,9 +44,13 @@ func getGameNames() {
     let selectedDirectoryURL = steamAppsDirectory
 
     do {
+        // Load the current list of games from the JSON file
+        let currentGamesList = loadGamesFromJSON()
+        var gameNames = Set(currentGamesList.games.map { $0.name })
+
         // Do the JSON mapping code and appending of games here
         let appIDDirectories = try fileManager.contentsOfDirectory(at: selectedDirectoryURL, includingPropertiesForKeys: nil)
-        var games = [Game]()
+        var games = currentGamesList.games
         for appIDDirectory in appIDDirectories {
             let appID = appIDDirectory.lastPathComponent
             if appID.hasSuffix(".acf") {
@@ -74,8 +78,11 @@ func getGameNames() {
                     name: name ?? "Unknown",
                     platform: Platform.STEAM
                 )
-//                print(game)
-                games.append(game)
+                // Check if the game is already in the list
+                if !gameNames.contains(game.name) {
+                    gameNames.insert(game.name)
+                    games.append(game)
+                }
             }
         }
         let gamesList = GamesList(games: games)
