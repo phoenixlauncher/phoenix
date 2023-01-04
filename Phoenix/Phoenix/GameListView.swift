@@ -11,20 +11,6 @@ struct GameListView: View {
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     
-    private func loadImageFromFile(filePath: String) -> NSImage? {
-        do {
-            if filePath != "" {
-                let imageData = try Data(contentsOf: URL(string: filePath)!)
-                return NSImage(data: imageData)
-            } else {
-                return nil
-            }
-        } catch {
-            print("Error loading image : \(error)")
-        }
-        return nil
-    }
-    
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in
@@ -33,7 +19,7 @@ struct GameListView: View {
                     Section(header: Text(platform.displayName)) {
                         ForEach(gamesForPlatform, id: \.name) { game in
                             HStack {
-                                Image(nsImage: loadImageFromFile(filePath: game.icon) ?? NSImage(imageLiteralResourceName: "PlaceholderIcon"))
+                                Image(nsImage: loadImageFromFile(filePath: game.icon))
                                     .resizable()
                                     .frame(width: 15, height: 15)
                                 Text(game.name)

@@ -25,6 +25,7 @@ struct ContentView: View {
             GameListView(selectedGame: $selectedGame, refresh: $refresh)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
+                        // Add game button
                         Button(action: {
                             self.isAddingGame.toggle()
                         }, label: {
@@ -41,6 +42,8 @@ struct ContentView: View {
         } detail: {
             // The detailed view of the selected game
             GameDetailView(selectedGame: $selectedGame, refresh: $refresh)
+            
+            // Refresh detail view
             Text(String(refresh))
                 .hidden()
         }

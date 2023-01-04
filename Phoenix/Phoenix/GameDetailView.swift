@@ -8,20 +8,6 @@
 import SwiftUI
 
 struct GameDetailView: View {
-    private func loadImageFromFile(filePath: String) -> NSImage? {
-        do {
-            if filePath != "" {
-                let imageData = try Data(contentsOf: URL(string: filePath)!)
-                return NSImage(data: imageData)
-            } else {
-                return nil
-            }
-        } catch {
-            print("Error loading image : \(error)")
-        }
-        return nil
-    }
-    
     @State var editingGame: Bool = false
     @State var showingAlert: Bool = false
     @Binding var selectedGame: String?
@@ -32,7 +18,6 @@ struct GameDetailView: View {
             GeometryReader { geometry in
                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                     let game = games[idx]
-//                    Image(try String(contentsOfFile: game.metadata["header_img"]!))
                     Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!) ?? NSImage(imageLiteralResourceName: "PlaceholderHeader"))
                         .resizable()
                         .scaledToFill()
@@ -80,7 +65,7 @@ struct GameDetailView: View {
                             .font(.system(size: 24))
                     })
                     .sheet(isPresented: $editingGame, onDismiss: {
-                        // Refresh game list
+                        // Refresh game detail page
                         refresh.toggle()
                     }, content: {
                         let idx = games.firstIndex(where: { $0.name == selectedGame })

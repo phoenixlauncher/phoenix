@@ -32,7 +32,7 @@ struct Game: Codable, Comparable, Hashable {
     var name: String
     var platform: Platform
     
-    init(
+init(
         appID: String = "",
         launcher: String = "",
          metadata: [String: String] = [
@@ -56,8 +56,19 @@ struct Game: Codable, Comparable, Hashable {
         self.name = name
         self.platform = platform
     }
-    
-    static func < (lhs: Game, rhs: Game) -> Bool {
+
+    /**
+     Compares two `Game` objects based on their `name` property.
+     
+     - Parameters:
+        - lhs: The left-hand side of the comparison.
+        - rhs: The right-hand side of the comparison.
+     
+     - Returns: `true` if the `name` property of the left-hand side is
+                lexicographically less than the `name` property of the
+                right-hand side, `false` otherwise.
+     */
+     static func < (lhs: Game, rhs: Game) -> Bool {
         lhs.name < rhs.name
     }
 }
@@ -66,7 +77,17 @@ struct GamesList: Codable {
     var games: [Game]
 }
 
+/**
+ Check if the given array of games contains any games for the given platform
+ 
+ - Parameters:
+    - arr: the array of games to search
+    - plat: the platform to search for
+ 
+ - Returns: A boolean for whether plat was found
+ */
 func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
+    // Check if arr has any games in it for plat
     for game in arr {
         if game.platform == plat {
             return true

@@ -77,9 +77,9 @@ struct EditGameView: View {
                         var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
                         
                         if iconInput.hasSuffix(".jpg") || iconInput.hasSuffix(".jpeg") {
-                            url = url.appendingPathComponent("Phoenix/cachedImages/\(nameInput)_icon.jpg", conformingTo: .jpeg)
+                            url = url.appendingPathComponent("Phoenix/cachedImages/\(currentGame.name)_icon.jpg", conformingTo: .jpeg)
                         } else if iconInput.hasSuffix(".png") {
-                            url = url.appendingPathComponent("Phoenix/cachedImages/\(nameInput)_icon.png", conformingTo: .png)
+                            url = url.appendingPathComponent("Phoenix/cachedImages/\(currentGame.name)_icon.png", conformingTo: .png)
                         }
                         
                         try iconData.write(to: url)
@@ -153,9 +153,9 @@ struct EditGameView: View {
                         var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
                         
                         if headInput.hasSuffix(".jpg") || headInput.hasSuffix(".jpeg") {
-                            url = url.appendingPathComponent("Phoenix/cachedImages/\(nameInput)_header.jpg", conformingTo: .jpeg)
+                            url = url.appendingPathComponent("Phoenix/cachedImages/\(currentGame.name)_header.jpg", conformingTo: .jpeg)
                         } else if headInput.hasSuffix(".png") {
-                            url = url.appendingPathComponent("Phoenix/cachedImages/\(nameInput)_header.png", conformingTo: .png)
+                            url = url.appendingPathComponent("Phoenix/cachedImages/\(currentGame.name)_header.png", conformingTo: .png)
                         }
                         
                         try headerData.write(to: url)
