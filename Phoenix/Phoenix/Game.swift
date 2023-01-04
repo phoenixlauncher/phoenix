@@ -77,7 +77,7 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
 }
 
 func loadGames() -> GamesList {
-    getGameNames()
+    detectSteamGamesAndWriteToJSON()
     let res = loadGamesFromJSON()
     return res
 }

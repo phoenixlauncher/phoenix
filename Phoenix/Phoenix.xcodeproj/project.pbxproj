@@ -23,7 +23,6 @@
 		0AF378772953AADE00978137 /* PhoenixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378762953AADE00978137 /* PhoenixTests.swift */; };
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
-		CA51F9DD29639CFB00083083 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA51F9DC29639CFB00083083 /* Bookmarks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +63,6 @@
 		0AF3787C2953AADE00978137 /* PhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		CA51F9DC29639CFB00083083 /* Bookmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +127,6 @@
 				0AF378682953AADE00978137 /* Assets.xcassets */,
 				0AF3786D2953AADE00978137 /* Phoenix.entitlements */,
 				0AF3786A2953AADE00978137 /* Preview Content */,
-				CA51F9DC29639CFB00083083 /* Bookmarks.swift */,
 			);
 			path = Phoenix;
 			sourceTree = "<group>";
@@ -298,7 +295,6 @@
 			files = (
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
-				CA51F9DD29639CFB00083083 /* Bookmarks.swift in Sources */,
 				0A02F8EC295BB92400FE29F4 /* AddGameView.swift in Sources */,
 				0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* HeaderUtils.swift in Sources */,
