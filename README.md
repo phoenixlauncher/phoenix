@@ -6,13 +6,13 @@
   <br>
 </h1>
 
-<p align="center">Phoenix is an open-source game launcher for MacOS, created by Shock9616, written in SwiftUI. This launcher was inspired by projects like <a href="https://playnite.link" target="_blank">Playnite</a> and <a href="https://lutris.net" target="_blank">Lutris</a>, and supports any game which can be launched from the command line. (So basically all of them!) It was designed to be small, fast, and not overly complicated. Phoenix is available on GitHub under the [MIT license](License.txt)</p>
+<p align="center">Phoenix is an open-source game launcher for MacOS, created by Shock9616, written in SwiftUI. This launcher was inspired by projects like <a href="https://playnite.link" target="_blank">Playnite</a> and <a href="https://lutris.net" target="_blank">Lutris</a>, and supports any game which can be launched from the command line. (So basically all of them!) It was designed to be small, fast, and not overly complicated. Phoenix is available on GitHub under the <a href="License.txt" target="_blank">MIT license</a></p>
 
 <img src="Readme Images/Screenshot1.png" alt="Screenshot of the app"/>
 
 ## Compatibility
 
-Phoenix is compatible with just about any game that can be run on MacOS as games are launched by running a terminal command in the background. For example, to launch Hollow Knight through Steam, it would run `open steam://run/367520`. This approach means that this launcher can launch games installed through the App Store, Steam (and other similar stores) CrossOver, Parallels, and even emulated games! This makes Phoenix the perfect hub for all the games you have on your Mac
+Phoenix is compatible with just about any game that can be run on MacOS as games are launched by running a terminal command in the background. For example, to launch Hollow Knight through Steam, it would run `open steam://run/367520`. This approach means that this launcher can launch games installed through the App Store, Steam (and other similar stores), CrossOver, Parallels, and even emulated games! This makes Phoenix the perfect hub for all the games you have on your Mac
 
 ## Usage
 
@@ -22,9 +22,7 @@ Download the [latest release](https://github.com/Shock9616/Phoenix/releases) fro
 
 <img src="Readme Images/Screenshot2.png" alt="Screenshot of the first time opening the app" width="800"/>
 
-You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can. To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. (The above screenshot doesn't look very nice does it? 😅) Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the gear button on the right hand side of the window. When editing, leave everything at its default value except for the information you intend to change. 
-
-*IMPORTANT NOTE: There is currently a bug that causes the detail view to go blank after editing a game. If you try to edit the game again while it is in this state, the app will crash. To work around it for now (I am working on a fix as we speak), just select a different game and then go back to the one you just edited. Your changes will be shown and you won't have to worry about the crash*
+You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can. To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. (The above screenshot doesn't look very nice does it? 😅) Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the gear button next to the play button. When editing, leave everything at its default value except for the information you intend to change.
 
 Once you have a game and it's launcher command is configured, you can hit the play button and it will open up!
 
@@ -45,6 +43,8 @@ open ~/Applications/<App Name Here>.app
 ```
 
 #### Steam games:
+
+Steam games are now automatically detected by Phoenix! But, on the off chance that you want to change it or need to enter it yourself, here's the format to use:
 
 ```
 open steam://run/<steam app id here>
@@ -102,7 +102,7 @@ If you want to build this app for yourself, just download this repository
 git clone git@github.com:Shock9616/Phoenix.git
 ```
 
-then open `Phoenix.xcodeproj` in Xcode. You can create a `.app` file by going to `Product > Archive` in the menu bar, clicking `Distribute App`, selecting `Copy App` and then saving the folder somewhere easy to find like your desktop. The app will be inside the folder and you can copy it into your applications folder and begin using it!
+then open `Phoenix.xcodeproj` in Xcode. You will first have to update the `Team` field in the `Signing and Capabilities` section of `Targets > Phoenix` in the main Project file. You can then create a `.app` file by going to `Product > Archive` in the menu bar, clicking `Distribute App`, selecting `Copy App` and then saving the folder somewhere easy to find like your desktop. The app will be inside the folder and you can copy it into your applications folder and begin using it!
 
 ## Updates
 
