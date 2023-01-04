@@ -164,6 +164,7 @@ struct GameDetailView: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                 }
                 .padding(.top, 16.0)
+                .padding(.leading)
             }
             .font(.system(size: 15))
             .lineSpacing(5)
