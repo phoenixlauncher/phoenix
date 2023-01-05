@@ -4,7 +4,6 @@
 //
 //  Created by Kaleb Rosborough on 2022-12-28.
 //
-
 import Foundation
 import SwiftUI
 
@@ -43,6 +42,7 @@ struct EditGameView: View {
 
           TextField("Enter game name", text: $nameInput)
             .padding()
+            .accessibility(label: Text("NameInput"))
           Text("Required. This is the name that will show up in the sidebar and in the title bar")
             .frame(width: 300)
         }

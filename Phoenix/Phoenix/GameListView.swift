@@ -4,7 +4,6 @@
 //
 //  Created by Kaleb Rosborough on 2022-12-28.
 //
-
 import SwiftUI
 
 struct GameListView: View {
@@ -25,7 +24,7 @@ struct GameListView: View {
                 Text(game.name)
               }
               .contextMenu {
-                Button("Delete game") {
+                Button(action: {
                   if let idx = games.firstIndex(where: { $0.name == game.name }) {
                     games.remove(at: idx)
                     refresh.toggle()
@@ -45,10 +44,13 @@ struct GameListView: View {
                       print(error.localizedDescription)
                     }
                   }
+                }) {
+                  Text("Delete game")
                 }
+                .accessibility(identifier: "Delete Game")
               }
-            }
-          }.scrollDisabled(true)
+            }.scrollDisabled(true)
+          }
         }
       }
       Text(String(refresh))
