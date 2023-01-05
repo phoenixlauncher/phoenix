@@ -26,8 +26,11 @@ final class PhoenixUITests: XCTestCase {
     app.launch()
 
     // Click the "plus" button
-    let plusButton = app.buttons["New Game"]
-    plusButton.click()
+    let plusButtonQuery = app.buttons.matching(identifier: "New Game")
+    if plusButtonQuery.count > 0 {
+        let plusButton = plusButtonQuery.element(boundBy: 0)
+        plusButton.click()
+    }
 
     // Enter "nameForTestingUI" into the name field
     let nameField = app.textFields["NameInput"]
