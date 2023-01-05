@@ -46,7 +46,7 @@ struct Game: Codable, Comparable, Hashable {
       "genre": "",
       "publisher": "",
     ],
-    icon: String = "PlaceholderIcon",
+    icon: String = "PlaceholderImage",
     name: String,
     platform: Platform = Platform.NONE
   ) {

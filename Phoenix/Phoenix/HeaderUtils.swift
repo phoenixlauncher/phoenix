@@ -95,12 +95,12 @@ func loadImageFromFile(filePath: String) -> NSImage {
   do {
     if filePath != "" {
       let imageData = try Data(contentsOf: URL(string: filePath)!)
-      return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderIcon")
+      return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderImage")
     } else {
-      return NSImage(imageLiteralResourceName: "PlaceholderIcon")
+      return NSImage(imageLiteralResourceName: "PlaceholderImage")
     }
   } catch {
     print("Error loading image : \(error)")
   }
-  return NSImage(imageLiteralResourceName: "PlaceholderIcon")
+  return NSImage(imageLiteralResourceName: "PlaceholderImage")
 }

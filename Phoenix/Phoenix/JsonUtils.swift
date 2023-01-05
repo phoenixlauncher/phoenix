@@ -95,7 +95,7 @@ func detectSteamGamesAndWriteToJSON() {
             "genre": "",
             "publisher": "",
           ],
-          icon: "PlaceholderIcon",
+          icon: "",
           name: name ?? "Unknown",
           platform: Platform.STEAM
         )
