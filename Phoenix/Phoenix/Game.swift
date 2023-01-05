@@ -41,12 +41,12 @@ struct Game: Codable, Comparable, Hashable {
       "time_played": "",
       "last_played": "",
       "developer": "",
-      "header_img": "PlaceholderHeader",
+      "header_img": "",
       "description": "",
       "genre": "",
       "publisher": "",
     ],
-    icon: String = "PlaceholderImage",
+    icon: String = "",
     name: String,
     platform: Platform = Platform.NONE
   ) {

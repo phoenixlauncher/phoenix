@@ -42,7 +42,7 @@ struct GameDetailView: View {
                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                     let game = games[idx]
                     
-                    Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!) ?? NSImage(imageLiteralResourceName: "PlaceholderHeader"))
+                    Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!) ?? NSImage(imageLiteralResourceName: "PlaceholderImage"))
                         .resizable()
                         .scaledToFill()
                         .frame(width: geometry.size.width, height: getHeightForHeaderImage(geometry))
