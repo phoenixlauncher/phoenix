@@ -110,7 +110,7 @@ If you want to be notified when new updates are released here, make sure you "wa
 
 ## Contact
 
-For now, if you need to contact me for anything, you can email me at shock9616@gmail.com. If this project really takes off I will make a Discord server and update this section of the readme 🙂
+If you need to contact us for anything, you can join our [Discord Server](https://discord.gg/Q8TQ6rYfGQ). There you can ask the devs for help if you are having any issues using our app, and you will be the first to know when there are new releases!
 
 ## Credits
 
