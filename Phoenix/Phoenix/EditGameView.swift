@@ -258,8 +258,16 @@ struct EditGameView: View {
           }
           if dateInput == .now {
             dateInputStr = currentGame.metadata["release_date"] ?? ""
+          } else {
+              let dateFormatter: DateFormatter = {
+                  let formatter = DateFormatter()
+                  formatter.dateStyle = .long
+                  return formatter
+              }()
+              
+              dateInputStr = dateFormatter.string(from: dateInput)
           }
-
+            
           let editedGame: Game = .init(
             launcher: cmdInput,
             metadata: [
@@ -277,7 +285,7 @@ struct EditGameView: View {
             name: nameInput,
             platform: platInput
           )
-
+            
           let idx = games.firstIndex(where: { $0.name == currentGame.name })
           games[idx!] = editedGame
 

@@ -157,7 +157,7 @@ struct GameDetailView: View {
                                 Text(game.metadata["genre"] ?? "").padding(5)
                                 Text(game.metadata["developer"] ?? "").padding(5)
                                 Text(game.metadata["publisher"] ?? "").padding(5)
-                                Text(game.metadata["release_date"] ?? "").padding(5)
+                                Text(game.metadata["release_date"] ?? "No date").padding(5)
                             }
                         }
                     }
