@@ -20,6 +20,7 @@ struct ContentView: View {
 
   // The stuff that is actually on screen
   var body: some View {
+    // edit the file menu to add a new menu item called "Open Phoenix Data Folder"
     NavigationSplitView {
       // The sidebar
       GameListView(selectedGame: $selectedGame, refresh: $refresh)
