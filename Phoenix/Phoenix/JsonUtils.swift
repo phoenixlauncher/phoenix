@@ -101,6 +101,8 @@ func detectSteamGamesAndWriteToJSON() {
         )
         // Check if the game is already in the list
         if !gameNames.contains(game.name) {
+          logger.write(
+            "[INFO]: New Steam game - '\(game.name)' was detected. Adding to games list.")
           gameNames.insert(game.name)
           games.append(game)
         }
@@ -114,7 +116,7 @@ func detectSteamGamesAndWriteToJSON() {
       }
     }
   } catch {
-    print("Error writing steam games.")
+    logger.write("[ERROR]: Error adding to Steam games.")
   }
 }
 
@@ -132,17 +134,16 @@ func loadGamesFromJSON() -> GamesList {
   do {
     let jsonData = try Data(contentsOf: url)
     games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-
     return games ?? GamesList(games: [])
   } catch {
-    print("Couldn't find games.json. Creating new one.")
+    logger.write("[INFO]: Couldn't find games.json. Creating new one.")
     let jsonFileURL = Bundle.main.url(forResource: "games", withExtension: "json")
     do {
       let jsonData = try Data(contentsOf: jsonFileURL!)
       let jsonString = String(decoding: jsonData, as: UTF8.self)
       writeGamesToJSON(data: jsonString)
     } catch {
-      print("Could not get data from 'games.json'")
+      logger.write("[ERROR]: Could not get data from 'games.json'")
     }
 
     do {
@@ -151,7 +152,7 @@ func loadGamesFromJSON() -> GamesList {
 
       return games ?? GamesList(games: [])
     } catch {
-      print("Couldn't read from new 'games.json'")
+      logger.write("[ERROR]: Couldn't read from new 'games.json'")
     }
   }
 
@@ -184,7 +185,7 @@ func writeGamesToJSON(data: String) {
       do {
         try data.write(to: url, atomically: true, encoding: .utf8)
       } catch {
-        print("Could not write data to 'games.json'")
+        logger.write("[ERROR]: Could not write data to 'games.json'")
       }
       // If .../Application Support/Phoenix/games.json file DOESN'T exist
     } else {
@@ -193,9 +194,10 @@ func writeGamesToJSON(data: String) {
           "Phoenix/games.json", conformingTo: .json
         ).path, contents: Data(data.utf8))
       {
-        print("'games.json' created successfully.")
+        logger.write("[INFO]: 'games.json' created successfully.")
       } else {
-        print("'games.json' not created.")
+        logger.write("[ERROR]: 'games.json' not created.")
+
       }
     }
     // If .../Application Support/Phoenix/cachedImages DOESN'T exist
@@ -210,7 +212,7 @@ func writeGamesToJSON(data: String) {
             "Phoenix", conformingTo: .directory
           ).path, withIntermediateDirectories: true)
       } catch {
-        print("Could not create directory")
+        logger.write("[ERROR]: Could not create directory")
       }
     }
     // If .../Application Support/Phoenix directory DOESN'T exist
@@ -230,12 +232,12 @@ func writeGamesToJSON(data: String) {
           "Phoenix/games.json", conformingTo: .json
         ).path, contents: Data(data.utf8))
       {
-        print("'games.json' created successfully.")
+        logger.write("[INFO]: 'games.json' created successfully.")
       } else {
-        print("'File' not created.")
+        logger.write("[INFO]: 'File' not created.")
       }
     } catch {
-      print("Could not create directory")
+      logger.write("[ERROR]: Could not create directory")
     }
   }
 }

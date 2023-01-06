@@ -15,16 +15,18 @@ import Foundation
 ///
 /// - Throws: An error if there was a problem executing the
 /// command or reading from the pipe
-func shell(_ command: String) throws {
+func shell(_ command: Game) throws {
   let task = Process()
   let pipe = Pipe()
 
   task.standardOutput = pipe
   task.standardError = pipe
-  task.arguments = ["-c", command]
+  task.arguments = ["-c", command.launcher]
   task.executableURL = URL(fileURLWithPath: "/bin/zsh")
   task.standardInput = nil
-
+  logger.write(
+    "[INFO]: Executing command: \(task.arguments!.joined(separator: " ")) to launch game: \(command.name)."
+  )
   try task.run()
 
   pipe.fileHandleForReading.readabilityHandler = { fileHandle in

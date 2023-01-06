@@ -92,8 +92,8 @@ struct EditGameView: View {
             iconOutput = url.relativeString
           } catch {
             // Handle failure.
-            print("Unable to read file contents")
-            print(error.localizedDescription)
+            logger.write("Unable to read file contents")
+            logger.write(error.localizedDescription)
           }
         }
 
@@ -177,8 +177,8 @@ struct EditGameView: View {
             headOutput = url.relativeString
           } catch {
             // Handle failure.
-            print("Unable to read file contents")
-            print(error.localizedDescription)
+            logger.write("Unable to read file contents")
+            logger.write(error.localizedDescription)
           }
         }
 
@@ -301,7 +301,7 @@ struct EditGameView: View {
               writeGamesToJSON(data: gamesJSONString)
             }
           } catch {
-            print(error.localizedDescription)
+            logger.write(error.localizedDescription)
           }
 
           dismiss()
