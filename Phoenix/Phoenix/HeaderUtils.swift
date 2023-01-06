@@ -100,7 +100,7 @@ func loadImageFromFile(filePath: String) -> NSImage {
       return NSImage(imageLiteralResourceName: "PlaceholderImage")
     }
   } catch {
-    print("Error loading image : \(error)")
+    logger.write("Error loading image : \(error)")
   }
   return NSImage(imageLiteralResourceName: "PlaceholderImage")
 }

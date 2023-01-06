@@ -86,8 +86,8 @@ struct AddGameView: View {
             iconOutput = url.relativeString
           } catch {
             // Handle failure.
-            print("Unable to write to file")
-            print(error.localizedDescription)
+            logger.write("Unable to write to file")
+            logger.write(error.localizedDescription)
           }
         }
 
@@ -171,8 +171,8 @@ struct AddGameView: View {
             headOutput = url.relativeString
           } catch {
             // Handle failure.
-            print("Unable to write to file")
-            print(error.localizedDescription)
+            logger.write("Unable to write to file")
+            logger.write(error.localizedDescription)
           }
         }
 
@@ -258,7 +258,7 @@ struct AddGameView: View {
               writeGamesToJSON(data: gamesJSONString)
             }
           } catch {
-            print(error.localizedDescription)
+            logger.write(error.localizedDescription)
           }
 
           dismiss()

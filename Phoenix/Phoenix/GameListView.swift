@@ -41,7 +41,7 @@ struct GameListView: View {
                         writeGamesToJSON(data: gamesJSONString)
                       }
                     } catch {
-                      print(error.localizedDescription)
+                      logger.write(error.localizedDescription)
                     }
                   }
                 }) {

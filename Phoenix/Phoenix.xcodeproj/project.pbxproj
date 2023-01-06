@@ -23,6 +23,7 @@
 		0AF378772953AADE00978137 /* PhoenixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378762953AADE00978137 /* PhoenixTests.swift */; };
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
+		CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAFAA82967600700B89003 /* LogUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		0AF3787C2953AADE00978137 /* PhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CAFAFAA82967600700B89003 /* LogUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,9 +123,10 @@
 				0A87BBB4295D7B1A0009AF47 /* GameDetailView.swift */,
 				0A02F8EB295BB92400FE29F4 /* AddGameView.swift */,
 				0A87BBB2295D7A360009AF47 /* EditGameView.swift */,
+				0A20E1E82957C52F00B7756E /* CmdUtils.swift */,
 				0A947C992958990D00A2CE66 /* HeaderUtils.swift */,
 				0A20E1F02957FD4C00B7756E /* JsonUtils.swift */,
-				0A20E1E82957C52F00B7756E /* CmdUtils.swift */,
+				CAFAFAA82967600700B89003 /* LogUtils.swift */,
 				0AF378682953AADE00978137 /* Assets.xcassets */,
 				0AF3786D2953AADE00978137 /* Phoenix.entitlements */,
 				0AF3786A2953AADE00978137 /* Preview Content */,
@@ -298,6 +301,7 @@
 				0A02F8EC295BB92400FE29F4 /* AddGameView.swift in Sources */,
 				0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* HeaderUtils.swift in Sources */,
+				CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */,
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
 				0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
@@ -463,7 +467,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = UC7RC43VZH;
+				DEVELOPMENT_TEAM = 6L9QQBQLVU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
