@@ -242,7 +242,7 @@ struct AddGameView: View {
             name: nameInput,
             platform: platInput
           )
-
+          
           games.append(newGame)
           games = games.sorted()
 
