@@ -23,7 +23,7 @@ struct PhoenixApp: App {
         Button("Open Phoenix Data Folder") {
           if let phoenixDirectory = getPhoenixDirectory() {
             NSWorkspace.shared.open(phoenixDirectory)
-              logger.write("[INFO]: Opened Application Support/Phoenix.")
+            logger.write("[INFO]: Opened Application Support/Phoenix.")
           }
         }
       }
