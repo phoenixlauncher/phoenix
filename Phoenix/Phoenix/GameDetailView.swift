@@ -26,14 +26,16 @@ struct GameDetailView: View {
   @Binding var selectedGame: String?
   @Binding var refresh: Bool
 
-  static let color0 = Color(red: 0 / 255, green: 230 / 255, blue: 2 / 255)
-  static let color1 = Color(red: 14 / 255, green: 173 / 255, blue: 89 / 255)
-  static let color2 = Color(red: 0 / 255, green: 230 / 255, blue: 2 / 255)
-  static let color3 = Color(red: 79 / 255, green: 84 / 255, blue: 84 / 255)
-  static let color4 = Color(red: 55 / 255, green: 54 / 255, blue: 53 / 255)
+  // make gradient colors
+  static let color0 = Color(red: 0/255, green: 230/255, blue: 2/255);
+  static let color1 = Color(red: 14/255, green: 173/255, blue: 89/255);
+  static let color2 = Color(red: 0/255, green: 230/255, blue: 2/255);
+  static let color3 = Color(red: 79/255, green: 84/255, blue: 84/255);
+  static let color4 = Color(red: 55/255, green: 54/255, blue: 53/255);
 
-  let playGradient = Gradient(colors: [color0, color1, color2])
-  let settingsGradient = Gradient(colors: [color3, color4])
+  //make gradients
+  let playGradient = Gradient(colors: [color0, color1, color2]);
+  let settingsGradient = Gradient(colors: [color3, color4]);
 
   var body: some View {
     ScrollView {
@@ -41,107 +43,100 @@ struct GameDetailView: View {
         if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
           let game = games[idx]
 
-          Image(
-            nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!)
-              ?? NSImage(imageLiteralResourceName: "PlaceholderImage")
-          )
-          .resizable()
-          .scaledToFill()
-          .frame(width: geometry.size.width, height: getHeightForHeaderImage(geometry))
-          .blur(radius: getBlurRadiusForImage(geometry))
-          .clipped()
-          .offset(x: 0, y: getOffsetForHeaderImage(geometry))
+          //create header image
+          Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!) ?? NSImage(imageLiteralResourceName: "PlaceholderImage"))
+            .resizable()
+            .scaledToFill()
+            .frame(width: geometry.size.width, height: getHeightForHeaderImage(geometry))
+            .blur(radius: getBlurRadiusForImage(geometry))
+            .clipped()
+            .offset(x: 0, y: getOffsetForHeaderImage(geometry))
         }
       }.frame(height: 400)
 
       VStack(alignment: .leading) {
-        HStack {
-          Button(
-            action: {
-              if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                do {
-                  let game = games[idx]
-                  if game.launcher != "" {
-                    try shell(game)
-                  } else {
-                    showingAlert = true
-                  }
-                } catch {
-                  logger.write("\(error)")  // handle or silence the error here
-                }
-              }
-            },
-            label: {
-              Image(systemName: "play.fill")
-                .foregroundColor(Color.white)
-                .font(.system(size: 25))
-              Text(" Play")
-                .fontWeight(.medium)
-                .foregroundColor(Color.white)
-                .font(.system(size: 25))
-            }
-          )
-          .alert(
-            "No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")",
-            isPresented: $showingAlert
-          ) {}
-          .buttonStyle(.plain)
-          .frame(width: 175, height: 50)
-          .background(
-            LinearGradient(
-              gradient: playGradient,
-              startPoint: .init(x: 0, y: 0.5),
-              endPoint: .init(x: 1, y: 0.5)
-            )
-          )
-          .cornerRadius(10)
-          .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
-          Button(
-            action: {
-              editingGame.toggle()
-            },
-            label: {
-              Image(systemName: "gear")
-                .fontWeight(.bold)
-                .foregroundColor(Color.white)
-                .font(.system(size: 27))
-            }
-          )
-          .sheet(
-            isPresented: $editingGame,
-            onDismiss: {
-              // Refresh game list
-              refresh.toggle()
-            },
-            content: {
-              let idx = games.firstIndex(where: { $0.name == selectedGame })
-              let game = games[idx!]
-              EditGameView(currentGame: .constant(game))
-            }
-          )
-          .buttonStyle(.plain)
-          .frame(width: 50, height: 50)
-          .background(
-            LinearGradient(
-              gradient: settingsGradient,
-              startPoint: .init(x: 0.50, y: 0),
-              endPoint: .init(x: 0.50, y: 1)
-            )
-          )
-          .cornerRadius(10)
-        }.padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
-
-        HStack(alignment: .top, spacing: 100) {
+        HStack(alignment: .top) {
           VStack(alignment: .leading) {
-            // Game Description
-            if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-              let game = games[idx]
-              Text(game.metadata["description"] ?? "No game selected")
-            }
-          }
-          .frame(minWidth: 0, maxWidth: .infinity)
+            HStack(alignment: .top) {
+              //play button
+              Button(action: {
+                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                  do {
+                    let game = games[idx]
+                    if game.launcher != "" {
+                      try shell(game)
+                    } else {
+                      showingAlert = true
+                    }
+                  } catch {
+                    logger.write("\(error)") // handle or silence the error here
+                  }
+                }
+              }, label: {
+                Image(systemName: "play.fill")
+                  .foregroundColor(Color.white)
+                  .font(.system(size: 25))
+                Text(" Play")
+                  .fontWeight(.medium)
+                  .foregroundColor(Color.white)
+                  .font(.system(size: 25))
+              })
+              .alert("No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")", isPresented: $showingAlert) {}
+              .buttonStyle(.plain)
+              .frame(width: 175, height: 50)
+              .background(LinearGradient(
+                gradient: playGradient,
+                startPoint: .init(x: 0, y: 0.5),
+                endPoint: .init(x: 1, y: 0.5)
+              ))
+              .cornerRadius(10)
+              .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
 
-          HStack {
+              //settings button
+              Button(action: {
+                editingGame.toggle()
+              }, label: {
+                Image(systemName: "gear")
+                  .fontWeight(.bold)
+                  .foregroundColor(Color.white)
+                  .font(.system(size: 27))
+              })
+              .sheet(isPresented: $editingGame, onDismiss: {
+                // Refresh game list
+                refresh.toggle()
+              }, content: {
+                let idx = games.firstIndex(where: { $0.name == selectedGame })
+                let game = games[idx!]
+                EditGameView(currentGame: .constant(game))
+              })
+              .buttonStyle(.plain)
+              .frame(width: 50, height: 50)
+              .background(LinearGradient(
+                gradient: settingsGradient,
+                startPoint: .init(x: 0.50, y: 0),
+                endPoint: .init(x: 0.50, y: 1)
+              ))
+              .cornerRadius(10)
+            }//hstack
+            .frame(alignment: .leading)
+
+            //description
+            VStack(alignment: .leading) {
+              // Game Description
+              if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                let game = games[idx]
+                Text(game.metadata["description"] ?? "No game selected")
+              }
+            }//vstack
+            .frame(maxWidth: 450)  // controls the width of the description text
+            .font(.system(size: 14.5))
+            .lineSpacing(3.5)
+            .padding(.top, 5)
+          }//vstack
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
+
+          HStack(alignment: .top) {
             // Game Info
             VStack(alignment: .leading) {
               Text("Time Played:").padding(5)
@@ -153,7 +148,7 @@ struct GameDetailView: View {
               Text("Publisher:").padding(5)
               Text("Release Date:").padding(5)
             }
-            VStack(alignment: .leading) {
+            VStack(alignment: .trailing) {
               if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                 let game = games[idx]
                 Text(game.metadata["time_played"] ?? "").padding(5)
@@ -176,17 +171,14 @@ struct GameDetailView: View {
                 Text(game.metadata["genre"] ?? "").padding(5)
                 Text(game.metadata["developer"] ?? "").padding(5)
                 Text(game.metadata["publisher"] ?? "").padding(5)
-                Text(game.metadata["release_date"] ?? "").padding(5)
+                Text(game.metadata["release_date"] ?? "No date").padding(5)
               }
             }
           }
-          .frame(minWidth: 0, maxWidth: .infinity)
+          .frame(minWidth: 350).padding(.top, 5)  // specify min width for the game details (ensures padding on right side)
+          .font(.system(size: 14.5))
         }
-        .padding(.top, 16.0)
-        .padding(.leading)
       }
-      .font(.system(size: 15))
-      .lineSpacing(5)
     }
     .edgesIgnoringSafeArea(.all)
     .navigationTitle(selectedGame ?? "Phoenix")
