@@ -9,9 +9,7 @@ import SwiftUI
 
 @main
 struct PhoenixApp: App {
-  init() {
-    logger.write("[INFO]: Phoenix App Launched.")
-  }
+  @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   var body: some Scene {
     WindowGroup {
       ContentView()
@@ -28,5 +26,22 @@ struct PhoenixApp: App {
         }
       }
     }
+  }
+}
+class AppDelegate: NSObject, NSApplicationDelegate {
+  func applicationWillFinishLaunching(_ notification: Notification) {
+    logger.write("[INFO]: Phoenix App Launched.")
+  }
+  func applicationDidFinishLaunching(_ notification: Notification) {
+    NSSetUncaughtExceptionHandler { exception in
+      // Log the stack trace to the console
+      print("Uncaught exception: \(exception)")
+      print("Stack trace: \(exception.callStackSymbols.joined(separator: "\n"))")
+    }
+    logger.write("[INFO]: Phoenix App finished launching.")
+  }
+  func applicationWillTerminate(_ aNotification: Notification) {
+    // This method is called when the application is about to terminate. Save data if appropriate.
+    logger.write("[INFO]: Phoenix App shutting down.")
   }
 }
