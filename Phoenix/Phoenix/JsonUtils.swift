@@ -18,6 +18,16 @@ func getApplicationSupportDirectory() -> URL {
   return paths[0]
 }
 
+///Returns the Phoenix application support directory
+///
+/// - Returns: The URL for the Application support directory/Phoenix.
+func getPhoenixDirectory() -> URL? {
+    let fileManager = FileManager.default
+    let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+    let phoenixDirectory = appSupportDirectory?.appendingPathComponent("Phoenix")
+    return phoenixDirectory
+}
+
 ///  Parses the appmanifest_<appid>.acf file and returns a dictionary of the key-value pairs.
 ///
 ///    - Parameters:

@@ -18,6 +18,15 @@ struct PhoenixApp: App {
         .frame(
           minWidth: 800, idealWidth: 1900, maxWidth: .infinity,
           minHeight: 445, idealHeight: 1080, maxHeight: .infinity)
+    }.commands {
+      CommandGroup(replacing: CommandGroupPlacement.newItem) {
+        Button("Open Phoenix Data Folder") {
+          if let phoenixDirectory = getPhoenixDirectory() {
+            NSWorkspace.shared.open(phoenixDirectory)
+              logger.write("[INFO]: Opened Application Support/Phoenix.")
+          }
+        }
+      }
     }
   }
 }
