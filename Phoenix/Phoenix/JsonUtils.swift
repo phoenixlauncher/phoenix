@@ -62,7 +62,7 @@ func parseACFFile(data: Data) -> [String: String] {
 ///    - Returns: Void.
 ///
 ///    - Throws: An error if there was a problem writing to the file.
-func detectSteamGamesAndWriteToJSON() {
+func detectSteamGamesAndWriteToJSON() -> Void {
   let fileManager = FileManager.default
 
   /// Get ~/Library/Application Support/Steam/steamapps
@@ -70,10 +70,16 @@ func detectSteamGamesAndWriteToJSON() {
   /// Currently the app is not sandboxed, so the getApplicationSupportDirectory function will return the first option.
 
   let applicationSupportDirectory = getApplicationSupportDirectory()
-  let steamAppsDirectory = applicationSupportDirectory.appendingPathComponent("Steam/steamapps")
-
-  // Load the current list of games from the JSON file to prevent overwriting
-  let currentGamesList = loadGamesFromJSON()
+  let steamAppsDirectory = applicationSupportDirectory.appendingPathComponent("blah/steamapps")
+    let currentGamesList : GamesList
+    if fileManager.fileExists(atPath: steamAppsDirectory.path) {
+      // Load the current list of games from the JSON file to prevent overwriting
+      currentGamesList = loadGamesFromJSON()
+    } else {
+      // The steamAppsDirectory does not exist, so we can't continue with the rest of the function
+        logger.write("[INFO]: The steamAppsDirectory does not exist at: \(steamAppsDirectory.path)")
+      return
+    }
 
   // Create a set of the current game names to prevent duplicates
   var gameNames = Set(currentGamesList.games.map { $0.name })
@@ -153,7 +159,7 @@ func loadGamesFromJSON() -> GamesList {
       let jsonString = String(decoding: jsonData, as: UTF8.self)
       writeGamesToJSON(data: jsonString)
     } catch {
-      logger.write("[ERROR]: Could not get data from 'games.json'")
+      logger.write("[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'")
     }
 
     do {
@@ -244,10 +250,10 @@ func writeGamesToJSON(data: String) {
       {
         logger.write("[INFO]: 'games.json' created successfully.")
       } else {
-        logger.write("[INFO]: 'File' not created.")
+        logger.write("[INFO]: 'File' 'games.json' not created.")
       }
     } catch {
-      logger.write("[ERROR]: Could not create directory")
+      logger.write("[ERROR]: Could not create directory Application Support/Phoenix")
     }
   }
 }
