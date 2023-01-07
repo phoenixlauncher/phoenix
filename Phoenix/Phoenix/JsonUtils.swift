@@ -22,10 +22,11 @@ func getApplicationSupportDirectory() -> URL {
 ///
 /// - Returns: The URL for the Application support directory/Phoenix.
 func getPhoenixDirectory() -> URL? {
-    let fileManager = FileManager.default
-    let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
-    let phoenixDirectory = appSupportDirectory?.appendingPathComponent("Phoenix")
-    return phoenixDirectory
+  let fileManager = FileManager.default
+  let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+    .first
+  let phoenixDirectory = appSupportDirectory?.appendingPathComponent("Phoenix")
+  return phoenixDirectory
 }
 
 ///  Parses the appmanifest_<appid>.acf file and returns a dictionary of the key-value pairs.
@@ -62,7 +63,7 @@ func parseACFFile(data: Data) -> [String: String] {
 ///    - Returns: Void.
 ///
 ///    - Throws: An error if there was a problem writing to the file.
-func detectSteamGamesAndWriteToJSON() -> Void {
+func detectSteamGamesAndWriteToJSON() {
   let fileManager = FileManager.default
 
   /// Get ~/Library/Application Support/Steam/steamapps
@@ -70,16 +71,17 @@ func detectSteamGamesAndWriteToJSON() -> Void {
   /// Currently the app is not sandboxed, so the getApplicationSupportDirectory function will return the first option.
 
   let applicationSupportDirectory = getApplicationSupportDirectory()
-  let steamAppsDirectory = applicationSupportDirectory.appendingPathComponent("blah/steamapps")
-    let currentGamesList : GamesList
-    if fileManager.fileExists(atPath: steamAppsDirectory.path) {
-      // Load the current list of games from the JSON file to prevent overwriting
-      currentGamesList = loadGamesFromJSON()
-    } else {
-      // The steamAppsDirectory does not exist, so we can't continue with the rest of the function
-        logger.write("[INFO]: The steamAppsDirectory does not exist at: \(steamAppsDirectory.path)")
-      return
-    }
+  let steamAppsDirectory = applicationSupportDirectory.appendingPathComponent("steam/steamapps")
+  let currentGamesList: GamesList
+  if fileManager.fileExists(atPath: steamAppsDirectory.path) {
+    // Load the current list of games from the JSON file to prevent overwriting
+    currentGamesList = loadGamesFromJSON()
+  } else {
+    // The steamAppsDirectory does not exist, so we can't continue with the rest of the function
+    logger.write("[INFO]: The steamAppsDirectory does not exist at: \(steamAppsDirectory.path)")
+    logger.write("[INFO]: Skipping the addition of Steam games to the game library.")
+    return
+  }
 
   // Create a set of the current game names to prevent duplicates
   var gameNames = Set(currentGamesList.games.map { $0.name })
@@ -159,7 +161,8 @@ func loadGamesFromJSON() -> GamesList {
       let jsonString = String(decoding: jsonData, as: UTF8.self)
       writeGamesToJSON(data: jsonString)
     } catch {
-      logger.write("[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'")
+      logger.write(
+        "[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'")
     }
 
     do {
