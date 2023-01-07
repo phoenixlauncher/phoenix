@@ -124,6 +124,7 @@ func detectSteamGamesAndWriteToJSON() {
           gameNames.insert(game.name)
           games.append(game)
         }
+          logger.write("[INFO]: Steam game - '\(game.name)' already exists, not overwriting games.json.")
       }
     }
     let gamesList = GamesList(games: games)
