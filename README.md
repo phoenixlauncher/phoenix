@@ -112,7 +112,7 @@ If you want to be notified when new updates are released here, make sure you "wa
 
 If you need to contact us for anything, you can join our [Discord Server](https://discord.gg/Q8TQ6rYfGQ). There you can ask the devs for help if you are having any issues using our app, and you will be the first to know when there are new releases!
 
-Contributing
+## Contributing
 
 We would love to have you on the team! There are lots of ways to contribute, you can:
 
