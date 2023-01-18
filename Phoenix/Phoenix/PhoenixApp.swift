@@ -20,6 +20,7 @@ struct PhoenixApp: App {
       CommandGroup(replacing: CommandGroupPlacement.newItem) {
         Button("Open Phoenix Data Folder") {
           if let phoenixDirectory = getPhoenixDirectory() {
+              print(phoenixDirectory)
             NSWorkspace.shared.open(phoenixDirectory)
             logger.write("[INFO]: Opened Application Support/Phoenix.")
           }

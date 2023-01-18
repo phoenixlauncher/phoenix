@@ -7,20 +7,6 @@
 import SwiftUI
 
 struct GameDetailView: View {
-  private func loadImageFromFile(filePath: String) -> NSImage? {
-    do {
-      if filePath != "" {
-        let imageData = try Data(contentsOf: URL(string: filePath)!)
-        return NSImage(data: imageData)
-      } else {
-        return nil
-      }
-    } catch {
-      logger.write("[ERROR]: Error loading image : \(error)")
-    }
-    return nil
-  }
-
   @State var editingGame: Bool = false
   @State var showingAlert: Bool = false
   @Binding var selectedGame: String?
@@ -44,7 +30,7 @@ struct GameDetailView: View {
           let game = games[idx]
 
           //create header image
-          Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!) ?? NSImage(imageLiteralResourceName: "PlaceholderImage"))
+            Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!))
             .resizable()
             .scaledToFill()
             .frame(width: geometry.size.width, height: getHeightForHeaderImage(geometry))
