@@ -91,4 +91,3 @@ fastlane/test_output
 
 iOSInjectionProject/
 *.pbxproj
-/Phoenix/Phoenix.xcodeproj/project.pbxproj
