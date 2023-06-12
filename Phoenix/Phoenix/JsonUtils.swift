@@ -195,75 +195,39 @@ func loadGamesFromJSON() -> GamesList {
 /// - Throws: An error if there was a problem creating the directory or file, or
 /// writing to the file.
 func writeGamesToJSON(data: String) {
-    // If .../Application Support/Phoenix directory exists
-    if FileManager.default.fileExists(
-        atPath: getApplicationSupportDirectory().appendingPathComponent(
-            "Phoenix", isDirectory: true
-        )
-        .path)
-    {
-        // If .../Application Support/Phoenix/games.json file exists
-        if FileManager.default.fileExists(
-            atPath: getApplicationSupportDirectory().appendingPathComponent(
-                "Phoenix/games.json", conformingTo: .json
-            ).path)
-        {
-            let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
-            do {
-                try data.write(to: url, atomically: true, encoding: .utf8)
-            } catch {
-                logger.write("[ERROR]: Could not write data to 'games.json'")
-            }
-            // If .../Application Support/Phoenix/games.json file DOESN'T exist
-        } else {
-            if FileManager.default.createFile(
-                atPath: getApplicationSupportDirectory().appendingPathComponent(
-                    "Phoenix/games.json", conformingTo: .json
-                ).path, contents: Data(data.utf8))
-            {
-                logger.write("[INFO]: 'games.json' created successfully.")
-            } else {
-                logger.write("[ERROR]: 'games.json' not created.")
-            }
-        }
-        // If .../Application Support/Phoenix/cachedImages DOESN'T exist
-        if FileManager.default.fileExists(
-            atPath: getApplicationSupportDirectory().appendingPathComponent(
-                "Phoenix/cachedImages", isDirectory: true
-            ).path)
-        {
-            do {
-                try FileManager.default.createDirectory(
-                    atPath: getApplicationSupportDirectory().appendingPathComponent(
-                        "Phoenix", conformingTo: .directory
-                    ).path, withIntermediateDirectories: true)
-            } catch {
-                logger.write("[ERROR]: Could not create directory")
-            }
-        }
-        // If .../Application Support/Phoenix directory DOESN'T exist
-    } else {
-        do {
-            try FileManager.default.createDirectory(
-                atPath: getApplicationSupportDirectory().appendingPathComponent(
-                    "Phoenix", conformingTo: .directory
-                ).path, withIntermediateDirectories: true)
-            try FileManager.default.createDirectory(
-                atPath: getApplicationSupportDirectory().appendingPathComponent(
-                    "Phoenix/cachedImages", conformingTo: .directory
-                ).path, withIntermediateDirectories: true)
+    let fileManager = FileManager.default
+    let phoenixDirectory = getApplicationSupportDirectory().appendingPathComponent(
+        "Phoenix", isDirectory: true)
+    let gamesJSON = phoenixDirectory.appendingPathComponent("games.json", conformingTo: .json)
+    let cachedImagesDirectory = phoenixDirectory.appendingPathComponent(
+        "cachedImages", conformingTo: .directory)
 
-            if FileManager.default.createFile(
-                atPath: getApplicationSupportDirectory().appendingPathComponent(
-                    "Phoenix/games.json", conformingTo: .json
-                ).path, contents: Data(data.utf8))
-            {
-                logger.write("[INFO]: 'games.json' created successfully.")
-            } else {
-                logger.write("[INFO]: 'File' 'games.json' not created.")
-            }
+    // If .../Application Support/Phoenix directory doesn't exist
+    if !fileManager.fileExists(atPath: phoenixDirectory.path) {
+        do {
+            try fileManager.createDirectory(
+                atPath: phoenixDirectory.path, withIntermediateDirectories: true)
+            try fileManager.createDirectory(
+                atPath: cachedImagesDirectory.path, withIntermediateDirectories: true)
         } catch {
             logger.write("[ERROR]: Could not create directory Application Support/Phoenix")
+            return
+        }
+    }
+
+    // If .../Application Support/Phoenix/games.json file exists
+    if fileManager.fileExists(atPath: gamesJSON.path) {
+        do {
+            try data.write(to: gamesJSON, atomically: true, encoding: .utf8)
+            logger.write("[INFO]: 'games.json' updated successfully.")
+        } catch {
+            logger.write("[ERROR]: Could not write data to 'games.json'")
+        }
+    } else {
+        if fileManager.createFile(atPath: gamesJSON.path, contents: Data(data.utf8)) {
+            logger.write("[INFO]: 'games.json' created successfully.")
+        } else {
+            logger.write("[ERROR]: 'games.json' not created.")
         }
     }
 }
