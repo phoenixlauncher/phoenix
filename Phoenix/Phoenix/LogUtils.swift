@@ -40,7 +40,10 @@ struct ConsoleAndFileLogger: TextOutputStream {
             })
 
             for url in sortedLogFileURLs[0..<sortedLogFileURLs.count - 3] {
-                try! FileManager.default.removeItem(at: url)
+                let fileExtension = url.pathExtension
+                if fileExtension == "log" {
+                    try! FileManager.default.removeItem(at: url)
+                }
             }
         }
 
