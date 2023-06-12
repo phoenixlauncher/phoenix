@@ -69,27 +69,44 @@ struct AddGameView: View {
                     do {
                         let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
                         iconInput = selectedFile.relativeString
-
+                        
                         let iconData = try Data(contentsOf: selectedFile)
-
-                        var url = FileManager.default.urls(
-                            for: .applicationSupportDirectory, in: .userDomainMask)[0]
-
-                        if iconInput.hasSuffix(".jpg") || iconInput.hasSuffix(".jpeg") {
-                            url = url.appendingPathComponent(
-                                "Phoenix/cachedImages/\(nameInput)_icon.jpg", conformingTo: .jpeg)
-                        } else if iconInput.hasSuffix(".png") {
-                            url = url.appendingPathComponent(
-                                "Phoenix/cachedImages/\(nameInput)_icon.png", conformingTo: .png)
+                        
+                        let fileManager = FileManager.default
+                        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                            fatalError("Unable to retrieve application support directory URL")
                         }
-
-                        try iconData.write(to: url)
-
-                        iconOutput = url.relativeString
+                        
+                        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                        
+                        if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
+                            do {
+                                try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                                print("Created 'Phoenix/cachedImages' directory")
+                            } catch {
+                                fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                            }
+                        }
+                        
+                        var destinationURL: URL
+                        
+                        if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
+                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)icon.jpg")
+                        } else {
+                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)icon.png")
+                        }
+                        
+                        do {
+                            try iconData.write(to: destinationURL)
+                            iconOutput = destinationURL.relativeString
+                            print("Saved image to: \(destinationURL.path)")
+                        } catch {
+                            print("Failed to save image: \(error.localizedDescription)")
+                        }
                     } catch {
                         // Handle failure.
-                        logger.write("Unable to write to file")
-                        logger.write(error.localizedDescription)
+                        print("Unable to write to file")
+                        print(error.localizedDescription)
                     }
                 }
 
@@ -154,27 +171,44 @@ struct AddGameView: View {
                     do {
                         let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
                         headInput = selectedFile.relativeString
-
+                        
                         let headerData = try Data(contentsOf: selectedFile)
-
-                        var url = FileManager.default.urls(
-                            for: .applicationSupportDirectory, in: .userDomainMask)[0]
-
-                        if headInput.hasSuffix(".jpg") || headInput.hasSuffix(".jpeg") {
-                            url = url.appendingPathComponent(
-                                "Phoenix/cachedImages/\(nameInput)_header.jpg", conformingTo: .jpeg)
-                        } else if headInput.hasSuffix(".png") {
-                            url = url.appendingPathComponent(
-                                "Phoenix/cachedImages/\(nameInput)_header.png", conformingTo: .png)
+                        
+                        let fileManager = FileManager.default
+                        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                            fatalError("Unable to retrieve application support directory URL")
                         }
-
-                        try headerData.write(to: url)
-
-                        headOutput = url.relativeString
+                        
+                        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                        
+                        if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
+                            do {
+                                try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                                print("Created 'Phoenix/cachedImages' directory")
+                            } catch {
+                                fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                            }
+                        }
+                        
+                        var destinationURL: URL
+                        
+                        if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
+                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)_header.jpg")
+                        } else {
+                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)_header.png")
+                        }
+                        
+                        do {
+                            try headerData.write(to: destinationURL)
+                            headOutput = destinationURL.relativeString
+                            print("Saved image to: \(destinationURL.path)")
+                        } catch {
+                            print("Failed to save image: \(error.localizedDescription)")
+                        }
                     } catch {
                         // Handle failure.
-                        logger.write("Unable to write to file")
-                        logger.write(error.localizedDescription)
+                        print("Unable to write to file")
+                        print(error.localizedDescription)
                     }
                 }
 
