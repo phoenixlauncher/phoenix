@@ -38,7 +38,6 @@ struct Game: Codable, Comparable, Hashable {
         metadata: [String: String] = [
             "rating": "",
             "release_date": "",
-            "time_played": "",
             "last_played": "",
             "developer": "",
             "header_img": "PlaceholderHeader",

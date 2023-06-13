@@ -134,7 +134,6 @@ struct GameDetailView: View {
                     HStack(alignment: .top) {
                         // Game Info
                         VStack(alignment: .leading) {
-                            Text("Time Played:").padding(5)
                             Text("Last Played:").padding(5)
                             Text("Platform:").padding(5)
                             Text("Rating:").padding(5)
@@ -146,21 +145,20 @@ struct GameDetailView: View {
                         VStack(alignment: .trailing) {
                             if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                 let game = games[idx]
-                                Text(game.metadata["time_played"] ?? "").padding(5)
-                                Text(game.metadata["last_played"] ?? "").padding(5)
+                                Text(game.metadata["last_played"] ?? "")
                                 switch game.platform {
                                 case Platform.MAC:
-                                    Text("MacOS").padding(5)
+                                    Text("macOS")
                                 case Platform.STEAM:
-                                    Text("Steam").padding(5)
+                                    Text("Steam")
                                 case Platform.GOG:
-                                    Text("GOG").padding(5)
+                                    Text("GOG")
                                 case Platform.EPIC:
-                                    Text("Epic Games").padding(5)
+                                    Text("Epic Games")
                                 case Platform.EMUL:
-                                    Text("Emulated").padding(5)
+                                    Text("Emulated")
                                 case Platform.NONE:
-                                    Text("Other").padding(5)
+                                    Text("Other")
                                 }
                                 Text(game.metadata["rating"] ?? "").padding(5)
                                 Text(game.metadata["genre"] ?? "").padding(5)

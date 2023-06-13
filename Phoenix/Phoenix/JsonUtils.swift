@@ -107,7 +107,6 @@ func detectSteamGamesAndWriteToJSON() {
                     metadata: [
                         "rating": "",
                         "release_date": "",
-                        "time_played": "",
                         "last_played": "",
                         "developer": "",
                         "header_img": "",
