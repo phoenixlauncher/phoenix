@@ -65,6 +65,7 @@ struct GameDetailView: View {
                                 },
                                 label: {
                                     Image(systemName: "play.fill")
+                                        .fontWeight(.bold)
                                         .foregroundColor(Color.white)
                                         .font(.system(size: 25))
                                     Text(" Play")
@@ -79,13 +80,7 @@ struct GameDetailView: View {
                             ) {}
                             .buttonStyle(.plain)
                             .frame(width: 175, height: 50)
-                            .background(
-                                LinearGradient(
-                                    gradient: playGradient,
-                                    startPoint: .init(x: 0, y: 0.5),
-                                    endPoint: .init(x: 1, y: 0.5)
-                                )
-                            )
+                            .background(Color.accentColor)
                             .cornerRadius(10)
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
 
@@ -97,7 +92,7 @@ struct GameDetailView: View {
                                 label: {
                                     Image(systemName: "gear")
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(Color.accentColor)
                                         .font(.system(size: 27))
                                 }
                             )
@@ -115,13 +110,7 @@ struct GameDetailView: View {
                             )
                             .buttonStyle(.plain)
                             .frame(width: 50, height: 50)
-                            .background(
-                                LinearGradient(
-                                    gradient: settingsGradient,
-                                    startPoint: .init(x: 0.50, y: 0),
-                                    endPoint: .init(x: 0.50, y: 1)
-                                )
-                            )
+                            .background(Color.accentColor.opacity(0.1))
                             .cornerRadius(10)
                         }  // hstack
                         .frame(alignment: .leading)
