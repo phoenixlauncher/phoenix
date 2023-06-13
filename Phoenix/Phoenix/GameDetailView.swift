@@ -120,13 +120,14 @@ struct GameDetailView: View {
                             // Game Description
                             if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                 let game = games[idx]
+                                
                                 Text(game.metadata["description"] ?? "No game selected")
+                                    .font(.system(size: 14.5))
+                                    .lineSpacing(3.5)
+                                    .padding(.top, 5)
                             }
-                        }  // vstack
-                        .frame(maxWidth: 450)  // controls the width of the description text
-                        .font(.system(size: 14.5))
-                        .lineSpacing(3.5)
-                        .padding(.top, 5)
+                        }
+                        .frame(maxWidth: 450, alignment: .leading) // controls the width and alignment of the description text
                     }  // vstack
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
@@ -198,6 +199,8 @@ struct GameDetailView: View {
                             }
                         }
                     }
+                    .font(.system(size: 14.5))
+                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 17.5))
                 }
             }
         }
