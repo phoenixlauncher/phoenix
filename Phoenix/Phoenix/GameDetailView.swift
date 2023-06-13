@@ -131,45 +131,73 @@ struct GameDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
 
-                    HStack(alignment: .top) {
-                        // Game Info
-                        VStack(alignment: .leading) {
-                            Text("Last Played:").padding(5)
-                            Text("Platform:").padding(5)
-                            Text("Rating:").padding(5)
-                            Text("Genres:\n\n").padding(5)
-                            Text("Developer:").padding(5)
-                            Text("Publisher:").padding(5)
-                            Text("Release Date:").padding(5)
-                        }
-                        VStack(alignment: .trailing) {
-                            if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                                let game = games[idx]
+                    // Game Info
+                    VStack(alignment: .trailing, spacing: 5) {
+                        if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                            let game = games[idx]
+                            
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Last Played")
+                                    .foregroundColor(Color.white)
                                 Text(game.metadata["last_played"] ?? "")
+                                    .foregroundColor(Color.white.opacity(0.5))
+                            }
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Platform")
+                                    .foregroundColor(Color.white)
                                 switch game.platform {
-                                case Platform.MAC:
-                                    Text("macOS")
-                                case Platform.STEAM:
-                                    Text("Steam")
-                                case Platform.GOG:
-                                    Text("GOG")
-                                case Platform.EPIC:
-                                    Text("Epic Games")
-                                case Platform.EMUL:
-                                    Text("Emulated")
-                                case Platform.NONE:
-                                    Text("Other")
+                                    case Platform.MAC:
+                                        Text("macOS")
+                                            .foregroundColor(Color.white.opacity(0.5))
+                                    case Platform.STEAM:
+                                        Text("Steam")
+                                            .foregroundColor(Color.white.opacity(0.5))
+                                    case Platform.GOG:
+                                        Text("GOG")
+                                            .foregroundColor(Color.white.opacity(0.5))
+                                    case Platform.EPIC:
+                                        Text("Epic Games")
+                                            .foregroundColor(Color.white.opacity(0.5))
+                                    case Platform.EMUL:
+                                        Text("Emulated")
+                                            .foregroundColor(Color.white.opacity(0.5))
+                                    case Platform.NONE:
+                                        Text("Other")
+                                            .foregroundColor(Color.white.opacity(0.5))
                                 }
-                                Text(game.metadata["rating"] ?? "").padding(5)
-                                Text(game.metadata["genre"] ?? "").padding(5)
-                                Text(game.metadata["developer"] ?? "").padding(5)
-                                Text(game.metadata["publisher"] ?? "").padding(5)
-                                Text(game.metadata["release_date"] ?? "No date").padding(5)
+                            }
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Rating")
+                                    .foregroundColor(Color.white)
+                                Text(game.metadata["rating"] ?? "")
+                                    .foregroundColor(Color.white.opacity(0.5))
+                            }
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Genres")
+                                    .foregroundColor(Color.white)
+                                Text(game.metadata["genre"] ?? "")
+                                    .foregroundColor(Color.white.opacity(0.5))
+                            }
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Developer")
+                                    .foregroundColor(Color.white)
+                                Text(game.metadata["developer"] ?? "")
+                                    .foregroundColor(Color.white.opacity(0.5))
+                            }
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Publisher")
+                                    .foregroundColor(Color.white)
+                                Text(game.metadata["publisher"] ?? "")
+                                    .foregroundColor(Color.white.opacity(0.5))
+                            }
+                            VStack(alignment: .trailing, spacing: 1) {
+                                Text("Release Date")
+                                    .foregroundColor(Color.white)
+                                Text(game.metadata["release_date"] ?? "")
+                                    .foregroundColor(Color.white.opacity(0.5))
                             }
                         }
                     }
-                    .frame(minWidth: 350).padding(.top, 5)  // specify min width for the game details (ensures padding on right side)
-                    .font(.system(size: 14.5))
                 }
             }
         }
