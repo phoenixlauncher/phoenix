@@ -42,6 +42,9 @@ struct GameDetailView: View {
                                     ) {
                                         do {
                                             let game = games[idx]
+                                            let currentDate = Date()
+                                            // Update the last played date and write the updated information to the JSON file
+                                            updateLastPlayedDate(currentDate: currentDate, games: &games)
                                             if game.launcher != "" {
                                                 try shell(game)
                                             } else {
@@ -195,5 +198,39 @@ struct GameDetailView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .navigationTitle(selectedGame ?? "Phoenix")
+    }
+    
+    func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {
+        
+        let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .long
+            return formatter
+        }()
+        
+        // Convert the current date to a string using the dateFormatter
+        let dateString = dateFormatter.string(from: currentDate)
+
+        // Update the value of "last_played" in the game's metadata
+        let idx = games.firstIndex(where: { $0.name == selectedGame })
+        if idx != nil {
+            games[idx!].metadata["last_played"] = dateString
+            
+            // Write the updated game information to the JSON file
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            
+            do {
+                let gamesJSON = try encoder.encode(GamesList(games: games))
+                
+                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                    writeGamesToJSON(data: gamesJSONString)
+                }
+            } catch {
+                logger.write(error.localizedDescription)
+            }
+        }
     }
 }

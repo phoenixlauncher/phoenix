@@ -267,7 +267,7 @@ struct AddGameView: View {
                         metadata: [
                             "description": descInput,
                             "header_img": headOutput,
-                            "last_played": "Today",
+                            "last_played": "Never",
                             "rating": rateInput,
                             "genre": genreInput,
                             "developer": devInput,

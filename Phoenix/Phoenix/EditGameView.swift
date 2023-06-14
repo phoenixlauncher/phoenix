@@ -313,7 +313,6 @@ struct EditGameView: View {
                         metadata: [
                             "description": descInput,
                             "header_img": headOutput,
-                            "last_played": "Today",
                             "rating": rateInput,
                             "genre": genreInput,
                             "developer": devInput,

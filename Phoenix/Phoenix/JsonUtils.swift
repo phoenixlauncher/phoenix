@@ -133,6 +133,7 @@ func detectSteamGamesAndWriteToJSON() {
         }
         let gamesList = GamesList(games: games)
         let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
         if let encoded = try? encoder.encode(gamesList) {
             if let jsonString = String(data: encoded, encoding: .utf8) {
                 writeGamesToJSON(data: jsonString)
