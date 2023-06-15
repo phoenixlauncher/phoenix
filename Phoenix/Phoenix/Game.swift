@@ -97,7 +97,9 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
 }
 
 func loadGames() -> GamesList {
-    detectSteamGamesAndWriteToJSON()
+    if UserDefaults.standard.bool(forKey: "isGameDetectionEnabled") {
+        detectSteamGamesAndWriteToJSON()
+    }
     let res = loadGamesFromJSON()
     return res
 }

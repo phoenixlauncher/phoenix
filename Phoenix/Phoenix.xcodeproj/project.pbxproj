@@ -16,6 +16,9 @@
 		0A87BBB3295D7A360009AF47 /* EditGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A87BBB2295D7A360009AF47 /* EditGameView.swift */; };
 		0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A87BBB4295D7B1A0009AF47 /* GameDetailView.swift */; };
 		0A947C9A2958990D00A2CE66 /* HeaderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A947C992958990D00A2CE66 /* HeaderUtils.swift */; };
+		0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9B6F32A3AD97100800850 /* SettingsView.swift */; };
+		0AE9B6F62A3ADA0E00800850 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9B6F52A3ADA0E00800850 /* GeneralSettingsView.swift */; };
+		0AE9B6F82A3ADAD700800850 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9B6F72A3ADAD700800850 /* AppearanceSettingsView.swift */; };
 		0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378642953AADD00978137 /* PhoenixApp.swift */; };
 		0AF378672953AADD00978137 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378662953AADD00978137 /* ContentView.swift */; };
 		0AF378692953AADE00978137 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AF378682953AADE00978137 /* Assets.xcassets */; };
@@ -53,6 +56,9 @@
 		0A87BBB2295D7A360009AF47 /* EditGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGameView.swift; sourceTree = "<group>"; };
 		0A87BBB4295D7B1A0009AF47 /* GameDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailView.swift; sourceTree = "<group>"; };
 		0A947C992958990D00A2CE66 /* HeaderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderUtils.swift; sourceTree = "<group>"; };
+		0AE9B6F32A3AD97100800850 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		0AE9B6F52A3ADA0E00800850 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		0AE9B6F72A3ADAD700800850 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0AF378612953AADD00978137 /* Phoenix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phoenix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378642953AADD00978137 /* PhoenixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixApp.swift; sourceTree = "<group>"; };
 		0AF378662953AADD00978137 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -123,6 +129,9 @@
 				0A87BBB4295D7B1A0009AF47 /* GameDetailView.swift */,
 				0A02F8EB295BB92400FE29F4 /* AddGameView.swift */,
 				0A87BBB2295D7A360009AF47 /* EditGameView.swift */,
+				0AE9B6F32A3AD97100800850 /* SettingsView.swift */,
+				0AE9B6F52A3ADA0E00800850 /* GeneralSettingsView.swift */,
+				0AE9B6F72A3ADAD700800850 /* AppearanceSettingsView.swift */,
 				0A20E1E82957C52F00B7756E /* CmdUtils.swift */,
 				0A947C992958990D00A2CE66 /* HeaderUtils.swift */,
 				0A20E1F02957FD4C00B7756E /* JsonUtils.swift */,
@@ -227,7 +236,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					0AF378602953AADD00978137 = {
 						CreatedOnToolsVersion = 14.2;
@@ -296,8 +305,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AE9B6F62A3ADA0E00800850 /* GeneralSettingsView.swift in Sources */,
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
+				0AE9B6F82A3ADAD700800850 /* AppearanceSettingsView.swift in Sources */,
 				0A02F8EC295BB92400FE29F4 /* AddGameView.swift in Sources */,
 				0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* HeaderUtils.swift in Sources */,
@@ -305,6 +316,7 @@
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
 				0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
+				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
 				0A87BBB3295D7A360009AF47 /* EditGameView.swift in Sources */,
 				0A87BBB1295D57C30009AF47 /* GameListView.swift in Sources */,
 			);
@@ -376,9 +388,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -436,9 +450,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -466,6 +482,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
 				DEVELOPMENT_TEAM = UC7RC43VZH;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -496,6 +513,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
 				DEVELOPMENT_TEAM = UC7RC43VZH;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -522,6 +540,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = UC7RC43VZH;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -540,6 +559,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = UC7RC43VZH;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -558,6 +578,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6L9QQBQLVU;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -576,6 +597,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6L9QQBQLVU;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
