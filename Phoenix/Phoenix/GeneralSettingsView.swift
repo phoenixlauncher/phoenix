@@ -16,6 +16,7 @@ struct GeneralSettingsView: View {
             Toggle(isOn: $isGameDetectionEnabled) {
                 Text("Game Detection")
             }
+
         }
     }
 }

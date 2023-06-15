@@ -8,7 +8,15 @@
 import SwiftUI
 
 struct AppearanceSettingsView: View {
+    
+    @AppStorage("accentColorUI")
+    private var accentColorUI: Bool = true
+    
     var body: some View {
-        Text("Appearance Settings")
+        Form {
+            Toggle(isOn: $accentColorUI) {
+                Text("Accent Color UI (Requires restart)")
+            }
+        }
     }
 }
