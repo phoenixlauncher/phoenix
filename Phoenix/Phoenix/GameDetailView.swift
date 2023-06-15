@@ -126,23 +126,23 @@ struct GameDetailView: View {
                                     }
                                 }
                             }
-                            .frame(maxWidth: 450, maxHeight: .infinity, alignment: .topLeading)   // controls the dimensions and alignment of the description text
-                            .background(Color.gray.opacity(0.25))
+                            .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading)   // controls the dimensions and alignment of the description text
+                            .background(Color.gray.opacity(0.15))
                             .cornerRadius(7.5)
-                            .padding(.top, 5)
+                            .padding(.trailing, 7.5)
                             
                             VStack(alignment: .leading, spacing: 5) {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
-                                    
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Last Played")
-                                        Text(game.metadata["last_played"] ?? "")
-                                            .opacity(0.5)
-                                    }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Platform")
-                                        switch game.platform {
+                                    VStack(alignment: .leading) {
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Last Played")
+                                            Text(game.metadata["last_played"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Platform")
+                                            switch game.platform {
                                             case Platform.MAC:
                                                 Text("macOS")
                                                     .opacity(0.5)
@@ -161,41 +161,44 @@ struct GameDetailView: View {
                                             case Platform.NONE:
                                                 Text("Other")
                                                     .opacity(0.5)
+                                            }
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Rating")
+                                            Text(game.metadata["rating"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Genres")
+                                            Text(game.metadata["genre"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Developer")
+                                            Text(game.metadata["developer"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Publisher")
+                                            Text(game.metadata["publisher"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Release Date")
+                                            Text(game.metadata["release_date"] ?? "")
+                                                .opacity(0.5)
                                         }
                                     }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Rating")
-                                        Text(game.metadata["rating"] ?? "")
-                                            .opacity(0.5)
-                                    }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Genres")
-                                        Text(game.metadata["genre"] ?? "")
-                                            .opacity(0.5)
-                                    }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Developer")
-                                        Text(game.metadata["developer"] ?? "")
-                                            .opacity(0.5)
-                                    }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Publisher")
-                                        Text(game.metadata["publisher"] ?? "")
-                                            .opacity(0.5)
-                                    }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Release Date")
-                                        Text(game.metadata["release_date"] ?? "")
-                                            .opacity(0.5)
-                                    }
+                                    .padding(.trailing, 2.5)
                                 }
                             }
                             .font(.system(size: 14.5))
                             .padding(10)
-                            .background(Color.gray.opacity(0.25))
+                            .background(Color.gray.opacity(0.15))
                             .cornerRadius(7.5)
                         }
                         .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top, 10)
                     }
                     .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
