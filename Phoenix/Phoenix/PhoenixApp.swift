@@ -14,7 +14,7 @@ struct PhoenixApp: App {
         WindowGroup {
             ContentView()
                 .frame(
-                    minWidth: 800, idealWidth: 1900, maxWidth: .infinity,
+                    minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity)
         }.commands {
             CommandGroup(replacing: CommandGroupPlacement.newItem) {

@@ -70,12 +70,12 @@ struct GameDetailView: View {
                                 "No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")",
                                 isPresented: $showingAlert
                             ) {}
-                            .buttonStyle(.plain)
-                            .frame(width: 175, height: 50)
-                            .background(Color.accentColor)
-                            .cornerRadius(10)
-                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
-
+                                .buttonStyle(.plain)
+                                .frame(width: 175, height: 50)
+                                .background(Color.accentColor)
+                                .cornerRadius(10)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
+                            
                             // settings button
                             Button(
                                 action: {
@@ -106,93 +106,99 @@ struct GameDetailView: View {
                             .cornerRadius(10)
                         }  // hstack
                         .frame(alignment: .leading)
-
-                        // description
-                        VStack(alignment: .leading) {
-                            // Game Description
-                            if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                                let game = games[idx]
-                                
-                                Text(game.metadata["description"] ?? "No game selected")
-                                    .font(.system(size: 14.5))
-                                    .lineSpacing(3.5)
-                                    .padding(.top, 5)
-                            }
-                        }
-                        .frame(maxWidth: 450, alignment: .leading) // controls the width and alignment of the description text
-                    }  // vstack
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
-
-                    // Game Info
-                    VStack(alignment: .trailing, spacing: 5) {
-                        if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                            let game = games[idx]
-                            
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Last Played")
-                                    .foregroundColor(Color.white)
-                                Text(game.metadata["last_played"] ?? "")
-                                    .foregroundColor(Color.white.opacity(0.5))
-                            }
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Platform")
-                                    .foregroundColor(Color.white)
-                                switch game.platform {
-                                    case Platform.MAC:
-                                        Text("macOS")
-                                            .foregroundColor(Color.white.opacity(0.5))
-                                    case Platform.STEAM:
-                                        Text("Steam")
-                                            .foregroundColor(Color.white.opacity(0.5))
-                                    case Platform.GOG:
-                                        Text("GOG")
-                                            .foregroundColor(Color.white.opacity(0.5))
-                                    case Platform.EPIC:
-                                        Text("Epic Games")
-                                            .foregroundColor(Color.white.opacity(0.5))
-                                    case Platform.EMUL:
-                                        Text("Emulated")
-                                            .foregroundColor(Color.white.opacity(0.5))
-                                    case Platform.NONE:
-                                        Text("Other")
-                                            .foregroundColor(Color.white.opacity(0.5))
+                        
+                        HStack(alignment: .top) {
+                            // description
+                            VStack(alignment: .leading) {
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    let game = games[idx]
+                                    // Game Description
+                                    if game.metadata["description"] != "" {
+                                        Text(game.metadata["description"] ?? "No game selected")
+                                            .font(.system(size: 14.5))
+                                            .lineSpacing(3.5)
+                                            .padding(10)
+                                    } else {
+                                        Text("No description found")
+                                            .font(.system(size: 14.5))
+                                            .lineSpacing(3.5)
+                                            .padding(10)
+                                    }
                                 }
                             }
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Rating")
-                                    .foregroundColor(Color.white)
-                                Text(game.metadata["rating"] ?? "")
-                                    .foregroundColor(Color.white.opacity(0.5))
+                            .frame(maxWidth: 450, maxHeight: .infinity, alignment: .topLeading)   // controls the dimensions and alignment of the description text
+                            .background(Color.gray.opacity(0.25))
+                            .cornerRadius(7.5)
+                            .padding(.top, 5)
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    let game = games[idx]
+                                    
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Last Played")
+                                        Text(game.metadata["last_played"] ?? "")
+                                            .opacity(0.5)
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Platform")
+                                        switch game.platform {
+                                            case Platform.MAC:
+                                                Text("macOS")
+                                                    .opacity(0.5)
+                                            case Platform.STEAM:
+                                                Text("Steam")
+                                                    .opacity(0.5)
+                                            case Platform.GOG:
+                                                Text("GOG")
+                                                    .opacity(0.5)
+                                            case Platform.EPIC:
+                                                Text("Epic Games")
+                                                    .opacity(0.5)
+                                            case Platform.EMUL:
+                                                Text("Emulated")
+                                                    .opacity(0.5)
+                                            case Platform.NONE:
+                                                Text("Other")
+                                                    .opacity(0.5)
+                                        }
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Rating")
+                                        Text(game.metadata["rating"] ?? "")
+                                            .opacity(0.5)
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Genres")
+                                        Text(game.metadata["genre"] ?? "")
+                                            .opacity(0.5)
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Developer")
+                                        Text(game.metadata["developer"] ?? "")
+                                            .opacity(0.5)
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Publisher")
+                                        Text(game.metadata["publisher"] ?? "")
+                                            .opacity(0.5)
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Release Date")
+                                        Text(game.metadata["release_date"] ?? "")
+                                            .opacity(0.5)
+                                    }
+                                }
                             }
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Genres")
-                                    .foregroundColor(Color.white)
-                                Text(game.metadata["genre"] ?? "")
-                                    .foregroundColor(Color.white.opacity(0.5))
-                            }
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Developer")
-                                    .foregroundColor(Color.white)
-                                Text(game.metadata["developer"] ?? "")
-                                    .foregroundColor(Color.white.opacity(0.5))
-                            }
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Publisher")
-                                    .foregroundColor(Color.white)
-                                Text(game.metadata["publisher"] ?? "")
-                                    .foregroundColor(Color.white.opacity(0.5))
-                            }
-                            VStack(alignment: .trailing, spacing: 1) {
-                                Text("Release Date")
-                                    .foregroundColor(Color.white)
-                                Text(game.metadata["release_date"] ?? "")
-                                    .foregroundColor(Color.white.opacity(0.5))
-                            }
+                            .font(.system(size: 14.5))
+                            .padding(10)
+                            .background(Color.gray.opacity(0.25))
+                            .cornerRadius(7.5)
                         }
+                        .frame(maxHeight: .infinity, alignment: .top)
                     }
-                    .font(.system(size: 14.5))
-                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 17.5))
+                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 }
             }
         }
@@ -234,3 +240,4 @@ struct GameDetailView: View {
         }
     }
 }
+
