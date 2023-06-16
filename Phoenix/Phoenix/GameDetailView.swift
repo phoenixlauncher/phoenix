@@ -12,17 +12,26 @@ struct GameDetailView: View {
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
 
-    // make gradient colors
-    static let color0 = Color(red: 0 / 255, green: 230 / 255, blue: 2 / 255)
-    static let color1 = Color(red: 14 / 255, green: 173 / 255, blue: 89 / 255)
-    static let color2 = Color(red: 0 / 255, green: 230 / 255, blue: 2 / 255)
-    static let color3 = Color(red: 79 / 255, green: 84 / 255, blue: 84 / 255)
-    static let color4 = Color(red: 55 / 255, green: 54 / 255, blue: 53 / 255)
+    // initialize colors
+    var playColor = Color.green
+    var settingsColor = Color.gray.opacity(0.1)
+    var playText = Color.white
+    var settingsText = Color.primary
 
-    // make gradients
-    let playGradient = Gradient(colors: [color0, color1, color2])
-    let settingsGradient = Gradient(colors: [color3, color4])
-
+    init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
+        self._selectedGame = selectedGame
+        self._refresh = refresh
+        if UserDefaults.standard.bool(forKey: "accentColorUI") {
+            playColor = Color.accentColor
+            settingsColor = Color.accentColor.opacity(0.25)
+            settingsText = Color.accentColor
+        } else {
+            playColor = Color.green
+            settingsColor = Color.gray.opacity(0.25)
+            settingsText = Color.primary
+        }
+    }
+    
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
@@ -65,11 +74,11 @@ struct GameDetailView: View {
                                 },
                                 label: {
                                     Image(systemName: "play.fill")
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(playText)
                                         .font(.system(size: 25))
                                     Text(" Play")
                                         .fontWeight(.medium)
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(playText)
                                         .font(.system(size: 25))
                                 }
                             )
@@ -80,11 +89,7 @@ struct GameDetailView: View {
                             .buttonStyle(.plain)
                             .frame(width: 175, height: 50)
                             .background(
-                                LinearGradient(
-                                    gradient: playGradient,
-                                    startPoint: .init(x: 0, y: 0.5),
-                                    endPoint: .init(x: 1, y: 0.5)
-                                )
+                                playColor
                             )
                             .cornerRadius(10)
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
@@ -97,7 +102,7 @@ struct GameDetailView: View {
                                 label: {
                                     Image(systemName: "gear")
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(settingsText)
                                         .font(.system(size: 27))
                                 }
                             )
@@ -115,13 +120,7 @@ struct GameDetailView: View {
                             )
                             .buttonStyle(.plain)
                             .frame(width: 50, height: 50)
-                            .background(
-                                LinearGradient(
-                                    gradient: settingsGradient,
-                                    startPoint: .init(x: 0.50, y: 0),
-                                    endPoint: .init(x: 0.50, y: 1)
-                                )
-                            )
+                            .background(settingsColor)
                             .cornerRadius(10)
                         }  // hstack
                         .frame(alignment: .leading)
