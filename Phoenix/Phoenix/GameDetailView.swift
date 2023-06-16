@@ -12,6 +12,26 @@ struct GameDetailView: View {
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
 
+    // initialize colors
+    var playColor = Color.green
+    var settingsColor = Color.gray.opacity(0.1)
+    var playText = Color.white
+    var settingsText = Color.primary
+
+    init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
+        self._selectedGame = selectedGame
+        self._refresh = refresh
+        if UserDefaults.standard.bool(forKey: "accentColorUI") {
+            playColor = Color.accentColor
+            settingsColor = Color.accentColor.opacity(0.25)
+            settingsText = Color.accentColor
+        } else {
+            playColor = Color.green
+            settingsColor = Color.gray.opacity(0.25)
+            settingsText = Color.primary
+        }
+    }
+    
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
@@ -58,11 +78,11 @@ struct GameDetailView: View {
                                 label: {
                                     Image(systemName: "play.fill")
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(playText)
                                         .font(.system(size: 25))
                                     Text(" Play")
                                         .fontWeight(.medium)
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(playText)
                                         .font(.system(size: 25))
                                 }
                             )
@@ -70,12 +90,12 @@ struct GameDetailView: View {
                                 "No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")",
                                 isPresented: $showingAlert
                             ) {}
-                                .buttonStyle(.plain)
-                                .frame(width: 175, height: 50)
-                                .background(Color.accentColor)
-                                .cornerRadius(10)
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
-                            
+                            .buttonStyle(.plain)
+                            .frame(width: 175, height: 50)
+                            .background(playColor)
+                            .cornerRadius(10)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
+
                             // settings button
                             Button(
                                 action: {
@@ -84,7 +104,7 @@ struct GameDetailView: View {
                                 label: {
                                     Image(systemName: "gear")
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color.accentColor)
+                                        .foregroundColor(settingsText)
                                         .font(.system(size: 27))
                                 }
                             )
@@ -102,7 +122,7 @@ struct GameDetailView: View {
                             )
                             .buttonStyle(.plain)
                             .frame(width: 50, height: 50)
-                            .background(Color.accentColor.opacity(0.1))
+                            .background(settingsColor)
                             .cornerRadius(10)
                         }  // hstack
                         .frame(alignment: .leading)

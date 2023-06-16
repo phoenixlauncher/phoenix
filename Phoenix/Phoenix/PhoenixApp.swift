@@ -27,6 +27,10 @@ struct PhoenixApp: App {
                 }
             }
         }
+        
+        Settings {
+            SettingsView()
+        }
     }
 }
 
