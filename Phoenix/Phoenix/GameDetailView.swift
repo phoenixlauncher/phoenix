@@ -151,7 +151,7 @@ struct GameDetailView: View {
                             .cornerRadius(7.5)
                             .padding(.trailing, 7.5)
                             
-                            VStack(alignment: .leading, spacing: 5) {
+                            VStack(alignment: .leading, spacing: 7.5) {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
                                     VStack(alignment: .leading) {
@@ -216,6 +216,7 @@ struct GameDetailView: View {
                             .padding(10)
                             .background(Color.gray.opacity(0.15))
                             .cornerRadius(7.5)
+                            .frame(minWidth: 200, maxWidth: .infinity, alignment: .leading)
                         }
                         .frame(maxHeight: .infinity, alignment: .top)
                         .padding(.top, 10)
