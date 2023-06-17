@@ -151,10 +151,10 @@ struct GameDetailView: View {
                             .cornerRadius(7.5)
                             .padding(.trailing, 7.5)
 
-                            VStack(alignment: .leading, spacing: 7.5) {
+                            VStack(alignment: .leading) {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
-                                    VStack(alignment: .leading) {
+                                    VStack(alignment: .leading, spacing: 7.5) {
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Last Played")
                                             Text(game.metadata["last_played"] ?? "")
@@ -209,14 +209,14 @@ struct GameDetailView: View {
                                                 .opacity(0.5)
                                         }
                                     }
-                                    .padding(.trailing, 2.5)
+                                    .padding(.trailing, 10)
+                                    .frame(minWidth: 150, alignment: .leading)
                                 }
                             }
                             .font(.system(size: 14.5))
                             .padding(10)
                             .background(Color.gray.opacity(0.15))
                             .cornerRadius(7.5)
-                            .frame(minWidth: 200, maxWidth: .infinity, alignment: .leading)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .padding(.top, 10)
