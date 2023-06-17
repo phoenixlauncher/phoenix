@@ -19,8 +19,8 @@ struct GameDetailView: View {
     var settingsText = Color.primary
 
     init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
-        self._selectedGame = selectedGame
-        self._refresh = refresh
+        _selectedGame = selectedGame
+        _refresh = refresh
         if UserDefaults.standard.bool(forKey: "accentColorUI") {
             playColor = Color.accentColor
             settingsColor = Color.accentColor.opacity(0.25)
@@ -31,7 +31,7 @@ struct GameDetailView: View {
             settingsText = Color.primary
         }
     }
-    
+
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
@@ -71,7 +71,7 @@ struct GameDetailView: View {
                                                 showingAlert = true
                                             }
                                         } catch {
-                                            logger.write("\(error)")  // handle or silence the error here
+                                            logger.write("\(error)") // handle or silence the error here
                                         }
                                     }
                                 },
@@ -124,9 +124,9 @@ struct GameDetailView: View {
                             .frame(width: 50, height: 50)
                             .background(settingsColor)
                             .cornerRadius(10)
-                        }  // hstack
+                        } // hstack
                         .frame(alignment: .leading)
-                        
+
                         HStack(alignment: .top) {
                             // description
                             VStack(alignment: .leading) {
@@ -146,11 +146,11 @@ struct GameDetailView: View {
                                     }
                                 }
                             }
-                            .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading)   // controls the dimensions and alignment of the description text
+                            .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
                             .background(Color.gray.opacity(0.15))
                             .cornerRadius(7.5)
                             .padding(.trailing, 7.5)
-                            
+
                             VStack(alignment: .leading, spacing: 7.5) {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
@@ -218,7 +218,7 @@ struct GameDetailView: View {
                             .cornerRadius(7.5)
                             .frame(minWidth: 200, maxWidth: .infinity, alignment: .leading)
                         }
-                        .frame(maxWidth: infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .padding(.top, 10)
                     }
                     .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
@@ -229,15 +229,14 @@ struct GameDetailView: View {
         .edgesIgnoringSafeArea(.all)
         .navigationTitle(selectedGame ?? "Phoenix")
     }
-    
+
     func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {
-        
         let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .long
             return formatter
         }()
-        
+
         // Convert the current date to a string using the dateFormatter
         let dateString = dateFormatter.string(from: currentDate)
 
@@ -245,14 +244,14 @@ struct GameDetailView: View {
         let idx = games.firstIndex(where: { $0.name == selectedGame })
         if idx != nil {
             games[idx!].metadata["last_played"] = dateString
-            
+
             // Write the updated game information to the JSON file
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
-            
+
             do {
                 let gamesJSON = try encoder.encode(GamesList(games: games))
-                
+
                 if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
                     // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
                     gamesJSONString = "{\"games\": \(gamesJSONString)}"
@@ -264,4 +263,3 @@ struct GameDetailView: View {
         }
     }
 }
-
