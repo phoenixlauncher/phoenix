@@ -19,8 +19,8 @@ struct GameDetailView: View {
     var settingsText = Color.primary
 
     init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
-        self._selectedGame = selectedGame
-        self._refresh = refresh
+        _selectedGame = selectedGame
+        _refresh = refresh
         if UserDefaults.standard.bool(forKey: "accentColorUI") {
             playColor = Color.accentColor
             settingsColor = Color.accentColor.opacity(0.25)
@@ -31,7 +31,7 @@ struct GameDetailView: View {
             settingsText = Color.primary
         }
     }
-    
+
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
@@ -62,18 +62,22 @@ struct GameDetailView: View {
                                     ) {
                                         do {
                                             let game = games[idx]
+                                            let currentDate = Date()
+                                            // Update the last played date and write the updated information to the JSON file
+                                            updateLastPlayedDate(currentDate: currentDate, games: &games)
                                             if game.launcher != "" {
                                                 try shell(game)
                                             } else {
                                                 showingAlert = true
                                             }
                                         } catch {
-                                            logger.write("\(error)")  // handle or silence the error here
+                                            logger.write("\(error)") // handle or silence the error here
                                         }
                                     }
                                 },
                                 label: {
                                     Image(systemName: "play.fill")
+                                        .fontWeight(.bold)
                                         .foregroundColor(playText)
                                         .font(.system(size: 25))
                                     Text(" Play")
@@ -88,9 +92,7 @@ struct GameDetailView: View {
                             ) {}
                             .buttonStyle(.plain)
                             .frame(width: 175, height: 50)
-                            .background(
-                                playColor
-                            )
+                            .background(playColor)
                             .cornerRadius(10)
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
 
@@ -122,70 +124,142 @@ struct GameDetailView: View {
                             .frame(width: 50, height: 50)
                             .background(settingsColor)
                             .cornerRadius(10)
-                        }  // hstack
+                        } // hstack
                         .frame(alignment: .leading)
 
-                        // description
-                        VStack(alignment: .leading) {
-                            // Game Description
-                            if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                                let game = games[idx]
-                                Text(game.metadata["description"] ?? "No game selected")
-                            }
-                        }  // vstack
-                        .frame(maxWidth: 450)  // controls the width of the description text
-                        .font(.system(size: 14.5))
-                        .lineSpacing(3.5)
-                        .padding(.top, 5)
-                    }  // vstack
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
-
-                    HStack(alignment: .top) {
-                        // Game Info
-                        VStack(alignment: .leading) {
-                            Text("Time Played:").padding(5)
-                            Text("Last Played:").padding(5)
-                            Text("Platform:").padding(5)
-                            Text("Rating:").padding(5)
-                            Text("Genres:\n\n").padding(5)
-                            Text("Developer:").padding(5)
-                            Text("Publisher:").padding(5)
-                            Text("Release Date:").padding(5)
-                        }
-                        VStack(alignment: .trailing) {
-                            if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                                let game = games[idx]
-                                Text(game.metadata["time_played"] ?? "").padding(5)
-                                Text(game.metadata["last_played"] ?? "").padding(5)
-                                switch game.platform {
-                                case Platform.MAC:
-                                    Text("MacOS").padding(5)
-                                case Platform.STEAM:
-                                    Text("Steam").padding(5)
-                                case Platform.GOG:
-                                    Text("GOG").padding(5)
-                                case Platform.EPIC:
-                                    Text("Epic Games").padding(5)
-                                case Platform.EMUL:
-                                    Text("Emulated").padding(5)
-                                case Platform.NONE:
-                                    Text("Other").padding(5)
+                        HStack(alignment: .top) {
+                            // description
+                            VStack(alignment: .leading) {
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    let game = games[idx]
+                                    // Game Description
+                                    if game.metadata["description"] != "" {
+                                        Text(game.metadata["description"] ?? "No game selected")
+                                            .font(.system(size: 14.5))
+                                            .lineSpacing(3.5)
+                                            .padding(10)
+                                    } else {
+                                        Text("No description found")
+                                            .font(.system(size: 14.5))
+                                            .lineSpacing(3.5)
+                                            .padding(10)
+                                    }
                                 }
-                                Text(game.metadata["rating"] ?? "").padding(5)
-                                Text(game.metadata["genre"] ?? "").padding(5)
-                                Text(game.metadata["developer"] ?? "").padding(5)
-                                Text(game.metadata["publisher"] ?? "").padding(5)
-                                Text(game.metadata["release_date"] ?? "No date").padding(5)
                             }
+                            .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
+                            .background(Color.gray.opacity(0.15))
+                            .cornerRadius(7.5)
+                            .padding(.trailing, 7.5)
+
+                            VStack(alignment: .leading) {
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    let game = games[idx]
+                                    VStack(alignment: .leading, spacing: 7.5) {
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Last Played")
+                                            Text(game.metadata["last_played"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Platform")
+                                            switch game.platform {
+                                            case Platform.MAC:
+                                                Text("macOS")
+                                                    .opacity(0.5)
+                                            case Platform.STEAM:
+                                                Text("Steam")
+                                                    .opacity(0.5)
+                                            case Platform.GOG:
+                                                Text("GOG")
+                                                    .opacity(0.5)
+                                            case Platform.EPIC:
+                                                Text("Epic Games")
+                                                    .opacity(0.5)
+                                            case Platform.EMUL:
+                                                Text("Emulated")
+                                                    .opacity(0.5)
+                                            case Platform.NONE:
+                                                Text("Other")
+                                                    .opacity(0.5)
+                                            }
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Rating")
+                                            Text(game.metadata["rating"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Genres")
+                                            Text(game.metadata["genre"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Developer")
+                                            Text(game.metadata["developer"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Publisher")
+                                            Text(game.metadata["publisher"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("Release Date")
+                                            Text(game.metadata["release_date"] ?? "")
+                                                .opacity(0.5)
+                                        }
+                                    }
+                                    .padding(.trailing, 10)
+                                    .frame(minWidth: 150, alignment: .leading)
+                                }
+                            }
+                            .font(.system(size: 14.5))
+                            .padding(10)
+                            .background(Color.gray.opacity(0.15))
+                            .cornerRadius(7.5)
                         }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .padding(.top, 10)
                     }
-                    .frame(minWidth: 350).padding(.top, 5)  // specify min width for the game details (ensures padding on right side)
-                    .font(.system(size: 14.5))
+                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 }
             }
         }
         .edgesIgnoringSafeArea(.all)
         .navigationTitle(selectedGame ?? "Phoenix")
+    }
+
+    func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {
+        let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .long
+            return formatter
+        }()
+
+        // Convert the current date to a string using the dateFormatter
+        let dateString = dateFormatter.string(from: currentDate)
+
+        // Update the value of "last_played" in the game's metadata
+        let idx = games.firstIndex(where: { $0.name == selectedGame })
+        if idx != nil {
+            games[idx!].metadata["last_played"] = dateString
+
+            // Write the updated game information to the JSON file
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+
+            do {
+                let gamesJSON = try encoder.encode(GamesList(games: games))
+
+                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                    writeGamesToJSON(data: gamesJSONString)
+                }
+            } catch {
+                logger.write(error.localizedDescription)
+            }
+        }
     }
 }

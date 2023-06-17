@@ -233,7 +233,7 @@ struct EditGameView: View {
                         .frame(width: 87, alignment: .leading)
                     TextEditor(text: $genreInput)
                     Text(
-                        "A list of 3 genres that describe this game. Please write each genre on a new line"
+                        "Genre(s) that describe this game. Please write each genre on a new line"
                     )
                     .frame(width: 290)
                 }
@@ -313,8 +313,6 @@ struct EditGameView: View {
                         metadata: [
                             "description": descInput,
                             "header_img": headOutput,
-                            "time_played": "0 Hours",
-                            "last_played": "Today",
                             "rating": rateInput,
                             "genre": genreInput,
                             "developer": devInput,
