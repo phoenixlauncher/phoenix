@@ -7,9 +7,10 @@
 import SwiftUI
 
 struct GameListView: View {
+    @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
-
+    
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in
@@ -42,7 +43,17 @@ struct GameListView: View {
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
+            hiddenGamesDelegateObject.refreshGameListView = {
+                logger.write("run the func")
+                // Perform the action in ContentView
+                self.refreshGameListView()
+            }
         }
+    }
+    
+    func refreshGameListView() {
+        logger.write("refresh games list")
+        $refresh.wrappedValue.toggle()
     }
     
     /// Deletes a game from the games list by setting its `isDeleted` property to `true`.

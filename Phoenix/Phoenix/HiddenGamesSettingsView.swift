@@ -7,8 +7,13 @@
 
 import SwiftUI
 
+class HiddenGamesDelegateObject: ObservableObject {
+    var refreshGameListView: (() -> Void)?
+}
+
 struct HiddenGamesSettingsView: View {
     
+    @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
     @State var selectedGame: String?
     @State var refresh: Bool = false
     
@@ -46,6 +51,8 @@ struct HiddenGamesSettingsView: View {
         if let index = games.firstIndex(where: { $0.name == game.name }) {
             games[index].isDeleted = false
             // REFRESH GAME LIST VIEW HERE
+            logger.write("called function from settings view")
+            hiddenGamesDelegateObject.refreshGameListView?()
             refresh.wrappedValue.toggle()
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted

@@ -12,6 +12,8 @@ private let collapsedImageHeight: CGFloat = 150
 
 var games = loadGames().games.sorted()
 
+private let hiddenGamesDelegateObject = HiddenGamesDelegateObject()
+
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @State var selectedGame: String?
@@ -23,6 +25,7 @@ struct ContentView: View {
         NavigationSplitView {
             // The sidebar
             GameListView(selectedGame: $selectedGame, refresh: $refresh)
+                .environmentObject(hiddenGamesDelegateObject)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         // Add game button

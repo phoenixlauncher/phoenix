@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @StateObject private var hiddenGamesDelegateObject = HiddenGamesDelegateObject()
+    
     var body: some View {
         TabView {
             GeneralSettingsView()
@@ -19,6 +21,7 @@ struct SettingsView: View {
                     Label("Appearance", systemImage: "paintpalette")
                 }
             HiddenGamesSettingsView()
+                .environmentObject(hiddenGamesDelegateObject)
                 .tabItem {
                     Label("Hidden Games", systemImage: "eye.slash.fill")
                 }
