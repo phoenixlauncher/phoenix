@@ -250,7 +250,7 @@ struct GameDetailView: View {
             encoder.outputFormatting = .prettyPrinted
 
             do {
-                let gamesJSON = try encoder.encode(GamesList(games: games))
+                let gamesJSON = try encoder.encode(games)
 
                 if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
                     // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
