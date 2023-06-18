@@ -321,7 +321,9 @@ struct EditGameView: View {
                         ],
                         icon: iconOutput,
                         name: nameInput,
-                        platform: platInput)
+                        platform: platInput,
+                        isDeleted: false
+                    )
 
                     let idx = games.firstIndex(where: { $0.name == currentGame.name })
                     games[idx!] = editedGame

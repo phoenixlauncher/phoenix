@@ -31,6 +31,7 @@ struct Game: Codable, Comparable, Hashable {
     var icon: String
     var name: String
     var platform: Platform
+    var isDeleted: Bool // New property to indicate if the game has been deleted
 
     init(
         appID: String = "",
@@ -47,7 +48,8 @@ struct Game: Codable, Comparable, Hashable {
         ],
         icon: String = "PlaceholderImage",
         name: String,
-        platform: Platform = Platform.NONE
+        platform: Platform = Platform.NONE,
+        isDeleted: Bool // Initialize isDeleted with false by default
     ) {
         self.appID = appID
         self.launcher = launcher
@@ -55,6 +57,7 @@ struct Game: Codable, Comparable, Hashable {
         self.icon = icon
         self.name = name
         self.platform = platform
+        self.isDeleted = isDeleted
     }
 
     /**
@@ -99,6 +102,8 @@ func loadGames() -> GamesList {
     if UserDefaults.standard.bool(forKey: "isGameDetectionEnabled") {
         detectSteamGamesAndWriteToJSON()
     }
+    
     let res = loadGamesFromJSON()
     return res
 }
+

@@ -276,7 +276,9 @@ struct AddGameView: View {
                         ],
                         icon: iconOutput,
                         name: nameInput,
-                        platform: platInput)
+                        platform: platInput,
+                        isDeleted: false
+                    )
 
                     games.append(newGame)
                     games = games.sorted()
