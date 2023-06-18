@@ -18,6 +18,10 @@ struct SettingsView: View {
                 .tabItem {
                     Label("Appearance", systemImage: "paintpalette")
                 }
+            HiddenGamesSettingsView()
+                .tabItem {
+                    Label("Hidden Games", systemImage: "eye.slash.fill")
+                }
         }
         .frame(width: 450, height: 250)
     }
