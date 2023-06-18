@@ -104,9 +104,6 @@ func loadGames() -> GamesList {
     }
     
     let res = loadGamesFromJSON()
-    
-    // Filter out the deleted games
-    let filteredGames = res.games.filter { !$0.isDeleted }
-    return GamesList(games: filteredGames)
+    return res
 }
 
