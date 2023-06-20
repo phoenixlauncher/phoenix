@@ -26,6 +26,10 @@
 		0AF378772953AADE00978137 /* PhoenixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378762953AADE00978137 /* PhoenixTests.swift */; };
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
+		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
+		CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = CAFACC752A42638E001C45C4 /* Sparkle */; };
+		CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */; };
+		CAFACC7A2A42650F001C45C4 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAFACC792A42650F001C45C4 /* Info.plist */; };
 		CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAFAA82967600700B89003 /* LogUtils.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +74,9 @@
 		0AF3787C2953AADE00978137 /* PhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
+		CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterViewModel.swift; sourceTree = "<group>"; };
+		CAFACC792A42650F001C45C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CAFAFAA82967600700B89003 /* LogUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +129,9 @@
 		0AF378632953AADD00978137 /* Phoenix */ = {
 			isa = PBXGroup;
 			children = (
+				CAFACC792A42650F001C45C4 /* Info.plist */,
+				CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */,
+				CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */,
 				0A20E1F22957FEAD00B7756E /* games.json */,
 				0AF378642953AADD00978137 /* PhoenixApp.swift */,
 				0A20E1EE2957E8B900B7756E /* Game.swift */,
@@ -187,6 +198,7 @@
 			);
 			name = Phoenix;
 			packageProductDependencies = (
+				CAFACC752A42638E001C45C4 /* Sparkle */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -261,6 +273,7 @@
 			);
 			mainGroup = 0AF378582953AADC00978137;
 			packageReferences = (
+				CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -278,6 +291,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAFACC7A2A42650F001C45C4 /* Info.plist in Resources */,
 				0AF3786C2953AADE00978137 /* Preview Assets.xcassets in Resources */,
 				0A20E1F32957FEAD00B7756E /* games.json in Resources */,
 				0AF378692953AADE00978137 /* Assets.xcassets in Resources */,
@@ -307,12 +321,14 @@
 			files = (
 				0AE9B6F62A3ADA0E00800850 /* GeneralSettingsView.swift in Sources */,
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
+				CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
 				0AE9B6F82A3ADAD700800850 /* AppearanceSettingsView.swift in Sources */,
 				0A02F8EC295BB92400FE29F4 /* AddGameView.swift in Sources */,
 				0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* HeaderUtils.swift in Sources */,
 				CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */,
+				CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */,
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
 				0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
@@ -484,7 +500,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = SPWQRB7M9L;
+				DEVELOPMENT_TEAM = 6L9QQBQLVU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -515,7 +531,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = SPWQRB7M9L;
+				DEVELOPMENT_TEAM = 6L9QQBQLVU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -650,6 +666,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CAFACC752A42638E001C45C4 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0AF378592953AADC00978137 /* Project object */;
 }
