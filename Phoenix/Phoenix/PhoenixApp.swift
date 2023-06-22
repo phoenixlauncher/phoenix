@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct PhoenixApp: App {
+    @StateObject var updaterViewModel = UpdaterViewModel()
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     private let hiddenGamesDelegateObject = HiddenGamesDelegateObject()
     private let appearanceDelegateObject = AppearanceDelegateObject()
@@ -30,6 +31,9 @@ struct PhoenixApp: App {
                         logger.write("[INFO]: Opened Application Support/Phoenix.")
                     }
                 }
+            }
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesView(UpdaterViewModel: updaterViewModel)
             }
         }
         
