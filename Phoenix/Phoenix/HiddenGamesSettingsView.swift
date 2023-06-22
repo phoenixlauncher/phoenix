@@ -17,6 +17,8 @@ struct HiddenGamesSettingsView: View {
     @State var selectedGame: String?
     @State var refresh: Bool = false
     
+    @State var noGamesTextDisplayed: Bool = false
+    
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in
@@ -39,6 +41,18 @@ struct HiddenGamesSettingsView: View {
                                 .accessibility(identifier: "Restore Game")
                             }
                         }.scrollDisabled(true)
+                    }
+                } else {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            if (platform.displayName == "Steam") {
+                                Text("No deleted games found")
+                            }
+                            Spacer()
+                        }
+                        Spacer()
                     }
                 }
             }

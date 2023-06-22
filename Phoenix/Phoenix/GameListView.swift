@@ -7,9 +7,11 @@
 import SwiftUI
 
 struct GameListView: View {
+    
     @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
+    @State private var timer: Timer?
     
     var body: some View {
         List(selection: $selectedGame) {
@@ -43,11 +45,15 @@ struct GameListView: View {
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
-            hiddenGamesDelegateObject.refreshGameListView = {
-                logger.write("run the func")
-                // Perform the action in ContentView
-                self.refreshGameListView()
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                refresh.toggle()
+                // This code will be executed every 1 second
             }
+        }
+        .onDisappear {
+            // Invalidate the timer when the view disappears
+            timer?.invalidate()
+            timer = nil
         }
     }
     

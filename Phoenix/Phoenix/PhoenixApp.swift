@@ -11,6 +11,7 @@ import SwiftUI
 struct PhoenixApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     private let hiddenGamesDelegateObject = HiddenGamesDelegateObject()
+    private let appearanceDelegateObject = AppearanceDelegateObject()
     
     var body: some Scene {
         WindowGroup {
@@ -19,6 +20,7 @@ struct PhoenixApp: App {
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity)
                 .environmentObject(hiddenGamesDelegateObject)
+                .environmentObject(appearanceDelegateObject)
         }.commands {
             CommandGroup(replacing: CommandGroupPlacement.newItem) {
                 Button("Open Phoenix Data Folder") {

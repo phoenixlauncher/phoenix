@@ -13,6 +13,7 @@ private let collapsedImageHeight: CGFloat = 150
 var games = loadGames().games.sorted()
 
 private let hiddenGamesDelegateObject = HiddenGamesDelegateObject()
+private let appearanceDelegateObject = AppearanceDelegateObject()
 
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
@@ -52,6 +53,7 @@ struct ContentView: View {
         } detail: {
             // The detailed view of the selected game
             GameDetailView(selectedGame: $selectedGame, refresh: $refresh)
+                .environmentObject(appearanceDelegateObject)
 
             // Refresh detail view
             Text(String(refresh))
