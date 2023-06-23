@@ -7,16 +7,19 @@
 import SwiftUI
 
 struct GameDetailView: View {
+    @EnvironmentObject private var appearanceDelegateObject: AppearanceDelegateObject
+    
     @State var editingGame: Bool = false
     @State var showingAlert: Bool = false
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
+    @State private var timer: Timer?
 
     // initialize colors
-    var playColor = Color.green
-    var settingsColor = Color.gray.opacity(0.1)
-    var playText = Color.white
-    var settingsText = Color.primary
+    @State var playColor = Color.green
+    @State var settingsColor = Color.gray.opacity(0.1)
+    @State var playText = Color.white
+    @State var settingsText = Color.primary
 
     init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
         _selectedGame = selectedGame
@@ -228,6 +231,43 @@ struct GameDetailView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .navigationTitle(selectedGame ?? "Phoenix")
+        .onAppear {
+            if selectedGame == nil {
+                selectedGame = games[0].name
+            }
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                refresh.toggle()
+                // This code will be executed every 1 second
+            }
+            if UserDefaults.standard.bool(forKey: "accentColorUI") {
+                playColor = Color.accentColor
+                settingsColor = Color.accentColor.opacity(0.25)
+                settingsText = Color.accentColor
+            } else {
+                playColor = Color.green
+                settingsColor = Color.gray.opacity(0.25)
+                settingsText = Color.primary
+            }
+        }
+        .onDisappear {
+            // Invalidate the timer when the view disappears
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    func refreshGameDetailView() {
+        logger.write("refresh game detail")
+        if UserDefaults.standard.bool(forKey: "accentColorUI") {
+            playColor = Color.accentColor
+            settingsColor = Color.accentColor.opacity(0.25)
+            settingsText = Color.accentColor
+        } else {
+            playColor = Color.green
+            settingsColor = Color.gray.opacity(0.25)
+            settingsText = Color.primary
+        }
+        $refresh.wrappedValue.toggle()
     }
 
     func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {

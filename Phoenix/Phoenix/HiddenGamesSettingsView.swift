@@ -1,22 +1,28 @@
 //
-//  GameListView.swift
+//  HiddenGamesSettingsView.swift
 //  Phoenix
 //
-//  Created by Kaleb Rosborough on 2022-12-28.
+//  Created by james hughes on 6/18/23.
 //
+
 import SwiftUI
 
-struct GameListView: View {
+class HiddenGamesDelegateObject: ObservableObject {
+    var refreshGameListView: (() -> Void)?
+}
+
+struct HiddenGamesSettingsView: View {
     
     @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
-    @Binding var selectedGame: String?
-    @Binding var refresh: Bool
-    @State private var timer: Timer?
+    @State var selectedGame: String?
+    @State var refresh: Bool = false
+    
+    @State var noGamesTextDisplayed: Bool = false
     
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in
-                let gamesForPlatform = games.filter { $0.platform == platform && $0.isDeleted == false}
+                let gamesForPlatform = games.filter { $0.platform == platform && $0.isDeleted == true}
                 if !gamesForPlatform.isEmpty {
                     Section(header: Text(platform.displayName)) {
                         ForEach(gamesForPlatform, id: \.name) { game in
@@ -28,48 +34,39 @@ struct GameListView: View {
                             }
                             .contextMenu {
                                 Button(action: {
-                                    deleteGame(game, refresh: $refresh)
+                                    restoreGame(game, refresh: $refresh)
                                 }) {
-                                    Text("Delete game")
+                                    Text("Restore game")
                                 }
-                                .accessibility(identifier: "Delete Game")
+                                .accessibility(identifier: "Restore Game")
                             }
                         }.scrollDisabled(true)
+                    }
+                } else {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            if (platform.displayName == "Steam") {
+                                Text("No deleted games found")
+                            }
+                            Spacer()
+                        }
+                        Spacer()
                     }
                 }
             }
             Text(String(refresh))
                 .hidden()
         }
-        .onAppear {
-            if selectedGame == nil {
-                selectedGame = games[0].name
-            }
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                refresh.toggle()
-                // This code will be executed every 1 second
-            }
-        }
-        .onDisappear {
-            // Invalidate the timer when the view disappears
-            timer?.invalidate()
-            timer = nil
-        }
     }
     
-    func refreshGameListView() {
-        logger.write("refresh games list")
-        $refresh.wrappedValue.toggle()
-    }
-    
-    /// Deletes a game from the games list by setting its `isDeleted` property to `true`.
-    ///
-    /// - Parameters:
-    ///   - game: The game to delete.
-    ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
-    func deleteGame(_ game: Game, refresh: Binding<Bool>) {
+    func restoreGame(_ game: Game, refresh: Binding<Bool>) {
         if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].isDeleted = true
+            games[index].isDeleted = false
+            // REFRESH GAME LIST VIEW HERE
+            logger.write("called function from settings view")
+            hiddenGamesDelegateObject.refreshGameListView?()
             refresh.wrappedValue.toggle()
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
@@ -87,5 +84,4 @@ struct GameListView: View {
             }
         }
     }
-
 }
