@@ -254,7 +254,7 @@ struct EditGameView: View {
                 }
 
                 HStack {
-                    DatePicker(selection: $dateInput, in: ...Date.now, displayedComponents: .date) {
+                    DatePicker(selection: $dateInput, in: ...Date(), displayedComponents: .date) {
                         Text("Release Date")
                             .frame(width: 87, alignment: .leading)
                     }
@@ -296,7 +296,8 @@ struct EditGameView: View {
                     if pubInput == "" {
                         pubInput = currentGame.metadata["publisher"] ?? ""
                     }
-                    if dateInput == .now {
+                    // check if the date is today, if yes then change it to the previous release date
+                    if dateInput.formatted(date: .complete, time: .omitted) == Date().formatted(date: .complete, time: .omitted) {
                         dateInputStr = currentGame.metadata["release_date"] ?? ""
                     } else {
                         let dateFormatter: DateFormatter = {
