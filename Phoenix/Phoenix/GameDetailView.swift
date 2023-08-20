@@ -150,7 +150,11 @@ struct GameDetailView: View {
                                 }
                             }
                             .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
-                            .background(Color.gray.opacity(0.15))
+                            .background(Color.gray.opacity(0.05))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                            )
                             .cornerRadius(7.5)
                             .padding(.trailing, 7.5)
 
@@ -200,7 +204,11 @@ struct GameDetailView: View {
                             }
                             .font(.system(size: 14.5))
                             .padding(10)
-                            .background(Color.gray.opacity(0.15))
+                            .background(Color.gray.opacity(0.05))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                            )
                             .cornerRadius(7.5)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
