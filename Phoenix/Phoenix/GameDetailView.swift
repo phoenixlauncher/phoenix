@@ -149,7 +149,7 @@ struct GameDetailView: View {
                                     }
                                 }
                             }
-                            .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
+                            .frame(idealWidth: 400, maxWidth: 550, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
                             .background(Color.gray.opacity(0.05))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 7.5)
@@ -164,7 +164,7 @@ struct GameDetailView: View {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Last Played")
-                                            Text(game.metadata["last_played"] ?? "")
+                                            Text(game.metadata["last_played"] ?? "Never")
                                                 .opacity(0.5)
                                         }
                                         VStack(alignment: .leading, spacing: 1) {
@@ -214,12 +214,11 @@ struct GameDetailView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .padding(.top, 10)
                     }
-                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
+                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 10, trailing: 17.5))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 }
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .navigationTitle(selectedGame ?? "Phoenix")
         .onAppear {
             if selectedGame == nil {
