@@ -165,26 +165,8 @@ struct GameDetailView: View {
                                         }
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Platform")
-                                            switch game.platform {
-                                            case Platform.MAC:
-                                                Text("macOS")
-                                                    .opacity(0.5)
-                                            case Platform.STEAM:
-                                                Text("Steam")
-                                                    .opacity(0.5)
-                                            case Platform.GOG:
-                                                Text("GOG")
-                                                    .opacity(0.5)
-                                            case Platform.EPIC:
-                                                Text("Epic Games")
-                                                    .opacity(0.5)
-                                            case Platform.EMUL:
-                                                Text("Emulated")
-                                                    .opacity(0.5)
-                                            case Platform.NONE:
-                                                Text("Other")
-                                                    .opacity(0.5)
-                                            }
+                                            Text(game.platform.displayName)
+                                                .opacity(0.5)
                                         }
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Rating")

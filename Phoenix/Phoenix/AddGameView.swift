@@ -277,7 +277,7 @@ struct AddGameView: View {
                         icon: iconOutput,
                         name: nameInput,
                         platform: platInput,
-                        isDeleted: false
+                        is_deleted: false
                     )
 
                     games.append(newGame)

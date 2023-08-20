@@ -7,6 +7,14 @@
 import Foundation
 import SwiftUI
 
+extension String {
+    func capitalizingFirstLetter() -> String {
+        let first = String(self.prefix(1)).uppercased()
+        let other = String(self.dropFirst())
+        return first + other
+    }
+}
+
 struct EditGameView: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -25,11 +33,11 @@ struct EditGameView: View {
     @State private var devInput: String = ""
     @State private var pubInput: String = ""
     @State private var dateInput: Date = .now
-
     @State private var iconIsImporting: Bool = false
     @State private var headIsImporting: Bool = false
 
     var body: some View {
+
         ScrollView {
             Text(
                 "Editing \(currentGame.name). Only enter information in the fields you wish to change"
@@ -41,10 +49,15 @@ struct EditGameView: View {
                 HStack {
                     Text("Name")
                         .frame(width: 70, alignment: .leading)
-
-                    TextField("Enter game name", text: $nameInput)
-                        .padding()
-                        .accessibility(label: Text("NameInput"))
+                    if currentGame.name == "" {
+                        TextField("Enter game name", text: $nameInput)
+                            .padding()
+                            .accessibility(label: Text("NameInput"))
+                    } else {
+                        TextField(currentGame.name, text: $nameInput)
+                            .padding()
+                            .accessibility(label: Text("NameInput"))
+                    }
                     Text(
                         "Required. This is the name that will show up in the sidebar and in the title bar"
                     )
@@ -119,11 +132,13 @@ struct EditGameView: View {
                 }
 
                 HStack {
-                    Picker("Platform          ", selection: $platInput) {
+                    Text("Platform")
+                        .frame(width: 70, alignment: .leading)
+                    Picker("", selection: $platInput) {
                         ForEach(Platform.allCases) { platform in
-                            Text(platform.rawValue)
+                            Text(platform.displayName)
                         }
-                    }
+                    }.labelsHidden().padding()
                     Text(
                         "Not required. This is mostly just for sorting purposes in the sidebar. If you do not select a platform the game will still work, it will just go under the 'Other' header"
                     )
@@ -150,7 +165,7 @@ struct EditGameView: View {
                 HStack {
                     Text("Description")
                         .frame(width: 87, alignment: .leading)
-                    TextField("Enter game description", text: $descInput)
+                    TextEditor(text: $descInput)
                 }
 
                 HStack {
@@ -323,7 +338,7 @@ struct EditGameView: View {
                         icon: iconOutput,
                         name: nameInput,
                         platform: platInput,
-                        isDeleted: false
+                        is_deleted: false
                     )
 
                     let idx = games.firstIndex(where: { $0.name == currentGame.name })
@@ -353,5 +368,8 @@ struct EditGameView: View {
             .padding()
         }
         .font(.system(size: 13))
+        .onAppear() {
+            platInput = currentGame.platform
+        }
     }
 }

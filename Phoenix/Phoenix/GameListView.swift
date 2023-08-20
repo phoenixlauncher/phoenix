@@ -16,14 +16,14 @@ struct GameListView: View {
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in
-                let gamesForPlatform = games.filter { $0.platform == platform && $0.isDeleted == false}
+                let gamesForPlatform = games.filter { $0.platform == platform && $0.is_deleted == false}
                 if !gamesForPlatform.isEmpty {
                     Section(header: Text(platform.displayName)) {
                         ForEach(gamesForPlatform, id: \.name) { game in
                             HStack {
                                 Image(nsImage: loadImageFromFile(filePath: game.icon))
                                     .resizable()
-                                    .frame(width: 15, height: 15)
+                                    .frame(width: 20, height: 20)
                                 Text(game.name)
                             }
                             .contextMenu {
@@ -62,14 +62,14 @@ struct GameListView: View {
         $refresh.wrappedValue.toggle()
     }
     
-    /// Deletes a game from the games list by setting its `isDeleted` property to `true`.
+    /// Deletes a game from the games list by setting its `is_deleted` property to `true`.
     ///
     /// - Parameters:
     ///   - game: The game to delete.
     ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
     func deleteGame(_ game: Game, refresh: Binding<Bool>) {
         if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].isDeleted = true
+            games[index].is_deleted = true
             refresh.wrappedValue.toggle()
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
