@@ -17,7 +17,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
         case .MAC: return "macOS"
         case .WIN: return "Windows"
         case .PS: return "Playstation"
-        case .XBOX: return "XBOX"
+        case .XBOX: return "Xbox"
         case .NIN: return "Nintendo"
         case .NONE: return "Other"
         }

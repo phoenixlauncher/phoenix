@@ -105,7 +105,7 @@ struct GameDetailView: View {
                                     editingGame.toggle()
                                 },
                                 label: {
-                                    Image(systemName: "gear")
+                                    Image(systemName: "pencil")
                                         .fontWeight(.bold)
                                         .foregroundColor(settingsText)
                                         .font(.system(size: 27))

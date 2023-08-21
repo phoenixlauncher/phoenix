@@ -39,12 +39,6 @@ struct EditGameView: View {
     var body: some View {
 
         ScrollView {
-            Text(
-                "Editing \(currentGame.name). Only enter information in the fields you wish to change"
-            )
-            .fontWeight(.bold)
-            .padding()
-
             VStack(alignment: .leading) {
                 HStack {
                     Text("Name")
@@ -58,10 +52,6 @@ struct EditGameView: View {
                             .padding()
                             .accessibility(label: Text("NameInput"))
                     }
-                    Text(
-                        "Required. This is the name that will show up in the sidebar and in the title bar"
-                    )
-                    .frame(width: 300)
                 }
 
                 HStack {
@@ -77,9 +67,6 @@ struct EditGameView: View {
                             Text("Browse")
                         })
                     Text(iconInput)
-                    Spacer()
-                    Text("Not required. If no icon is selected, a default icon will be used")
-                        .frame(width: 275)
                 }
                 .padding()
                 .fileImporter(
@@ -138,36 +125,45 @@ struct EditGameView: View {
                         ForEach(Platform.allCases) { platform in
                             Text(platform.displayName)
                         }
-                    }.labelsHidden().padding()
-                    Text(
-                        "Not required. This is mostly just for sorting purposes in the sidebar. If you do not select a platform the game will still work, it will just go under the 'Other' header"
-                    )
-                    .frame(width: 300)
+                    }
+                    .labelsHidden()
+                    .padding()
                 }
 
                 HStack {
                     Text("Command")
                         .frame(width: 70, alignment: .leading)
-                    TextField("Enter terminal command to launch game", text: $cmdInput)
-                        .padding()
-                    Text(
-                        "Not required. If no command is entered, the game will show up in the sidebar, but the play button will not do anything"
-                    )
-                    .frame(width: 300)
+                    if currentGame.launcher == "" {
+                        TextField("Enter terminal command to launch game", text: $cmdInput)
+                            .padding()
+                            .accessibility(label: Text("NameInput"))
+                    } else {
+                        TextField(currentGame.launcher, text: $cmdInput)
+                            .padding()
+                            .accessibility(label: Text("NameInput"))
+                    }
                 }
-
-                Text("Metadata")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                Text("None of this is required, but it will make the game's detail page look nicer")
-                    .padding()
 
                 HStack {
                     Text("Description")
-                        .frame(width: 87, alignment: .leading)
+                        .frame(width: 70, alignment: .leading)
                     TextEditor(text: $descInput)
+                        .scrollContentBackground(.hidden)
+                        .border(Color.gray.opacity(0.1), width: 1)
+                        .background(Color.gray.opacity(0.05))
+                        .frame(minHeight: 50)
+                        .padding()
                 }
-
+                HStack {
+                    Text("Genres")
+                        .frame(width: 70, alignment: .leading)
+                    TextEditor(text: $genreInput)
+                        .scrollContentBackground(.hidden)
+                        .border(Color.gray.opacity(0.1), width: 1)
+                        .background(Color.gray.opacity(0.05))
+                        .frame(minHeight: 50)
+                        .padding()
+                }
                 HStack {
                     Text("Header Image")
                         .frame(width: 87, alignment: .leading)
@@ -181,9 +177,6 @@ struct EditGameView: View {
                             Text("Browse")
                         })
                     Text(headInput)
-                    Spacer()
-                    Text("The banner image to be displayed at the top of the game's detail page")
-                        .frame(width: 265)
                 }
                 .padding()
                 .fileImporter(
@@ -234,49 +227,29 @@ struct EditGameView: View {
                         print(error.localizedDescription)
                     }
                 }
-
                 HStack {
                     Text("Rating")
-                        .frame(width: 87, alignment: .leading)
+                        .frame(width: 70, alignment: .leading)
                     TextField("X / 10", text: $rateInput)
-                    Text("A rating out of 10. Pretty self-explanatory")
-                        .frame(width: 300)
+                        .padding()
                 }
-
-                HStack {
-                    Text("Genre")
-                        .frame(width: 87, alignment: .leading)
-                    TextEditor(text: $genreInput)
-                    Text(
-                        "Genre(s) that describe this game. Please write each genre on a new line"
-                    )
-                    .frame(width: 290)
-                }
-            }
-            .padding()
-
-            VStack(alignment: .leading) {
                 HStack {
                     Text("Developer")
-                        .frame(width: 87, alignment: .leading)
+                        .frame(width: 70, alignment: .leading)
                     TextField("Enter game developer", text: $devInput)
+                        .padding()
                 }
-
                 HStack {
                     Text("Publisher")
-                        .frame(width: 87, alignment: .leading)
+                        .frame(width: 70, alignment: .leading)
                     TextField("Enter game publisher", text: $pubInput)
+                        .padding()
                 }
-
                 HStack {
-                    DatePicker(selection: $dateInput, in: ...Date(), displayedComponents: .date) {
-                        Text("Release Date")
-                            .frame(width: 87, alignment: .leading)
-                    }
+                    DatePicker("Release Date", selection: $dateInput, in: ...Date(), displayedComponents: .date)
                 }
             }
             .padding()
-
             Button(
                 action: {
                     var dateInputStr = ""
@@ -368,6 +341,7 @@ struct EditGameView: View {
             .padding()
         }
         .font(.system(size: 13))
+        .frame(minWidth: 750)
         .onAppear() {
             platInput = currentGame.platform
         }
