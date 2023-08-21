@@ -165,8 +165,8 @@ struct EditGameView: View {
                         .padding()
                 }
                 HStack {
-                    Text("Header Image")
-                        .frame(width: 87, alignment: .leading)
+                    Text("Header")
+                        .frame(width: 70, alignment: .leading)
                         .offset(x: -15)
                     Button(
                         action: {
@@ -230,23 +230,49 @@ struct EditGameView: View {
                 HStack {
                     Text("Rating")
                         .frame(width: 70, alignment: .leading)
-                    TextField("X / 10", text: $rateInput)
-                        .padding()
+                    if currentGame.metadata["rating"] == "" {
+                        TextField("X / 10", text: $rateInput)
+                            .padding()
+                            .accessibility(label: Text("RatingInput"))
+                    } else {
+                        TextField(currentGame.metadata["rating"] ?? "X / 10", text: $rateInput)
+                            .padding()
+                            .accessibility(label: Text("RatingInput"))
+                    }
+                    
                 }
                 HStack {
                     Text("Developer")
                         .frame(width: 70, alignment: .leading)
-                    TextField("Enter game developer", text: $devInput)
-                        .padding()
+                    if currentGame.metadata["developer"] == "" {
+                        TextField("Enter game developer", text: $devInput)
+                            .padding()
+                            .accessibility(label: Text("devInput"))
+                    } else {
+                        TextField(currentGame.metadata["developer"] ?? "Enter game developer", text: $devInput)
+                            .padding()
+                            .accessibility(label: Text("devInput"))
+                    }
+                    
                 }
                 HStack {
                     Text("Publisher")
                         .frame(width: 70, alignment: .leading)
-                    TextField("Enter game publisher", text: $pubInput)
-                        .padding()
+                    if currentGame.metadata["publisher"] == "" {
+                        TextField("Enter game publisher", text: $pubInput)
+                            .padding()
+                            .accessibility(label: Text("pubInput"))
+                    } else {
+                        TextField(currentGame.metadata["publisher"] ?? "Enter game publisher", text: $pubInput)
+                            .padding()
+                            .accessibility(label: Text("pubInput"))
+                    }
                 }
                 HStack {
-                    DatePicker("Release Date", selection: $dateInput, in: ...Date(), displayedComponents: .date)
+                    Text("Release Date")
+                        .frame(width: 87, alignment: .leading)
+                    DatePicker("", selection: $dateInput, in: ...Date(), displayedComponents: .date)
+                        .labelsHidden()
                 }
             }
             .padding()
@@ -343,7 +369,21 @@ struct EditGameView: View {
         .font(.system(size: 13))
         .frame(minWidth: 750)
         .onAppear() {
+            nameInput = currentGame.name
             platInput = currentGame.platform
+            cmdInput = currentGame.launcher
+            descInput = currentGame.metadata["description"] ?? ""
+            genreInput = currentGame.metadata["genre"] ?? ""
+            rateInput = currentGame.metadata["rating"] ?? ""
+            devInput = currentGame.metadata["developer"] ?? ""
+            pubInput = currentGame.metadata["publisher"] ?? ""
+            // Create Date Formatter
+            let dateFormatter = DateFormatter()
+
+            // Set Date Format
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            // Convert String to Date
+            dateInput = dateFormatter.date(from: currentGame.metadata["release_date"] ?? "") ?? Date()
         }
     }
 }

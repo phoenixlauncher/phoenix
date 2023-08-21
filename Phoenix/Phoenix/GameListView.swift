@@ -23,7 +23,7 @@ struct GameListView: View {
                             HStack {
                                 Image(nsImage: loadImageFromFile(filePath: game.icon))
                                     .resizable()
-                                    .frame(width: 20, height: 20)
+                                    .frame(width: 24, height: 24)
                                 Text(game.name)
                             }
                             .contextMenu {
