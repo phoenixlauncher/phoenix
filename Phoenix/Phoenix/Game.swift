@@ -8,17 +8,20 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case MAC, WIN, PS, XBOX, NIN, NONE
+    case MAC, STEAM, GOG, EPIC, XBOX, PS, NIN, PC, NONE
 
     var id: Platform { self }
 
     var displayName: String {
         switch self {
-        case .MAC: return "macOS"
-        case .WIN: return "Windows"
-        case .PS: return "Playstation"
+        case .MAC: return "Mac"
+        case .STEAM: return "Steam"
+        case .GOG: return "GOG"
+        case .EPIC: return "Epic"
         case .XBOX: return "Xbox"
+        case .PS: return "Playstation"
         case .NIN: return "Nintendo"
+        case .PC: return "PC"
         case .NONE: return "Other"
         }
     }
