@@ -367,7 +367,7 @@ struct EditGameView: View {
             .padding()
         }
         .font(.system(size: 13))
-        .frame(minWidth: 750)
+        .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
         .onAppear() {
             nameInput = currentGame.name
             platInput = currentGame.platform

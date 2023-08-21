@@ -289,6 +289,6 @@ struct AddGameView: View {
             )
             .padding()
         }
-        .frame(minWidth: 750)
+        .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
     }
 }
