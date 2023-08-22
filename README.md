@@ -12,11 +12,11 @@
   Phoenix is available on GitHub under the <a href="License.txt" target="_blank">MIT license</a>.
 </p>
 
+<img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
+
 ## Setup
 
 To setup the app refer to [the setup page](./setup.md).
-
-<img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
 
 ## Building
 
