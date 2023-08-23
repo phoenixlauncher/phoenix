@@ -30,7 +30,7 @@ To setup the app refer to [the setup page](./setup.md).
 If you want to build this app for yourself, just download this repository
 
 ```bash
-git clone git@github.com:Shock9616/Phoenix.git
+git clone git@github.com:PhoenixLauncher/Phoenix.git
 ```
 
 then open `Phoenix.xcodeproj` in Xcode. You will first have to update the `Team` field in the `Signing and Capabilities` section of `Targets > Phoenix` in the main Project file. You can then create a `.app` file by going to `Product > Archive` in the menu bar, clicking `Distribute App`, selecting `Copy App` and then saving the folder somewhere easy to find like your desktop. The app will be inside the folder and you can copy it into your applications folder and begin using it!
@@ -38,10 +38,6 @@ then open `Phoenix.xcodeproj` in Xcode. You will first have to update the `Team`
 ## Updates
 
 If you want to be notified when new updates are released here, make sure you "watch" this repository at the top of the page. You can be notified of only new releases by clicking the arrow next to the button, selecting "Custom", and then selecting "Releases" and then "Apply"
-
-## Contact
-
-If you need to contact us for anything, you can join our [Discord Server](https://discord.gg/Q8TQ6rYfGQ). There you can ask the devs for help if you are having any issues using our app, and you will be the first to know when there are new releases!
 
 ## Contributing
 
