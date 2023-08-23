@@ -22,7 +22,7 @@ struct HiddenGamesSettingsView: View {
     var body: some View {
         List(selection: $selectedGame) {
             ForEach(Platform.allCases, id: \.self) { platform in
-                let gamesForPlatform = games.filter { $0.platform == platform && $0.isDeleted == true}
+                let gamesForPlatform = games.filter { $0.platform == platform && $0.is_deleted == true}
                 if !gamesForPlatform.isEmpty {
                     Section(header: Text(platform.displayName)) {
                         ForEach(gamesForPlatform, id: \.name) { game in
@@ -63,7 +63,7 @@ struct HiddenGamesSettingsView: View {
     
     func restoreGame(_ game: Game, refresh: Binding<Bool>) {
         if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].isDeleted = false
+            games[index].is_deleted = false
             // REFRESH GAME LIST VIEW HERE
             logger.write("called function from settings view")
             hiddenGamesDelegateObject.refreshGameListView?()

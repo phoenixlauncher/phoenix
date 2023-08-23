@@ -30,17 +30,13 @@ struct AddGameView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
+                Group {
                 HStack {
                     Text("Name")
                         .frame(width: 70, alignment: .leading)
-
                     TextField("Enter game name", text: $nameInput)
-                        .accessibility(label: Text("NameInput"))
                         .padding()
-                    Text(
-                        "Required. This is the name that will show up in the sidebar and in the title bar"
-                    )
-                    .frame(width: 300)
+                        .accessibility(label: Text("NameInput"))
                 }
 
                 HStack {
@@ -56,9 +52,6 @@ struct AddGameView: View {
                             Text("Browse")
                         })
                     Text(iconInput)
-                    Spacer()
-                    Text("Not required. If no icon is selected, a default icon will be used")
-                        .frame(width: 275)
                 }
                 .padding()
                 .fileImporter(
@@ -111,15 +104,15 @@ struct AddGameView: View {
                 }
 
                 HStack {
-                    Picker("Platform          ", selection: $platInput) {
+                    Text("Platform")
+                        .frame(width: 70, alignment: .leading)
+                    Picker("", selection: $platInput) {
                         ForEach(Platform.allCases) { platform in
-                            Text(platform.rawValue)
+                            Text(platform.displayName)
                         }
                     }
-                    Text(
-                        "Not required. This is mostly just for sorting purposes in the sidebar. If you do not select a platform the game will still work, it will just go under the 'Other' header"
-                    )
-                    .frame(width: 300)
+                    .labelsHidden()
+                    .padding()
                 }
 
                 HStack {
@@ -127,128 +120,122 @@ struct AddGameView: View {
                         .frame(width: 70, alignment: .leading)
                     TextField("Enter terminal command to launch game", text: $cmdInput)
                         .padding()
-                    Text(
-                        "Not required. If no command is entered, the game will show up in the sidebar, but the play button will not do anything"
-                    )
-                    .frame(width: 300)
+                        .accessibility(label: Text("NameInput"))
                 }
 
-                Text("Metadata")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                Text("None of this is required, but it will make the game's detail page look nicer")
-                    .padding()
-
-                HStack {
-                    Text("Description")
-                        .frame(width: 87, alignment: .leading)
-                    TextField("Enter game description", text: $descInput)
-                }
-
-                HStack {
-                    Text("Header Image")
-                        .frame(width: 87, alignment: .leading)
-                        .offset(x: -15)
-                    Button(
-                        action: {
-                            headIsImporting = true
-
-                        },
-                        label: {
-                            Text("Browse")
-                        })
-                    Text(headInput)
-                    Spacer()
-                    Text("The banner image to be displayed at the top of the game's detail page")
-                        .frame(width: 265)
-                }
-                .padding()
-                .fileImporter(
-                    isPresented: $headIsImporting,
-                    allowedContentTypes: [.image],
-                    allowsMultipleSelection: false
-                ) { result in
-                    do {
-                        let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
-                        headInput = selectedFile.relativeString
-                        
-                        let headerData = try Data(contentsOf: selectedFile)
-                        
-                        let fileManager = FileManager.default
-                        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                            fatalError("Unable to retrieve application support directory URL")
-                        }
-                        
-                        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                        
-                        if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                            do {
-                                try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                                print("Created 'Phoenix/cachedImages' directory")
-                            } catch {
-                                fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
-                            }
-                        }
-                        
-                        var destinationURL: URL
-                        
-                        if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
-                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)_header.jpg")
-                        } else {
-                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)_header.png")
-                        }
-                        
-                        do {
-                            try headerData.write(to: destinationURL)
-                            headOutput = destinationURL.relativeString
-                            print("Saved image to: \(destinationURL.path)")
-                        } catch {
-                            print("Failed to save image: \(error.localizedDescription)")
-                        }
-                    } catch {
-                        // Handle failure.
-                        print("Unable to write to file")
-                        print(error.localizedDescription)
+                    HStack {
+                        Text("Description")
+                            .frame(width: 70, alignment: .leading)
+                        TextEditor(text: $descInput)
+                            .scrollContentBackground(.hidden)
+                            .border(Color.gray.opacity(0.1), width: 1)
+                            .background(Color.gray.opacity(0.05))
+                            .frame(minHeight: 50)
+                            .padding()
                     }
                 }
-
-                HStack {
-                    Text("Rating")
-                        .frame(width: 87, alignment: .leading)
-                    TextField("X / 10", text: $rateInput)
-                    Text("A rating out of 10. Pretty self-explanatory")
-                        .frame(width: 300)
-                }
-
-                HStack {
-                    Text("Genre")
-                        .frame(width: 87, alignment: .leading)
-                    TextEditor(text: $genreInput)
-                    Text(
-                        "Genre(s) that describe this game. Please write each genre on a new line"
-                    )
-                    .frame(width: 290)
-                }
-            }
-            .padding()
-
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("Developer")
-                        .frame(width: 87, alignment: .leading)
-                    TextField("Enter game developer", text: $devInput)
-                }
-
-                HStack {
-                    Text("Publisher")
-                        .frame(width: 87, alignment: .leading)
-                    TextField("Enter game publisher", text: $pubInput)
-                }
-
-                HStack {
-                    DatePicker(selection: $dateInput, in: ...Date.now, displayedComponents: .date) {
+                Group {
+                    HStack {
+                        Text("Genres")
+                            .frame(width: 70, alignment: .leading)
+                        TextEditor(text: $genreInput)
+                            .scrollContentBackground(.hidden)
+                            .border(Color.gray.opacity(0.1), width: 1)
+                            .background(Color.gray.opacity(0.05))
+                            .frame(minHeight: 50)
+                            .padding()
+                    }
+                    HStack {
+                        Text("Header")
+                            .frame(width: 70, alignment: .leading)
+                            .offset(x: -15)
+                        Button(
+                            action: {
+                                headIsImporting = true
+                                
+                            },
+                            label: {
+                                Text("Browse")
+                            })
+                        Text(headInput)
+                    }
+                    .padding()
+                    .fileImporter(
+                        isPresented: $headIsImporting,
+                        allowedContentTypes: [.image],
+                        allowsMultipleSelection: false
+                    ) { result in
+                        do {
+                            let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
+                            headInput = selectedFile.relativeString
+                            
+                            let headerData = try Data(contentsOf: selectedFile)
+                            
+                            let fileManager = FileManager.default
+                            guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                                fatalError("Unable to retrieve application support directory URL")
+                            }
+                            
+                            let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                            
+                            if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
+                                do {
+                                    try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                                    print("Created 'Phoenix/cachedImages' directory")
+                                } catch {
+                                    fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                                }
+                            }
+                            
+                            var destinationURL: URL
+                            
+                            if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
+                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)_header.jpg")
+                            } else {
+                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(nameInput)_header.png")
+                            }
+                            
+                            do {
+                                try headerData.write(to: destinationURL)
+                                headOutput = destinationURL.relativeString
+                                print("Saved image to: \(destinationURL.path)")
+                            } catch {
+                                print("Failed to save image: \(error.localizedDescription)")
+                            }
+                        } catch {
+                            // Handle failure.
+                            print("Unable to write to file")
+                            print(error.localizedDescription)
+                        }
+                    }
+                    HStack {
+                        Text("Rating")
+                            .frame(width: 70, alignment: .leading)
+                        TextField("X / 10", text: $rateInput)
+                            .padding()
+                            .accessibility(label: Text("RatingInput"))
+                        
+                    }
+                    HStack {
+                        Text("Developer")
+                            .frame(width: 70, alignment: .leading)
+                        TextField("Enter game developer", text: $devInput)
+                            .padding()
+                            .accessibility(label: Text("devInput"))
+                        
+                    }
+                    HStack {
+                        Text("Publisher")
+                            .frame(width: 70, alignment: .leading)
+                        TextField("Enter game publisher", text: $pubInput)
+                            .padding()
+                            .accessibility(label: Text("pubInput"))
+                    }
+                    HStack {
                         Text("Release Date")
                             .frame(width: 87, alignment: .leading)
+                        DatePicker("", selection: $dateInput, in: ...Date(), displayedComponents: .date)
+                            .labelsHidden()
                     }
                 }
             }
@@ -277,7 +264,7 @@ struct AddGameView: View {
                         icon: iconOutput,
                         name: nameInput,
                         platform: platInput,
-                        isDeleted: false
+                        is_deleted: false
                     )
 
                     games.append(newGame)
@@ -306,5 +293,6 @@ struct AddGameView: View {
             )
             .padding()
         }
+        .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
     }
 }

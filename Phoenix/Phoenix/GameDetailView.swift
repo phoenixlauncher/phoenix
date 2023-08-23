@@ -105,7 +105,7 @@ struct GameDetailView: View {
                                     editingGame.toggle()
                                 },
                                 label: {
-                                    Image(systemName: "gear")
+                                    Image(systemName: "pencil")
                                         .fontWeight(.bold)
                                         .foregroundColor(settingsText)
                                         .font(.system(size: 27))
@@ -149,8 +149,12 @@ struct GameDetailView: View {
                                     }
                                 }
                             }
-                            .frame(maxWidth: 400, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
-                            .background(Color.gray.opacity(0.15))
+                            .frame(idealWidth: 400, maxWidth: 550, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
+                            .background(Color.gray.opacity(0.05))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                            )
                             .cornerRadius(7.5)
                             .padding(.trailing, 7.5)
 
@@ -160,31 +164,13 @@ struct GameDetailView: View {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Last Played")
-                                            Text(game.metadata["last_played"] ?? "")
+                                            Text(game.metadata["last_played"] ?? "Never")
                                                 .opacity(0.5)
                                         }
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Platform")
-                                            switch game.platform {
-                                            case Platform.MAC:
-                                                Text("macOS")
-                                                    .opacity(0.5)
-                                            case Platform.STEAM:
-                                                Text("Steam")
-                                                    .opacity(0.5)
-                                            case Platform.GOG:
-                                                Text("GOG")
-                                                    .opacity(0.5)
-                                            case Platform.EPIC:
-                                                Text("Epic Games")
-                                                    .opacity(0.5)
-                                            case Platform.EMUL:
-                                                Text("Emulated")
-                                                    .opacity(0.5)
-                                            case Platform.NONE:
-                                                Text("Other")
-                                                    .opacity(0.5)
-                                            }
+                                            Text(game.platform.displayName)
+                                                .opacity(0.5)
                                         }
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text("Rating")
@@ -218,18 +204,21 @@ struct GameDetailView: View {
                             }
                             .font(.system(size: 14.5))
                             .padding(10)
-                            .background(Color.gray.opacity(0.15))
+                            .background(Color.gray.opacity(0.05))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                            )
                             .cornerRadius(7.5)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .padding(.top, 10)
                     }
-                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 0, trailing: 0))
+                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 10, trailing: 17.5))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 }
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .navigationTitle(selectedGame ?? "Phoenix")
         .onAppear {
             if selectedGame == nil {

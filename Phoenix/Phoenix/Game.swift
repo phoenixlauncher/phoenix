@@ -8,7 +8,7 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case MAC, STEAM, GOG, EPIC, EMUL, NONE
+    case MAC, STEAM, GOG, EPIC, PC, PS, NIN, XBOX, NONE
 
     var id: Platform { self }
 
@@ -18,7 +18,10 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
         case .STEAM: return "Steam"
         case .GOG: return "GOG"
         case .EPIC: return "Epic"
-        case .EMUL: return "Emulated"
+        case .PC: return "PC"
+        case .PS: return "Playstation"
+        case .NIN: return "Nintendo"
+        case .XBOX: return "Xbox"
         case .NONE: return "Other"
         }
     }
@@ -31,7 +34,7 @@ struct Game: Codable, Comparable, Hashable {
     var icon: String
     var name: String
     var platform: Platform
-    var isDeleted: Bool // New property to indicate if the game has been deleted
+    var is_deleted: Bool // New property to indicate if the game has been deleted
 
     init(
         appID: String = "",
@@ -49,7 +52,7 @@ struct Game: Codable, Comparable, Hashable {
         icon: String = "PlaceholderImage",
         name: String,
         platform: Platform = Platform.NONE,
-        isDeleted: Bool // Initialize isDeleted with false by default
+        is_deleted: Bool
     ) {
         self.appID = appID
         self.launcher = launcher
@@ -57,7 +60,7 @@ struct Game: Codable, Comparable, Hashable {
         self.icon = icon
         self.name = name
         self.platform = platform
-        self.isDeleted = isDeleted
+        self.is_deleted = is_deleted
     }
 
     /**
