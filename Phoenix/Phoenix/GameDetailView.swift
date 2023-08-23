@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct GameDetailView: View {
-    @EnvironmentObject private var appearanceDelegateObject: AppearanceDelegateObject
+    @StateObject private var appearanceDelegateObject: AppearanceDelegateObject
     
     @State var editingGame: Bool = false
     @State var showingAlert: Bool = false
@@ -228,15 +228,8 @@ struct GameDetailView: View {
                 refresh.toggle()
                 // This code will be executed every 1 second
             }
-            if UserDefaults.standard.bool(forKey: "accentColorUI") {
-                playColor = Color.accentColor
-                settingsColor = Color.accentColor.opacity(0.25)
-                settingsText = Color.accentColor
-            } else {
-                playColor = Color.green
-                settingsColor = Color.gray.opacity(0.25)
-                settingsText = Color.primary
-            }
+            appearanceDelegateObject.refreshGameDetailView = refreshGameDetailView
+            refreshGameDetailView()
         }
         .onDisappear {
             // Invalidate the timer when the view disappears
@@ -256,7 +249,7 @@ struct GameDetailView: View {
             settingsColor = Color.gray.opacity(0.25)
             settingsText = Color.primary
         }
-        $refresh.wrappedValue.toggle()
+        refresh.toggle()
     }
 
     func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {

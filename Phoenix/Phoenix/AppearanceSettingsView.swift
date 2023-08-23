@@ -9,12 +9,12 @@ import SwiftUI
 import AppKit
 
 class AppearanceDelegateObject: ObservableObject {
-    var refreshGameDetailView: (() -> Void)?
+    @Published var refreshGameDetailView: (() -> Void)?
 }
 
 struct AppearanceSettingsView: View {
     
-    @EnvironmentObject private var appearanceDelegateObject: AppearanceDelegateObject
+    @StateObject private var appearanceDelegateObject = AppearanceDelegateObject()
     
     @AppStorage("accentColorUI")
     private var accentColorUI: Bool = true
