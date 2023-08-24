@@ -78,57 +78,23 @@ struct EditGameView: View {
                     ) { result in
                         do {
                             let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
-                            iconInput = selectedFile.relativeString
-
                             self.iconInput = selectedFile.relativeString
                             
                             let iconData = try Data(contentsOf: selectedFile)
-
-                            // Resize the image to 48x48 pixels
-                            if let image = NSImage(data: iconData) {
-                                let newSize = NSSize(width: 48, height: 48)
-                                let newImage = NSImage(size: newSize)
-
-                                newImage.lockFocus()
-                                image.draw(in: NSRect(origin: .zero, size: newSize),
-                                           from: NSRect(origin: .zero, size: image.size),
-                                           operation: .sourceOver,
-                                           fraction: 1.0)
-                                newImage.unlockFocus()
-
-                                // Convert the resized image to data
-                                if let resizedImageData = newImage.tiffRepresentation {
-                                    let fileManager = FileManager.default
-                                    guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                                        fatalError("Unable to retrieve application support directory URL")
-                                    }
-
-                                    let cachedImagesDirectoryURL = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-
-                                    if !fileManager.fileExists(atPath: cachedImagesDirectoryURL.path) {
-                                        do {
-                                            try fileManager.createDirectory(at: cachedImagesDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-                                            print("Created 'Phoenix/cachedImages' directory")
-                                        } catch {
-                                            fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
-                                        }
-                                    }
-
-                                    var destinationURL: URL
-
-                                    if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
-                                        destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(currentGame.name)_icon.jpg")
-                                    } else {
-                                        destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(currentGame.name)_icon.png")
-                                    }
-
-                                    do {
-                                        try resizedImageData.write(to: destinationURL)
-                                        iconOutput = destinationURL.relativeString
-                                        print("Resized and saved image to: \(destinationURL.path)")
-                                    } catch {
-                                        print("Failed to save resized image: \(error.localizedDescription)")
-                                    }
+                            
+                            let fileManager = FileManager.default
+                            guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                                fatalError("Unable to retrieve application support directory URL")
+                            }
+                            
+                            let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                            
+                            if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
+                                do {
+                                    try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                                    print("Created 'Phoenix/cachedImages' directory")
+                                } catch {
+                                    fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
                                 }
                             }
                             
@@ -149,11 +115,10 @@ struct EditGameView: View {
                             }
                         } catch {
                             // Handle failure.
-                            print("Unable to process selected file")
+                            print("Unable to write to file")
                             print(error.localizedDescription)
                         }
                     }
-
                     
                     HStack {
                         Text("Platform")

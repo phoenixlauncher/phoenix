@@ -13,11 +13,10 @@ struct GeneralSettingsView: View {
 
     var body: some View {
         Form {
-            VStack(alignment: .leading) {
-                Toggle(isOn: $isGameDetectionEnabled) {
-                    Text("Game Detection")
-                }
+            Toggle(isOn: $isGameDetectionEnabled) {
+                Text("Game Detection")
             }
+
         }
     }
 }
