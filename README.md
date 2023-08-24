@@ -2,15 +2,22 @@
   <br>
   <img src="Readme Images/Icon.png" alt="Phoenix app icon" width="100" height="100"/>
   <br>
-  <b>Phoenix Game Launcher</b>
+  <b>Phoenix</b>
   <br>
 </h1>
 
-<p align="center">Phoenix is an open-source game launcher for macOS, written SwiftUI. 
-  This launcher was inspired by projects like <a href="https://playnite.link" target="_blank">Playnite</a> and <a href="https://lutris.net" target="_blank">Lutris</a>, and supports any game which can be launched from the command line. (So basically     all of them!) 
-  It was designed to be small, fast, and not overly complicated. 
-  Phoenix is available on GitHub under the <a href="License.txt" target="_blank">MIT license</a>.
-</p>
+<p align="center">
+    Phoenix is an open-source game launcher for macOS, written in SwiftUI. 
+    <br />
+    <br />
+    <a href="https://discord.gg/nm3GY2K36H">Discord</a>
+    ·
+    <a href="https://phoenixlauncher.vercel.app/">Website</a>
+    <br />
+    <br />
+    This launcher was inspired by projects like Playnite and Lutris, and supports any game which can be launched from the command line.      <br/>
+    (So basically all of them!) It was designed to be small, fast, and not overly complicated.
+  </p>
 
 <img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
 
@@ -23,7 +30,7 @@ To setup the app refer to [the setup page](./setup.md).
 If you want to build this app for yourself, just download this repository
 
 ```bash
-git clone git@github.com:Shock9616/Phoenix.git
+git clone git@github.com:PhoenixLauncher/Phoenix.git
 ```
 
 then open `Phoenix.xcodeproj` in Xcode. You will first have to update the `Team` field in the `Signing and Capabilities` section of `Targets > Phoenix` in the main Project file. You can then create a `.app` file by going to `Product > Archive` in the menu bar, clicking `Distribute App`, selecting `Copy App` and then saving the folder somewhere easy to find like your desktop. The app will be inside the folder and you can copy it into your applications folder and begin using it!
@@ -31,10 +38,6 @@ then open `Phoenix.xcodeproj` in Xcode. You will first have to update the `Team`
 ## Updates
 
 If you want to be notified when new updates are released here, make sure you "watch" this repository at the top of the page. You can be notified of only new releases by clicking the arrow next to the button, selecting "Custom", and then selecting "Releases" and then "Apply"
-
-## Contact
-
-If you need to contact us for anything, you can join our [Discord Server](https://discord.gg/Q8TQ6rYfGQ). There you can ask the devs for help if you are having any issues using our app, and you will be the first to know when there are new releases!
 
 ## Contributing
 
