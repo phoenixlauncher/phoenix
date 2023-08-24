@@ -17,7 +17,6 @@ extension String {
 
 struct EditGameView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
 
     @Binding var currentGame: Game
 
@@ -38,18 +37,19 @@ struct EditGameView: View {
     @State private var headIsImporting: Bool = false
 
     var body: some View {
+
         ScrollView {
             VStack(alignment: .leading) {
                 Group {
                     HStack {
                         Text("Name")
                             .frame(width: 70, alignment: .leading)
-                        if self.currentGame.name == "" {
-                            TextField("Enter game name", text: self.$nameInput)
+                        if currentGame.name == "" {
+                            TextField("Enter game name", text: $nameInput)
                                 .padding()
                                 .accessibility(label: Text("NameInput"))
                         } else {
-                            TextField(self.currentGame.name, text: self.$nameInput)
+                            TextField(currentGame.name, text: $nameInput)
                                 .padding()
                                 .accessibility(label: Text("NameInput"))
                         }
@@ -61,69 +61,85 @@ struct EditGameView: View {
                             .offset(x: -15)
                         Button(
                             action: {
-                                self.iconIsImporting = true
+                                iconIsImporting = true
                                 
                             },
                             label: {
                                 Text("Browse")
-                            }
-                        )
-                        Text(self.iconInput)
+                            })
+                        Text(iconInput)
                     }
                     .padding()
                     .fileImporter(
-                        isPresented: self.$iconIsImporting,
+                        isPresented: $iconIsImporting,
                         allowedContentTypes: [.image],
                         allowsMultipleSelection: false
                     ) { result in
                         do {
                             let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
-                            self.iconInput = selectedFile.relativeString
-                            
+                            iconInput = selectedFile.relativeString
+
                             let iconData = try Data(contentsOf: selectedFile)
-                            
-                            let fileManager = FileManager.default
-                            guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                                fatalError("Unable to retrieve application support directory URL")
-                            }
-                            
-                            let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                            
-                            if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                                do {
-                                    try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                                    print("Created 'Phoenix/cachedImages' directory")
-                                } catch {
-                                    fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+
+                            // Resize the image to 48x48 pixels
+                            if let image = NSImage(data: iconData) {
+                                let newSize = NSSize(width: 48, height: 48)
+                                let newImage = NSImage(size: newSize)
+
+                                newImage.lockFocus()
+                                image.draw(in: NSRect(origin: .zero, size: newSize),
+                                           from: NSRect(origin: .zero, size: image.size),
+                                           operation: .sourceOver,
+                                           fraction: 1.0)
+                                newImage.unlockFocus()
+
+                                // Convert the resized image to data
+                                if let resizedImageData = newImage.tiffRepresentation {
+                                    let fileManager = FileManager.default
+                                    guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                                        fatalError("Unable to retrieve application support directory URL")
+                                    }
+
+                                    let cachedImagesDirectoryURL = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+
+                                    if !fileManager.fileExists(atPath: cachedImagesDirectoryURL.path) {
+                                        do {
+                                            try fileManager.createDirectory(at: cachedImagesDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+                                            print("Created 'Phoenix/cachedImages' directory")
+                                        } catch {
+                                            fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                                        }
+                                    }
+
+                                    var destinationURL: URL
+
+                                    if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
+                                        destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(currentGame.name)_icon.jpg")
+                                    } else {
+                                        destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(currentGame.name)_icon.png")
+                                    }
+
+                                    do {
+                                        try resizedImageData.write(to: destinationURL)
+                                        iconOutput = destinationURL.relativeString
+                                        print("Resized and saved image to: \(destinationURL.path)")
+                                    } catch {
+                                        print("Failed to save resized image: \(error.localizedDescription)")
+                                    }
                                 }
-                            }
-                            
-                            var destinationURL: URL
-                            
-                            if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
-                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(self.currentGame.name)icon.jpg")
-                            } else {
-                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(self.currentGame.name)icon.png")
-                            }
-                            
-                            do {
-                                try iconData.write(to: destinationURL)
-                                self.iconOutput = destinationURL.relativeString
-                                print("Saved image to: \(destinationURL.path)")
-                            } catch {
-                                print("Failed to save image: \(error.localizedDescription)")
                             }
                         } catch {
                             // Handle failure.
-                            print("Unable to write to file")
+                            print("Unable to process selected file")
                             print(error.localizedDescription)
                         }
                     }
+
                     
                     HStack {
                         Text("Platform")
                             .frame(width: 70, alignment: .leading)
-                        Picker("", selection: self.$platInput) {
+                        Picker("", selection: $platInput) {
                             ForEach(Platform.allCases) { platform in
                                 Text(platform.displayName)
                             }
@@ -135,12 +151,12 @@ struct EditGameView: View {
                     HStack {
                         Text("Command")
                             .frame(width: 70, alignment: .leading)
-                        if self.currentGame.launcher == "" {
-                            TextField("Enter terminal command to launch game", text: self.$cmdInput)
+                        if currentGame.launcher == "" {
+                            TextField("Enter terminal command to launch game", text: $cmdInput)
                                 .padding()
                                 .accessibility(label: Text("NameInput"))
                         } else {
-                            TextField(self.currentGame.launcher, text: self.$cmdInput)
+                            TextField(currentGame.launcher, text: $cmdInput)
                                 .padding()
                                 .accessibility(label: Text("NameInput"))
                         }
@@ -149,7 +165,7 @@ struct EditGameView: View {
                     HStack {
                         Text("Description")
                             .frame(width: 70, alignment: .leading)
-                        TextEditor(text: self.$descInput)
+                        TextEditor(text: $descInput)
                             .scrollContentBackground(.hidden)
                             .border(Color.gray.opacity(0.1), width: 1)
                             .background(Color.gray.opacity(0.05))
@@ -161,7 +177,7 @@ struct EditGameView: View {
                     HStack {
                         Text("Genres")
                             .frame(width: 70, alignment: .leading)
-                        TextEditor(text: self.$genreInput)
+                        TextEditor(text: $genreInput)
                             .scrollContentBackground(.hidden)
                             .border(Color.gray.opacity(0.1), width: 1)
                             .background(Color.gray.opacity(0.05))
@@ -174,24 +190,23 @@ struct EditGameView: View {
                             .offset(x: -15)
                         Button(
                             action: {
-                                self.headIsImporting = true
+                                headIsImporting = true
                                 
                             },
                             label: {
                                 Text("Browse")
-                            }
-                        )
-                        Text(self.headInput)
+                            })
+                        Text(headInput)
                     }
                     .padding()
                     .fileImporter(
-                        isPresented: self.$headIsImporting,
+                        isPresented: $headIsImporting,
                         allowedContentTypes: [.image],
                         allowsMultipleSelection: false
                     ) { result in
                         do {
                             let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
-                            self.headInput = selectedFile.relativeString
+                            headInput = selectedFile.relativeString
                             
                             let headerData = try Data(contentsOf: selectedFile)
                             
@@ -214,14 +229,14 @@ struct EditGameView: View {
                             var destinationURL: URL
                             
                             if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
-                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(self.currentGame.name)_header.jpg")
+                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(currentGame.name)_header.jpg")
                             } else {
-                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(self.currentGame.name)_header.png")
+                                destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(currentGame.name)_header.png")
                             }
                             
                             do {
                                 try headerData.write(to: destinationURL)
-                                self.headOutput = destinationURL.relativeString
+                                headOutput = destinationURL.relativeString
                                 print("Saved image to: \(destinationURL.path)")
                             } catch {
                                 print("Failed to save image: \(error.localizedDescription)")
@@ -235,38 +250,40 @@ struct EditGameView: View {
                     HStack {
                         Text("Rating")
                             .frame(width: 70, alignment: .leading)
-                        if self.currentGame.metadata["rating"] == "" {
-                            TextField("X / 10", text: self.$rateInput)
+                        if currentGame.metadata["rating"] == "" {
+                            TextField("X / 10", text: $rateInput)
                                 .padding()
                                 .accessibility(label: Text("RatingInput"))
                         } else {
-                            TextField(self.currentGame.metadata["rating"] ?? "X / 10", text: self.$rateInput)
+                            TextField(currentGame.metadata["rating"] ?? "X / 10", text: $rateInput)
                                 .padding()
                                 .accessibility(label: Text("RatingInput"))
                         }
+                        
                     }
                     HStack {
                         Text("Developer")
                             .frame(width: 70, alignment: .leading)
-                        if self.currentGame.metadata["developer"] == "" {
-                            TextField("Enter game developer", text: self.$devInput)
+                        if currentGame.metadata["developer"] == "" {
+                            TextField("Enter game developer", text: $devInput)
                                 .padding()
                                 .accessibility(label: Text("devInput"))
                         } else {
-                            TextField(self.currentGame.metadata["developer"] ?? "Enter game developer", text: self.$devInput)
+                            TextField(currentGame.metadata["developer"] ?? "Enter game developer", text: $devInput)
                                 .padding()
                                 .accessibility(label: Text("devInput"))
                         }
+                        
                     }
                     HStack {
                         Text("Publisher")
                             .frame(width: 70, alignment: .leading)
-                        if self.currentGame.metadata["publisher"] == "" {
-                            TextField("Enter game publisher", text: self.$pubInput)
+                        if currentGame.metadata["publisher"] == "" {
+                            TextField("Enter game publisher", text: $pubInput)
                                 .padding()
                                 .accessibility(label: Text("pubInput"))
                         } else {
-                            TextField(self.currentGame.metadata["publisher"] ?? "Enter game publisher", text: self.$pubInput)
+                            TextField(currentGame.metadata["publisher"] ?? "Enter game publisher", text: $pubInput)
                                 .padding()
                                 .accessibility(label: Text("pubInput"))
                         }
@@ -274,150 +291,120 @@ struct EditGameView: View {
                     HStack {
                         Text("Release Date")
                             .frame(width: 87, alignment: .leading)
-                        DatePicker("", selection: self.$dateInput, in: ...Date(), displayedComponents: .date)
+                        DatePicker("", selection: $dateInput, in: ...Date(), displayedComponents: .date)
                             .labelsHidden()
                     }
                 }
             }
             .padding()
-            HStack {
-                Spacer().frame(maxWidth: .infinity)
+            Button(
+                action: {
+                    var dateInputStr = ""
 
-                Button(
-                    action: {
-                        var dateInputStr = ""
-
-                        if self.nameInput == "" {
-                            self.nameInput = self.currentGame.name
-                        }
-                        if self.iconOutput == "" {
-                            self.iconOutput = self.currentGame.icon
-                        }
-                        if self.platInput == .NONE {
-                            self.platInput = self.currentGame.platform
-                        }
-                        if self.cmdInput == "" {
-                            self.cmdInput = self.currentGame.launcher
-                        }
-                        if self.descInput == "" {
-                            self.descInput = self.currentGame.metadata["description"] ?? ""
-                        }
-                        if self.headOutput == "" {
-                            self.headOutput = self.currentGame.metadata["header_img"] ?? ""
-                        }
-                        if self.rateInput == "" {
-                            self.rateInput = self.currentGame.metadata["rating"] ?? ""
-                        }
-                        if self.genreInput == "" {
-                            self.genreInput = self.currentGame.metadata["genre"] ?? ""
-                        }
-                        if self.devInput == "" {
-                            self.devInput = self.currentGame.metadata["developer"] ?? ""
-                        }
-                        if self.pubInput == "" {
-                            self.pubInput = self.currentGame.metadata["publisher"] ?? ""
-                        }
-                        // check if the date is today, if yes then change it to the previous release date
-                        if self.dateInput.formatted(date: .complete, time: .omitted) == Date().formatted(date: .complete, time: .omitted) {
-                            dateInputStr = self.currentGame.metadata["release_date"] ?? ""
-                        } else {
-                            let dateFormatter: DateFormatter = {
-                                let formatter = DateFormatter()
-                                formatter.dateStyle = .long
-                                return formatter
-                            }()
-
-                            dateInputStr = dateFormatter.string(from: self.dateInput)
-                        }
-
-                        let editedGame: Game = .init(
-                            launcher: cmdInput,
-                            metadata: [
-                                "description": descInput,
-                                "header_img": headOutput,
-                                "rating": rateInput,
-                                "genre": genreInput,
-                                "developer": devInput,
-                                "publisher": pubInput,
-                                "release_date": dateInputStr,
-                            ],
-                            icon: iconOutput,
-                            name: nameInput,
-                            platform: platInput,
-                            is_deleted: false
-                        )
-
-                        let idx = games.firstIndex(where: { $0.name == self.currentGame.name })
-                        games[idx!] = editedGame
-
-                        let encoder = JSONEncoder()
-                        encoder.outputFormatting = .prettyPrinted
-
-                        do {
-                            let gamesJSON = try JSONEncoder().encode(games)
-
-                            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                                gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                                writeGamesToJSON(data: gamesJSONString)
-                            }
-                        } catch {
-                            logger.write(error.localizedDescription)
-                        }
-
-                        self.dismiss()
-                    },
-                    label: {
-                        Text("Save Changes")
+                    if nameInput == "" {
+                        nameInput = currentGame.name
                     }
-                )
-                .padding()
-                .frame(maxWidth: .infinity)
+                    if iconOutput == "" {
+                        iconOutput = currentGame.icon
+                    }
+                    if platInput == .NONE {
+                        platInput = currentGame.platform
+                    }
+                    if cmdInput == "" {
+                        cmdInput = currentGame.launcher
+                    }
+                    if descInput == "" {
+                        descInput = currentGame.metadata["description"] ?? ""
+                    }
+                    if headOutput == "" {
+                        headOutput = currentGame.metadata["header_img"] ?? ""
+                    }
+                    if rateInput == "" {
+                        rateInput = currentGame.metadata["rating"] ?? ""
+                    }
+                    if genreInput == "" {
+                        genreInput = currentGame.metadata["genre"] ?? ""
+                    }
+                    if devInput == "" {
+                        devInput = currentGame.metadata["developer"] ?? ""
+                    }
+                    if pubInput == "" {
+                        pubInput = currentGame.metadata["publisher"] ?? ""
+                    }
+                    // check if the date is today, if yes then change it to the previous release date
+                    if dateInput.formatted(date: .complete, time: .omitted) == Date().formatted(date: .complete, time: .omitted) {
+                        dateInputStr = currentGame.metadata["release_date"] ?? ""
+                    } else {
+                        let dateFormatter: DateFormatter = {
+                            let formatter = DateFormatter()
+                            formatter.dateStyle = .long
+                            return formatter
+                        }()
 
-                HStack {
-                    Spacer()
-                        .frame(maxWidth: .infinity)
-                    Spacer()
-                        .frame(maxWidth: .infinity)
+                        dateInputStr = dateFormatter.string(from: dateInput)
+                    }
 
-                    Button (
-                        action: {
-                            openURL(URL(string: "https://github.com/PhoenixLauncher/Phoenix/blob/main/setup.md")!)
-                        }, label: {
-                            ZStack {
-                                Circle()
-                                    .strokeBorder(Color(NSColor.separatorColor), lineWidth: 0.5)
-                                    .background(Circle().foregroundColor(Color(NSColor.controlColor)))
-                                    .shadow(color: Color(NSColor.separatorColor).opacity(0.3), radius: 1)
-                                    .frame(width: 20, height: 20)
-                                Text("?").font(.system(size: 15, weight: .medium))
-                            }
-                        }
+                    let editedGame: Game = .init(
+                        launcher: cmdInput,
+                        metadata: [
+                            "description": descInput,
+                            "header_img": headOutput,
+                            "rating": rateInput,
+                            "genre": genreInput,
+                            "developer": devInput,
+                            "publisher": pubInput,
+                            "release_date": dateInputStr,
+                        ],
+                        icon: iconOutput,
+                        name: nameInput,
+                        platform: platInput,
+                        is_deleted: false
                     )
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(maxWidth: .infinity)
 
+                    let idx = games.firstIndex(where: { $0.name == currentGame.name })
+                    games[idx!] = editedGame
+
+                    let encoder = JSONEncoder()
+                    encoder.outputFormatting = .prettyPrinted
+
+                    do {
+                        let gamesJSON = try JSONEncoder().encode(games)
+
+                        if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                            // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                            gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                            writeGamesToJSON(data: gamesJSONString)
+                        }
+                    } catch {
+                        logger.write(error.localizedDescription)
+                    }
+
+                    dismiss()
+                },
+                label: {
+                    Text("Save Changes")
                 }
-            }
+            )
+            .padding()
         }
         .font(.system(size: 13))
-        .frame(idealWidth: 800)
-        .onAppear {
-            self.nameInput = self.currentGame.name
-            self.platInput = self.currentGame.platform
-            self.cmdInput = self.currentGame.launcher
-            self.descInput = self.currentGame.metadata["description"] ?? ""
-            self.genreInput = self.currentGame.metadata["genre"] ?? ""
-            self.rateInput = self.currentGame.metadata["rating"] ?? ""
-            self.devInput = self.currentGame.metadata["developer"] ?? ""
-            self.pubInput = self.currentGame.metadata["publisher"] ?? ""
+        .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
+        .onAppear() {
+            nameInput = currentGame.name
+            platInput = currentGame.platform
+            cmdInput = currentGame.launcher
+            descInput = currentGame.metadata["description"] ?? ""
+            genreInput = currentGame.metadata["genre"] ?? ""
+            rateInput = currentGame.metadata["rating"] ?? ""
+            devInput = currentGame.metadata["developer"] ?? ""
+            pubInput = currentGame.metadata["publisher"] ?? ""
             // Create Date Formatter
             let dateFormatter = DateFormatter()
 
             // Set Date Format
             dateFormatter.dateFormat = "MMM dd, yyyy"
             // Convert String to Date
-            self.dateInput = dateFormatter.date(from: self.currentGame.metadata["release_date"] ?? "") ?? Date()
+            dateInput = dateFormatter.date(from: currentGame.metadata["release_date"] ?? "") ?? Date()
         }
     }
 }
