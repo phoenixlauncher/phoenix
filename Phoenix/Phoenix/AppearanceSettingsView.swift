@@ -8,13 +8,7 @@
 import SwiftUI
 import AppKit
 
-class AppearanceDelegateObject: ObservableObject {
-    @Published var refreshGameDetailView: (() -> Void)?
-}
-
 struct AppearanceSettingsView: View {
-    
-    @StateObject private var appearanceDelegateObject = AppearanceDelegateObject()
     
     @AppStorage("accentColorUI")
     private var accentColorUI: Bool = true
@@ -22,29 +16,8 @@ struct AppearanceSettingsView: View {
     var body: some View {
         Form {
             Toggle(isOn: $accentColorUI) {
-                Text("Accent Color UI (Requires restart)")
-            }
-            .onChange(of: accentColorUI) { newValue in
-                updateAccentColorUI()
-            }
-            Button(action: {
-                restartApp()
-            }) {
-                Text("Restart App")
+                Text("Adaptive Color UI)")
             }
         }
     }
-    
-    func updateAccentColorUI() {
-        appearanceDelegateObject.refreshGameDetailView?()
-    }
-    
-    func restartApp() {
-        let task = Process()
-        task.launchPath = "/usr/bin/env"
-        task.arguments = ["sh", "-c", "sleep 1 && open -a '\(Bundle.main.bundlePath)'"]
-        task.launch()
-        NSApp.terminate(nil)
-    }
-
 }

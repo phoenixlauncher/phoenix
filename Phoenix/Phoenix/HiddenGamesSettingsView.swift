@@ -6,14 +6,8 @@
 //
 
 import SwiftUI
-
-class HiddenGamesDelegateObject: ObservableObject {
-    var refreshGameListView: (() -> Void)?
-}
-
 struct HiddenGamesSettingsView: View {
     
-    @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
     @State var selectedGame: String?
     @State var refresh: Bool = false
     
@@ -42,18 +36,6 @@ struct HiddenGamesSettingsView: View {
                             }
                         }.scrollDisabled(true)
                     }
-                } else {
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            if (platform.displayName == "Steam") {
-                                Text("No deleted games found")
-                            }
-                            Spacer()
-                        }
-                        Spacer()
-                    }
                 }
             }
             Text(String(refresh))
@@ -66,7 +48,6 @@ struct HiddenGamesSettingsView: View {
             games[index].is_deleted = false
             // REFRESH GAME LIST VIEW HERE
             logger.write("called function from settings view")
-            hiddenGamesDelegateObject.refreshGameListView?()
             refresh.wrappedValue.toggle()
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted

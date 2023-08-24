@@ -8,7 +8,6 @@ import SwiftUI
 
 struct GameListView: View {
     
-    @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     @State private var timer: Timer?
@@ -55,11 +54,6 @@ struct GameListView: View {
             timer?.invalidate()
             timer = nil
         }
-    }
-    
-    func refreshGameListView() {
-        logger.write("refresh games list")
-        $refresh.wrappedValue.toggle()
     }
     
     /// Deletes a game from the games list by setting its `is_deleted` property to `true`.
