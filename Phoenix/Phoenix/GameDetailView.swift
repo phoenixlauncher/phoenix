@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct GameDetailView: View {
-    @EnvironmentObject private var appearanceDelegateObject: AppearanceDelegateObject
     
     @State var editingGame: Bool = false
     @State var showingAlert: Bool = false
@@ -24,15 +23,6 @@ struct GameDetailView: View {
     init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
         _selectedGame = selectedGame
         _refresh = refresh
-        if UserDefaults.standard.bool(forKey: "accentColorUI") {
-            playColor = Color.accentColor
-            settingsColor = Color.accentColor.opacity(0.25)
-            settingsText = Color.accentColor
-        } else {
-            playColor = Color.green
-            settingsColor = Color.gray.opacity(0.25)
-            settingsText = Color.primary
-        }
     }
 
     var body: some View {
@@ -221,21 +211,14 @@ struct GameDetailView: View {
         }
         .navigationTitle(selectedGame ?? "Phoenix")
         .onAppear {
+            refreshGameDetailView()
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                refreshGameDetailView()
                 refresh.toggle()
                 // This code will be executed every 1 second
-            }
-            if UserDefaults.standard.bool(forKey: "accentColorUI") {
-                playColor = Color.accentColor
-                settingsColor = Color.accentColor.opacity(0.25)
-                settingsText = Color.accentColor
-            } else {
-                playColor = Color.green
-                settingsColor = Color.gray.opacity(0.25)
-                settingsText = Color.primary
             }
         }
         .onDisappear {
@@ -256,7 +239,6 @@ struct GameDetailView: View {
             settingsColor = Color.gray.opacity(0.25)
             settingsText = Color.primary
         }
-        $refresh.wrappedValue.toggle()
     }
 
     func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {

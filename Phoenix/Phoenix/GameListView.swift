@@ -8,10 +8,10 @@ import SwiftUI
 
 struct GameListView: View {
     
-    @EnvironmentObject private var hiddenGamesDelegateObject: HiddenGamesDelegateObject
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     @State private var timer: Timer?
+    @State private var iconSize: Double = 24
     
     var body: some View {
         List(selection: $selectedGame) {
@@ -23,7 +23,7 @@ struct GameListView: View {
                             HStack {
                                 Image(nsImage: loadImageFromFile(filePath: game.icon))
                                     .resizable()
-                                    .frame(width: 24, height: 24)
+                                    .frame(width: iconSize, height: iconSize)
                                 Text(game.name)
                             }
                             .contextMenu {
@@ -42,10 +42,26 @@ struct GameListView: View {
                 .hidden()
         }
         .onAppear {
+            if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
+            if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+                iconSize = 0
+            } else {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
+                    iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+                }
+                if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+                    iconSize = 0
+                } else {
+                    iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+                }
                 refresh.toggle()
                 // This code will be executed every 1 second
             }
@@ -55,11 +71,6 @@ struct GameListView: View {
             timer?.invalidate()
             timer = nil
         }
-    }
-    
-    func refreshGameListView() {
-        logger.write("refresh games list")
-        $refresh.wrappedValue.toggle()
     }
     
     /// Deletes a game from the games list by setting its `is_deleted` property to `true`.
