@@ -11,6 +11,7 @@ struct GameListView: View {
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     @State private var timer: Timer?
+    @State private var iconSize: Double = 24
     
     var body: some View {
         List(selection: $selectedGame) {
@@ -22,7 +23,7 @@ struct GameListView: View {
                             HStack {
                                 Image(nsImage: loadImageFromFile(filePath: game.icon))
                                     .resizable()
-                                    .frame(width: 24, height: 24)
+                                    .frame(width: iconSize, height: iconSize)
                                 Text(game.name)
                             }
                             .contextMenu {
@@ -41,10 +42,12 @@ struct GameListView: View {
                 .hidden()
         }
         .onAppear {
+            iconSize = UserDefaults.standard.double(forKey: "listIconSize")
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
                 refresh.toggle()
                 // This code will be executed every 1 second
             }
