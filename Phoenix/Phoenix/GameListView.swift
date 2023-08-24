@@ -42,12 +42,26 @@ struct GameListView: View {
                 .hidden()
         }
         .onAppear {
-            iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
+            if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+                iconSize = 0
+            } else {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+                if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
+                    iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+                }
+                if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+                    iconSize = 0
+                } else {
+                    iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+                }
                 refresh.toggle()
                 // This code will be executed every 1 second
             }

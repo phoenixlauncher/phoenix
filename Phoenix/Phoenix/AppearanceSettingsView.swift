@@ -13,27 +13,34 @@ struct AppearanceSettingsView: View {
     @AppStorage("accentColorUI")
     private var accentColorUI: Bool = true
     
+    @AppStorage("listIconsHidden")
+    private var listIconsHidden: Bool = false
+    
     @AppStorage("listIconSize")
-    private var listIconSize: Double = 20
+    private var listIconSize: Double = 24
     
     var body: some View {
         Form {
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 20) {
                 Toggle(isOn: $accentColorUI) {
                     Text("Adaptive Color UI")
+                }
+                Toggle(isOn: $listIconsHidden) {
+                    Text("Hide icons in sidebar")
                 }
                 Slider(
                     value: $listIconSize,
                     in: 20...48,
                     step: 4
                 ) {
-                    Text("List Icon Size")
+                    Text("List icon size")
                 } minimumValueLabel: {
                     Text("20 px")
                 } maximumValueLabel: {
                     Text("48 px")
                 }
                 .frame(maxWidth: 225)
+                .opacity(listIconsHidden ? 0 : 1)
             }
         }
     }
