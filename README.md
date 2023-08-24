@@ -17,8 +17,9 @@
 
   ##
 
-  This launcher was inspired by projects like Playnite and Lutris, and supports any game which can be launched from the command line.      <br/>
-  (So basically all of them!) It was designed to be small, fast, and not overly complicated.
+  This launcher was inspired by projects like Playnite and Lutris, and supports any game which can be launched from the command line!
+
+  It was designed to be small, fast, and not overly complicated.
 
 <img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
 
