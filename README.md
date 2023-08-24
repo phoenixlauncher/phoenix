@@ -12,12 +12,13 @@
     <br />
     <a href="https://discord.gg/nm3GY2K36H">Discord</a>
     ·
-    <a href="https://phoenixlauncher.vercel.app/">Website</a>
-    <br />
-    <br />
-    This launcher was inspired by projects like Playnite and Lutris, and supports any game which can be launched from the command line.      <br/>
-    (So basically all of them!) It was designed to be small, fast, and not overly complicated.
+    <a href="https://phoenixlauncher.vercel.app/">Website</a>    
   </p>
+
+  ##
+
+  This launcher was inspired by projects like Playnite and Lutris, and supports any game which can be launched from the command line.      <br/>
+  (So basically all of them!) It was designed to be small, fast, and not overly complicated.
 
 <img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
 
