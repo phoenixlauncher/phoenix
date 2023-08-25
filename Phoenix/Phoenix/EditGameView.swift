@@ -24,6 +24,7 @@ struct EditGameView: View {
     @State private var iconInput: String = ""
     @State private var iconOutput: String = ""
     @State private var platInput: Platform = .NONE
+    @State private var statusInput: Status = .NONE
     @State private var cmdInput: String = ""
     @State private var descInput: String = ""
     @State private var headInput: String = ""
@@ -142,6 +143,18 @@ struct EditGameView: View {
                         Picker("", selection: $platInput) {
                             ForEach(Platform.allCases) { platform in
                                 Text(platform.displayName)
+                            }
+                        }
+                        .labelsHidden()
+                        .padding()
+                    }
+                    
+                    HStack {
+                        Text("Status")
+                            .frame(width: 70, alignment: .leading)
+                        Picker("", selection: $statusInput) {
+                            ForEach(Status.allCases) { status in
+                                Text(status.displayName)
                             }
                         }
                         .labelsHidden()
@@ -310,6 +323,9 @@ struct EditGameView: View {
                     if platInput == .NONE {
                         platInput = currentGame.platform
                     }
+                    if statusInput == .NONE {
+                        statusInput = currentGame.status
+                    }
                     if cmdInput == "" {
                         cmdInput = currentGame.launcher
                     }
@@ -358,6 +374,7 @@ struct EditGameView: View {
                         icon: iconOutput,
                         name: nameInput,
                         platform: platInput,
+                        status: statusInput,
                         is_deleted: false
                     )
 

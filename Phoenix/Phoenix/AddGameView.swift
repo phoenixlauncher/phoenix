@@ -14,6 +14,7 @@ struct AddGameView: View {
     @State private var iconInput: String = ""
     @State private var iconOutput: String = ""
     @State private var platInput: Platform = .NONE
+    @State private var statusInput: Status = .NONE
     @State private var cmdInput: String = ""
     @State private var descInput: String = ""
     @State private var headInput: String = ""
@@ -123,6 +124,18 @@ struct AddGameView: View {
                     Picker("", selection: $platInput) {
                         ForEach(Platform.allCases) { platform in
                             Text(platform.displayName)
+                        }
+                    }
+                    .labelsHidden()
+                    .padding()
+                }
+                    
+                HStack {
+                    Text("Status")
+                        .frame(width: 70, alignment: .leading)
+                    Picker("", selection: $statusInput) {
+                        ForEach(Status.allCases) { status in
+                            Text(status.displayName)
                         }
                     }
                     .labelsHidden()
@@ -278,6 +291,7 @@ struct AddGameView: View {
                         icon: iconOutput,
                         name: nameInput,
                         platform: platInput,
+                        status: statusInput,
                         is_deleted: false
                     )
 
