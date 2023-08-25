@@ -79,6 +79,30 @@ struct Game: Codable, Comparable, Hashable {
         self.platform = platform
         self.is_deleted = is_deleted
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case appID, launcher, metadata, icon, name, platform, is_deleted
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        appID = try container.decode(String.self, forKey: .appID)
+        launcher = try container.decode(String.self, forKey: .launcher)
+        metadata = try container.decode([String: String].self, forKey: .metadata)
+        icon = try container.decode(String.self, forKey: .icon)
+        name = try container.decode(String.self, forKey: .name)
+        is_deleted = try container.decode(Bool.self, forKey: .is_deleted)
+        
+        // If game platform was .EMUL change to .NONE
+        let platformRawValue = try container.decode(String.self, forKey: .platform)
+        if platformRawValue == "EMUL" {
+            self.platform = .NONE
+        } else if let platform = Platform(rawValue: platformRawValue) {
+            self.platform = platform
+        } else {
+            self.platform = .NONE
+        }
+    }
 
     /**
      Compares two `Game` objects based on their `name` property.
