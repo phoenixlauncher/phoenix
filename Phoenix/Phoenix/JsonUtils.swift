@@ -159,7 +159,17 @@ func loadGamesFromJSON() -> GamesList {
     var games: GamesList?
     do {
         let jsonData = try Data(contentsOf: url)
-        games = try JSONDecoder().decode(GamesList.self, from: jsonData)
+        // Custom decoding strategy to convert "isDeleted" to "is_deleted"
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
+            let key = keys.last!
+            if key.stringValue == "isDeleted" {
+                return AnyCodingKey(stringValue: "is_deleted")!
+            }
+            return key
+        }
+        
+        games = try decoder.decode(GamesList.self, from: jsonData)
         return games ?? GamesList(games: [])
     } catch {
         logger.write("[INFO]: Couldn't find games.json. Creating new one.")
@@ -170,13 +180,23 @@ func loadGamesFromJSON() -> GamesList {
             writeGamesToJSON(data: jsonString)
         } catch {
             logger.write(
-                "[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'")
+                "[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'"
+            )
         }
 
         do {
             let jsonData = try Data(contentsOf: url)
-            games = try JSONDecoder().decode(GamesList.self, from: jsonData)
-
+            // Custom decoding strategy to convert "isDeleted" to "is_deleted"
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
+                let key = keys.last!
+                if key.stringValue == "isDeleted" {
+                    return AnyCodingKey(stringValue: "is_deleted")!
+                }
+                return key
+            }
+            
+            games = try decoder.decode(GamesList.self, from: jsonData)
             return games ?? GamesList(games: [])
         } catch {
             logger.write("[ERROR]: Couldn't read from new 'games.json'")
