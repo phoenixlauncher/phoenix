@@ -28,7 +28,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 }
 
 enum Status: String, Codable, CaseIterable, Identifiable {
-    case BACKLOG, PLAYING, BEATEN, COMPLETED, SHELVED, ABANDONED, NONE
+    case PLAYING, SHELVED, BACKLOG, BEATEN, COMPLETED, ABANDONED, NONE
 
     var id: Status { self }
 

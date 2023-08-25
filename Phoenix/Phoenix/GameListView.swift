@@ -8,6 +8,7 @@ import SwiftUI
 
 struct GameListView: View {
     
+    @Binding var sortByPlatform: Bool
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     @State private var timer: Timer?
@@ -15,26 +16,52 @@ struct GameListView: View {
     
     var body: some View {
         List(selection: $selectedGame) {
-            ForEach(Platform.allCases, id: \.self) { platform in
-                let gamesForPlatform = games.filter { $0.platform == platform && $0.is_deleted == false}
-                if !gamesForPlatform.isEmpty {
-                    Section(header: Text(platform.displayName)) {
-                        ForEach(gamesForPlatform, id: \.name) { game in
-                            HStack {
-                                Image(nsImage: loadImageFromFile(filePath: game.icon))
-                                    .resizable()
-                                    .frame(width: iconSize, height: iconSize)
-                                Text(game.name)
-                            }
-                            .contextMenu {
-                                Button(action: {
-                                    deleteGame(game, refresh: $refresh)
-                                }) {
-                                    Text("Delete game")
+            if sortByPlatform {
+                ForEach(Platform.allCases, id: \.self) { platform in
+                    let gamesForPlatform = games.filter { $0.platform == platform && $0.is_deleted == false}
+                    if !gamesForPlatform.isEmpty {
+                        Section(header: Text(platform.displayName)) {
+                            ForEach(gamesForPlatform, id: \.name) { game in
+                                HStack {
+                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
+                                        .resizable()
+                                        .frame(width: iconSize, height: iconSize)
+                                    Text(game.name)
                                 }
-                                .accessibility(identifier: "Delete Game")
-                            }
-                        }.scrollDisabled(true)
+                                .contextMenu {
+                                    Button(action: {
+                                        deleteGame(game, refresh: $refresh)
+                                    }) {
+                                        Text("Delete game")
+                                    }
+                                    .accessibility(identifier: "Delete Game")
+                                }
+                            }.scrollDisabled(true)
+                        }
+                    }
+                }
+            } else {
+                ForEach(Status.allCases, id: \.self) { status in
+                    let gamesForStatus = games.filter { $0.status == status && $0.is_deleted == false}
+                    if !gamesForStatus.isEmpty {
+                        Section(header: Text(status.displayName)) {
+                            ForEach(gamesForStatus, id: \.name) { game in
+                                HStack {
+                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
+                                        .resizable()
+                                        .frame(width: iconSize, height: iconSize)
+                                    Text(game.name)
+                                }
+                                .contextMenu {
+                                    Button(action: {
+                                        deleteGame(game, refresh: $refresh)
+                                    }) {
+                                        Text("Delete game")
+                                    }
+                                    .accessibility(identifier: "Delete Game")
+                                }
+                            }.scrollDisabled(true)
+                        }
                     }
                 }
             }

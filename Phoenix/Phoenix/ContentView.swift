@@ -14,6 +14,7 @@ var games = loadGames().games.sorted()
 
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
+    @Binding var sortByPlatform: Bool
     @State var selectedGame: String?
     @State var refresh: Bool = false
     @State private var isAddingGame: Bool = false
@@ -22,7 +23,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(selectedGame: $selectedGame, refresh: $refresh)
+            GameListView(sortByPlatform: $sortByPlatform, selectedGame: $selectedGame, refresh: $refresh)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         // Add game button
