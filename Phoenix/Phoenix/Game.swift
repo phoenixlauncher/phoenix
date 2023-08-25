@@ -90,12 +90,10 @@ struct Game: Codable, Comparable, Hashable {
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        appID = try container.decode(String.self, forKey: .appID)
         launcher = try container.decode(String.self, forKey: .launcher)
         metadata = try container.decode([String: String].self, forKey: .metadata)
         icon = try container.decode(String.self, forKey: .icon)
         name = try container.decode(String.self, forKey: .name)
-        is_deleted = try container.decode(Bool.self, forKey: .is_deleted)
         
         // If game platform was .EMUL change to .NONE
         let platformRawValue = try container.decode(String.self, forKey: .platform)
