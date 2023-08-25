@@ -33,10 +33,11 @@ struct PhoenixApp: App {
                     }
                 }
             }
-            CommandGroup(replacing: CommandGroupPlacement.toolbar) {
+            CommandGroup(replacing: CommandGroupPlacement.sidebar) {
                 Button("Sort sidebar by \(sortByPlatform ? "status" : "platform")", action: {
                     sortByPlatform.toggle()
                 })
+                .keyboardShortcut("k", modifiers: .command)
             }
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(UpdaterViewModel: updaterViewModel)
