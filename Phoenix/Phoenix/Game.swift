@@ -113,6 +113,20 @@ struct Game: Codable, Comparable, Hashable {
         } else {
             self.status = .NONE
         }
+        
+        // Handle appID conversion with default to ""
+        if let appID = try? container.decode(String.self, forKey: .appID) {
+            self.appID = appID
+        } else {
+            self.appID = ""
+        }
+        
+        // Handle appID conversion with default to ""
+        if let is_deleted = try? container.decode(Bool.self, forKey: .is_deleted) {
+            self.is_deleted = is_deleted
+        } else {
+            self.is_deleted = false
+        }
     }
 
     /**
