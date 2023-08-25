@@ -163,6 +163,11 @@ struct GameDetailView: View {
                                                 .opacity(0.5)
                                         }
                                         VStack(alignment: .leading, spacing: 1) {
+                                            Text("Status")
+                                            Text(game.status.displayName)
+                                                .opacity(0.5)
+                                        }
+                                        VStack(alignment: .leading, spacing: 1) {
                                             Text("Rating")
                                             Text(game.metadata["rating"] ?? "")
                                                 .opacity(0.5)
@@ -229,7 +234,6 @@ struct GameDetailView: View {
     }
     
     func refreshGameDetailView() {
-        logger.write("refresh game detail")
         if UserDefaults.standard.bool(forKey: "accentColorUI") {
             playColor = Color.accentColor
             settingsColor = Color.accentColor.opacity(0.25)

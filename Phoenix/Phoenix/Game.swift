@@ -28,7 +28,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 }
 
 enum Status: String, Codable, CaseIterable, Identifiable {
-    case BACKLOG, PLAYING, BEATEN, COMPLETED, SHELVED, ABANDONED
+    case BACKLOG, PLAYING, BEATEN, COMPLETED, SHELVED, ABANDONED, NONE
 
     var id: Status { self }
 
@@ -40,6 +40,7 @@ enum Status: String, Codable, CaseIterable, Identifiable {
         case .COMPLETED: return "Completed"
         case .SHELVED: return "Shelved"
         case .ABANDONED: return "Abandoned"
+        case .NONE: return "Other"
         }
     }
 }
@@ -51,6 +52,7 @@ struct Game: Codable, Comparable, Hashable {
     var icon: String
     var name: String
     var platform: Platform
+    var status: Status
     var is_deleted: Bool // New property to indicate if the game has been deleted
 
     init(
@@ -69,6 +71,7 @@ struct Game: Codable, Comparable, Hashable {
         icon: String = "PlaceholderImage",
         name: String,
         platform: Platform = Platform.NONE,
+        status: Status = Status.NONE,
         is_deleted: Bool
     ) {
         self.appID = appID
@@ -77,11 +80,12 @@ struct Game: Codable, Comparable, Hashable {
         self.icon = icon
         self.name = name
         self.platform = platform
+        self.status = status
         self.is_deleted = is_deleted
     }
     
     enum CodingKeys: String, CodingKey {
-        case appID, launcher, metadata, icon, name, platform, is_deleted
+        case appID, launcher, metadata, icon, name, platform, status, is_deleted
     }
         
     init(from decoder: Decoder) throws {
@@ -101,6 +105,13 @@ struct Game: Codable, Comparable, Hashable {
             self.platform = platform
         } else {
             self.platform = .NONE
+        }
+        
+        // Handle status conversion with default to .NONE
+        if let status = try? container.decode(Status.self, forKey: .status) {
+            self.status = status
+        } else {
+            self.status = .NONE
         }
     }
 
