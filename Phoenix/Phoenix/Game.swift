@@ -27,6 +27,23 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+enum Status: String, Codable, CaseIterable, Identifiable {
+    case BACKLOG, PLAYING, BEATEN, COMPLETED, SHELVED, ABANDONED
+
+    var id: Status { self }
+
+    var displayName: String {
+        switch self {
+        case .BACKLOG: return "Backlog"
+        case .PLAYING: return "Playing"
+        case .BEATEN: return "Beaten"
+        case .COMPLETED: return "Completed"
+        case .SHELVED: return "Shelved"
+        case .ABANDONED: return "Abandoned"
+        }
+    }
+}
+
 struct Game: Codable, Comparable, Hashable {
     var appID: String
     var launcher: String
