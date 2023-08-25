@@ -10,14 +10,19 @@ import SwiftUI
 @main
 struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()
+    
+    @AppStorage("sortByPlatform")
+    var sortByPlatform: Bool = true
+    
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(sortByPlatform: $sortByPlatform)
                 .frame(
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
-                    minHeight: 445, idealHeight: 1080, maxHeight: .infinity)
+                    minHeight: 445, idealHeight: 1080, maxHeight: .infinity
+                )
         }.commands {
             CommandGroup(replacing: CommandGroupPlacement.newItem) {
                 Button("Open Phoenix Data Folder") {
@@ -27,6 +32,11 @@ struct PhoenixApp: App {
                         logger.write("[INFO]: Opened Application Support/Phoenix.")
                     }
                 }
+            }
+            CommandGroup(replacing: CommandGroupPlacement.toolbar) {
+                Button("Sort sidebar by \(sortByPlatform ? "status" : "platform")", action: {
+                    sortByPlatform.toggle()
+                })
             }
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(UpdaterViewModel: updaterViewModel)
