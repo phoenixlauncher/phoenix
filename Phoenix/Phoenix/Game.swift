@@ -53,7 +53,7 @@ struct Game: Codable, Comparable, Hashable {
     var name: String
     var platform: Platform
     var status: Status
-    var is_deleted: Bool // New property to indicate if the game has been deleted
+    var is_deleted: Bool
 
     init(
         appID: String = "",

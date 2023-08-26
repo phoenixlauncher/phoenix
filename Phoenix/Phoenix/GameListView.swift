@@ -25,21 +25,8 @@ struct GameListView: View {
                     if !gamesForPlatform.isEmpty {
                         Section(header: Text(platform.displayName)) {
                             ForEach(gamesForPlatform, id: \.name) { game in
-                                HStack {
-                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
-                                        .resizable()
-                                        .frame(width: iconSize, height: iconSize)
-                                    Text(game.name)
-                                }
-                                .contextMenu {
-                                    Button(action: {
-                                        deleteGame(game, refresh: $refresh)
-                                    }) {
-                                        Text("Delete game")
-                                    }
-                                    .accessibility(identifier: "Delete Game")
-                                }
-                            }.scrollDisabled(true)
+                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                            }
                         }
                     }
                 }
@@ -51,22 +38,8 @@ struct GameListView: View {
                     if !gamesForStatus.isEmpty {
                         Section(header: Text(status.displayName)) {
                             ForEach(gamesForStatus, id: \.name) { game in
-                                HStack {
-                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
-                                        .resizable()
-                                        .frame(width: iconSize, height: iconSize)
-                                    Text(game.name)
-                                }
-                                .contextMenu {
-                                    Button(action: {
-                                        deleteGame(game, refresh: $refresh)
-                                    }) {
-                                        Text("Delete game")
-                                    }
-                                    .accessibility(identifier: "Delete Game")
-                                }
+                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                             }
-                            .scrollDisabled(true)
                         }
                         
                     }
@@ -110,7 +83,29 @@ struct GameListView: View {
 
         
     }
-        
+}
+
+struct GameListItem: View {
+    @State var game: Game
+    @Binding var refresh: Bool
+    @Binding var iconSize: Double
+    
+    var body: some View {
+        HStack {
+            Image(nsImage: loadImageFromFile(filePath: game.icon))
+                .resizable()
+                .frame(width: iconSize, height: iconSize)
+            Text(game.name)
+        }
+        .contextMenu {
+            Button(action: {
+                deleteGame(game, refresh: $refresh)
+            }) {
+                Text("Delete game")
+            }
+            .accessibility(identifier: "Delete Game")
+        }
+    }
     
     /// Deletes a game from the games list by setting its `is_deleted` property to `true`.
     ///
@@ -137,5 +132,4 @@ struct GameListView: View {
             }
         }
     }
-
 }
