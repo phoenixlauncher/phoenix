@@ -8,39 +8,39 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case MAC, STEAM, GOG, EPIC, PC, PS, NIN, XBOX, NONE
+    case mac, stean, gog, epic, pc, ps, nin, xbox, none
 
     var id: Platform { self }
 
     var displayName: String {
         switch self {
-        case .MAC: return "Mac"
-        case .STEAM: return "Steam"
-        case .GOG: return "GOG"
-        case .EPIC: return "Epic"
-        case .PC: return "PC"
-        case .PS: return "Playstation"
-        case .NIN: return "Nintendo"
-        case .XBOX: return "Xbox"
-        case .NONE: return "Other"
+        case .mac: return "Mac"
+        case .stean: return "Steam"
+        case .gog: return "GOG"
+        case .epic: return "Epic"
+        case .pc: return "PC"
+        case .ps: return "Playstation"
+        case .nin: return "Nintendo"
+        case .xbox: return "Xbox"
+        case .none: return "Other"
         }
     }
 }
 
 enum Status: String, Codable, CaseIterable, Identifiable {
-    case PLAYING, SHELVED, BACKLOG, BEATEN, COMPLETED, ABANDONED, NONE
+    case playing, shelved, backlog, beaten, completed, abandoned, none
 
     var id: Status { self }
 
     var displayName: String {
         switch self {
-        case .BACKLOG: return "Backlog"
-        case .PLAYING: return "Playing"
-        case .BEATEN: return "Beaten"
-        case .COMPLETED: return "Completed"
-        case .SHELVED: return "Shelved"
-        case .ABANDONED: return "Abandoned"
-        case .NONE: return "Other"
+        case .playing: return "Playing"
+        case .shelved: return "Shelved"
+        case .backlog: return "Backlog"
+        case .beaten: return "Beaten"
+        case .completed: return "Completed"
+        case .abandoned: return "Abandoned"
+        case .none: return "Other"
         }
     }
 }
@@ -70,8 +70,8 @@ struct Game: Codable, Comparable, Hashable {
         ],
         icon: String = "PlaceholderImage",
         name: String,
-        platform: Platform = Platform.NONE,
-        status: Status = Status.NONE,
+        platform: Platform = Platform.none,
+        status: Status = Status.none,
         is_deleted: Bool
     ) {
         self.appID = appID
@@ -95,21 +95,23 @@ struct Game: Codable, Comparable, Hashable {
         icon = try container.decode(String.self, forKey: .icon)
         name = try container.decode(String.self, forKey: .name)
         
-        // If game platform was .EMUL change to .NONE
-        let platformRawValue = try container.decode(String.self, forKey: .platform)
-        if platformRawValue == "EMUL" {
-            self.platform = .NONE
-        } else if let platform = Platform(rawValue: platformRawValue) {
+        // If game platform was .EMUL change to .none
+        var platformRawValue = try container.decode(String.self, forKey: .platform)
+        platformRawValue = platformRawValue.lowercased()
+        
+        if let platform = Platform(rawValue: platformRawValue) {
             self.platform = platform
         } else {
-            self.platform = .NONE
+            self.platform = .none
         }
         
-        // Handle status conversion with default to .NONE
-        if let status = try? container.decode(Status.self, forKey: .status) {
+        var statusRawValue = try container.decode(String.self, forKey: .status)
+        statusRawValue = statusRawValue.lowercased()
+
+        if let status = Status(rawValue: statusRawValue) {
             self.status = status
         } else {
-            self.status = .NONE
+            self.status = .none
         }
         
         // Handle appID conversion with default to ""

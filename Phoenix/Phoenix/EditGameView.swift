@@ -23,8 +23,8 @@ struct EditGameView: View {
     @State private var nameInput: String = ""
     @State private var iconInput: String = ""
     @State private var iconOutput: String = ""
-    @State private var platInput: Platform = .NONE
-    @State private var statusInput: Status = .NONE
+    @State private var platInput: Platform = .none
+    @State private var statusInput: Status = .none
     @State private var cmdInput: String = ""
     @State private var descInput: String = ""
     @State private var headInput: String = ""
@@ -320,10 +320,10 @@ struct EditGameView: View {
                     if iconOutput == "" {
                         iconOutput = currentGame.icon
                     }
-                    if platInput == .NONE {
+                    if platInput == .none {
                         platInput = currentGame.platform
                     }
-                    if statusInput == .NONE {
+                    if statusInput == .none {
                         statusInput = currentGame.status
                     }
                     if cmdInput == "" {

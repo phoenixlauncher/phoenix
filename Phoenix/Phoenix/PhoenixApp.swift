@@ -12,9 +12,18 @@ struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()
     
     enum SortBy: String, Codable, CaseIterable, Identifiable {
-        case platform = "Platform", status = "Status", name = "Name", recency = "Recency"
+        case platform, status, name, recency
 
         var id: SortBy { self }
+        
+        var displayName: String {
+            switch self {
+            case .platform: return "Platform"
+            case .status: return "Status"
+            case .name: return "Name"
+            case .recency: return "Recency"
+            }
+        }
         
         var symbol: String {
             switch self {

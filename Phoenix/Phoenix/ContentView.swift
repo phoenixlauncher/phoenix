@@ -50,11 +50,10 @@ struct ContentView: View {
                     ToolbarItem(placement: .primaryAction) {
                         Picker("Sort by", selection: $sortBy) {
                             ForEach(PhoenixApp.SortBy.allCases) { sortBy in
-                                HStack(alignment: .bottom, spacing: 5) {
+                                HStack(alignment: .center, spacing: 5) {
                                     Image(systemName: sortBy.symbol)
-                                    Text(sortBy.rawValue)
+                                    Text(sortBy.displayName)
                                 }
-                                
                             }
                         }
                         .pickerStyle(.automatic)
