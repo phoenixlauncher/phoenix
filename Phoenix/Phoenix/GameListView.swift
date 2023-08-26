@@ -50,15 +50,26 @@ struct GameListView: View {
                     $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
                 }
                 if !gamesForName.isEmpty {
-                    VStack(alignment: .leading) {
+                    Section(header: Text("Name")) {
                         ForEach(gamesForName, id: \.name) { game in
                             GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                         }
                     }
-                    .padding(.top, 5)
                 }
             case .recency:
-                Text("in development")
+                ForEach(Recency.allCases, id: \.self) { recency in
+                    let gamesForRecency = games.filter {
+                        $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                    }
+                    if !gamesForRecency.isEmpty {
+                        Section(header: Text(recency.displayName)) {
+                            ForEach(gamesForRecency, id: \.name) { game in
+                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                            }
+                        }
+                        
+                    }
+                }
             }
             Text(String(refresh))
                 .hidden()

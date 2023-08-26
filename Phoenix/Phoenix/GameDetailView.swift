@@ -259,6 +259,7 @@ struct GameDetailView: View {
         let idx = games.firstIndex(where: { $0.name == selectedGame })
         if idx != nil {
             games[idx!].metadata["last_played"] = dateString
+            games[idx!].recency = .day
 
             // Write the updated game information to the JSON file
             let encoder = JSONEncoder()

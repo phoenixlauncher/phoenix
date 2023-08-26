@@ -8,14 +8,14 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case mac, stean, gog, epic, pc, ps, nin, xbox, none
+    case mac, steam, gog, epic, pc, ps, nin, xbox, none
 
     var id: Platform { self }
 
     var displayName: String {
         switch self {
         case .mac: return "Mac"
-        case .stean: return "Steam"
+        case .steam: return "Steam"
         case .gog: return "GOG"
         case .epic: return "Epic"
         case .pc: return "PC"
@@ -45,6 +45,24 @@ enum Status: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+enum Recency: String, Codable, CaseIterable, Identifiable {
+    case day, week, month, three_months, six_months, year, never
+
+    var id: Recency { self }
+
+    var displayName: String {
+        switch self {
+        case .day: return "Today"
+        case .week: return "This Week"
+        case .month: return "This Month"
+        case .three_months: return "Last 3 Months"
+        case .six_months: return "Last 6 Months"
+        case .year: return "This Year"
+        case .never: return "Never"
+        }
+    }
+}
+
 struct Game: Codable, Comparable, Hashable {
     var appID: String
     var launcher: String
@@ -53,6 +71,7 @@ struct Game: Codable, Comparable, Hashable {
     var name: String
     var platform: Platform
     var status: Status
+    var recency: Recency
     var is_deleted: Bool
 
     init(
@@ -72,6 +91,7 @@ struct Game: Codable, Comparable, Hashable {
         name: String,
         platform: Platform = Platform.none,
         status: Status = Status.none,
+        recency: Recency = Recency.never,
         is_deleted: Bool
     ) {
         self.appID = appID
@@ -81,11 +101,12 @@ struct Game: Codable, Comparable, Hashable {
         self.name = name
         self.platform = platform
         self.status = status
+        self.recency = recency
         self.is_deleted = is_deleted
     }
     
     enum CodingKeys: String, CodingKey {
-        case appID, launcher, metadata, icon, name, platform, status, is_deleted
+        case appID, launcher, metadata, icon, name, platform, status, recency, is_deleted
     }
         
     init(from decoder: Decoder) throws {
@@ -112,6 +133,32 @@ struct Game: Codable, Comparable, Hashable {
             self.status = status
         } else {
             self.status = .none
+        }
+        
+        // Decode recency, or derive it from last_played
+        let dateString = metadata["last_played"] ?? ""
+        if dateString == "" || dateString == "Never" {
+            self.recency = .never
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            let lastPlayedDate = dateFormatter.date(from: dateString)
+            let timeInterval = lastPlayedDate?.timeIntervalSinceNow ?? 0
+            if abs(timeInterval) <= 24 * 60 * 60 {
+                self.recency = .day
+            } else if abs(timeInterval) <= 7 * 24 * 60 * 60 {
+                self.recency = .week
+            } else if abs(timeInterval) <= 30 * 24 * 60 * 60 {
+                self.recency = .month
+            } else if abs(timeInterval) <= 90 * 24 * 60 * 60 {
+                self.recency = .three_months
+            } else if abs(timeInterval) <= 180 * 24 * 60 * 60 {
+                self.recency = .six_months
+            } else if abs(timeInterval) <= 365 * 24 * 60 * 60 {
+                self.recency = .year
+            } else {
+                self.recency = .never
+            }
         }
         
         // Handle appID conversion with default to ""
