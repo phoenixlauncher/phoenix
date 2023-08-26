@@ -11,14 +11,30 @@ import SwiftUI
 struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()
     
-    @AppStorage("sortByPlatform")
-    var sortByPlatform: Bool = true
+    enum SortBy: String, Codable, CaseIterable, Identifiable {
+        case platform = "Platform", status = "Status", name = "Name", recency = "Recency"
+
+        var id: SortBy { self }
+        
+        var symbol: String {
+            switch self {
+            case .platform: return "arcade.stick.console"
+            case .status: return "trophy"
+            case .name: return "textformat.abc"
+            case .recency: return "calendar.badge.clock"
+            }
+        }
+    }
+    
+    @AppStorage("sortBy")
+    var sortBy: SortBy = .platform
+    
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
-            ContentView(sortByPlatform: $sortByPlatform)
+            ContentView(sortBy: $sortBy)
                 .frame(
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity
@@ -34,10 +50,22 @@ struct PhoenixApp: App {
                 }
             }
             CommandGroup(replacing: CommandGroupPlacement.sidebar) {
-                Button("Sort sidebar by \(sortByPlatform ? "status" : "platform")", action: {
-                    sortByPlatform.toggle()
+                Button("Sort sidebar by platform", action: {
+                    sortBy = SortBy.platform
                 })
-                .keyboardShortcut("k", modifiers: .command)
+                .keyboardShortcut("1", modifiers: .command)
+                Button("Sort sidebar by status", action: {
+                    sortBy = SortBy.status
+                })
+                .keyboardShortcut("2", modifiers: .command)
+                Button("Sort sidebar by name", action: {
+                    sortBy = SortBy.name
+                })
+                .keyboardShortcut("3", modifiers: .command)
+                Button("Sort sidebar by recency", action: {
+                    sortBy = SortBy.recency
+                })
+                .keyboardShortcut("4", modifiers: .command)
             }
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(UpdaterViewModel: updaterViewModel)

@@ -8,7 +8,7 @@ import SwiftUI
 
 struct GameListView: View {
     
-    @Binding var sortByPlatform: Bool
+    @Binding var sortBy: PhoenixApp.SortBy
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
     @Binding var searchText: String
@@ -17,7 +17,8 @@ struct GameListView: View {
     
     var body: some View {
         List(selection: $selectedGame) {
-            if sortByPlatform {
+            switch sortBy {
+            case .platform:
                 ForEach(Platform.allCases, id: \.self) { platform in
                     let gamesForPlatform = games.filter {
                         $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
@@ -30,7 +31,7 @@ struct GameListView: View {
                         }
                     }
                 }
-            } else {
+            case .status:
                 ForEach(Status.allCases, id: \.self) { status in
                     let gamesForStatus = games.filter {
                         $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
@@ -44,7 +45,20 @@ struct GameListView: View {
                         
                     }
                 }
-                
+            case .name:
+                let gamesForName = games.filter {
+                    $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                }
+                if !gamesForName.isEmpty {
+                    VStack(alignment: .leading) {
+                        ForEach(gamesForName, id: \.name) { game in
+                            GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                        }
+                    }
+                    .padding(.top, 5)
+                }
+            case .recency:
+                Text("in development")
             }
             Text(String(refresh))
                 .hidden()

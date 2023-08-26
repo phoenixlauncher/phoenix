@@ -14,7 +14,7 @@ var games = loadGames().games.sorted()
 
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
-    @Binding var sortByPlatform: Bool
+    @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
     @State var selectedGame: String?
     @State var refresh: Bool = false
@@ -24,7 +24,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortByPlatform: $sortByPlatform, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText)
+            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         // Add game button
@@ -46,6 +46,18 @@ struct ContentView: View {
                                 AddGameView()
                             }
                         )
+                    }
+                    ToolbarItem(placement: .primaryAction) {
+                        Picker("Sort by", selection: $sortBy) {
+                            ForEach(PhoenixApp.SortBy.allCases) { sortBy in
+                                HStack(alignment: .bottom, spacing: 5) {
+                                    Image(systemName: sortBy.symbol)
+                                    Text(sortBy.rawValue)
+                                }
+                                
+                            }
+                        }
+                        .pickerStyle(.automatic)
                     }
                 }
         } detail: {
