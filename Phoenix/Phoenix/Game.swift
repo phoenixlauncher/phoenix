@@ -73,6 +73,7 @@ struct Game: Codable, Comparable, Hashable {
     var status: Status
     var recency: Recency
     var is_deleted: Bool
+    var is_favorite: Bool
 
     init(
         appID: String = "",
@@ -92,7 +93,8 @@ struct Game: Codable, Comparable, Hashable {
         platform: Platform = Platform.none,
         status: Status = Status.none,
         recency: Recency = Recency.never,
-        is_deleted: Bool
+        is_deleted: Bool,
+        is_favorite: Bool
     ) {
         self.appID = appID
         self.launcher = launcher
@@ -103,10 +105,11 @@ struct Game: Codable, Comparable, Hashable {
         self.status = status
         self.recency = recency
         self.is_deleted = is_deleted
+        self.is_favorite = is_favorite
     }
     
     enum CodingKeys: String, CodingKey {
-        case appID, launcher, metadata, icon, name, platform, status, recency, is_deleted
+        case appID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
     }
         
     init(from decoder: Decoder) throws {
@@ -173,6 +176,13 @@ struct Game: Codable, Comparable, Hashable {
             self.is_deleted = is_deleted
         } else {
             self.is_deleted = false
+        }
+        
+        // Handle appID conversion with default to ""
+        if let is_favorite = try? container.decode(Bool.self, forKey: .is_favorite) {
+            self.is_favorite = is_favorite
+        } else {
+            self.is_favorite = false
         }
     }
 

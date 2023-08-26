@@ -292,7 +292,8 @@ struct AddGameView: View {
                         name: nameInput,
                         platform: platInput,
                         status: statusInput,
-                        is_deleted: false
+                        is_deleted: false,
+                        is_favorite: false
                     )
 
                     games.append(newGame)

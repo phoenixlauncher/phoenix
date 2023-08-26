@@ -17,11 +17,21 @@ struct GameListView: View {
     
     var body: some View {
         List(selection: $selectedGame) {
+            let favoriteGames = games.filter {
+                $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == true
+            }
+            if !favoriteGames.isEmpty {
+                Section(header: Text("Favorites")) {
+                    ForEach(favoriteGames, id: \.name) { game in
+                        GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                    }
+                }
+            }
             switch sortBy {
             case .platform:
                 ForEach(Platform.allCases, id: \.self) { platform in
                     let gamesForPlatform = games.filter {
-                        $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                        $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
                     }
                     if !gamesForPlatform.isEmpty {
                         Section(header: Text(platform.displayName)) {
@@ -34,7 +44,7 @@ struct GameListView: View {
             case .status:
                 ForEach(Status.allCases, id: \.self) { status in
                     let gamesForStatus = games.filter {
-                        $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                        $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
                     }
                     if !gamesForStatus.isEmpty {
                         Section(header: Text(status.displayName)) {
@@ -47,7 +57,7 @@ struct GameListView: View {
                 }
             case .name:
                 let gamesForName = games.filter {
-                    $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                    $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
                 }
                 if !gamesForName.isEmpty {
                     Section(header: Text("Name")) {
@@ -59,7 +69,7 @@ struct GameListView: View {
             case .recency:
                 ForEach(Recency.allCases, id: \.self) { recency in
                     let gamesForRecency = games.filter {
-                        $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                        $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
                     }
                     if !gamesForRecency.isEmpty {
                         Section(header: Text(recency.displayName)) {
@@ -67,7 +77,6 @@ struct GameListView: View {
                                 GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                             }
                         }
-                        
                     }
                 }
             }
@@ -124,11 +133,43 @@ struct GameListItem: View {
         }
         .contextMenu {
             Button(action: {
+                favoriteGame(game, refresh: $refresh)
+            }) {
+                Text("\(game.is_favorite ? "Unfavorite" : "Favorite") game")
+            }
+            .accessibility(identifier: "Favorite Game")
+            Button(action: {
                 deleteGame(game, refresh: $refresh)
             }) {
                 Text("Delete game")
             }
-            .accessibility(identifier: "Delete Game")
+            .accessibility(identifier: "Favorite Game")
+        }
+    }
+    
+    /// Favorites a game from the games list by toggling its `is_favorite` property.
+    ///
+    /// - Parameters:
+    ///   - game: The game to favorite / unfavorite.
+    ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
+    func favoriteGame(_ game: Game, refresh: Binding<Bool>) {
+        if let index = games.firstIndex(where: { $0.name == game.name }) {
+            games[index].is_favorite.toggle()
+            refresh.wrappedValue.toggle()
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+
+            do {
+                let gamesJSON = try encoder.encode(games)
+
+                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                    writeGamesToJSON(data: gamesJSONString)
+                }
+            } catch {
+                logger.write(error.localizedDescription)
+            }
         }
     }
     

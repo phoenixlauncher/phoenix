@@ -375,7 +375,8 @@ struct EditGameView: View {
                         name: nameInput,
                         platform: platInput,
                         status: statusInput,
-                        is_deleted: false
+                        is_deleted: currentGame.is_deleted,
+                        is_favorite: currentGame.is_favorite
                     )
 
                     let idx = games.firstIndex(where: { $0.name == currentGame.name })
