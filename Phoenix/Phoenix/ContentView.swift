@@ -15,6 +15,7 @@ var games = loadGames().games.sorted()
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortByPlatform: Bool
+    @State var searchText: String = ""
     @State var selectedGame: String?
     @State var refresh: Bool = false
     @State private var isAddingGame: Bool = false
@@ -23,7 +24,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortByPlatform: $sortByPlatform, selectedGame: $selectedGame, refresh: $refresh)
+            GameListView(sortByPlatform: $sortByPlatform, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         // Add game button
@@ -55,5 +56,6 @@ struct ContentView: View {
             Text(String(refresh))
                 .hidden()
         }
+        .searchable(text: $searchText, placement: .sidebar)
     }
 }

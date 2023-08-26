@@ -11,6 +11,7 @@ struct GameListView: View {
     @Binding var sortByPlatform: Bool
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
+    @Binding var searchText: String
     @State private var timer: Timer?
     @State private var iconSize: Double = 24
     
@@ -18,7 +19,9 @@ struct GameListView: View {
         List(selection: $selectedGame) {
             if sortByPlatform {
                 ForEach(Platform.allCases, id: \.self) { platform in
-                    let gamesForPlatform = games.filter { $0.platform == platform && $0.is_deleted == false}
+                    let gamesForPlatform = games.filter {
+                        $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                    }
                     if !gamesForPlatform.isEmpty {
                         Section(header: Text(platform.displayName)) {
                             ForEach(gamesForPlatform, id: \.name) { game in
@@ -42,7 +45,9 @@ struct GameListView: View {
                 }
             } else {
                 ForEach(Status.allCases, id: \.self) { status in
-                    let gamesForStatus = games.filter { $0.status == status && $0.is_deleted == false}
+                    let gamesForStatus = games.filter {
+                        $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty)
+                    }
                     if !gamesForStatus.isEmpty {
                         Section(header: Text(status.displayName)) {
                             ForEach(gamesForStatus, id: \.name) { game in
@@ -60,10 +65,13 @@ struct GameListView: View {
                                     }
                                     .accessibility(identifier: "Delete Game")
                                 }
-                            }.scrollDisabled(true)
+                            }
+                            .scrollDisabled(true)
                         }
+                        
                     }
                 }
+                
             }
             Text(String(refresh))
                 .hidden()
@@ -98,7 +106,11 @@ struct GameListView: View {
             timer?.invalidate()
             timer = nil
         }
+        
+
+        
     }
+        
     
     /// Deletes a game from the games list by setting its `is_deleted` property to `true`.
     ///
