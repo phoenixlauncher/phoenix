@@ -11,20 +11,64 @@ import SwiftUI
 struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()
     
-    @AppStorage("sortByPlatform")
-    var sortByPlatform: Bool = true
+    enum SortBy: String, Codable, CaseIterable, Identifiable {
+        case platform, status, name, recency
+
+        var id: SortBy { self }
+        
+        var displayName: String {
+            switch self {
+            case .platform: return "Platform"
+            case .status: return "Status"
+            case .name: return "Name"
+            case .recency: return "Recency"
+            }
+        }
+        
+        var symbol: String {
+            switch self {
+            case .platform: return "arcade.stick.console"
+            case .status: return "trophy"
+            case .name: return "textformat.abc"
+            case .recency: return "calendar.badge.clock"
+            }
+        }
+    }
+    
+    @AppStorage("sortBy")
+    var sortBy: SortBy = .platform
+    
+    @State var selectedGame: String?
+    
+    @State var isAddingGame: Bool = false
+    @State var isEditingGame: Bool = false
+    @State var isPlayingGame: Bool = false
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
-            ContentView(sortByPlatform: $sortByPlatform)
+            ContentView(sortBy: $sortBy, selectedGame: $selectedGame, isAddingGame: $isAddingGame, isEditingGame: $isEditingGame, isPlayingGame: $isPlayingGame)
                 .frame(
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity
                 )
         }.commands {
-            CommandGroup(replacing: CommandGroupPlacement.newItem) {
+            CommandGroup(before: CommandGroupPlacement.newItem) {
+                Button("Add Game") {
+                    self.isAddingGame.toggle()
+                }
+                .keyboardShortcut("n", modifiers: [.shift, .command])
+                Button("Edit Game") {
+                    self.isEditingGame.toggle()
+                }
+                .keyboardShortcut("e", modifiers: [.shift, .command])
+                Button("Play Game") {
+                    self.isPlayingGame.toggle()
+                }
+                .keyboardShortcut("p", modifiers: [.shift, .command])
+            }
+            CommandGroup(replacing: CommandGroupPlacement.importExport) {
                 Button("Open Phoenix Data Folder") {
                     if let phoenixDirectory = getPhoenixDirectory() {
                         print(phoenixDirectory)
@@ -32,11 +76,25 @@ struct PhoenixApp: App {
                         logger.write("[INFO]: Opened Application Support/Phoenix.")
                     }
                 }
+                .keyboardShortcut("o", modifiers: [.option, .shift])
             }
-            CommandGroup(replacing: CommandGroupPlacement.toolbar) {
-                Button("Sort sidebar by \(sortByPlatform ? "status" : "platform")", action: {
-                    sortByPlatform.toggle()
+            CommandGroup(replacing: CommandGroupPlacement.sidebar) {
+                Button("Sort Sidebar by Platform", action: {
+                    sortBy = SortBy.platform
                 })
+                .keyboardShortcut("1", modifiers: .command)
+                Button("Sort Sidebar by Status", action: {
+                    sortBy = SortBy.status
+                })
+                .keyboardShortcut("2", modifiers: .command)
+                Button("Sort Sidebar by Name", action: {
+                    sortBy = SortBy.name
+                })
+                .keyboardShortcut("3", modifiers: .command)
+                Button("Sort Sidebar by Recency", action: {
+                    sortBy = SortBy.recency
+                })
+                .keyboardShortcut("4", modifiers: .command)
             }
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(UpdaterViewModel: updaterViewModel)

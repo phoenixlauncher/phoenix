@@ -14,16 +14,21 @@ var games = loadGames().games.sorted()
 
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
-    @Binding var sortByPlatform: Bool
-    @State var selectedGame: String?
+    @Binding var sortBy: PhoenixApp.SortBy
+    @State var searchText: String = ""
+    @Binding var selectedGame: String?
     @State var refresh: Bool = false
-    @State private var isAddingGame: Bool = false
+    @State private var timer: Timer?
+    @Binding var isAddingGame: Bool
+    @Binding var isEditingGame: Bool
+    @Binding var isPlayingGame: Bool
+    @State var picker: Bool = true
 
     // The stuff that is actually on screen
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortByPlatform: $sortByPlatform, selectedGame: $selectedGame, refresh: $refresh)
+            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         // Add game button
@@ -46,14 +51,44 @@ struct ContentView: View {
                             }
                         )
                     }
+                    if picker {
+                        ToolbarItem(placement: .primaryAction) {
+                            Picker("Sort by", selection: $sortBy) {
+                                ForEach(PhoenixApp.SortBy.allCases) { sortBy in
+                                    HStack(alignment: .center, spacing: 5) {
+                                        Image(systemName: sortBy.symbol)
+                                        Text(sortBy.displayName)
+                                    }
+                                }
+                            }
+                            .pickerStyle(.automatic)
+                        }
+                    }
                 }
         } detail: {
             // The detailed view of the selected game
-            GameDetailView(selectedGame: $selectedGame, refresh: $refresh)
+            GameDetailView(selectedGame: $selectedGame, refresh: $refresh, editingGame: $isEditingGame, playingGame: $isPlayingGame)
 
             // Refresh detail view
             Text(String(refresh))
                 .hidden()
         }
+        .onAppear {
+            if UserDefaults.standard.bool(forKey: "picker") {
+                picker = true
+            } else {
+                picker = false
+            }
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                if UserDefaults.standard.bool(forKey: "picker") {
+                    picker = true
+                } else {
+                    picker = false
+                }
+                refresh.toggle()
+                // This code will be executed every 1 second
+            }
+        }
+        .searchable(text: $searchText, placement: .sidebar)
     }
 }

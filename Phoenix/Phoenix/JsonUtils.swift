@@ -116,9 +116,10 @@ func detectSteamGamesAndWriteToJSON() {
                     ],
                     icon: "",
                     name: name ?? "Unknown",
-                    platform: Platform.MAC,
-                    status: Status.NONE,
-                    is_deleted: false
+                    platform: Platform.none,
+                    status: Status.none,
+                    is_deleted: false,
+                    is_favorite: false
                 )
                 // Check if the game is already in the list
                 if !gameNames.contains(game.name) {

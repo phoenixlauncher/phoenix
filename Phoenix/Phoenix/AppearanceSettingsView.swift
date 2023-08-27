@@ -19,6 +19,9 @@ struct AppearanceSettingsView: View {
     @AppStorage("listIconSize")
     private var listIconSize: Double = 24
     
+    @AppStorage("picker")
+    private var picker: Bool = true
+    
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 20) {
@@ -41,6 +44,9 @@ struct AppearanceSettingsView: View {
                 }
                 .frame(maxWidth: 225)
                 .opacity(listIconsHidden ? 0 : 1)
+                Toggle(isOn: $picker) {
+                    Text("Show sidebar category picker")
+                }
             }
         }
     }

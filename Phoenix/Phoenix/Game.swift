@@ -8,39 +8,57 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case MAC, STEAM, GOG, EPIC, PC, PS, NIN, XBOX, NONE
+    case mac, steam, gog, epic, pc, ps, nin, xbox, none
 
     var id: Platform { self }
 
     var displayName: String {
         switch self {
-        case .MAC: return "Mac"
-        case .STEAM: return "Steam"
-        case .GOG: return "GOG"
-        case .EPIC: return "Epic"
-        case .PC: return "PC"
-        case .PS: return "Playstation"
-        case .NIN: return "Nintendo"
-        case .XBOX: return "Xbox"
-        case .NONE: return "Other"
+        case .mac: return "Mac"
+        case .steam: return "Steam"
+        case .gog: return "GOG"
+        case .epic: return "Epic"
+        case .pc: return "PC"
+        case .ps: return "Playstation"
+        case .nin: return "Nintendo"
+        case .xbox: return "Xbox"
+        case .none: return "Other"
         }
     }
 }
 
 enum Status: String, Codable, CaseIterable, Identifiable {
-    case PLAYING, SHELVED, BACKLOG, BEATEN, COMPLETED, ABANDONED, NONE
+    case playing, shelved, backlog, beaten, completed, abandoned, none
 
     var id: Status { self }
 
     var displayName: String {
         switch self {
-        case .BACKLOG: return "Backlog"
-        case .PLAYING: return "Playing"
-        case .BEATEN: return "Beaten"
-        case .COMPLETED: return "Completed"
-        case .SHELVED: return "Shelved"
-        case .ABANDONED: return "Abandoned"
-        case .NONE: return "Other"
+        case .playing: return "Playing"
+        case .shelved: return "Shelved"
+        case .backlog: return "Backlog"
+        case .beaten: return "Beaten"
+        case .completed: return "Completed"
+        case .abandoned: return "Abandoned"
+        case .none: return "Other"
+        }
+    }
+}
+
+enum Recency: String, Codable, CaseIterable, Identifiable {
+    case day, week, month, three_months, six_months, year, never
+
+    var id: Recency { self }
+
+    var displayName: String {
+        switch self {
+        case .day: return "Today"
+        case .week: return "This Week"
+        case .month: return "This Month"
+        case .three_months: return "Last 3 Months"
+        case .six_months: return "Last 6 Months"
+        case .year: return "This Year"
+        case .never: return "Never"
         }
     }
 }
@@ -53,7 +71,9 @@ struct Game: Codable, Comparable, Hashable {
     var name: String
     var platform: Platform
     var status: Status
-    var is_deleted: Bool // New property to indicate if the game has been deleted
+    var recency: Recency
+    var is_deleted: Bool
+    var is_favorite: Bool
 
     init(
         appID: String = "",
@@ -70,9 +90,11 @@ struct Game: Codable, Comparable, Hashable {
         ],
         icon: String = "PlaceholderImage",
         name: String,
-        platform: Platform = Platform.NONE,
-        status: Status = Status.NONE,
-        is_deleted: Bool
+        platform: Platform = Platform.none,
+        status: Status = Status.none,
+        recency: Recency = Recency.never,
+        is_deleted: Bool,
+        is_favorite: Bool
     ) {
         self.appID = appID
         self.launcher = launcher
@@ -81,11 +103,13 @@ struct Game: Codable, Comparable, Hashable {
         self.name = name
         self.platform = platform
         self.status = status
+        self.recency = recency
         self.is_deleted = is_deleted
+        self.is_favorite = is_favorite
     }
     
     enum CodingKeys: String, CodingKey {
-        case appID, launcher, metadata, icon, name, platform, status, is_deleted
+        case appID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
     }
         
     init(from decoder: Decoder) throws {
@@ -95,21 +119,49 @@ struct Game: Codable, Comparable, Hashable {
         icon = try container.decode(String.self, forKey: .icon)
         name = try container.decode(String.self, forKey: .name)
         
-        // If game platform was .EMUL change to .NONE
-        let platformRawValue = try container.decode(String.self, forKey: .platform)
-        if platformRawValue == "EMUL" {
-            self.platform = .NONE
-        } else if let platform = Platform(rawValue: platformRawValue) {
+        // If game platform was .EMUL change to .none
+        var platformRawValue = try container.decode(String.self, forKey: .platform)
+        platformRawValue = platformRawValue.lowercased()
+        
+        if let platform = Platform(rawValue: platformRawValue) {
             self.platform = platform
         } else {
-            self.platform = .NONE
+            self.platform = .none
         }
         
-        // Handle status conversion with default to .NONE
-        if let status = try? container.decode(Status.self, forKey: .status) {
+        var statusRawValue = try container.decode(String.self, forKey: .status)
+        statusRawValue = statusRawValue.lowercased()
+
+        if let status = Status(rawValue: statusRawValue) {
             self.status = status
         } else {
-            self.status = .NONE
+            self.status = .none
+        }
+        
+        // Decode recency, or derive it from last_played
+        let dateString = metadata["last_played"] ?? ""
+        if dateString == "" || dateString == "Never" {
+            self.recency = .never
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            let lastPlayedDate = dateFormatter.date(from: dateString)
+            let timeInterval = lastPlayedDate?.timeIntervalSinceNow ?? 0
+            if abs(timeInterval) <= 24 * 60 * 60 {
+                self.recency = .day
+            } else if abs(timeInterval) <= 7 * 24 * 60 * 60 {
+                self.recency = .week
+            } else if abs(timeInterval) <= 30 * 24 * 60 * 60 {
+                self.recency = .month
+            } else if abs(timeInterval) <= 90 * 24 * 60 * 60 {
+                self.recency = .three_months
+            } else if abs(timeInterval) <= 180 * 24 * 60 * 60 {
+                self.recency = .six_months
+            } else if abs(timeInterval) <= 365 * 24 * 60 * 60 {
+                self.recency = .year
+            } else {
+                self.recency = .never
+            }
         }
         
         // Handle appID conversion with default to ""
@@ -124,6 +176,13 @@ struct Game: Codable, Comparable, Hashable {
             self.is_deleted = is_deleted
         } else {
             self.is_deleted = false
+        }
+        
+        // Handle appID conversion with default to ""
+        if let is_favorite = try? container.decode(Bool.self, forKey: .is_favorite) {
+            self.is_favorite = is_favorite
+        } else {
+            self.is_favorite = false
         }
     }
 
