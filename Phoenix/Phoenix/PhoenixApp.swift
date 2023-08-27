@@ -38,18 +38,37 @@ struct PhoenixApp: App {
     @AppStorage("sortBy")
     var sortBy: SortBy = .platform
     
+    @State var selectedGame: String?
+    
+    @State var isAddingGame: Bool = false
+    @State var isEditingGame: Bool = false
+    @State var isPlayingGame: Bool = false
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
-            ContentView(sortBy: $sortBy)
+            ContentView(sortBy: $sortBy, selectedGame: $selectedGame, isAddingGame: $isAddingGame, isEditingGame: $isEditingGame, isPlayingGame: $isPlayingGame)
                 .frame(
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity
                 )
         }.commands {
-            CommandGroup(replacing: CommandGroupPlacement.newItem) {
+            CommandGroup(before: CommandGroupPlacement.newItem) {
+                Button("Add Game") {
+                    self.isAddingGame.toggle()
+                }
+                .keyboardShortcut("n", modifiers: [.shift, .command])
+                Button("Edit Game") {
+                    self.isEditingGame.toggle()
+                }
+                .keyboardShortcut("e", modifiers: [.shift, .command])
+                Button("Play Game") {
+                    self.isPlayingGame.toggle()
+                }
+                .keyboardShortcut("p", modifiers: [.shift, .command])
+            }
+            CommandGroup(replacing: CommandGroupPlacement.importExport) {
                 Button("Open Phoenix Data Folder") {
                     if let phoenixDirectory = getPhoenixDirectory() {
                         print(phoenixDirectory)
@@ -57,21 +76,22 @@ struct PhoenixApp: App {
                         logger.write("[INFO]: Opened Application Support/Phoenix.")
                     }
                 }
+                .keyboardShortcut("o", modifiers: [.option, .shift])
             }
             CommandGroup(replacing: CommandGroupPlacement.sidebar) {
-                Button("Sort sidebar by platform", action: {
+                Button("Sort Sidebar by Platform", action: {
                     sortBy = SortBy.platform
                 })
                 .keyboardShortcut("1", modifiers: .command)
-                Button("Sort sidebar by status", action: {
+                Button("Sort Sidebar by Status", action: {
                     sortBy = SortBy.status
                 })
                 .keyboardShortcut("2", modifiers: .command)
-                Button("Sort sidebar by name", action: {
+                Button("Sort Sidebar by Name", action: {
                     sortBy = SortBy.name
                 })
                 .keyboardShortcut("3", modifiers: .command)
-                Button("Sort sidebar by recency", action: {
+                Button("Sort Sidebar by Recency", action: {
                     sortBy = SortBy.recency
                 })
                 .keyboardShortcut("4", modifiers: .command)

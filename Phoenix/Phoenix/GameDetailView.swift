@@ -8,10 +8,11 @@ import SwiftUI
 
 struct GameDetailView: View {
     
-    @State var editingGame: Bool = false
     @State var showingAlert: Bool = false
     @Binding var selectedGame: String?
     @Binding var refresh: Bool
+    @Binding var editingGame: Bool
+    @Binding var playingGame: Bool
     @State private var timer: Timer?
 
     // initialize colors
@@ -20,9 +21,11 @@ struct GameDetailView: View {
     @State var playText = Color.white
     @State var settingsText = Color.primary
 
-    init(selectedGame: Binding<String?>, refresh: Binding<Bool>) {
+    init(selectedGame: Binding<String?>, refresh: Binding<Bool>, editingGame: Binding<Bool>, playingGame: Binding<Bool>) {
         _selectedGame = selectedGame
         _refresh = refresh
+        _editingGame = editingGame
+        _playingGame = playingGame
     }
 
     var body: some View {
@@ -51,22 +54,7 @@ struct GameDetailView: View {
                             // play button
                             Button(
                                 action: {
-                                    if let idx = games.firstIndex(where: { $0.name == selectedGame }
-                                    ) {
-                                        do {
-                                            let game = games[idx]
-                                            let currentDate = Date()
-                                            // Update the last played date and write the updated information to the JSON file
-                                            updateLastPlayedDate(currentDate: currentDate, games: &games)
-                                            if game.launcher != "" {
-                                                try shell(game)
-                                            } else {
-                                                showingAlert = true
-                                            }
-                                        } catch {
-                                            logger.write("\(error)") // handle or silence the error here
-                                        }
-                                    }
+                                    playingGame.toggle()
                                 },
                                 label: {
                                     Image(systemName: "play.fill")
@@ -231,6 +219,13 @@ struct GameDetailView: View {
             timer?.invalidate()
             timer = nil
         }
+        .onChange(of: playingGame) { newValue in
+            if newValue {
+                let idx = games.firstIndex(where: { $0.name == selectedGame })
+                let game = games[idx!]
+                playGame(game: game)
+            }
+        }
     }
     
     func refreshGameDetailView() {
@@ -243,6 +238,22 @@ struct GameDetailView: View {
             settingsColor = Color.gray.opacity(0.25)
             settingsText = Color.primary
         }
+    }
+    
+    func playGame(game: Game) {
+        do {
+            let currentDate = Date()
+            // Update the last played date and write the updated information to the JSON file
+            updateLastPlayedDate(currentDate: currentDate, games: &games)
+            if game.launcher != "" {
+                try shell(game)
+            } else {
+                showingAlert = true
+            }
+        } catch {
+            logger.write("\(error)") // handle or silence the error here
+        }
+        
     }
 
     func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {
@@ -279,3 +290,4 @@ struct GameDetailView: View {
         }
     }
 }
+

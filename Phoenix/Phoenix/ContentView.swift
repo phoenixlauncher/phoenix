@@ -16,9 +16,11 @@ struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
-    @State var selectedGame: String?
+    @Binding var selectedGame: String?
     @State var refresh: Bool = false
-    @State private var isAddingGame: Bool = false
+    @Binding var isAddingGame: Bool
+    @Binding var isEditingGame: Bool
+    @Binding var isPlayingGame: Bool
 
     // The stuff that is actually on screen
     var body: some View {
@@ -61,7 +63,7 @@ struct ContentView: View {
                 }
         } detail: {
             // The detailed view of the selected game
-            GameDetailView(selectedGame: $selectedGame, refresh: $refresh)
+            GameDetailView(selectedGame: $selectedGame, refresh: $refresh, editingGame: $isEditingGame, playingGame: $isPlayingGame)
 
             // Refresh detail view
             Text(String(refresh))
