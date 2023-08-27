@@ -22,7 +22,7 @@ struct ContentView: View {
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
-    @State var picker: Bool = false
+    @State var picker: Bool = true
 
     // The stuff that is actually on screen
     var body: some View {

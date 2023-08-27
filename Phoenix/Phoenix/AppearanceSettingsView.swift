@@ -20,7 +20,7 @@ struct AppearanceSettingsView: View {
     private var listIconSize: Double = 24
     
     @AppStorage("picker")
-    private var picker: Bool = false
+    private var picker: Bool = true
     
     var body: some View {
         Form {

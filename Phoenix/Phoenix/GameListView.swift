@@ -14,7 +14,7 @@ struct GameListView: View {
     @Binding var searchText: String
     @State private var timer: Timer?
     @State private var iconSize: Double = 24
-    @State private var minWidth: CGFloat = 225
+    @State private var minWidth: CGFloat = 296
     
     var body: some View {
         List(selection: $selectedGame) {
