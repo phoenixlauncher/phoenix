@@ -14,6 +14,7 @@ struct GameListView: View {
     @Binding var searchText: String
     @State private var timer: Timer?
     @State private var iconSize: Double = 24
+    @State private var minWidth: CGFloat = 225
     
     var body: some View {
         List(selection: $selectedGame) {
@@ -83,7 +84,13 @@ struct GameListView: View {
             Text(String(refresh))
                 .hidden()
         }
+        .frame(minWidth: minWidth)
         .onAppear {
+            if UserDefaults.standard.bool(forKey: "textPicker") {
+                minWidth = 296
+            } else {
+                minWidth = 245
+            }
             if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
                 iconSize = UserDefaults.standard.double(forKey: "listIconSize")
             }
@@ -96,6 +103,11 @@ struct GameListView: View {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                if UserDefaults.standard.bool(forKey: "textPicker") {
+                    minWidth = 296
+                } else {
+                    minWidth = 250
+                }
                 if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
                     iconSize = UserDefaults.standard.double(forKey: "listIconSize")
                 }
@@ -113,9 +125,6 @@ struct GameListView: View {
             timer?.invalidate()
             timer = nil
         }
-        
-
-        
     }
 }
 

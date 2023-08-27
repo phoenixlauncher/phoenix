@@ -18,9 +18,11 @@ struct ContentView: View {
     @State var searchText: String = ""
     @Binding var selectedGame: String?
     @State var refresh: Bool = false
+    @State private var timer: Timer?
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
+    @State var textPicker: Bool = false
 
     // The stuff that is actually on screen
     var body: some View {
@@ -54,7 +56,9 @@ struct ContentView: View {
                             ForEach(PhoenixApp.SortBy.allCases) { sortBy in
                                 HStack(alignment: .center, spacing: 5) {
                                     Image(systemName: sortBy.symbol)
-                                    Text(sortBy.displayName)
+                                    if textPicker {
+                                        Text(sortBy.displayName)
+                                    }
                                 }
                             }
                         }
@@ -68,6 +72,22 @@ struct ContentView: View {
             // Refresh detail view
             Text(String(refresh))
                 .hidden()
+        }
+        .onAppear {
+            if UserDefaults.standard.bool(forKey: "textPicker") {
+                textPicker = true
+            } else {
+                textPicker = false
+            }
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                if UserDefaults.standard.bool(forKey: "textPicker") {
+                    textPicker = true
+                } else {
+                    textPicker = false
+                }
+                refresh.toggle()
+                // This code will be executed every 1 second
+            }
         }
         .searchable(text: $searchText, placement: .sidebar)
     }
