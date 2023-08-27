@@ -19,8 +19,8 @@ struct AppearanceSettingsView: View {
     @AppStorage("listIconSize")
     private var listIconSize: Double = 24
     
-    @AppStorage("textPicker")
-    private var textPicker: Bool = false
+    @AppStorage("picker")
+    private var picker: Bool = false
     
     var body: some View {
         Form {
@@ -44,8 +44,8 @@ struct AppearanceSettingsView: View {
                 }
                 .frame(maxWidth: 225)
                 .opacity(listIconsHidden ? 0 : 1)
-                Toggle(isOn: $textPicker) {
-                    Text("Show text in sidebar category picker")
+                Toggle(isOn: $picker) {
+                    Text("Show sidebar category picker")
                 }
             }
         }

@@ -86,7 +86,7 @@ struct GameListView: View {
         }
         .frame(minWidth: minWidth)
         .onAppear {
-            if UserDefaults.standard.bool(forKey: "textPicker") {
+            if UserDefaults.standard.bool(forKey: "picker") {
                 minWidth = 296
             } else {
                 minWidth = 245
@@ -103,10 +103,10 @@ struct GameListView: View {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                if UserDefaults.standard.bool(forKey: "textPicker") {
+                if UserDefaults.standard.bool(forKey: "picker") {
                     minWidth = 296
                 } else {
-                    minWidth = 250
+                    minWidth = 196
                 }
                 if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
                     iconSize = UserDefaults.standard.double(forKey: "listIconSize")
