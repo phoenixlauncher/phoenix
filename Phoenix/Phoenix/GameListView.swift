@@ -89,7 +89,7 @@ struct GameListView: View {
             if UserDefaults.standard.bool(forKey: "picker") {
                 minWidth = 296
             } else {
-                minWidth = 245
+                minWidth = 196
             }
             if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
                 iconSize = UserDefaults.standard.double(forKey: "listIconSize")
