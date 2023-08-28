@@ -155,30 +155,40 @@ struct GameDetailView: View {
                                             Text(game.status.displayName)
                                                 .opacity(0.5)
                                         }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Rating")
-                                            Text(game.metadata["rating"] ?? "")
-                                                .opacity(0.5)
+                                        if game.metadata["rating"] != "" {
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text("Rating")
+                                                Text(game.metadata["rating"] ?? "")
+                                                    .opacity(0.5)
+                                            }
                                         }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Genres")
-                                            Text(game.metadata["genre"] ?? "")
-                                                .opacity(0.5)
+                                        if game.metadata["genre"] != "" {
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text("Genres")
+                                                Text(game.metadata["genre"] ?? "")
+                                                    .opacity(0.5)
+                                            }
                                         }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Developer")
-                                            Text(game.metadata["developer"] ?? "")
-                                                .opacity(0.5)
+                                        if game.metadata["developer"] != "" {
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text("Developer")
+                                                Text(game.metadata["developer"] ?? "")
+                                                    .opacity(0.5)
+                                            }
                                         }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Publisher")
-                                            Text(game.metadata["publisher"] ?? "")
-                                                .opacity(0.5)
+                                        if game.metadata["publisher"] != "" {
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text("Publisher")
+                                                Text(game.metadata["publisher"] ?? "")
+                                                    .opacity(0.5)
+                                            }
                                         }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Release Date")
-                                            Text(game.metadata["release_date"] ?? "")
-                                                .opacity(0.5)
+                                        if game.metadata["release_date"] != "" {
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text("Release Date")
+                                                Text(game.metadata["release_date"] ?? "")
+                                                    .opacity(0.5)
+                                            }
                                         }
                                     }
                                     .padding(.trailing, 10)
