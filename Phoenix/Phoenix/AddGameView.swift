@@ -126,8 +126,9 @@ struct AddGameView: View {
                                 Text(platform.displayName)
                             }
                         }
-                        .labelsHidden()
-                        .padding()
+                            .labelsHidden()
+                            .padding()
+                            .accessibility(label: Text("Platform Input"))
                     }
                         
                     HStack {
@@ -138,8 +139,9 @@ struct AddGameView: View {
                                 Text(status.displayName)
                             }
                         }
-                        .labelsHidden()
-                        .padding()
+                            .labelsHidden()
+                            .padding()
+                            .accessibility(label: Text("Status Input"))
                     }
 
                     HStack {
@@ -147,7 +149,7 @@ struct AddGameView: View {
                             .frame(width: 70, alignment: .leading)
                         TextField("Enter terminal command to launch game", text: $cmdInput)
                             .padding()
-                            .accessibility(label: Text("NameInput"))
+                            .accessibility(label: Text("Command Input"))
                     }
 
                     HStack {
@@ -159,6 +161,7 @@ struct AddGameView: View {
                             .background(Color.gray.opacity(0.05))
                             .frame(minHeight: 50)
                             .padding()
+                            .accessibility(label: Text("Description Input"))
                     }
                 }
                 Group {
@@ -171,6 +174,7 @@ struct AddGameView: View {
                             .background(Color.gray.opacity(0.05))
                             .frame(minHeight: 50)
                             .padding()
+                            .accessibility(label: Text("Genre Input"))
                     }
                     HStack {
                         Text("Header")
@@ -240,7 +244,7 @@ struct AddGameView: View {
                             .frame(width: 70, alignment: .leading)
                         TextField("X / 10", text: $rateInput)
                             .padding()
-                            .accessibility(label: Text("RatingInput"))
+                            .accessibility(label: Text("Rating Input"))
                         
                     }
                     HStack {
@@ -248,7 +252,7 @@ struct AddGameView: View {
                             .frame(width: 70, alignment: .leading)
                         TextField("Enter game developer", text: $devInput)
                             .padding()
-                            .accessibility(label: Text("devInput"))
+                            .accessibility(label: Text("Developer Input"))
                         
                     }
                     HStack {
@@ -256,7 +260,7 @@ struct AddGameView: View {
                             .frame(width: 70, alignment: .leading)
                         TextField("Enter game publisher", text: $pubInput)
                             .padding()
-                            .accessibility(label: Text("pubInput"))
+                            .accessibility(label: Text("Publisher Input"))
                     }
                     HStack {
                         Text("Release Date")
