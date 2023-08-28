@@ -45,15 +45,9 @@ struct EditGameView: View {
                     HStack {
                         Text("Name")
                             .frame(width: 70, alignment: .leading)
-                        if currentGame.name == "" {
-                            TextField("Enter game name", text: $nameInput)
-                                .padding()
-                                .accessibility(label: Text("NameInput"))
-                        } else {
-                            TextField(currentGame.name, text: $nameInput)
-                                .padding()
-                                .accessibility(label: Text("NameInput"))
-                        }
+                        TextField("Enter game name", text: $nameInput)
+                            .padding()
+                            .accessibility(label: Text("NameInput"))
                     }
                     
                     HStack {
@@ -164,15 +158,9 @@ struct EditGameView: View {
                     HStack {
                         Text("Command")
                             .frame(width: 70, alignment: .leading)
-                        if currentGame.launcher == "" {
-                            TextField("Enter terminal command to launch game", text: $cmdInput)
-                                .padding()
-                                .accessibility(label: Text("NameInput"))
-                        } else {
-                            TextField(currentGame.launcher, text: $cmdInput)
-                                .padding()
-                                .accessibility(label: Text("NameInput"))
-                        }
+                        TextField("Enter terminal command to launch game", text: $cmdInput)
+                            .padding()
+                            .accessibility(label: Text("NameInput"))
                     }
                     
                     HStack {
@@ -263,43 +251,25 @@ struct EditGameView: View {
                     HStack {
                         Text("Rating")
                             .frame(width: 70, alignment: .leading)
-                        if currentGame.metadata["rating"] == "" {
-                            TextField("X / 10", text: $rateInput)
-                                .padding()
-                                .accessibility(label: Text("RatingInput"))
-                        } else {
-                            TextField(currentGame.metadata["rating"] ?? "X / 10", text: $rateInput)
-                                .padding()
-                                .accessibility(label: Text("RatingInput"))
-                        }
+                        TextField("X / 10", text: $rateInput)
+                            .padding()
+                            .accessibility(label: Text("RatingInput"))
                         
                     }
                     HStack {
                         Text("Developer")
                             .frame(width: 70, alignment: .leading)
-                        if currentGame.metadata["developer"] == "" {
-                            TextField("Enter game developer", text: $devInput)
-                                .padding()
-                                .accessibility(label: Text("devInput"))
-                        } else {
-                            TextField(currentGame.metadata["developer"] ?? "Enter game developer", text: $devInput)
-                                .padding()
-                                .accessibility(label: Text("devInput"))
-                        }
+                        TextField("Enter game developer", text: $devInput)
+                            .padding()
+                            .accessibility(label: Text("devInput"))
                         
                     }
                     HStack {
                         Text("Publisher")
                             .frame(width: 70, alignment: .leading)
-                        if currentGame.metadata["publisher"] == "" {
-                            TextField("Enter game publisher", text: $pubInput)
-                                .padding()
-                                .accessibility(label: Text("pubInput"))
-                        } else {
-                            TextField(currentGame.metadata["publisher"] ?? "Enter game publisher", text: $pubInput)
-                                .padding()
-                                .accessibility(label: Text("pubInput"))
-                        }
+                        TextField("Enter game publisher", text: $pubInput)
+                            .padding()
+                            .accessibility(label: Text("pubInput"))
                     }
                     HStack {
                         Text("Release Date")
@@ -312,54 +282,6 @@ struct EditGameView: View {
             .padding()
             Button(
                 action: {
-                    var dateInputStr = ""
-
-                    if nameInput == "" {
-                        nameInput = currentGame.name
-                    }
-                    if iconOutput == "" {
-                        iconOutput = currentGame.icon
-                    }
-                    if platInput == .none {
-                        platInput = currentGame.platform
-                    }
-                    if statusInput == .none {
-                        statusInput = currentGame.status
-                    }
-                    if cmdInput == "" {
-                        cmdInput = currentGame.launcher
-                    }
-                    if descInput == "" {
-                        descInput = currentGame.metadata["description"] ?? ""
-                    }
-                    if headOutput == "" {
-                        headOutput = currentGame.metadata["header_img"] ?? ""
-                    }
-                    if rateInput == "" {
-                        rateInput = currentGame.metadata["rating"] ?? ""
-                    }
-                    if genreInput == "" {
-                        genreInput = currentGame.metadata["genre"] ?? ""
-                    }
-                    if devInput == "" {
-                        devInput = currentGame.metadata["developer"] ?? ""
-                    }
-                    if pubInput == "" {
-                        pubInput = currentGame.metadata["publisher"] ?? ""
-                    }
-                    // check if the date is today, if yes then change it to the previous release date
-                    if dateInput.formatted(date: .complete, time: .omitted) == Date().formatted(date: .complete, time: .omitted) {
-                        dateInputStr = currentGame.metadata["release_date"] ?? ""
-                    } else {
-                        let dateFormatter: DateFormatter = {
-                            let formatter = DateFormatter()
-                            formatter.dateStyle = .long
-                            return formatter
-                        }()
-
-                        dateInputStr = dateFormatter.string(from: dateInput)
-                    }
-
                     let editedGame: Game = .init(
                         launcher: cmdInput,
                         metadata: [
@@ -410,6 +332,7 @@ struct EditGameView: View {
         .onAppear() {
             nameInput = currentGame.name
             platInput = currentGame.platform
+            statusInput = currentGame.status
             cmdInput = currentGame.launcher
             descInput = currentGame.metadata["description"] ?? ""
             genreInput = currentGame.metadata["genre"] ?? ""
