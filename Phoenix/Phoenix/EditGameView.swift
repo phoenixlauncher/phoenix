@@ -290,6 +290,12 @@ struct EditGameView: View {
                         return formatter
                     }()
                     let dateInputStr = dateFormatter.string(from: dateInput)
+                    if iconOutput == "" {
+                        iconOutput = currentGame.icon
+                    }
+                    if headOutput == "" {
+                        headOutput = currentGame.metadata["header_img"] ?? ""
+                    }
                     let editedGame: Game = .init(
                         launcher: cmdInput,
                         metadata: [
