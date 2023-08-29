@@ -284,6 +284,12 @@ struct EditGameView: View {
             .padding()
             Button(
                 action: {
+                    let dateFormatter: DateFormatter = {
+                        let formatter = DateFormatter()
+                        formatter.dateStyle = .long
+                        return formatter
+                    }()
+                    let dateInputStr = dateFormatter.string(from: dateInput)
                     let editedGame: Game = .init(
                         launcher: cmdInput,
                         metadata: [
