@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddGameView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     @State private var nameInput: String = ""
     @State private var iconInput: String = ""
@@ -271,60 +272,88 @@ struct AddGameView: View {
                 }
             }
             .padding()
+            HStack {
+                Spacer().frame(maxWidth: .infinity)
+                Button(
+                    action: {
+                        let dateFormatter: DateFormatter = {
+                            let formatter = DateFormatter()
+                            formatter.dateStyle = .long
+                            return formatter
+                        }()
 
-            Button(
-                action: {
-                    let dateFormatter: DateFormatter = {
-                        let formatter = DateFormatter()
-                        formatter.dateStyle = .long
-                        return formatter
-                    }()
+                        let newGame: Game = .init(
+                            launcher: cmdInput,
+                            metadata: [
+                                "description": descInput,
+                                "header_img": headOutput,
+                                "last_played": "Never",
+                                "rating": rateInput,
+                                "genre": genreInput,
+                                "developer": devInput,
+                                "publisher": pubInput,
+                                "release_date": dateFormatter.string(from: dateInput),
+                            ],
+                            icon: iconOutput,
+                            name: nameInput,
+                            platform: platInput,
+                            status: statusInput,
+                            is_deleted: false,
+                            is_favorite: false
+                        )
 
-                    let newGame: Game = .init(
-                        launcher: cmdInput,
-                        metadata: [
-                            "description": descInput,
-                            "header_img": headOutput,
-                            "last_played": "Never",
-                            "rating": rateInput,
-                            "genre": genreInput,
-                            "developer": devInput,
-                            "publisher": pubInput,
-                            "release_date": dateFormatter.string(from: dateInput),
-                        ],
-                        icon: iconOutput,
-                        name: nameInput,
-                        platform: platInput,
-                        status: statusInput,
-                        is_deleted: false,
-                        is_favorite: false
-                    )
+                        games.append(newGame)
+                        games = games.sorted()
 
-                    games.append(newGame)
-                    games = games.sorted()
+                        let encoder = JSONEncoder()
+                        encoder.outputFormatting = .prettyPrinted
 
-                    let encoder = JSONEncoder()
-                    encoder.outputFormatting = .prettyPrinted
+                        do {
+                            let gamesJSON = try JSONEncoder().encode(games)
 
-                    do {
-                        let gamesJSON = try JSONEncoder().encode(games)
-
-                        if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                            // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                            gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                            writeGamesToJSON(data: gamesJSONString)
+                            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                                gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                                writeGamesToJSON(data: gamesJSONString)
+                            }
+                        } catch {
+                            logger.write(error.localizedDescription)
                         }
-                    } catch {
-                        logger.write(error.localizedDescription)
-                    }
 
-                    dismiss()
-                },
-                label: {
-                    Text("Save Game")
+                        dismiss()
+                    },
+                    label: {
+                        Text("Save Game")
+                    }
+                )
+                .padding()
+                .frame(maxWidth: .infinity)
+
+                HStack {
+                    Spacer()
+                        .frame(maxWidth: .infinity)
+                    Spacer()
+                        .frame(maxWidth: .infinity)
+
+                    Button (
+                        action: {
+                            openURL(URL(string: "https://github.com/PhoenixLauncher/Phoenix/blob/main/setup.md")!)
+                        }, label: {
+                            ZStack {
+                                Circle()
+                                    .strokeBorder(Color(NSColor.separatorColor), lineWidth: 0.5)
+                                    .background(Circle().foregroundColor(Color(NSColor.controlColor)))
+                                    .shadow(color: Color(NSColor.separatorColor).opacity(0.3), radius: 1)
+                                    .frame(width: 20, height: 20)
+                                Text("?").font(.system(size: 15, weight: .regular))
+                            }
+                        }
+                    )
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity)
+
                 }
-            )
-            .padding()
+            }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
     }
