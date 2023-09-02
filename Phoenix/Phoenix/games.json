@@ -15,8 +15,11 @@
       },
       "icon": "",
       "name": "Placeholder Game",
-      "platform": "NONE",
-      "is_deleted": false
+      "platform": "none",
+      "status": "none",
+      "recency": "never",
+      "is_deleted": false,
+      "is_favorite": false
     }
   ]
 }
