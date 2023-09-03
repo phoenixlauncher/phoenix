@@ -8,7 +8,7 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case mac, steam, gog, epic, pc, ps, nin, xbox, none
+    case mac, steam, gog, epic, pc, ps, nin, sega, xbox, none
 
     var id: Platform { self }
 
@@ -21,6 +21,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
         case .pc: return "PC"
         case .ps: return "Playstation"
         case .nin: return "Nintendo"
+        case .sega: return "Sega"
         case .xbox: return "Xbox"
         case .none: return "Other"
         }
@@ -64,7 +65,8 @@ enum Recency: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Game: Codable, Comparable, Hashable {
-    var appID: String
+    var steamID: String
+    var igdbID: String
     var launcher: String
     var metadata: [String: String]
     var icon: String
@@ -76,7 +78,8 @@ struct Game: Codable, Comparable, Hashable {
     var is_favorite: Bool
 
     init(
-        appID: String = "",
+        steamID: String = "",
+        igdbID: String = "",
         launcher: String = "",
         metadata: [String: String] = [
             "rating": "",
@@ -89,14 +92,15 @@ struct Game: Codable, Comparable, Hashable {
             "publisher": "",
         ],
         icon: String = "PlaceholderImage",
-        name: String,
+        name: String = "",
         platform: Platform = Platform.none,
         status: Status = Status.none,
         recency: Recency = Recency.never,
-        is_deleted: Bool,
-        is_favorite: Bool
+        is_deleted: Bool = false,
+        is_favorite: Bool = false
     ) {
-        self.appID = appID
+        self.steamID = steamID
+        self.igdbID = igdbID
         self.launcher = launcher
         self.metadata = metadata
         self.icon = icon
@@ -109,7 +113,7 @@ struct Game: Codable, Comparable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case appID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
+        case steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
     }
         
     init(from decoder: Decoder) throws {
@@ -119,7 +123,6 @@ struct Game: Codable, Comparable, Hashable {
         icon = try container.decode(String.self, forKey: .icon)
         name = try container.decode(String.self, forKey: .name)
         
-        // If game platform was .EMUL change to .none
         var platformRawValue = try container.decode(String.self, forKey: .platform)
         platformRawValue = platformRawValue.lowercased()
         
@@ -164,21 +167,28 @@ struct Game: Codable, Comparable, Hashable {
             }
         }
         
-        // Handle appID conversion with default to ""
-        if let appID = try? container.decode(String.self, forKey: .appID) {
-            self.appID = appID
+        // Handle steamID conversion with default to ""
+        if let steamID = try? container.decode(String.self, forKey: .steamID) {
+            self.steamID = steamID
         } else {
-            self.appID = ""
+            self.steamID = ""
         }
         
-        // Handle appID conversion with default to ""
+        // Handle igdbID conversion with default to ""
+        if let igdbID = try? container.decode(String.self, forKey: .igdbID) {
+            self.igdbID = igdbID
+        } else {
+            self.igdbID = ""
+        }
+        
+        // Handle is_deleted conversion with default to ""
         if let is_deleted = try? container.decode(Bool.self, forKey: .is_deleted) {
             self.is_deleted = is_deleted
         } else {
             self.is_deleted = false
         }
         
-        // Handle appID conversion with default to ""
+        // Handle is_favorite conversion with default to ""
         if let is_favorite = try? container.decode(Bool.self, forKey: .is_favorite) {
             self.is_favorite = is_favorite
         } else {
