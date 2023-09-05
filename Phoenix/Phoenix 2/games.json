@@ -1,0 +1,25 @@
+{
+  "games": [
+    {
+      "appID": "",
+      "launcher": "",
+      "metadata": {
+        "rating": "",
+        "release_date": "",
+        "last_played": "",
+        "developer": "",
+        "header_img": "",
+        "description": "",
+        "genre": "",
+        "publisher": ""
+      },
+      "icon": "",
+      "name": "Placeholder Game",
+      "platform": "none",
+      "status": "none",
+      "recency": "never",
+      "is_deleted": false,
+      "is_favorite": false
+    }
+  ]
+}

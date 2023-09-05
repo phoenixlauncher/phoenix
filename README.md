@@ -15,13 +15,13 @@
     <a href="https://phoenixlauncher.vercel.app/">Website</a>    
   </p>
 
-  ##
+## 
 
   This launcher was inspired by projects like Playnite and Lutris, and supports any game which can be launched from the command line!
 
   It was designed to be small, fast, and not overly complicated.
 
-<img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
+<img title="" src="file:///Users/kalebrosborough/Documents/Programming/Swift/Phoenix/Readme Images/phoenix light+dark.png" alt="Screenshot of the app">
 
 ## Setup
 

@@ -12,12 +12,19 @@ Wen you first open the app, it'll look something like this:
 You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can.
 
 ### Name:
+
 This is just the name of the game that is displayed in the sidebar and the toolbar.
+
 ### Icon:
-The app icon that shows in the sidebar. A good source for these is [macosicons.com](https://macOSicons.com).
-### Platform: 
+
+The app icon that shows in the sidebar. A good source for these is [macosicons.com](https://macOSicons.com). Please make sure the the icon is either a png or a jpg. If you get it from [macosicons.com](https://macOSicons.com) for example, it will likely be a .icns file. You can open it in Preview, File > Export, then export as a png and select that file to use instead.
+
+### Platform:
+
 The platform / store of the game. Will help organize the games in the sidebar.
+
 ### Command:
+
 This is the terminal command that will launch your app. I know that not everyone has used the terminal before, so here are some templates for some common places to find games:
 
 #### App Store/Regular Mac games:
@@ -89,27 +96,42 @@ For example, this command opens Red Dead Revolver in AetherSX2 for me:
 
 /Applications/AetherSX2.app/Contents/MacOS/AetherSX2 "/Volumes/Crucial X6/Games/PS2/Red Dead Revolver/Red Dead Revolver.iso"
 ```
+
 ### Description:
+
 This is the description of the game. Pretty self-explanatory.
-### Genres: 
+
+### Genres:
+
 This is where you put the genres of your game. You can have as many as you want. Format them with new lines like this:
+
 ```
 Action
 Adventure
 Sci-fi
 ```
-### Header: 
+
+### Header:
+
 This is the header image. It'll make the app look a hell of a lot better. Unless you are insane, please use one.
+
 ### Rating:
+
 A rating of the game out of 10.
-### Developer: 
+
+### Developer:
+
 The developer of the game. I know you love us, but we are not the devs. Don't put us!
-### Publisher: 
+
+### Publisher:
+
 The publisher of the game. Hopefully not Activision.
+
 ### Release Date:
+
 The date that the game was released.
 
- ## Final Result:
+## Final Result:
 
 It should look something like this after that:
 <img src="Readme Images/phoenixnms.webp" alt="Screenshot of the app"/>
@@ -117,6 +139,3 @@ It should look something like this after that:
 To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the pencil button next to the play button. 
 
 Once you have a game and it's launcher command is configured, you can hit the play button and it will open up!
-
-
-
