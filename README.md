@@ -21,7 +21,7 @@
 
   It was designed to be small, fast, and not overly complicated.
 
-<img title="" src="file:///Users/kalebrosborough/Documents/Programming/Swift/Phoenix/Readme Images/phoenix light+dark.png" alt="Screenshot of the app">
+<img title="" src="./Readme Images/phoenix light+dark.png" alt="Screenshot of the app">
 
 ## Setup
 
