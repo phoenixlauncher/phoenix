@@ -49,7 +49,7 @@ struct ContentView: View {
                                 self.refresh.toggle()
                             },
                             content: {
-                                GameInputView(isNewGame: true, gameName: "", showSuccessToast: $showSuccessToast)
+                                GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast)
                             }
                         )
                     }

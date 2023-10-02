@@ -14,7 +14,7 @@ struct ChooseGameView: View {
     
     @Binding var games: [Proto_Game]
     @State var selectedGame: Proto_Game?
-    @Binding var fetchedGame: Game?
+    var nameInput: String
     
     var body: some View {
         VStack {
@@ -39,12 +39,10 @@ struct ChooseGameView: View {
             }
             Button(
                 action: {
-                    print("SAVEIJG")
                     if let selectedGame = selectedGame {
-                        print("converting to igdb")
-                        FetchGameData().convertIGDBGame(igdbGame: selectedGame)
+                        chooseGame(selectedGame: selectedGame)
+                        dismiss()
                     }
-                    dismiss()
                 },
                 label: {
                     Text("Select Game")
@@ -53,6 +51,17 @@ struct ChooseGameView: View {
         }
         .padding()
         .frame(minWidth: 720, minHeight: 250, idealHeight: 400)
+        .onAppear {
+            if games.count == 1 {
+                chooseGame(selectedGame: $games.wrappedValue[0])
+                dismiss()
+            }
+        }
+    }
+    
+    func chooseGame(selectedGame: Proto_Game) {
+        print("converting to igdb")
+        FetchGameData().convertIGDBGame(igdbGame: selectedGame, nameInput: nameInput)
     }
 }
 

@@ -18,18 +18,10 @@ struct GameDetailView: View {
     
     @State private var timer: Timer?
 
-    // initialize colors
     @State var bgPlayColor = Color.green
     @State var bgSettingsColor = Color.gray.opacity(0.1)
     @State var textPlayColor = Color.white
     @State var textSettingsColor = Color.primary
-
-    init(selectedGame: Binding<String?>, refresh: Binding<Bool>, editingGame: Binding<Bool>, playingGame: Binding<Bool>) {
-        _selectedGame = selectedGame
-        _refresh = refresh
-        _editingGame = editingGame
-        _playingGame = playingGame
-    }
 
     var body: some View {
         ScrollView {
@@ -71,7 +63,7 @@ struct GameDetailView: View {
                                     refresh.toggle()
                                 },
                                 content: {
-                                    GameInputView(isNewGame: false, gameName: selectedGame ?? "", showSuccessToast: $showSuccessToast)
+                                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast)
                                 }
                             )
                         } // hstack
@@ -163,7 +155,7 @@ struct GameDetailView: View {
         do {
             let currentDate = Date()
             // Update the last played date and write the updated information to the JSON file
-            updateLastPlayedDate(currentDate: currentDate, games: &games)
+            updateLastPlayedDate(currentDate: currentDate)
             if game.launcher != "" {
                 try shell(game)
             } else {
@@ -175,7 +167,7 @@ struct GameDetailView: View {
         
     }
 
-    func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {
+    func updateLastPlayedDate(currentDate: Date) {
         let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .long
@@ -186,11 +178,10 @@ struct GameDetailView: View {
         let dateString = dateFormatter.string(from: currentDate)
 
         // Update the value of "last_played" in the game's metadata
-        let idx = games.firstIndex(where: { $0.name == selectedGame })
-        if let idx = idx {
+        if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
             games[idx].metadata["last_played"] = dateString
             games[idx].recency = .day
-            saveGame()
+            saveGames()
         }
     }
 }

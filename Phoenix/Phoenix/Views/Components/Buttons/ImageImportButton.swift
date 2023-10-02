@@ -35,13 +35,17 @@ struct ImageImportButton: View {
             allowsMultipleSelection: false
         ) { result in
             if type == "Icon" {
-                saveIconToFile(result: result, name: gameName) { image in
-                    output = image
+                resultIntoData(result: result) { data in
+                    saveIconToFile(iconData: data, name: gameName) { image in
+                        output = image
+                    }
                 }
             }
             if type == "Header" {
-                saveHeaderToFile(result: result, name: gameName) { image in
-                    output = image
+                resultIntoData(result: result) { data in
+                    saveHeaderToFile(headerData: data, name: gameName) { image in
+                        output = image
+                    }
                 }
             }
         }

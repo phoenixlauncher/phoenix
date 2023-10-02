@@ -13,15 +13,14 @@ struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    var gameName: String
+    @Binding var selectedGame: String?
     
     @Binding var showSuccessToast: Bool
-    @State private var showDupeGameToast = false
+    @State private var showErrorToast = false
     
     @State private var showChooseGameView: Bool = false
     
     @State var fetchedGames: [Proto_Game] = []
-    @State var fetchedGame: Game?
     
     @State private var nameInput: String = ""
     @State private var iconOutput: String = ""
@@ -45,7 +44,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput) 
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput)
         
                     SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
@@ -92,6 +91,14 @@ struct GameInputView: View {
                     if !isNewGame {
                         Button (
                             action: {
+                                let game: Game = .init(
+                                    launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
+                                )
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    games[idx] = game
+                                    saveGames()
+                                    selectedGame = game.name
+                                }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
                                     showChooseGameView.toggle()
@@ -108,37 +115,23 @@ struct GameInputView: View {
                                 launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
-                                let dispatchGroup = DispatchGroup()
-                                for i in games {
-                                    dispatchGroup.enter()
-                                    defer {
-                                        dispatchGroup.leave()
-                                    }
-                                    if i.name == game.name {
-                                        showDupeGameToast = true
+                                if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
+                                    FetchGameData().fetchGamesFromName(name: game.name) { gamesWithName in
+                                        fetchedGames = gamesWithName
+                                        games.append(game)
+                                        saveGames()
+                                        showChooseGameView.toggle()
                                     }
                                 }
-                                
-                                dispatchGroup.notify(queue: .main) { // once for loop is over
-                                    if !showDupeGameToast { // if no games are dupes
-                                        games.append(game)
-                                        games = games.sorted()
-                                        saveGame()
-                                        if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                                            FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
-                                                fetchedGames = gamesWithName
-                                                showChooseGameView.toggle()
-                                            }
-                                        }
-//                                                                        showSuccessToast = true
-//                                                                        dismiss()
-                                    }                                }
-
                             } else {
-                                let idx = games.firstIndex(where: { $0.name == nameInput })
-                                games[idx!] = game
-                                saveGame()
-                                showSuccessToast = true
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    games[idx] = game
+                                    saveGames()
+                                    selectedGame = game.name
+                                    showSuccessToast = true
+                                } else {
+                                    showErrorToast = true
+                                }
                                 dismiss()
                             }
                         },
@@ -158,23 +151,15 @@ struct GameInputView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) { // Alert if game already exists with name
-            AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
+        .toast(isPresenting: $showErrorToast, tapToDismiss: true) { // Alert if game already exists with name
+            AlertToast(type: .error(Color.red), title: "Game couldn't be saved.")
         }
-        .sheet(isPresented: $showChooseGameView, onDismiss: {
-            if let fetchedGame = fetchedGame {
-                games.append(fetchedGame)
-                games = games.sorted()
-                saveGame()
-                dismiss()
-            }
-        }, content: {
-            ChooseGameView(games: $fetchedGames, fetchedGame: $fetchedGame)
+        .sheet(isPresented: $showChooseGameView, onDismiss: { dismiss() }, content: {
+            ChooseGameView(games: $fetchedGames, nameInput: nameInput)
         })
         .onAppear() {
-            if !isNewGame {
-                let idx = games.firstIndex(where: { $0.name == gameName })
-                let currentGame = games[idx!]
+            if !isNewGame, let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                let currentGame = games[idx]
                 nameInput = currentGame.name
                 iconOutput = currentGame.icon
                 platInput = currentGame.platform

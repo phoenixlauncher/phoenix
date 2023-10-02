@@ -15,7 +15,8 @@ func getGameFromName(name: String) -> Game? {
     }
 }
 
-func saveGame() {
+func saveGames() {
+    games = games.sorted()
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted
     

@@ -14,8 +14,6 @@ struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
     
     func fetchGamesFromName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
-        let game = getGameFromName(name: name)
-        if let game = game {
             // Create an APICalypse query to specify the search query and fields.
             if name != "" {
                 let apicalypse = APICalypse()
@@ -38,34 +36,35 @@ struct FetchGameData {
                                     websites.url,
                                     websites.category
                                     """) // Specify the fields you want to retrieve
-                    .where(query: "name ~ \"\(name)\" & (category = 0 | category = 2 | category = 3 | category = 8)") // Use the "where" clause to search by name
+                    .where(query: "name ~ \"\(name)\"") // Use the "where" clause to search by name
                     .limit(value: 50)
                 
                 // Make the API request to search for the game by name.
                 wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in
-                    var gamesWithName: [Proto_Game] = []
-                    // Handle the retrieved games here
-                    for i in fetchedGames {
-                        if i.name == name {
-                            gamesWithName.append(i)
-                        }
-                    }
-                    if gamesWithName.count == 0 {
-                        gamesWithName = fetchedGames
-                    }
-                    completion(gamesWithName)
+                    completion(fetchedGames)
                 }) { error in
                     // Handle any errors that occur during the request
                     print("Error searching for the game: \(error)")
                 }
             }
-        }
     }
     
-    func convertIGDBGame(igdbGame: Proto_Game) {
-        var fetchedGame: Game = .init()
+    func convertIGDBGame(igdbGame: Proto_Game, nameInput: String) {
+        guard let idx = games.firstIndex(where: { $0.name == nameInput }) else { return }
+        var fetchedGame: Game = .init(
+            steamID: games[idx].steamID,
+            launcher: games[idx].launcher,
+            metadata: [
+                "rating": games[idx].metadata["rating"] ?? "",
+            ],
+            icon: games[idx].icon,
+            platform: games[idx].platform,
+            status: games[idx].status,
+            recency: games[idx].recency,
+            is_favorite: games[idx].is_favorite
+        )
         
-        fetchedGame.name = igdbGame.name
+        fetchedGame.name = nameInput
         
         fetchedGame.igdbID = String(igdbGame.id)
 
@@ -79,13 +78,15 @@ struct FetchGameData {
         for website in igdbGame.websites {
             if website.category.rawValue == 13 {
                 // Split the URL string by forward slash and get the last component
-                if let lastPathComponent = website.url.split(separator: "/").last {
+                if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
+                    print(website.url)
+                    print(lastPathComponent)
                     if let number = Int(lastPathComponent) {
                         fetchedGame.steamID = String(number)
                         getSteamHeader(number: number, name: igdbGame.name) { headerImage in
                             if let headerImage = headerImage {
                                 fetchedGame.metadata["header_img"] = headerImage
-                                saveFetchedGame(name: igdbGame.name, fetchedGame: fetchedGame)
+                                saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
                             } else {
                                 print("steam is on something")
                             }
@@ -142,38 +143,33 @@ struct FetchGameData {
         let combinedGenresString = uniqueGenres.sorted().joined(separator: "\n")
         fetchedGame.metadata["genre"] = combinedGenresString
 
-        var developers = ""
-        var devCount = 0
-        var publishers = ""
-        var pubCount = 0
+        var developerSet = Set<String>()
+        var publisherSet = Set<String>()
 
         for company in igdbGame.involvedCompanies {
-            if company.publisher && pubCount <= 1 {
-                let publisherName = company.company.name
-                if !publishers.isEmpty {
-                    publishers += "\n"
-                }
-                publishers += publisherName
-                pubCount += 1
+            let companyName = company.company.name
+            
+            if company.publisher && publisherSet.count < 2 {
+                publisherSet.insert(companyName)
             }
-            if company.developer && devCount <= 1 {
-                let developerName = company.company.name
-                if !developers.isEmpty {
-                    developers += "\n"
-                }
-                developers += developerName
-                devCount += 1
+            
+            if company.developer && developerSet.count < 2 {
+                developerSet.insert(companyName)
             }
         }
 
+        let publishers = publisherSet.joined(separator: "\n")
+        let developers = developerSet.joined(separator: "\n")
+
         if !developers.isEmpty {
-            // Set the `developer` variable with newline-separated publishers
+            // Set the `developer` variable with newline-separated developers
             fetchedGame.metadata["developer"] = developers
         }
         if !publishers.isEmpty {
             // Set the `publisher` variable with newline-separated publishers
             fetchedGame.metadata["publisher"] = publishers
         }
+
 
         // Convert Unix timestamp to Date
         let date = Date(timeIntervalSince1970: TimeInterval(igdbGame.firstReleaseDate.seconds))
@@ -188,90 +184,26 @@ struct FetchGameData {
     
     func getSteamHeader(number: Int, name: String, completion: @escaping (String?) -> Void) {
         let imageURL = "https://cdn.cloudflare.steamstatic.com/steam/apps/\(number)/library_hero.jpg"
-        if let url = URL(string: imageURL) {
+        if let url = URL(string: imageURL) {	
             URLSession.shared.dataTask(with: url) { headerData, response, error in
-                if let error = error {
-                    print("Failed to fetch image: \(error.localizedDescription)")
-                    // Handle the error (e.g., show an error message to the user)
-                    return
-                }
-                let fileManager = FileManager.default
-                guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                    fatalError("Unable to retrieve application support directory URL")
-                }
-                
-                let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                
-                if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                    do {
-                        try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                        print("Created 'Phoenix/cachedImages' directory")
-                    } catch {
-                        fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                if let headerData = headerData {
+                    saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                        completion(headerImage)
                     }
-                }
-                
-                var destinationURL: URL
-                
-                if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-                    destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
-                } else {
-                    destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
-                }
-                
-                do {
-                    try headerData?.write(to: destinationURL)
-                    let headerImage = destinationURL.relativeString
-                    completion(headerImage)
-                    print("Saved image to: \(destinationURL.path)")
-                } catch {
-                    print("Failed to save image: \(error.localizedDescription)")
                 }
             }.resume()
         }
     }
     
     func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
-        if let highestResArtwork = igdbGame.artworks.max(by: { $0.height < $1.height }) {
+        if let highestResArtwork = igdbGame.artworks.max(by: { $0.width < $1.width }) {
             let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
-                    if let error = error {
-                        print("Failed to fetch image: \(error.localizedDescription)")
-                        // Handle the error (e.g., show an error message to the user)
-                        return
-                    }
-                    let fileManager = FileManager.default
-                    guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                        fatalError("Unable to retrieve application support directory URL")
-                    }
-                    
-                    let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                    
-                    if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                        do {
-                            try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                            print("Created 'Phoenix/cachedImages' directory")
-                        } catch {
-                            fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                    if let headerData = headerData {
+                        saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                            completion(headerImage)
                         }
-                    }
-                    
-                    var destinationURL: URL
-                    
-                    if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-                        destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
-                    } else {
-                        destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
-                    }
-                    
-                    do {
-                        try headerData?.write(to: destinationURL)
-                        let headerImage = destinationURL.relativeString
-                        completion(headerImage)
-                        print("Saved image to: \(destinationURL.path)")
-                    } catch {
-                        print("Failed to save image: \(error.localizedDescription)")
                     }
                 }.resume()
             }
@@ -279,10 +211,9 @@ struct FetchGameData {
     }
     
     func saveFetchedGame(name: String, fetchedGame: Game) {
-        if let idx = games.firstIndex(where: { $0.name == fetchedGame.name }) {
+        if let idx = games.firstIndex(where: { $0.name == name }) {
             games[idx] = fetchedGame
-            print(fetchedGame, games[idx])
         }
-        saveGame()
+        saveGames()
     }
 }

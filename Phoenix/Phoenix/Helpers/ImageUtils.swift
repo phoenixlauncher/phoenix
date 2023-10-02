@@ -81,11 +81,20 @@ func getBlurRadiusForImage(_ geometry: GeometryProxy) -> CGFloat {
     return blur * 10  // Values will range from 0 - 10
 }
 
-func saveIconToFile(result: Result<[URL], Error>, name: String, completion: @escaping ((String) -> Void)) {
+func resultIntoData(result: Result<[URL], Error>, completion: @escaping ((Data) -> Void)) {
     do {
         let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
         
-        let iconData = try Data(contentsOf: selectedFile)
+        let data = try Data(contentsOf: selectedFile)
+        completion(data)
+    }
+    catch {
+        print("Failed to convert file to data: \(error.localizedDescription)")
+    }
+}
+
+func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String) -> Void)) {
+    do {
         // Resize the image to 48x48 pixels
         if let image = NSImage(data: iconData) {
             let newSize = NSSize(width: 48, height: 48)
@@ -119,14 +128,7 @@ func saveIconToFile(result: Result<[URL], Error>, name: String, completion: @esc
                     }
                 }
                 
-                var destinationURL: URL
-                
-                
-                if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
-                    destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.jpg")
-                } else {
-                    destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.png")
-                }
+                let destinationURL: URL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.jpg")
                 
                 do {
                     try resizedImageData.write(to: destinationURL)
@@ -138,17 +140,10 @@ func saveIconToFile(result: Result<[URL], Error>, name: String, completion: @esc
             }
         }
     }
-    catch {
-        print("Failed to get selected file: \(error.localizedDescription)")
-    }
 }
 
-func saveHeaderToFile(result: Result<[URL], Error>, name: String, completion: @escaping ((String) -> Void)) {
+func saveHeaderToFile(headerData: Data, name: String, completion: @escaping ((String) -> Void)) {
     do {
-        let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
-        
-        let headerData = try Data(contentsOf: selectedFile)
-                                        
         let fileManager = FileManager.default
         guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
             fatalError("Unable to retrieve application support directory URL")
@@ -164,25 +159,16 @@ func saveHeaderToFile(result: Result<[URL], Error>, name: String, completion: @e
                 fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
             }
         }
-                
-        var destinationURL: URL
 
-        if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
-            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_icon.jpg")
-        } else {
-            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_icon.png")
-        }
+        let destinationURL: URL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
         
         do {
             try headerData.write(to: destinationURL)
             completion(destinationURL.relativeString)
-            print("Resized and saved image to: \(destinationURL.path)")
+            print("Saved image to: \(destinationURL.path)")
         } catch {
             print("Failed to save resized image: \(error.localizedDescription)")
         }
-    }
-    catch {
-        print("Failed to get selected file: \(error.localizedDescription)")
     }
 }
 
