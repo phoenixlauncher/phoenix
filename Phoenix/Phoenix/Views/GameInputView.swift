@@ -111,7 +111,7 @@ struct GameInputView: View {
                     }
                     Button(
                         action: {
-                            let game: Game = .init(
+                            var game: Game = .init(
                                 launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
@@ -125,6 +125,8 @@ struct GameInputView: View {
                                 }
                             } else {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                    game.recency = games[idx].recency
+                                    game.is_favorite = games[idx].is_favorite
                                     games[idx] = game
                                     saveGames()
                                     selectedGame = game.name

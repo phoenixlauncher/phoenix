@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+@available(macOS 14, *)
 struct GameListView: View {
     
     @Binding var sortBy: PhoenixApp.SortBy
@@ -103,12 +104,24 @@ struct GameListView: View {
             }
         }
         .onAppear {
+            if UserDefaults.standard.bool(forKey: "picker") {
+                minWidth = 296
+            } else {
+                minWidth = 196
+            }
+            if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
+            if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+                iconSize = 0
+            } else {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 $refresh.wrappedValue.toggle()
-                print("REFRESH")
             }
         }
         .onDisappear {
