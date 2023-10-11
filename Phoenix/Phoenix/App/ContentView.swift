@@ -23,8 +23,10 @@ struct ContentView: View {
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
-    @State var picker: Bool = true
+    @State var pickerText: Bool = true
     @State var showSuccessToast: Bool = false
+    
+    @State var animate: Bool = false
 
     // The stuff that is actually on screen
     var body: some View {
@@ -53,17 +55,34 @@ struct ContentView: View {
                             }
                         )
                     }
-                    if picker {
-                        ToolbarItem(placement: .primaryAction) {
-                            Picker("Sort by", selection: $sortBy) {
-                                ForEach(PhoenixApp.SortBy.allCases) { sortBy in
-                                    HStack(alignment: .center, spacing: 5) {
-                                        Image(systemName: sortBy.symbol)
-                                        Text(sortBy.displayName)
-                                    }
+                    ToolbarItem(placement: .primaryAction) {
+                        ZStack(alignment: .leading) {
+                            Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
+                                ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                    Button("\(currentSortBy.displayName)",
+                                        action: {
+                                            sortBy = currentSortBy
+                                        }
+                                    )
                                 }
                             }
-                            .pickerStyle(.automatic)
+                            .transition(.slide)
+                            .animation(.easeInOut)
+                            if #available(macOS 14, *) {
+                                Image(systemName: sortBy.symbol)
+                                    .symbolRenderingMode(.palette)
+                                    .symbolEffect(.bounce, value: animate)
+                                    .contentTransition(.symbolEffect(.replace.byLayer.downUp))
+                                    .foregroundStyle(.secondary)
+                                    .font(.system(size: 15))
+                                    .padding(.leading, 7)
+                            } else {
+                                Image(systemName: sortBy.symbol)
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundStyle(.secondary)
+                                    .font(.system(size: 15))
+                                    .padding(.leading, 7)                            }
+                            
                         }
                     }
                 }
@@ -77,19 +96,22 @@ struct ContentView: View {
         }
         .onAppear {
             if UserDefaults.standard.bool(forKey: "picker") {
-                picker = true
+                pickerText = true
             } else {
-                picker = false
+                pickerText = false
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 if UserDefaults.standard.bool(forKey: "picker") {
-                    picker = true
+                    pickerText = true
                 } else {
-                    picker = false
+                    pickerText = false
                 }
                 refresh.toggle()
                 // This code will be executed every 1 second
             }
+        }
+        .onChange(of: sortBy) { _ in
+            animate.toggle()
         }
         .searchable(text: $searchText, placement: .sidebar)
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {

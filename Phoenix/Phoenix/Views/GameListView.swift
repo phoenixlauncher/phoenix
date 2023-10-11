@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-@available(macOS 14, *)
 struct GameListView: View {
     
     @Binding var sortBy: PhoenixApp.SortBy
@@ -70,29 +69,22 @@ struct GameListView: View {
                 }
             case .recency:
                 ForEach(Recency.allCases, id: \.self) { recency in
-                    let gamesForRecency = games.filter {
-                        $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
-                    }
-                    if !gamesForRecency.isEmpty {
-                        Section(header: Text(recency.displayName)) {
-                            ForEach(gamesForRecency, id: \.name) { game in
-                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                        let gamesForRecency = games.filter {
+                            $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                        }
+                        if !gamesForRecency.isEmpty {
+                            Section(header: Text(recency.displayName)) {
+                                ForEach(gamesForRecency, id: \.name) { game in
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                }
                             }
                         }
                     }
                 }
-            }
             Text(String(refresh))
                 .hidden()
         }
         .frame(minWidth: minWidth)
-        .onChange(of: UserDefaults.standard.bool(forKey: "picker")) { value in
-            if value {
-                minWidth = 296
-            } else {
-                minWidth = 196
-            }
-        }
         .onChange(of: UserDefaults.standard.double(forKey: "listIconSize")) { value in
             iconSize = value
         }

@@ -1,8 +1,8 @@
 //
-//  AddGameView.swift
+//  GameInputView.swift
 //  Phoenix
 //
-//  Created by Kaleb Rosborough on 2022-12-27.
+//  Created by James Hughes onon 2022-12-27.
 //
 import Foundation
 import SwiftUI
