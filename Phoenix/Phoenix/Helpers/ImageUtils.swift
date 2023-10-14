@@ -93,7 +93,7 @@ func resultIntoData(result: Result<[URL], Error>, completion: @escaping ((Data) 
     }
 }
 
-func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String) -> Void)) {
+func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String) -> Void)) {
     do {
         // Resize the image to 48x48 pixels
         if let image = NSImage(data: iconData) {
@@ -108,41 +108,45 @@ func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String
             newImage.unlockFocus()
             
             // Convert the resized image to data
-            if let resizedImageData = newImage.tiffRepresentation {
-                let fileManager = FileManager.default
-                let cachedImagesDirectoryURL: URL
-                do {
-                    cachedImagesDirectoryURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-                        .appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                } catch {
-                    print("Failed to get directory URL: \(error.localizedDescription)")
-                    return
-                }
-                
-                if !fileManager.fileExists(atPath: cachedImagesDirectoryURL.path) {
+//            let nsjpeg = NSBitmapImageRep.representation(using: NSBitmapImageRep.FileType.jpeg, properties: [NSBitmapImageRep.PropertyKey.colorSyncProfileData : (Any).self])
+            if let tiffRepresentation = newImage.tiffRepresentation {
+                let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
+                if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
+                    let fileManager = FileManager.default
+                    let cachedImagesDirectoryURL: URL
                     do {
-                        try fileManager.createDirectory(at: cachedImagesDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-                        print("Created 'Phoenix/cachedImages' directory")
+                        cachedImagesDirectoryURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                            .appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
                     } catch {
-                        fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                        print("Failed to get directory URL: \(error.localizedDescription)")
+                        return
                     }
-                }
-                
-                let destinationURL: URL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.jpg")
-                
-                do {
-                    try resizedImageData.write(to: destinationURL)
-                    completion(destinationURL.relativeString)
-                    print("Resized and saved image to: \(destinationURL.path)")
-                } catch {
-                    print("Failed to save resized image: \(error.localizedDescription)")
+                    
+                    if !fileManager.fileExists(atPath: cachedImagesDirectoryURL.path) {
+                        do {
+                            try fileManager.createDirectory(at: cachedImagesDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+                            print("Created 'Phoenix/cachedImages' directory")
+                        } catch {
+                            fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    let destinationURL: URL = cachedImagesDirectoryURL.appendingPathComponent("\(gameID)_icon.png")
+                    
+                    do {
+                        try pngData.write(to: destinationURL)
+                        completion(destinationURL.relativeString)
+                        print("Resized and saved image to: \(destinationURL.path)")
+                    } catch {
+                        print("Failed to save resized image: \(error.localizedDescription)")
+                    }
                 }
             }
         }
     }
 }
 
-func saveHeaderToFile(headerData: Data, name: String, completion: @escaping ((String) -> Void)) {
+func saveHeaderToFile(headerData: Data, gameID: UUID, completion: @escaping ((String) -> Void)) {
     do {
         let fileManager = FileManager.default
         guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
@@ -160,7 +164,7 @@ func saveHeaderToFile(headerData: Data, name: String, completion: @escaping ((St
             }
         }
 
-        let destinationURL: URL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
+        let destinationURL: URL = cachedImagesDirectoryPath.appendingPathComponent("\(gameID)_header.jpg")
         
         do {
             try headerData.write(to: destinationURL)

@@ -15,6 +15,14 @@ func getGameFromName(name: String) -> Game? {
     }
 }
 
+func getGameFromID(id: UUID) -> Game? {
+    if let idx = games.firstIndex(where: { $0.id == id }) {
+        return games[idx]
+    } else {
+        return nil
+    }
+}
+
 func saveGames() {
     games = games.sorted()
     let encoder = JSONEncoder()

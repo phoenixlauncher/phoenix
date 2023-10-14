@@ -44,8 +44,8 @@ struct HiddenGamesSettingsView: View {
     }
     
     func restoreGame(_ game: Game, refresh: Binding<Bool>) {
-        if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].is_deleted = false
+        if let idx = games.firstIndex(where: { $0.id == game.id }) {
+            games[idx].is_deleted = false
             // REFRESH GAME LIST VIEW HERE
             logger.write("called function from settings view")
             refresh.wrappedValue.toggle()

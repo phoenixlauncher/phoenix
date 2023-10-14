@@ -6,9 +6,7 @@
 //
 
 import Foundation
-import SwiftUI
 import IGDB_SWIFT_API
-import Kingfisher
 
 struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
@@ -49,22 +47,22 @@ struct FetchGameData {
             }
     }
     
-    func convertIGDBGame(igdbGame: Proto_Game, nameInput: String) {
-        guard let idx = games.firstIndex(where: { $0.name == nameInput }) else { return }
+    func convertIGDBGame(igdbGame: Proto_Game, gameID: UUID) {
+        guard let idx = games.firstIndex(where: { $0.id == gameID }) else { return }
         var fetchedGame: Game = .init(
             steamID: games[idx].steamID,
             launcher: games[idx].launcher,
             metadata: [
                 "rating": games[idx].metadata["rating"] ?? "",
+                "header_img": games[idx].metadata["header_img"] ?? "",
             ],
             icon: games[idx].icon,
+            name: games[idx].name,
             platform: games[idx].platform,
             status: games[idx].status,
             recency: games[idx].recency,
             is_favorite: games[idx].is_favorite
         )
-        
-        fetchedGame.name = nameInput
         
         fetchedGame.igdbID = String(igdbGame.id)
 
@@ -72,39 +70,6 @@ struct FetchGameData {
             fetchedGame.metadata["description"] = igdbGame.summary
         } else {
             fetchedGame.metadata["description"] = igdbGame.storyline
-        }
-
-        // Get the highest resolution artwork
-        for website in igdbGame.websites {
-            if website.category.rawValue == 13 {
-                // Split the URL string by forward slash and get the last component
-                if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
-                    print(website.url)
-                    print(lastPathComponent)
-                    if let number = Int(lastPathComponent) {
-                        fetchedGame.steamID = String(number)
-                        getSteamHeader(number: number, name: igdbGame.name) { headerImage in
-                            if let headerImage = headerImage {
-                                fetchedGame.metadata["header_img"] = headerImage
-                                saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
-                            } else {
-                                print("steam is on something")
-                            }
-                        }
-                    } else {
-                        logger.write("The last path component is not a valid number.")
-                    }
-                } else {
-                    logger.write("Invalid URL format.")
-                }
-            } else {
-                getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
-                    if let headerImage = headerImage {
-                        fetchedGame.metadata["header_img"] = headerImage
-                        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
-                    }
-                }
-            }
         }
 
         // Combine genres (excluding "Science Fiction")
@@ -178,16 +143,55 @@ struct FetchGameData {
         dateFormatter.dateFormat = "MMMM dd, yyyy"
 
         fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
+        
+        // Get the highest resolution artwork
+        var hasSteam = false
 
-        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
+        for website in igdbGame.websites {
+            if website.category.rawValue == 13 {
+                hasSteam = true
+                // Split the URL string by forward slash and get the last component
+                if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
+                    print(website.url)
+                    print(lastPathComponent)
+                    if let number = Int(lastPathComponent) {
+                        fetchedGame.steamID = String(number)
+                        getSteamHeader(number: number, gameID: gameID) { headerImage in
+                            if let headerImage = headerImage {
+                                fetchedGame.metadata["header_img"] = headerImage
+                                print(fetchedGame.metadata["header_img"] ?? "FUCK")
+                                saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+                                print("saved header")
+                            } else {
+                                print("steam is on something")
+                            }
+                        }
+                    } else {
+                        logger.write("The last path component is not a valid number.")
+                    }
+                } else {
+                    logger.write("Invalid URL format.")
+                }
+            }
+        }
+
+        if !hasSteam {
+            // This block will run only if NONE of the websites have category 13 which is a steam link
+            getIGDBHeader(igdbGame: igdbGame, gameID: gameID) { headerImage in
+                if let headerImage = headerImage {
+                    fetchedGame.metadata["header_img"] = headerImage
+                    saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+                }
+            }
+        }
     }
     
-    func getSteamHeader(number: Int, name: String, completion: @escaping (String?) -> Void) {
+    func getSteamHeader(number: Int, gameID: UUID, completion: @escaping (String?) -> Void) {
         let imageURL = "https://cdn.cloudflare.steamstatic.com/steam/apps/\(number)/library_hero.jpg"
         if let url = URL(string: imageURL) {	
             URLSession.shared.dataTask(with: url) { headerData, response, error in
                 if let headerData = headerData {
-                    saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                    saveHeaderToFile(headerData: headerData, gameID: gameID) { headerImage in
                         completion(headerImage)
                     }
                 }
@@ -195,13 +199,13 @@ struct FetchGameData {
         }
     }
     
-    func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
+    func getIGDBHeader(igdbGame: Proto_Game, gameID: UUID, completion: @escaping (String?) -> Void) {
         if let highestResArtwork = igdbGame.artworks.max(by: { $0.width < $1.width }) {
             let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
                     if let headerData = headerData {
-                        saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                        saveHeaderToFile(headerData: headerData, gameID: gameID) { headerImage in
                             completion(headerImage)
                         }
                     }
@@ -210,8 +214,8 @@ struct FetchGameData {
         }
     }
     
-    func saveFetchedGame(name: String, fetchedGame: Game) {
-        if let idx = games.firstIndex(where: { $0.name == name }) {
+    func saveFetchedGame(gameID: UUID, fetchedGame: Game) {
+        if let idx = games.firstIndex(where: { $0.id == gameID }) {
             games[idx] = fetchedGame
         }
         saveGames()

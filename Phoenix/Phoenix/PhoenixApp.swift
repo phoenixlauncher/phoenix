@@ -45,7 +45,7 @@ struct PhoenixApp: App {
         
         var symbol: String {
             switch self {
-            case .platform: return "arcade.stick.console"
+            case .platform: return "gamecontroller"
             case .status: return "trophy"
             case .name: return "textformat.abc.dottedunderline"
             case .recency: return "clock"
@@ -56,7 +56,7 @@ struct PhoenixApp: App {
     @AppStorage("sortBy")
     var sortBy: SortBy = .platform
     
-    @State var selectedGame: String?
+    @State var selectedGame: UUID?
     
     @State var isAddingGame: Bool = false
     @State var isEditingGame: Bool = false

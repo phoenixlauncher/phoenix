@@ -17,7 +17,7 @@ struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
-    @Binding var selectedGame: String?
+    @Binding var selectedGame: UUID?
     @State var refresh: Bool = false
     @State private var timer: Timer?
     @Binding var isAddingGame: Bool
@@ -66,7 +66,6 @@ struct ContentView: View {
                                     )
                                 }
                             }
-                            .transition(.slide)
                             .animation(.easeInOut)
                             if #available(macOS 14, *) {
                                 Image(systemName: sortBy.symbol)
