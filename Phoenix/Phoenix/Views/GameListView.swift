@@ -20,7 +20,7 @@ struct GameListView: View {
         VStack {
             List(selection: $selectedGame) {
                 let favoriteGames = games.filter {
-                    $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == true
+                    $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == true
                 }
                 if !favoriteGames.isEmpty {
                     Section(header: Text("Favorites")) {
@@ -33,7 +33,7 @@ struct GameListView: View {
                 case .platform:
                     ForEach(Platform.allCases, id: \.self) { platform in
                         let gamesForPlatform = games.filter {
-                            $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                            $0.platform == platform && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text(platform.displayName)) {
@@ -46,7 +46,7 @@ struct GameListView: View {
                 case .status:
                     ForEach(Status.allCases, id: \.self) { status in
                         let gamesForStatus = games.filter {
-                            $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                            $0.status == status && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForStatus.isEmpty {
                             Section(header: Text(status.displayName)) {
@@ -58,7 +58,7 @@ struct GameListView: View {
                     }
                 case .name:
                     let gamesForName = games.filter {
-                        $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                        $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                     }
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
@@ -70,7 +70,7 @@ struct GameListView: View {
                 case .recency:
                     ForEach(Recency.allCases, id: \.self) { recency in
                         let gamesForRecency = games.filter {
-                            $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                            $0.recency == recency && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForRecency.isEmpty {
                             Section(header: Text(recency.displayName)) {
@@ -129,69 +129,32 @@ struct GameListItem: View {
         }
         .contextMenu {
             Button(action: {
-                favoriteGame(game, refresh: $refresh)
+                if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                    games[idx].isFavorite.toggle()
+                }
+                saveGames()
             }) {
-                Text("\(game.is_favorite ? "Unfavorite" : "Favorite") game")
+                Text("\(game.isFavorite ? "Unfavorite" : "Favorite") game")
             }
             .accessibility(identifier: "Favorite Game")
             Button(action: {
-                deleteGame(game, refresh: $refresh)
+                if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                    games[idx].isHidden = true
+                }
+                saveGames()
+            }) {
+                Text("Hide game")
+            }
+            .accessibility(identifier: "Hide Game")
+            Button(action: {
+                if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                    games.remove(at: idx)
+                }
+                saveGames()
             }) {
                 Text("Delete game")
             }
             .accessibility(identifier: "Delete Game")
-        }
-    }
-    
-    /// Favorites a game from the games list by toggling its `is_favorite` property.
-    ///
-    /// - Parameters:
-    ///   - game: The game to favorite / unfavorite.
-    ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
-    func favoriteGame(_ game: Game, refresh: Binding<Bool>) {
-        if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].is_favorite.toggle()
-            refresh.wrappedValue.toggle()
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-
-            do {
-                let gamesJSON = try encoder.encode(games)
-
-                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                    writeGamesToJSON(data: gamesJSONString)
-                }
-            } catch {
-                logger.write(error.localizedDescription)
-            }
-        }
-    }
-    
-    /// Deletes a game from the games list by setting its `is_deleted` property to `true`.
-    ///
-    /// - Parameters:
-    ///   - game: The game to delete.
-    ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
-    func deleteGame(_ game: Game, refresh: Binding<Bool>) {
-        if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].is_deleted = true
-            refresh.wrappedValue.toggle()
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-
-            do {
-                let gamesJSON = try encoder.encode(games)
-
-                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                    writeGamesToJSON(data: gamesJSONString)
-                }
-            } catch {
-                logger.write(error.localizedDescription)
-            }
         }
     }
 }

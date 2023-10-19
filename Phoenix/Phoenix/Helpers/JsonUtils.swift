@@ -119,8 +119,8 @@ func detectSteamGamesAndWriteToJSON() {
                     name: name ?? "Unknown",
                     platform: Platform.none,
                     status: Status.none,
-                    is_deleted: false,
-                    is_favorite: false
+                    isHidden: false,
+                    isFavorite: false
                 )
                 // Check if the game is already in the list
                 if !gameNames.contains(game.name) {
@@ -162,14 +162,16 @@ func loadGamesFromJSON() -> GamesList {
     var games: GamesList?
     do {
         let jsonData = try Data(contentsOf: url)
-        // Custom decoding strategy to convert "isDeleted" to "is_deleted"
+        // Custom decoding strategy to convert "isDeleted" to "isHidden"
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
             let key = keys.last!
-            if key.stringValue == "isDeleted" {
-                return AnyCodingKey(stringValue: "is_deleted")!
-            } else if key.stringValue == "appID" {
+            if key.stringValue == "isDeleted" || key.stringValue == "is_deleted" {
+                return AnyCodingKey(stringValue: "isHidden")!
+            } else if key.stringValue == "appID" || key.stringValue == "steam_id" {
                 return AnyCodingKey(stringValue: "steamID")!
+            } else if key.stringValue == "is_favorite" {
+                return AnyCodingKey(stringValue: "isFavorite")!
             } else {
                 return key
             }
@@ -192,12 +194,12 @@ func loadGamesFromJSON() -> GamesList {
 
         do {
             let jsonData = try Data(contentsOf: url)
-            // Custom decoding strategy to convert "isDeleted" to "is_deleted"
+            // Custom decoding strategy to convert "isDeleted" to "isHidden"
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
                 let key = keys.last!
                 if key.stringValue == "isDeleted" {
-                    return AnyCodingKey(stringValue: "is_deleted")!
+                    return AnyCodingKey(stringValue: "isHidden")!
                 }
                 return key
             }

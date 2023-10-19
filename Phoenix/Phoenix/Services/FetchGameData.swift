@@ -61,8 +61,10 @@ struct FetchGameData {
             platform: games[idx].platform,
             status: games[idx].status,
             recency: games[idx].recency,
-            is_favorite: games[idx].is_favorite
+            isFavorite: games[idx].isFavorite
         )
+        
+        print(igdbGame)
         
         fetchedGame.igdbID = String(igdbGame.id)
 
@@ -175,14 +177,18 @@ struct FetchGameData {
             }
         }
 
+        print(fetchedGame)
+        
         if !hasSteam {
             // This block will run only if NONE of the websites have category 13 which is a steam link
             getIGDBHeader(igdbGame: igdbGame, gameID: gameID) { headerImage in
                 if let headerImage = headerImage {
                     fetchedGame.metadata["header_img"] = headerImage
+                    print(fetchedGame)
                     saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
                 }
             }
+            saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
         }
     }
     

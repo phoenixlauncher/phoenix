@@ -76,8 +76,8 @@ struct Game: Codable, Comparable, Hashable {
     var platform: Platform
     var status: Status
     var recency: Recency
-    var is_deleted: Bool
-    var is_favorite: Bool
+    var isHidden: Bool
+    var isFavorite: Bool
 
     init(
         id: UUID = UUID(),
@@ -99,8 +99,8 @@ struct Game: Codable, Comparable, Hashable {
         platform: Platform = Platform.none,
         status: Status = Status.none,
         recency: Recency = Recency.never,
-        is_deleted: Bool = false,
-        is_favorite: Bool = false
+        isHidden: Bool = false,
+        isFavorite: Bool = false
     ) {
         self.id = id
         self.steamID = steamID
@@ -112,12 +112,12 @@ struct Game: Codable, Comparable, Hashable {
         self.platform = platform
         self.status = status
         self.recency = recency
-        self.is_deleted = is_deleted
-        self.is_favorite = is_favorite
+        self.isHidden = isHidden
+        self.isFavorite = isFavorite
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
+        case id, steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, isHidden, isFavorite
     }
         
     init(from decoder: Decoder) throws {
@@ -192,18 +192,18 @@ struct Game: Codable, Comparable, Hashable {
             self.id = UUID()
         }
         
-        // Handle is_deleted conversion with default to ""
-        if let is_deleted = try? container.decode(Bool.self, forKey: .is_deleted) {
-            self.is_deleted = is_deleted
+        // Handle isHidden conversion with default to ""
+        if let isHidden = try? container.decode(Bool.self, forKey: .isHidden) {
+            self.isHidden = isHidden
         } else {
-            self.is_deleted = false
+            self.isHidden = false
         }
         
-        // Handle is_favorite conversion with default to ""
-        if let is_favorite = try? container.decode(Bool.self, forKey: .is_favorite) {
-            self.is_favorite = is_favorite
+        // Handle isFavorite conversion with default to ""
+        if let isFavorite = try? container.decode(Bool.self, forKey: .isFavorite) {
+            self.isFavorite = isFavorite
         } else {
-            self.is_favorite = false
+            self.isFavorite = false
         }
     }
 

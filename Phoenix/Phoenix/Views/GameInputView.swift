@@ -98,7 +98,7 @@ struct GameInputView: View {
                                 )
                                 if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                                     game.recency = games[idx].recency
-                                    game.is_favorite = games[idx].is_favorite
+                                    game.isFavorite = games[idx].isFavorite
                                     games[idx] = game
                                     saveGames()
                                     selectedGame = game.id
@@ -144,7 +144,7 @@ struct GameInputView: View {
                             } else {
                                 if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                                     game.recency = games[idx].recency
-                                    game.is_favorite = games[idx].is_favorite
+                                    game.isFavorite = games[idx].isFavorite
                                     games[idx] = game
                                     saveGames()
                                     selectedGame = game.id
