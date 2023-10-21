@@ -57,17 +57,18 @@ struct ContentView: View {
                     }
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {
-                            Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
-                                ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
-                                    Button("\(currentSortBy.displayName)",
-                                        action: {
-                                            sortBy = currentSortBy
-                                        }
-                                    )
-                                }
-                            }
-                            .animation(.easeInOut)
                             if #available(macOS 14, *) {
+                                Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
+                                    Text("Sort by:")
+                                    ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                        Button("\(currentSortBy.displayName)",
+                                            action: {
+                                                sortBy = currentSortBy
+                                            }
+                                        )
+                                    }
+                                }
+                                .animation(.easeInOut)
                                 Image(systemName: sortBy.symbol)
                                     .symbolRenderingMode(.palette)
                                     .symbolEffect(.bounce, value: animate)
@@ -76,12 +77,22 @@ struct ContentView: View {
                                     .font(.system(size: 15))
                                     .padding(.leading, 7)
                             } else {
+                                Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
+                                    Text("Sort by:")
+                                    ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                        Button("\(currentSortBy.displayName)",
+                                            action: {
+                                                sortBy = currentSortBy
+                                            }
+                                        )
+                                    }
+                                }
                                 Image(systemName: sortBy.symbol)
                                     .symbolRenderingMode(.palette)
                                     .foregroundStyle(.secondary)
                                     .font(.system(size: 15))
-                                    .padding(.leading, 7)                            }
-                            
+                                    .padding(.leading, 7)
+                            }
                         }
                     }
                 }
