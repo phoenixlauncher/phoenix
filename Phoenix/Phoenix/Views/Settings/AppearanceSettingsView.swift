@@ -22,6 +22,9 @@ struct AppearanceSettingsView: View {
     @AppStorage("picker")
     private var picker: Bool = true
     
+    @AppStorage("sortByNumber")
+    private var sortByNumber: Bool = false
+    
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 20) {
@@ -47,6 +50,9 @@ struct AppearanceSettingsView: View {
                 }
                 Toggle(isOn: $picker) {
                     Text("Show text in category picker")
+                }
+                Toggle(isOn: $sortByNumber) {
+                    Text("Show amount of games in sidebar")
                 }
             }
         }

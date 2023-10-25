@@ -56,8 +56,6 @@ struct PhoenixApp: App {
     @AppStorage("sortBy")
     var sortBy: SortBy = .platform
     
-    @State var selectedGame: UUID?
-    
     @State var isAddingGame: Bool = false
     @State var isEditingGame: Bool = false
     @State var isPlayingGame: Bool = false
@@ -66,7 +64,7 @@ struct PhoenixApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(sortBy: $sortBy, selectedGame: $selectedGame, isAddingGame: $isAddingGame, isEditingGame: $isEditingGame, isPlayingGame: $isPlayingGame)
+            ContentView(sortBy: $sortBy, isAddingGame: $isAddingGame, isEditingGame: $isEditingGame, isPlayingGame: $isPlayingGame)
                 .frame(
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity

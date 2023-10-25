@@ -9,7 +9,7 @@ import SwiftUI
 struct GameListView: View {
     
     @Binding var sortBy: PhoenixApp.SortBy
-    @Binding var selectedGame: UUID?
+    @Binding var selectedGame: UUID
     @Binding var refresh: Bool
     @Binding var searchText: String
     @State private var timer: Timer?
@@ -23,7 +23,7 @@ struct GameListView: View {
                     $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == true
                 }
                 if !favoriteGames.isEmpty {
-                    Section(header: Text("Favorites")) {
+                    Section(header: Text("Favorites \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
                             GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                         }
@@ -36,7 +36,7 @@ struct GameListView: View {
                             $0.platform == platform && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForPlatform.isEmpty {
-                            Section(header: Text(platform.displayName)) {
+                            Section(header: Text("\(platform.displayName) \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
                                     GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                                 }
@@ -49,7 +49,7 @@ struct GameListView: View {
                             $0.status == status && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForStatus.isEmpty {
-                            Section(header: Text(status.displayName)) {
+                            Section(header: Text("\(status.displayName) \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
                                     GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                                 }
@@ -73,7 +73,7 @@ struct GameListView: View {
                             $0.recency == recency && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForRecency.isEmpty {
-                            Section(header: Text(recency.displayName)) {
+                            Section(header: Text("\(recency.displayName) \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
                                     GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                                 }
@@ -107,9 +107,6 @@ struct GameListView: View {
                 iconSize = 0
             } else {
                 iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-            }
-            if selectedGame == nil {
-                selectedGame = games[0].id
             }
         }
     }
