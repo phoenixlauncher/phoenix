@@ -18,11 +18,8 @@ struct GameDetailView: View {
     @State var showSuccessToast: Bool = false
     
     @State private var timer: Timer?
-
-    @State var bgPlayColor = Color.green
-    @State var bgSettingsColor = Color.gray.opacity(0.1)
-    @State var textPlayColor = Color.white
-    @State var textSettingsColor = Color.primary
+    
+    @Default(.accentColorUI) var accentColorUI
 
     var body: some View {
         ScrollView {
@@ -49,14 +46,14 @@ struct GameDetailView: View {
                     VStack(alignment: .leading) {
                         HStack(alignment: .top) {
                             // play button
-                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: textPlayColor, bgColor: bgPlayColor)
+                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             .alert(
                                 "No launcher configured. Please configure a launch command to run \(selectedGameName ?? "this game")",
                                 isPresented: $showingAlert
                             ) {}
                             
                             // settings button
-                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: textSettingsColor, bgColor: bgSettingsColor)
+                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
                         } // hstack
                         .frame(alignment: .leading)
 
@@ -101,7 +98,6 @@ struct GameDetailView: View {
         .navigationTitle(selectedGameName ?? "Phoenix")
         .onAppear {
             // Usage
-            refreshGameDetailView()
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 // This code will be executed every 1 second
                 refresh.toggle()
@@ -118,9 +114,6 @@ struct GameDetailView: View {
                 playGame(game: game)
             }
         }
-        .onChange(of: UserDefaults.standard.bool(forKey: "accentColorUI")) { _ in
-            refreshGameDetailView()
-        }
         .onChange(of: selectedGame) { _ in
             if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                 selectedGameName = games[idx].name
@@ -129,19 +122,6 @@ struct GameDetailView: View {
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
             AlertToast(type: .complete(Color.green), title: "Game saved!")
         }
-    }
-    
-    func refreshGameDetailView() {
-        if UserDefaults.standard.bool(forKey: "accentColorUI") {
-            bgPlayColor = Color.accentColor
-            bgSettingsColor = Color.accentColor.opacity(0.25)
-            textSettingsColor = Color.accentColor
-        } else {
-            bgPlayColor = Color.green
-            bgSettingsColor = Color.gray.opacity(0.25)
-            textSettingsColor = Color.primary
-        }
-        refresh.toggle()
     }
     
     func playGame(game: Game) {
