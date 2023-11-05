@@ -12,6 +12,7 @@ struct HiddenGamesSettingsView: View {
     @State var selectedGame: String?
     @State var refresh: Bool = false
     @State private var timer: Timer?
+    @State var iconSize: Double = Defaults[.listIconSize]
     
     var body: some View {
         Form {
@@ -24,7 +25,7 @@ struct HiddenGamesSettingsView: View {
                                 HStack {
                                     Image(nsImage: loadImageFromFile(filePath: game.icon))
                                         .resizable()
-                                        .frame(width: 15, height: 15)
+                                        .frame(width: iconSize, height: iconSize)
                                     Text(game.name)
                                     Text(String(refresh))
                                         .hidden()
@@ -56,6 +57,9 @@ struct HiddenGamesSettingsView: View {
                 self.refresh.toggle()
                 // This code will be executed every 1 second
             }
+        }
+        .onChange(of: Defaults[.listIconSize]) { value in
+            iconSize = value
         }
     }
 }

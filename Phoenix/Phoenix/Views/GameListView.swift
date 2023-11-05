@@ -26,7 +26,7 @@ struct GameListView: View {
                 if !favoriteGames.isEmpty {
                     Section(header: Text("Favorites \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            GameListItem(game: game, refresh: $refresh)
+                            GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                         }
                     }
                 }
@@ -39,7 +39,7 @@ struct GameListView: View {
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh)
+                                    GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -52,7 +52,7 @@ struct GameListView: View {
                         if !gamesForStatus.isEmpty {
                             Section(header: Text("\(status.displayName) \(showSortByNumber ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh)
+                                    GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -64,7 +64,7 @@ struct GameListView: View {
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
                             ForEach(gamesForName, id: \.id) { game in
-                                GameListItem(game: game, refresh: $refresh)
+                                GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                             }
                         }
                     }
@@ -76,7 +76,7 @@ struct GameListView: View {
                         if !gamesForRecency.isEmpty {
                             Section(header: Text("\(recency.displayName) \(showSortByNumber ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh)
+                                    GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -91,6 +91,7 @@ struct GameListView: View {
 }
 
 struct GameListItem: View {
+    @Binding var selectedGame: UUID
     @State var game: Game
     @Binding var refresh: Bool
     @State var iconSize: Double = Defaults[.listIconSize]
@@ -119,6 +120,7 @@ struct GameListItem: View {
                 if let idx = games.firstIndex(where: { $0.id == game.id }) {
                     games[idx].isHidden = true
                 }
+                selectedGame = games[0].id
                 saveGames()
             }) {
                 Text("Hide game")
@@ -128,6 +130,7 @@ struct GameListItem: View {
                 if let idx = games.firstIndex(where: { $0.id == game.id }) {
                     games.remove(at: idx)
                 }
+                selectedGame = games[0].id
                 saveGames()
             }) {
                 Text("Delete game")

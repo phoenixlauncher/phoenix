@@ -9,7 +9,7 @@ import Foundation
 import IGDB_SWIFT_API
 
 struct FetchGameData {
-    let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
+    let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "9r56eak9gyfydlpnyz9fdwg1xkmx51")
     
     func fetchGamesFromName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
             // Create an APICalypse query to specify the search query and fields.

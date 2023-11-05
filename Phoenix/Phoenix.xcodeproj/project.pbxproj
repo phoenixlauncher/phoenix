@@ -664,9 +664,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Phoenix/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Phoenix;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023 Phoenix. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -695,9 +696,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Phoenix/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Phoenix;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023 Phoenix. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -832,7 +834,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/husnjak/IGDB-SWIFT-API";
 			requirement = {
-				branch = "apicalpse-query-parser";
+				branch = main;
 				kind = branch;
 			};
 		};
