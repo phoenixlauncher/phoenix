@@ -12,8 +12,10 @@ struct AppearanceSettingsView: View {
     
     var body: some View {
         Form {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 15) {
+                //detail settings
                 Defaults.Toggle("Adaptive Color UI", key: .accentColorUI)
+                Divider() //sidebar settings
                 Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
                 if !Defaults[.listIconsHidden] {
                     Slider(
@@ -29,9 +31,12 @@ struct AppearanceSettingsView: View {
                     }
                     .frame(maxWidth: 225)
                 }
-                Defaults.Toggle("Show text in category picker", key: .showPickerText)
                 Defaults.Toggle("Show amount of games in sidebar", key: .showSortByNumber)
+                Divider() //toolbar settings
+                Defaults.Toggle("Show animation of category picker", key: .showAnimationOfSortByIcon)
+                Defaults.Toggle("Show text in category picker", key: .showPickerText)
             }
+            .padding(20)
         }
     }
 }
