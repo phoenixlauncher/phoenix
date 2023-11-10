@@ -13,6 +13,8 @@ struct LargeToggleButton: View {
     var text: String
     var textColor: Color
     var bgColor: Color
+    
+    @Default(.gradientUI) var gradientUI
 
     var body: some View {
         Button(action: {
@@ -31,8 +33,22 @@ struct LargeToggleButton: View {
         }
         .buttonStyle(.plain)
         .frame(width: 175, height: 50)
-        .background(bgColor)
-        .cornerRadius(10)
+        .background(
+            Group {
+                if gradientUI {
+                    LinearGradient(
+                        colors: [bgColor,
+                                 bgColor.opacity(0.7)],
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                    .cornerRadius(10) // Adjust the corner radius value as needed
+                } else {
+                    (bgColor)
+                        .cornerRadius(10) // Adjust the corner radius value as needed
+                }
+            }
+        )
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
     }
 }

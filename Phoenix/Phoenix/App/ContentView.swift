@@ -25,6 +25,7 @@ struct ContentView: View {
     @Binding var isPlayingGame: Bool
     
     @Default(.showPickerText) var showPickerText
+    @Default(.showSidebarAddGameButton) var showSidebarAddGameButton
     
     @State var showSuccessToast: Bool = false
     @State var successToastText: String = "Success"
@@ -38,28 +39,30 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText)
+            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText, isAddingGame: $isAddingGame)
                 .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        // Add game button
-                        Button(
-                            action: {
-                                self.isAddingGame.toggle()
-                            },
-                            label: {
-                                Label("New Game", systemImage: "plus")
-                            }
-                        )
-                        .sheet(
-                            isPresented: $isAddingGame,
-                            onDismiss: {
-                                // Refresh game list
-                                self.refresh.toggle()
-                            },
-                            content: {
-                                GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
-                            }
-                        )
+                    if !showSidebarAddGameButton {
+                        ToolbarItem(placement: .primaryAction) {
+                            // Add game button
+                            Button(
+                                action: {
+                                    self.isAddingGame.toggle()
+                                },
+                                label: {
+                                    Label("New Game", systemImage: "plus")
+                                }
+                            )
+                            .sheet(
+                                isPresented: $isAddingGame,
+                                onDismiss: {
+                                    // Refresh game list
+                                    self.refresh.toggle()
+                                },
+                                content: {
+                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                                }
+                            )
+                        }
                     }
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {

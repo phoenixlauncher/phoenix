@@ -12,10 +12,14 @@ struct GameListView: View {
     @Binding var selectedGame: UUID
     @Binding var refresh: Bool
     @Binding var searchText: String
+    @Binding var isAddingGame: Bool
     @State private var timer: Timer?
     @State private var minWidth: CGFloat = 296
     
     @Default(.showSortByNumber) var showSortByNumber
+    @Default(.showSidebarAddGameButton) var showSidebarAddGameButton
+    @Default(.accentColorUI) var accentColorUI
+    @Default(.gradientUI) var gradientUI
     
     var body: some View {
         VStack {
@@ -83,10 +87,40 @@ struct GameListView: View {
                     }
                 }
             }
+            
+            if showSidebarAddGameButton {
+                Button(action: {
+                    isAddingGame.toggle()
+                }, label: {
+                    Image(systemName: "plus.app")
+                        .font(.system(size: 16))
+                        .foregroundColor(Color.white)
+                    Text("Add new game")
+                        .foregroundColor(Color.white)
+                        .font(.system(size: 15))
+                })
+                .buttonStyle(.plain)
+                .frame(minWidth: 200, maxWidth: .infinity, maxHeight: 35)
+                .background(
+                    Group {
+                        if gradientUI {
+                            LinearGradient(
+                                colors: [accentColorUI ? Color.accentColor : Color.blue,
+                                         accentColorUI ? Color.accentColor.opacity(0.7) : Color.blue.opacity(0.7)],
+                                startPoint: .bottom,
+                                endPoint: .top
+                            )
+                            .cornerRadius(7.5) // Adjust the corner radius value as needed
+                        } else {
+                            (accentColorUI ? Color.accentColor : Color.blue)
+                                .cornerRadius(7.5) // Adjust the corner radius value as needed
+                        }
+                    }
+                )
+                .padding()
+            }
         }
-        .frame(minWidth: minWidth)
-        .onAppear {
-        }
+        .frame(minWidth: Defaults[.showPickerText] ? 296 : 245)
     }
 }
 

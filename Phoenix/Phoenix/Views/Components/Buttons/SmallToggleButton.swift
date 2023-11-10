@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct SmallToggleButton: View {
     @Binding var toggle: Bool
     var symbol: String
     var textColor: Color
     var bgColor: Color
+    
+    @Default(.gradientUI) var gradientUI
 
     var body: some View {
         Button(action: {
@@ -26,7 +26,22 @@ struct SmallToggleButton: View {
         }
         .buttonStyle(.plain)
         .frame(width: 50, height: 50)
-        .background(bgColor)
+        .background(
+            Group {
+                if gradientUI {
+                    LinearGradient(
+                        colors: [bgColor,
+                                 bgColor.opacity(0.7)],
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                    .cornerRadius(10) // Adjust the corner radius value as needed
+                } else {
+                    (bgColor)
+                        .cornerRadius(10) // Adjust the corner radius value as needed
+                }
+            }
+        )
         .cornerRadius(10)
     }
 }
