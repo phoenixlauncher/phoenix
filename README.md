@@ -21,7 +21,7 @@
 
   It was designed to be small, fast, and not overly complicated.
 
-<img src="Readme Images/phoenix-dark.webp" alt="Screenshot of the app"/>
+<img src="Readme Images/phoenix-dark.png" alt="Screenshot of the app"/>
 
 ## Setup
 
