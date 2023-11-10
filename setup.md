@@ -5,7 +5,7 @@ To run this launcher, your Mac must be on at least macOS 13.0 (Ventura).
 Download the [latest release](https://github.com/PhoenixLauncher/Phoenix/releases) from the releases page and install the app like you would with any other. The first time you open the app, you will get an alert saying that your Mac can't check the app for malicious software. This is because I'm a broke university student who can't afford an Apple Developer Program membership. Open up the app anyways :)
 
 Wen you first open the app, it'll look something like this:
-<img src="Readme Images/phoenixplaceholder.webp" alt="Screenshot of the app"/>
+![Image of Phoenix with nothing configured](https://github.com/phoenixlauncher/phoenix/blob/main/Readme%20Images/phoenixplaceholder.webp)
 
 ## Adding a game
 
