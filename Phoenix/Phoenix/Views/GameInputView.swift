@@ -168,7 +168,9 @@ struct GameInputView: View {
                 HStack {
                     Spacer().frame(maxWidth: .infinity)
                     Spacer().frame(maxWidth: .infinity)
-                    HelpButton(url: "https://github.com/PhoenixLauncher/Phoenix/blob/main/setup.md")
+                    if let url = URL(string: "https://raw.githubusercontent.com/phoenixlauncher/phoenix/main/setup.md") {
+                        HelpButton(url: url)
+                    }
                 }
             }
         }

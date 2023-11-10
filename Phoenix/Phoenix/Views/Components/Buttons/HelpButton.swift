@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
+import MarkdownUI
 
 struct HelpButton: View {
+    @State var showHelp: Bool = false
+    @State var markdown: String = ""
     
-    @Environment(\.openURL) private var openURL
-    
-    var url: String
+    var url: URL
     
     var body: some View {
         Button (
             action: {
-                openURL(URL(string: "https://github.com/PhoenixLauncher/Phoenix/blob/main/setup.md")!)
+                fetchMarkdownContent(from: url)
+                showHelp.toggle()
             }, label: {
                 ZStack {
                     Circle()
@@ -30,5 +32,25 @@ struct HelpButton: View {
         )
         .buttonStyle(PlainButtonStyle())
         .frame(maxWidth: .infinity)
+        .sheet(isPresented: $showHelp, content: {
+            VStack {
+                ScrollView {
+                    Markdown(markdown)
+                        .markdownTheme(.docC)
+                }
+                .padding()
+            }
+            .frame(minWidth: 600, idealWidth: 800, maxWidth: .infinity, minHeight: 300, idealHeight: 600, maxHeight: .infinity)
+        })
+    }
+    
+    private func fetchMarkdownContent(from url: URL) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data, let markdownString = String(data: data, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    self.markdown = markdownString
+                }
+            }
+        }.resume()
     }
 }
