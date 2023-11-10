@@ -23,6 +23,7 @@ extension Defaults.Keys {
     //appearance
     static let accentColorUI = Key<Bool>("accentColorUI", default: true)
     static let gradientUI = Key<Bool>("gradientUI", default: true)
+    static let showStarRating = Key<Bool>("showStarRating", default: true)
     
     static let listIconsHidden = Key<Bool>("listIconsHidden", default: false)
     static let listIconSize = Key<Double>("listIconSize", default: 24.0)

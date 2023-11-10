@@ -74,8 +74,9 @@ struct GameInputView: View {
                         LargeTextBox(textBoxName: "Genres", input: $genreInput)
                         
                         ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameID: selectedGame)
-                        
-                        TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
+                        if !Defaults[.showStarRating] {
+                            TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
+                        }
                         
                         TextBox(textBoxName: "Developer", placeholder: "Enter game developer", input: $devInput)
                         

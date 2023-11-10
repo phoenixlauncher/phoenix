@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
-        "version" : "7.9.1"
+        "revision" : "277f1ab2c6664b19b4a412e32b094b201e2d5757",
+        "version" : "7.10.0"
       }
     },
     {
@@ -59,8 +59,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "87e4fcbac39912f9cdb9a9acf205cad60e1ca3bc",
-        "version" : "2.4.2"
+        "revision" : "1f07f4096e52f19b5e7abaa697b7fc592b7ff57c",
+        "version" : "2.5.1"
+      }
+    },
+    {
+      "identity" : "starratingviewswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jxhug/StarRatingViewSwiftUI.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a1d54fd7e238cda19c2d946ab5f83436578d2338"
       }
     },
     {
@@ -77,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "cf62cdaea48b77f1a631e5cb3aeda6047c2cba1d",
-        "version" : "1.23.0"
+        "revision" : "07f7f26ded8df9645c072f220378879c4642e063",
+        "version" : "1.25.1"
       }
     }
   ],

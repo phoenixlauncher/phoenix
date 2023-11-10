@@ -27,6 +27,7 @@
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
 		AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */ = {isa = PBXBuildFile; productRef = AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */; };
 		AD13CDE82AA542A300C6FD61 /* FetchGameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD13CDE72AA542A300C6FD61 /* FetchGameData.swift */; };
+		AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */; };
 		AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287C92AC007CC001673F5 /* TextBox.swift */; };
 		AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */; };
 		AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CD2AC00A1A001673F5 /* SlotInput.swift */; };
@@ -121,6 +122,7 @@
 				AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */,
 				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
 				CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */,
+				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
 				AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */,
 				ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */,
@@ -344,6 +346,7 @@
 				AD92C4F52AAEBAF40058E1EA /* Kingfisher */,
 				ADB63FFD2AF7F248006B39ED /* Defaults */,
 				AD8718FC2AFDE14D0008F144 /* MarkdownUI */,
+				AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -424,6 +427,7 @@
 				AD92C4F42AAEBAF40058E1EA /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */,
 				AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -842,6 +846,14 @@
 				kind = branch;
 			};
 		};
+		AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jxhug/StarRatingViewSwiftUI.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast.git";
@@ -889,6 +901,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD13CDE22AA53A3B00C6FD61 /* XCRemoteSwiftPackageReference "IGDB-SWIFT-API" */;
 			productName = "IGDB-SWIFT-API";
+		};
+		AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */;
+			productName = StarRatingViewSwiftUI;
 		};
 		AD5E91A52AAE33CB008097C4 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;

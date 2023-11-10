@@ -31,16 +31,30 @@ struct HiddenGamesSettingsView: View {
                                         .hidden()
                                 }
                                 Spacer()
-                                Button(action: {
-                                    if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                        games[idx].isHidden = false
+                                HStack {
+                                    Button(action: {
+                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                                            games[idx].isHidden = false
+                                        }
+                                        self.refresh.toggle()
+                                        saveGames()
+                                    }) {
+                                        Text("Show game")
                                     }
-                                    self.refresh.toggle()
-                                    saveGames()
-                                }) {
-                                    Text("Show game")
+                                    .accessibility(identifier: "Show Game")
+                                    Button(action: {
+                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                                            games.remove(at: idx)
+                                        }
+                                        saveGames()
+                                        self.refresh.toggle()
+                                        saveGames()
+                                    }) {
+                                        Image(systemName: "trash")
+                                    }
+                                    .accessibility(identifier: "Delete Game")
+
                                 }
-                                .accessibility(identifier: "Show Game")
                             }
                         }.scrollDisabled(true)
                     } else {

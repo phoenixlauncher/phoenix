@@ -16,6 +16,7 @@ struct AppearanceSettingsView: View {
                 //detail settings
                 Defaults.Toggle("Accent color UI", key: .accentColorUI)
                 Defaults.Toggle("Gradient UI", key: .gradientUI)
+                Defaults.Toggle("Show star rating", key: .showStarRating)
                 Divider() //sidebar settings
                 Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
                 if !Defaults[.listIconsHidden] {
