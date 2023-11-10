@@ -4,9 +4,6 @@ To run this launcher, your Mac must be on at least macOS 13.0 (Ventura).
 
 Download the [latest release](https://github.com/PhoenixLauncher/Phoenix/releases) from the releases page and install the app like you would with any other. The first time you open the app, you will get an alert saying that your Mac can't check the app for malicious software. This is because I'm a broke university student who can't afford an Apple Developer Program membership. Open up the app anyways :)
 
-Wen you first open the app, it'll look something like this:
-![Image of Phoenix with nothing configured](https://github.com/phoenixlauncher/phoenix/blob/main/Readme%20Images/phoenixplaceholder.png)
-
 ## Adding a game
 
 You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can.
@@ -108,15 +105,5 @@ The developer of the game. I know you love us, but we are not the devs. Don't pu
 The publisher of the game. Hopefully not Activision.
 ### Release Date:
 The date that the game was released.
-
- ## Final Result:
-
-It should look something like this after that:
-<img src="Readme Images/phoenix-edit.png" alt="Screenshot of the app"/>
-
-To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the pencil button next to the play button. 
-
-Once you have a game and it's launcher command is configured, you can hit the play button and it will open up!
-
 
 
