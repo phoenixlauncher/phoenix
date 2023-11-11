@@ -17,9 +17,14 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
-                Defaults.Toggle("Detect Steam games", key: .isGameDetectionEnabled)
+                Defaults.Toggle("Detect Steam games on launch", key: .isGameDetectionEnabled)
                 HStack {
-                    Text("Custom Steam folder")
+                    VStack(alignment: .leading) {
+                        Text("Custom Steam folder")
+                        Text("Selected folder: \(steamFolder.path)")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                    }
                     Spacer()
                     Button(
                         action: {
@@ -29,6 +34,7 @@ struct GeneralSettingsView: View {
                             Text("Browse")
                         }
                     )
+                    
                 }
                 .fileImporter(
                     isPresented: $steamIsImporting,
