@@ -127,7 +127,7 @@ struct GameInputView: View {
                                 launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
-                                if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
+                                if Defaults[.isMetaDataFetchingEnabled] {
                                     FetchGameData().fetchGamesFromName(name: game.name) { gamesWithName in
                                         fetchedGames = gamesWithName
                                         games.append(game)

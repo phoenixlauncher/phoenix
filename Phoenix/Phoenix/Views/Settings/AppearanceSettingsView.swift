@@ -6,35 +6,18 @@
 //
 
 import SwiftUI
-import AppKit
 
 struct AppearanceSettingsView: View {
-    
-    @AppStorage("accentColorUI")
-    private var accentColorUI: Bool = true
-    
-    @AppStorage("listIconsHidden")
-    private var listIconsHidden: Bool = false
-    
-    @AppStorage("listIconSize")
-    private var listIconSize: Double = 24
-    
-    @AppStorage("picker")
-    private var picker: Bool = true
-    
-    @AppStorage("sortByNumber")
-    private var sortByNumber: Bool = false
+    @Default(.listIconSize) var listIconSize
     
     var body: some View {
         Form {
-            VStack(alignment: .leading, spacing: 20) {
-                Toggle(isOn: $accentColorUI) {
-                    Text("Adaptive Color UI")
-                }
-                Toggle(isOn: $listIconsHidden) {
-                    Text("Hide icons in sidebar")
-                }
-                if !listIconsHidden {
+            VStack(alignment: .leading, spacing: 15) {
+                //detail settings
+                Defaults.Toggle("Adaptive Color UI", key: .accentColorUI)
+                Divider() //sidebar settings
+                Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
+                if !Defaults[.listIconsHidden] {
                     Slider(
                         value: $listIconSize,
                         in: 20...48,
@@ -48,13 +31,12 @@ struct AppearanceSettingsView: View {
                     }
                     .frame(maxWidth: 225)
                 }
-                Toggle(isOn: $picker) {
-                    Text("Show text in category picker")
-                }
-                Toggle(isOn: $sortByNumber) {
-                    Text("Show amount of games in sidebar")
-                }
+                Defaults.Toggle("Show amount of games in sidebar", key: .showSortByNumber)
+                Divider() //toolbar settings
+                Defaults.Toggle("Show animation of category picker", key: .showAnimationOfSortByIcon)
+                Defaults.Toggle("Show text in category picker", key: .showPickerText)
             }
+            .padding(20)
         }
     }
 }

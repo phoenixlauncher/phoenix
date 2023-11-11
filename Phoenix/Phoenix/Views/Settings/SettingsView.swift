@@ -24,6 +24,5 @@ struct SettingsView: View {
                     Label("Hidden Games", systemImage: "eye.slash.fill")
                 }
         }
-        .frame(width: 500, height: 300)
     }
 }

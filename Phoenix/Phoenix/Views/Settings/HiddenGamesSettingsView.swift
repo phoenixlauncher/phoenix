@@ -14,32 +14,39 @@ struct HiddenGamesSettingsView: View {
     @State private var timer: Timer?
     
     var body: some View {
-        VStack {
-            List(selection: $selectedGame) {
-                let hiddenGames = games.filter { $0.isHidden == true}
-                if !hiddenGames.isEmpty {
-                    ForEach(hiddenGames, id: \.id) { game in
-                        HStack {
-                            Image(nsImage: loadImageFromFile(filePath: game.icon))
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                            Text(game.name)
-                            Text(String(refresh))
-                                .hidden()
-                        }
-                        .contextMenu {
-                            Button(action: {
-                                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                    games[idx].isHidden = false
+        Form {
+            VStack {
+                List(selection: $selectedGame) {
+                    let hiddenGames = games.filter { $0.isHidden == true}
+                    if !hiddenGames.isEmpty {
+                        ForEach(hiddenGames, id: \.id) { game in
+                            HStack {
+                                HStack {
+                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
+                                        .resizable()
+                                        .frame(width: 15, height: 15)
+                                    Text(game.name)
+                                    Text(String(refresh))
+                                        .hidden()
                                 }
-                                self.refresh.toggle()
-                                saveGames()
-                            }) {
-                                Text("Show game")
+                                Spacer()
+                                Button(action: {
+                                    if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                                        games[idx].isHidden = false
+                                    }
+                                    self.refresh.toggle()
+                                    saveGames()
+                                }) {
+                                    Text("Show game")
+                                }
+                                .accessibility(identifier: "Show Game")
                             }
-                            .accessibility(identifier: "Show Game")
-                        }
-                    }.scrollDisabled(true)
+                        }.scrollDisabled(true)
+                    } else {
+                        Text("No hidden games found.")
+                            .fontWeight(.semibold)
+                            .font(.system(size: 20))
+                    }
                 }
             }
         }

@@ -13,8 +13,9 @@ struct GameListView: View {
     @Binding var refresh: Bool
     @Binding var searchText: String
     @State private var timer: Timer?
-    @State private var iconSize: Double = 24
     @State private var minWidth: CGFloat = 296
+    
+    @Default(.showSortByNumber) var showSortByNumber
     
     var body: some View {
         VStack {
@@ -23,9 +24,9 @@ struct GameListView: View {
                     $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == true
                 }
                 if !favoriteGames.isEmpty {
-                    Section(header: Text("Favorites \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(favoriteGames.count))" : "")")) {
+                    Section(header: Text("Favorites \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                            GameListItem(game: game, refresh: $refresh)
                         }
                     }
                 }
@@ -36,9 +37,9 @@ struct GameListView: View {
                             $0.platform == platform && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForPlatform.isEmpty {
-                            Section(header: Text("\(platform.displayName) \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(gamesForPlatform.count))" : "")")) {
+                            Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                    GameListItem(game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -49,9 +50,9 @@ struct GameListView: View {
                             $0.status == status && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForStatus.isEmpty {
-                            Section(header: Text("\(status.displayName) \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(gamesForStatus.count))" : "")")) {
+                            Section(header: Text("\(status.displayName) \(showSortByNumber ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                    GameListItem(game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -63,7 +64,7 @@ struct GameListView: View {
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
                             ForEach(gamesForName, id: \.id) { game in
-                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                GameListItem(game: game, refresh: $refresh)
                             }
                         }
                     }
@@ -73,9 +74,9 @@ struct GameListView: View {
                             $0.recency == recency && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForRecency.isEmpty {
-                            Section(header: Text("\(recency.displayName) \(UserDefaults.standard.bool(forKey: "sortByNumber") ? "(\(gamesForRecency.count))" : "")")) {
+                            Section(header: Text("\(recency.displayName) \(showSortByNumber ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                    GameListItem(game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -84,30 +85,7 @@ struct GameListView: View {
             }
         }
         .frame(minWidth: minWidth)
-        .onChange(of: UserDefaults.standard.double(forKey: "listIconSize")) { value in
-            iconSize = value
-        }
-        .onChange(of: UserDefaults.standard.bool(forKey: "listIconsHidden")) { value in
-            if value {
-                iconSize = 0
-            } else {
-                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-            }
-        }
         .onAppear {
-            if UserDefaults.standard.bool(forKey: "picker") {
-                minWidth = 296
-            } else {
-                minWidth = 196
-            }
-            if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
-                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-            }
-            if UserDefaults.standard.bool(forKey: "listIconsHidden") {
-                iconSize = 0
-            } else {
-                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-            }
         }
     }
 }
@@ -115,13 +93,16 @@ struct GameListView: View {
 struct GameListItem: View {
     @State var game: Game
     @Binding var refresh: Bool
-    @Binding var iconSize: Double
+    @State var iconSize: Double = Defaults[.listIconSize]
+    @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     
     var body: some View {
         HStack {
-            Image(nsImage: loadImageFromFile(filePath: game.icon))
-                .resizable()
-                .frame(width: iconSize, height: iconSize)
+            if !iconsHidden {
+                Image(nsImage: loadImageFromFile(filePath: game.icon))
+                    .resizable()
+                    .frame(width: iconSize, height: iconSize)
+            }
             Text(game.name)
         }
         .contextMenu {
@@ -152,6 +133,12 @@ struct GameListItem: View {
                 Text("Delete game")
             }
             .accessibility(identifier: "Delete Game")
+        }
+        .onChange(of: Defaults[.listIconSize]) { value in
+            iconSize = value
+        }
+        .onChange(of: Defaults[.listIconsHidden]) { value in
+            iconsHidden = value
         }
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()
     
-    enum SortBy: String, Codable, CaseIterable, Identifiable {
+    enum SortBy: String, Codable, CaseIterable, Identifiable, Defaults.Serializable {
         case platform, status, name, recency
 
         var id: SortBy { self }
@@ -53,8 +53,7 @@ struct PhoenixApp: App {
         }
     }
     
-    @AppStorage("sortBy")
-    var sortBy: SortBy = .platform
+    @State var sortBy: SortBy = Defaults[.sortBy]
     
     @State var isAddingGame: Bool = false
     @State var isEditingGame: Bool = false
