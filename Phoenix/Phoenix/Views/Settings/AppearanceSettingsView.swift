@@ -31,19 +31,20 @@ struct AppearanceSettingsView: View {
                 Toggle(isOn: $listIconsHidden) {
                     Text("Hide icons in sidebar")
                 }
-                Slider(
-                    value: $listIconSize,
-                    in: 20...48,
-                    step: 4
-                ) {
-                    Text("List icon size")
-                } minimumValueLabel: {
-                    Text("20 px")
-                } maximumValueLabel: {
-                    Text("48 px")
+                if !listIconsHidden {
+                    Slider(
+                        value: $listIconSize,
+                        in: 20...48,
+                        step: 4
+                    ) {
+                        Text("List icon size")
+                    } minimumValueLabel: {
+                        Text("20 px")
+                    } maximumValueLabel: {
+                        Text("48 px")
+                    }
+                    .frame(maxWidth: 225)
                 }
-                .frame(maxWidth: 225)
-                .opacity(listIconsHidden ? 0 : 1)
                 Toggle(isOn: $picker) {
                     Text("Show sidebar category picker")
                 }

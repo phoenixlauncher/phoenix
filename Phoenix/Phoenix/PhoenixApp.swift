@@ -76,7 +76,7 @@ struct PhoenixApp: App {
                         logger.write("[INFO]: Opened Application Support/Phoenix.")
                     }
                 }
-                .keyboardShortcut("o", modifiers: [.option, .shift])
+                .keyboardShortcut("o", modifiers: [.command, .shift])
             }
             CommandGroup(replacing: CommandGroupPlacement.sidebar) {
                 Button("Sort Sidebar by Platform", action: {

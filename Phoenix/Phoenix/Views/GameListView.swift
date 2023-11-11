@@ -85,39 +85,30 @@ struct GameListView: View {
                 .hidden()
         }
         .frame(minWidth: minWidth)
-        .onAppear {
-            if UserDefaults.standard.bool(forKey: "picker") {
+        .onChange(of: UserDefaults.standard.bool(forKey: "picker")) { value in
+            if value {
                 minWidth = 296
             } else {
                 minWidth = 196
             }
-            if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
-                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-            }
-            if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+        }
+        .onChange(of: UserDefaults.standard.double(forKey: "listIconSize")) { value in
+            iconSize = value
+        }
+        .onChange(of: UserDefaults.standard.bool(forKey: "listIconsHidden")) { value in
+            if value {
                 iconSize = 0
             } else {
                 iconSize = UserDefaults.standard.double(forKey: "listIconSize")
             }
+        }
+        .onAppear {
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                if UserDefaults.standard.bool(forKey: "picker") {
-                    minWidth = 296
-                } else {
-                    minWidth = 196
-                }
-                if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
-                    iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-                }
-                if UserDefaults.standard.bool(forKey: "listIconsHidden") {
-                    iconSize = 0
-                } else {
-                    iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-                }
-                refresh.toggle()
-                // This code will be executed every 1 second
+                $refresh.wrappedValue.toggle()
+                print("REFRESH")
             }
         }
         .onDisappear {
@@ -152,7 +143,7 @@ struct GameListItem: View {
             }) {
                 Text("Delete game")
             }
-            .accessibility(identifier: "Favorite Game")
+            .accessibility(identifier: "Delete Game")
         }
     }
     

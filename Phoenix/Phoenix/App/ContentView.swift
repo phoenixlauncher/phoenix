@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AlertToast
 
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
@@ -23,6 +24,7 @@ struct ContentView: View {
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
     @State var picker: Bool = true
+    @State var showSuccessToast: Bool = false
 
     // The stuff that is actually on screen
     var body: some View {
@@ -47,7 +49,7 @@ struct ContentView: View {
                                 self.refresh.toggle()
                             },
                             content: {
-                                AddGameView()
+                                GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast)
                             }
                         )
                     }
@@ -90,5 +92,8 @@ struct ContentView: View {
             }
         }
         .searchable(text: $searchText, placement: .sidebar)
+        .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
+            AlertToast(type: .complete(Color.green), title: "Game created.")
+        }
     }
 }

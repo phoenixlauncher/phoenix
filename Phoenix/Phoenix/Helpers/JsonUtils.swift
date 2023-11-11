@@ -31,10 +31,10 @@ func getPhoenixDirectory() -> URL? {
     return phoenixDirectory
 }
 
-///  Parses the appmanifest_<appid>.acf file and returns a dictionary of the key-value pairs.
+///  Parses the appmanifest_<steamID>.acf file and returns a dictionary of the key-value pairs.
 ///
 ///    - Parameters:
-///      - data: The data from the appmanifest_<appid>.acf file.
+///      - data: The data from the appmanifest_<steamID>.acf file.
 ///
 ///    - Returns: A dictionary of the key-value pairs.
 func parseACFFile(data: Data) -> [String: String] {
@@ -58,7 +58,7 @@ func parseACFFile(data: Data) -> [String: String] {
 }
 
 ///  Detects Steam games from application support directory
-///  using the appmanifest_<appid>.acf files and writes them to the games.json file.
+///  using the appmanifest_<steamID>.acf files and writes them to the games.json file.
 ///
 ///    - Parameters: None.
 ///
@@ -88,7 +88,7 @@ func detectSteamGamesAndWriteToJSON() {
     // Create a set of the current game names to prevent duplicates
     var gameNames = Set(currentGamesList.games.map { $0.name })
 
-    // Find the appmanifest_<appid>.acf files and parse data from them
+    // Find the appmanifest_<steamID>.acf files and parse data from them
     do {
         let steamAppsFiles = try fileManager.contentsOfDirectory(
             at: steamAppsDirectory, includingPropertiesForKeys: nil)
@@ -100,10 +100,11 @@ func detectSteamGamesAndWriteToJSON() {
                 let manifestFileData = try Data(contentsOf: manifestFilePath)
                 let manifestDictionary = parseACFFile(data: manifestFileData)
                 let name = manifestDictionary["name"]
-                let appID = manifestDictionary["appid"]
+                let steamID = manifestDictionary["steamID"]
                 let game = Game(
-                    appID: appID ?? "Unknown",
-                    launcher: "open steam://run/\(appID ?? "Unknown")",
+                    steamID: steamID ?? "Unknown",
+                    igdbID: "",
+                    launcher: "open steam://run/\(steamID ?? "Unknown")",
                     metadata: [
                         "rating": "",
                         "release_date": "",
@@ -167,8 +168,11 @@ func loadGamesFromJSON() -> GamesList {
             let key = keys.last!
             if key.stringValue == "isDeleted" {
                 return AnyCodingKey(stringValue: "is_deleted")!
+            } else if key.stringValue == "appID" {
+                return AnyCodingKey(stringValue: "steamID")!
+            } else {
+                return key
             }
-            return key
         }
         
         games = try decoder.decode(GamesList.self, from: jsonData)

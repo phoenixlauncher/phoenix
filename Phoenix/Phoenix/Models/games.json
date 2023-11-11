@@ -1,7 +1,8 @@
 {
   "games": [
     {
-      "appID": "",
+      "steamID": "",
+      "igdbID": "",
       "launcher": "",
       "metadata": {
         "rating": "",
