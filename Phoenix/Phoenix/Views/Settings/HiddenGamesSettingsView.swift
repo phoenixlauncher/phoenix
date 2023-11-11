@@ -12,6 +12,7 @@ struct HiddenGamesSettingsView: View {
     @State var selectedGame: String?
     @State var refresh: Bool = false
     @State private var timer: Timer?
+    @State var iconSize: Double = Defaults[.listIconSize]
     
     var body: some View {
         Form {
@@ -24,22 +25,36 @@ struct HiddenGamesSettingsView: View {
                                 HStack {
                                     Image(nsImage: loadImageFromFile(filePath: game.icon))
                                         .resizable()
-                                        .frame(width: 15, height: 15)
+                                        .frame(width: iconSize, height: iconSize)
                                     Text(game.name)
                                     Text(String(refresh))
                                         .hidden()
                                 }
                                 Spacer()
-                                Button(action: {
-                                    if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                        games[idx].isHidden = false
+                                HStack {
+                                    Button(action: {
+                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                                            games[idx].isHidden = false
+                                        }
+                                        self.refresh.toggle()
+                                        saveGames()
+                                    }) {
+                                        Text("Show game")
                                     }
-                                    self.refresh.toggle()
-                                    saveGames()
-                                }) {
-                                    Text("Show game")
+                                    .accessibility(identifier: "Show Game")
+                                    Button(action: {
+                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                                            games.remove(at: idx)
+                                        }
+                                        saveGames()
+                                        self.refresh.toggle()
+                                        saveGames()
+                                    }) {
+                                        Image(systemName: "trash")
+                                    }
+                                    .accessibility(identifier: "Delete Game")
+
                                 }
-                                .accessibility(identifier: "Show Game")
                             }
                         }.scrollDisabled(true)
                     } else {
@@ -56,6 +71,9 @@ struct HiddenGamesSettingsView: View {
                 self.refresh.toggle()
                 // This code will be executed every 1 second
             }
+        }
+        .onChange(of: Defaults[.listIconSize]) { value in
+            iconSize = value
         }
     }
 }

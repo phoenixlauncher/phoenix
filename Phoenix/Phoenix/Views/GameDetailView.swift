@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import AlertToast
+import StarRatingViewSwiftUI
 
 struct GameDetailView: View {
     
@@ -17,9 +18,12 @@ struct GameDetailView: View {
     @Binding var playingGame: Bool
     @State var showSuccessToast: Bool = false
     
+    @State var rating: Float = 0
+    
     @State private var timer: Timer?
     
     @Default(.accentColorUI) var accentColorUI
+    @Default(.showStarRating) var showStarRating
 
     var body: some View {
         ScrollView {
@@ -44,7 +48,7 @@ struct GameDetailView: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        HStack(alignment: .top) {
+                        HStack(alignment: .center) {
                             // play button
                             LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             .alert(
@@ -54,6 +58,11 @@ struct GameDetailView: View {
                             
                             // settings button
                             SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
+                            if showStarRating {
+                                StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
+                                  .frame(width: 300, height: 30)
+                                  .padding()
+                            }
                         } // hstack
                         .frame(alignment: .leading)
 
@@ -76,7 +85,9 @@ struct GameDetailView: View {
                                         GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
                                         GameMetadata(field: "Platform", value: game.platform.displayName)
                                         GameMetadata(field: "Status", value: game.status.displayName)
-                                        GameMetadata(field: "Rating", value: game.metadata["rating"] ?? "")
+                                        if !showStarRating {
+                                            GameMetadata(field: "Rating", value: game.metadata["rating"] ?? "")
+                                        }
                                         GameMetadata(field: "Genres", value: game.metadata["genre"] ?? "")
                                         GameMetadata(field: "Developer", value: game.metadata["developer"] ?? "")
                                         GameMetadata(field: "Publisher", value: game.metadata["publisher"] ?? "")
@@ -97,6 +108,10 @@ struct GameDetailView: View {
         }
         .navigationTitle(selectedGameName ?? "Phoenix")
         .onAppear {
+            let game = getGameFromID(id: selectedGame)
+            if let gameRating = game?.metadata["rating"] {
+                rating = Float(gameRating) ?? 0
+            }
             // Usage
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 // This code will be executed every 1 second
@@ -114,9 +129,19 @@ struct GameDetailView: View {
                 playGame(game: game)
             }
         }
+        .onChange(of: rating) { _ in
+            if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
+                 games[idx].metadata["rating"] = String(rating)
+            }
+            saveGames()
+        }
         .onChange(of: selectedGame) { _ in
             if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                 selectedGameName = games[idx].name
+            }
+            let game = getGameFromID(id: selectedGame)
+            if let gameRating = game?.metadata["rating"] {
+                rating = Float(gameRating) ?? 0
             }
         }
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {

@@ -74,8 +74,9 @@ struct GameInputView: View {
                         LargeTextBox(textBoxName: "Genres", input: $genreInput)
                         
                         ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameID: selectedGame)
-                        
-                        TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
+                        if !Defaults[.showStarRating] {
+                            TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
+                        }
                         
                         TextBox(textBoxName: "Developer", placeholder: "Enter game developer", input: $devInput)
                         
@@ -168,7 +169,9 @@ struct GameInputView: View {
                 HStack {
                     Spacer().frame(maxWidth: .infinity)
                     Spacer().frame(maxWidth: .infinity)
-                    HelpButton(url: "https://github.com/PhoenixLauncher/Phoenix/blob/main/setup.md")
+                    if let url = URL(string: "https://raw.githubusercontent.com/phoenixlauncher/phoenix/main/setup.md") {
+                        HelpButton(url: url)
+                    }
                 }
             }
         }

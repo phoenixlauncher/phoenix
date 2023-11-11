@@ -93,7 +93,7 @@ struct PhoenixApp: App {
                 }
                 .keyboardShortcut("o", modifiers: [.command, .shift])
             }
-            CommandGroup(replacing: CommandGroupPlacement.sidebar) {
+            CommandGroup(replacing: CommandGroupPlacement.sidebar) {                                                                               
                 Button("Sort Sidebar by Platform", action: {
                     sortBy = SortBy.platform
                 })

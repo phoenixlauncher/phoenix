@@ -14,7 +14,9 @@ struct AppearanceSettingsView: View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
                 //detail settings
-                Defaults.Toggle("Adaptive Color UI", key: .accentColorUI)
+                Defaults.Toggle("Accent color UI", key: .accentColorUI)
+                Defaults.Toggle("Gradient UI", key: .gradientUI)
+                Defaults.Toggle("Show star rating", key: .showStarRating)
                 Divider() //sidebar settings
                 Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
                 if !Defaults[.listIconsHidden] {
@@ -32,6 +34,7 @@ struct AppearanceSettingsView: View {
                     .frame(maxWidth: 225)
                 }
                 Defaults.Toggle("Show amount of games in sidebar", key: .showSortByNumber)
+                Defaults.Toggle("Show add game button in sidebar", key: .showSidebarAddGameButton)
                 Divider() //toolbar settings
                 Defaults.Toggle("Show animation of category picker", key: .showAnimationOfSortByIcon)
                 Defaults.Toggle("Show text in category picker", key: .showPickerText)

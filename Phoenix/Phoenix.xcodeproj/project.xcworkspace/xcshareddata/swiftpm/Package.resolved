@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/husnjak/IGDB-SWIFT-API",
       "state" : {
-        "branch" : "apicalpse-query-parser",
-        "revision" : "4c1db74952e4b4f75e1b78c66d1331fb0359cae7"
+        "branch" : "main",
+        "revision" : "2dc05394e6614a4ff9c181cee261829d0be3cb1d"
       }
     },
     {
@@ -41,8 +41,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
-        "version" : "7.9.1"
+        "revision" : "277f1ab2c6664b19b4a412e32b094b201e2d5757",
+        "version" : "7.10.0"
+      }
+    },
+    {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
+        "version" : "6.0.0"
       }
     },
     {
@@ -50,8 +59,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "87e4fcbac39912f9cdb9a9acf205cad60e1ca3bc",
-        "version" : "2.4.2"
+        "revision" : "1f07f4096e52f19b5e7abaa697b7fc592b7ff57c",
+        "version" : "2.5.1"
+      }
+    },
+    {
+      "identity" : "starratingviewswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jxhug/StarRatingViewSwiftUI.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a1d54fd7e238cda19c2d946ab5f83436578d2338"
+      }
+    },
+    {
+      "identity" : "swift-markdown-ui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/swift-markdown-ui.git",
+      "state" : {
+        "revision" : "5df8a4adedd6ae4eb2455ef60ff75183984daeb8",
+        "version" : "2.2.0"
       }
     },
     {
@@ -59,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "cf62cdaea48b77f1a631e5cb3aeda6047c2cba1d",
-        "version" : "1.23.0"
+        "revision" : "07f7f26ded8df9645c072f220378879c4642e063",
+        "version" : "1.25.1"
       }
     }
   ],

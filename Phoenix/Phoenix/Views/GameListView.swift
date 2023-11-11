@@ -12,10 +12,14 @@ struct GameListView: View {
     @Binding var selectedGame: UUID
     @Binding var refresh: Bool
     @Binding var searchText: String
+    @Binding var isAddingGame: Bool
     @State private var timer: Timer?
     @State private var minWidth: CGFloat = 296
     
     @Default(.showSortByNumber) var showSortByNumber
+    @Default(.showSidebarAddGameButton) var showSidebarAddGameButton
+    @Default(.accentColorUI) var accentColorUI
+    @Default(.gradientUI) var gradientUI
     
     var body: some View {
         VStack {
@@ -26,7 +30,7 @@ struct GameListView: View {
                 if !favoriteGames.isEmpty {
                     Section(header: Text("Favorites \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            GameListItem(game: game, refresh: $refresh)
+                            GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                         }
                     }
                 }
@@ -39,7 +43,7 @@ struct GameListView: View {
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh)
+                                    GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -52,7 +56,7 @@ struct GameListView: View {
                         if !gamesForStatus.isEmpty {
                             Section(header: Text("\(status.displayName) \(showSortByNumber ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh)
+                                    GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                                 }
                             }
                         }
@@ -64,7 +68,7 @@ struct GameListView: View {
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
                             ForEach(gamesForName, id: \.id) { game in
-                                GameListItem(game: game, refresh: $refresh)
+                                GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                             }
                         }
                     }
@@ -76,21 +80,52 @@ struct GameListView: View {
                         if !gamesForRecency.isEmpty {
                             Section(header: Text("\(recency.displayName) \(showSortByNumber ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    GameListItem(game: game, refresh: $refresh)
+                                    GameListItem(selectedGame: $selectedGame, game: game, refresh: $refresh)
                                 }
                             }
                         }
                     }
                 }
             }
+            
+            if showSidebarAddGameButton {
+                Button(action: {
+                    isAddingGame.toggle()
+                }, label: {
+                    Image(systemName: "plus.app")
+                        .font(.system(size: 16))
+                        .foregroundColor(Color.white)
+                    Text("Add new game")
+                        .foregroundColor(Color.white)
+                        .font(.system(size: 15))
+                })
+                .buttonStyle(.plain)
+                .frame(minWidth: 200, maxWidth: .infinity, maxHeight: 35)
+                .background(
+                    Group {
+                        if gradientUI {
+                            LinearGradient(
+                                colors: [accentColorUI ? Color.accentColor : Color.blue,
+                                         accentColorUI ? Color.accentColor.opacity(0.7) : Color.blue.opacity(0.7)],
+                                startPoint: .bottom,
+                                endPoint: .top
+                            )
+                            .cornerRadius(7.5) // Adjust the corner radius value as needed
+                        } else {
+                            (accentColorUI ? Color.accentColor : Color.blue)
+                                .cornerRadius(7.5) // Adjust the corner radius value as needed
+                        }
+                    }
+                )
+                .padding()
+            }
         }
-        .frame(minWidth: minWidth)
-        .onAppear {
-        }
+        .frame(minWidth: Defaults[.showPickerText] ? 296 : 245)
     }
 }
 
 struct GameListItem: View {
+    @Binding var selectedGame: UUID
     @State var game: Game
     @Binding var refresh: Bool
     @State var iconSize: Double = Defaults[.listIconSize]
@@ -119,6 +154,7 @@ struct GameListItem: View {
                 if let idx = games.firstIndex(where: { $0.id == game.id }) {
                     games[idx].isHidden = true
                 }
+                selectedGame = games[0].id
                 saveGames()
             }) {
                 Text("Hide game")
@@ -128,6 +164,7 @@ struct GameListItem: View {
                 if let idx = games.firstIndex(where: { $0.id == game.id }) {
                     games.remove(at: idx)
                 }
+                selectedGame = games[0].id
                 saveGames()
             }) {
                 Text("Delete game")
