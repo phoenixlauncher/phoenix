@@ -69,29 +69,22 @@ struct GameListView: View {
                 }
             case .recency:
                 ForEach(Recency.allCases, id: \.self) { recency in
-                    let gamesForRecency = games.filter {
-                        $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
-                    }
-                    if !gamesForRecency.isEmpty {
-                        Section(header: Text(recency.displayName)) {
-                            ForEach(gamesForRecency, id: \.name) { game in
-                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                        let gamesForRecency = games.filter {
+                            $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                        }
+                        if !gamesForRecency.isEmpty {
+                            Section(header: Text(recency.displayName)) {
+                                ForEach(gamesForRecency, id: \.name) { game in
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                }
                             }
                         }
                     }
                 }
-            }
             Text(String(refresh))
                 .hidden()
         }
         .frame(minWidth: minWidth)
-        .onChange(of: UserDefaults.standard.bool(forKey: "picker")) { value in
-            if value {
-                minWidth = 296
-            } else {
-                minWidth = 196
-            }
-        }
         .onChange(of: UserDefaults.standard.double(forKey: "listIconSize")) { value in
             iconSize = value
         }
@@ -103,12 +96,24 @@ struct GameListView: View {
             }
         }
         .onAppear {
+            if UserDefaults.standard.bool(forKey: "picker") {
+                minWidth = 296
+            } else {
+                minWidth = 196
+            }
+            if UserDefaults.standard.double(forKey: "listIconSize") != 0 {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
+            if UserDefaults.standard.bool(forKey: "listIconsHidden") {
+                iconSize = 0
+            } else {
+                iconSize = UserDefaults.standard.double(forKey: "listIconSize")
+            }
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 $refresh.wrappedValue.toggle()
-                print("REFRESH")
             }
         }
         .onDisappear {

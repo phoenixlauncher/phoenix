@@ -46,7 +46,7 @@ struct AppearanceSettingsView: View {
                     .frame(maxWidth: 225)
                 }
                 Toggle(isOn: $picker) {
-                    Text("Show sidebar category picker")
+                    Text("Show text in category picker")
                 }
             }
         }
