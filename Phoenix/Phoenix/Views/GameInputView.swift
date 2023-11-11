@@ -13,10 +13,13 @@ struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    @Binding var selectedGame: String?
+    @Binding var selectedGame: UUID
     
     @Binding var showSuccessToast: Bool
-    @State private var showErrorToast = false
+    @Binding var successToastText: String
+    
+    @Binding var showFailureToast: Bool
+    @Binding var failureToastText: String
     
     @State private var showChooseGameView: Bool = false
     
@@ -44,7 +47,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput)
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameID: selectedGame)
         
                     SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
@@ -70,7 +73,7 @@ struct GameInputView: View {
                         
                         LargeTextBox(textBoxName: "Genres", input: $genreInput)
                         
-                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameName: nameInput)
+                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameID: selectedGame)
                         
                         TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
                         
@@ -91,17 +94,26 @@ struct GameInputView: View {
                     if !isNewGame {
                         Button (
                             action: {
-                                let game: Game = .init(
+                                var game: Game = .init(
                                     launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                                 )
-                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
+                                    game.recency = games[idx].recency
+                                    game.isFavorite = games[idx].isFavorite
                                     games[idx] = game
                                     saveGames()
-                                    selectedGame = game.name
+                                    selectedGame = game.id
                                 }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
-                                    showChooseGameView.toggle()
+                                    selectedGame = game.id
+                                    if fetchedGames.count != 0 {
+                                        showChooseGameView.toggle()
+                                    } else {
+                                        failureToastText = "No games found."
+                                        showFailureToast = true
+                                        dismiss()
+                                    }
                                 }
                             },
                             label: {
@@ -120,19 +132,27 @@ struct GameInputView: View {
                                         fetchedGames = gamesWithName
                                         games.append(game)
                                         saveGames()
-                                        showChooseGameView.toggle()
+                                        selectedGame = game.id
+                                        if fetchedGames.count != 0 {
+                                            showChooseGameView.toggle()
+                                        } else {
+                                            failureToastText = "No games found."
+                                            showFailureToast = true
+                                            dismiss()
+                                        }
                                     }
                                 }
                             } else {
-                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                                     game.recency = games[idx].recency
-                                    game.is_favorite = games[idx].is_favorite
+                                    game.isFavorite = games[idx].isFavorite
                                     games[idx] = game
                                     saveGames()
-                                    selectedGame = game.name
+                                    selectedGame = game.id
                                     showSuccessToast = true
                                 } else {
-                                    showErrorToast = true
+                                    failureToastText = "Game couldn't be found."
+                                    showFailureToast = true
                                 }
                                 dismiss()
                             }
@@ -153,14 +173,14 @@ struct GameInputView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showErrorToast, tapToDismiss: true) { // Alert if game already exists with name
-            AlertToast(type: .error(Color.red), title: "Game couldn't be saved.")
-        }
-        .sheet(isPresented: $showChooseGameView, onDismiss: { dismiss() }, content: {
-            ChooseGameView(games: $fetchedGames, nameInput: nameInput)
+        .sheet(isPresented: $showChooseGameView, onDismiss: {
+            dismiss()
+            showSuccessToast = true
+        }, content: {
+            ChooseGameView(games: $fetchedGames, gameID: selectedGame)
         })
         .onAppear() {
-            if !isNewGame, let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+            if !isNewGame, let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                 let currentGame = games[idx]
                 nameInput = currentGame.name
                 iconOutput = currentGame.icon

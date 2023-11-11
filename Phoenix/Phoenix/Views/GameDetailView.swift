@@ -10,7 +10,8 @@ import AlertToast
 struct GameDetailView: View {
     
     @State var showingAlert: Bool = false
-    @Binding var selectedGame: String?
+    @Binding var selectedGame: UUID
+    @State var selectedGameName: String?
     @Binding var refresh: Bool
     @Binding var editingGame: Bool
     @Binding var playingGame: Bool
@@ -26,7 +27,7 @@ struct GameDetailView: View {
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
-                let game = getGameFromName(name: selectedGame ?? "")
+                let game = getGameFromID(id: selectedGame)
                 if let game = game {
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
@@ -50,29 +51,19 @@ struct GameDetailView: View {
                             // play button
                             LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: textPlayColor, bgColor: bgPlayColor)
                             .alert(
-                                "No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")",
+                                "No launcher configured. Please configure a launch command to run \(selectedGameName ?? "this game")",
                                 isPresented: $showingAlert
                             ) {}
                             
                             // settings button
                             SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: textSettingsColor, bgColor: bgSettingsColor)
-                            .sheet(
-                                isPresented: $editingGame,
-                                onDismiss: {
-                                    // Refresh game list
-                                    refresh.toggle()
-                                },
-                                content: {
-                                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast)
-                                }
-                            )
                         } // hstack
                         .frame(alignment: .leading)
 
                         HStack(alignment: .top) {
                             //description
                             VStack(alignment: .leading) {
-                                let game = getGameFromName(name: selectedGame ?? "")
+                                let game = getGameFromID(id: selectedGame)
                                 if game?.metadata["description"] != "" {
                                     TextCard(text: game?.metadata["description"] ?? "No game selected")
                                 } else {
@@ -82,7 +73,7 @@ struct GameDetailView: View {
                             .padding(.trailing, 7.5)
                             
                             SlotCard(content: {
-                                let game = getGameFromName(name: selectedGame ?? "")
+                                let game = getGameFromID(id: selectedGame)
                                 if let game = game {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
@@ -107,13 +98,10 @@ struct GameDetailView: View {
                 }
             }
         }
-        .navigationTitle(selectedGame ?? "Phoenix")
+        .navigationTitle(selectedGameName ?? "Phoenix")
         .onAppear {
             // Usage
             refreshGameDetailView()
-            if selectedGame == nil {
-                selectedGame = games[0].name
-            }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 // This code will be executed every 1 second
                 refresh.toggle()
@@ -125,7 +113,7 @@ struct GameDetailView: View {
             timer = nil
         }
         .onChange(of: playingGame) { _ in
-            let game = getGameFromName(name: selectedGame ?? "")
+            let game = getGameFromID(id: selectedGame)
             if let game = game {
                 playGame(game: game)
             }
@@ -133,8 +121,13 @@ struct GameDetailView: View {
         .onChange(of: UserDefaults.standard.bool(forKey: "accentColorUI")) { _ in
             refreshGameDetailView()
         }
+        .onChange(of: selectedGame) { _ in
+            if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
+                selectedGameName = games[idx].name
+            }
+        }
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: "Game Edited!")
+            AlertToast(type: .complete(Color.green), title: "Game saved!")
         }
     }
     
@@ -178,7 +171,7 @@ struct GameDetailView: View {
         let dateString = dateFormatter.string(from: currentDate)
 
         // Update the value of "last_played" in the game's metadata
-        if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+        if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
             games[idx].metadata["last_played"] = dateString
             games[idx].recency = .day
             saveGames()

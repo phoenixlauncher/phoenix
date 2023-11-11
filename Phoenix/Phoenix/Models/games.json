@@ -1,6 +1,7 @@
 {
   "games": [
     {
+      "id": "",
       "steamID": "",
       "igdbID": "",
       "launcher": "",
@@ -19,8 +20,8 @@
       "platform": "none",
       "status": "none",
       "recency": "never",
-      "is_deleted": false,
-      "is_favorite": false
+      "isHidden": false,
+      "isFavorite": false
     }
   ]
 }

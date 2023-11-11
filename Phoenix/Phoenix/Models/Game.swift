@@ -29,7 +29,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 }
 
 enum Status: String, Codable, CaseIterable, Identifiable {
-    case playing, shelved, backlog, beaten, completed, occasional, abandoned, none
+    case playing, shelved, occasional, backlog, beaten, completed, abandoned, none
 
     var id: Status { self }
 
@@ -37,10 +37,10 @@ enum Status: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .playing: return "Playing"
         case .shelved: return "Shelved"
+        case .occasional: return "Occasional"
         case .backlog: return "Backlog"
         case .beaten: return "Beaten"
         case .completed: return "Completed"
-        case .occasional: return "Occasional"
         case .abandoned: return "Abandoned"
         case .none: return "Other"
         }
@@ -66,6 +66,7 @@ enum Recency: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Game: Codable, Comparable, Hashable {
+    var id: UUID
     var steamID: String
     var igdbID: String
     var launcher: String
@@ -75,10 +76,11 @@ struct Game: Codable, Comparable, Hashable {
     var platform: Platform
     var status: Status
     var recency: Recency
-    var is_deleted: Bool
-    var is_favorite: Bool
+    var isHidden: Bool
+    var isFavorite: Bool
 
     init(
+        id: UUID = UUID(),
         steamID: String = "",
         igdbID: String = "",
         launcher: String = "",
@@ -97,9 +99,10 @@ struct Game: Codable, Comparable, Hashable {
         platform: Platform = Platform.none,
         status: Status = Status.none,
         recency: Recency = Recency.never,
-        is_deleted: Bool = false,
-        is_favorite: Bool = false
+        isHidden: Bool = false,
+        isFavorite: Bool = false
     ) {
+        self.id = id
         self.steamID = steamID
         self.igdbID = igdbID
         self.launcher = launcher
@@ -109,12 +112,12 @@ struct Game: Codable, Comparable, Hashable {
         self.platform = platform
         self.status = status
         self.recency = recency
-        self.is_deleted = is_deleted
-        self.is_favorite = is_favorite
+        self.isHidden = isHidden
+        self.isFavorite = isFavorite
     }
     
     enum CodingKeys: String, CodingKey {
-        case steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
+        case id, steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, isHidden, isFavorite
     }
         
     init(from decoder: Decoder) throws {
@@ -182,18 +185,25 @@ struct Game: Codable, Comparable, Hashable {
             self.igdbID = ""
         }
         
-        // Handle is_deleted conversion with default to ""
-        if let is_deleted = try? container.decode(Bool.self, forKey: .is_deleted) {
-            self.is_deleted = is_deleted
+        // Handle id conversion
+        if let id = try? container.decode(UUID.self, forKey: .id) {
+            self.id = id
         } else {
-            self.is_deleted = false
+            self.id = UUID()
         }
         
-        // Handle is_favorite conversion with default to ""
-        if let is_favorite = try? container.decode(Bool.self, forKey: .is_favorite) {
-            self.is_favorite = is_favorite
+        // Handle isHidden conversion with default to ""
+        if let isHidden = try? container.decode(Bool.self, forKey: .isHidden) {
+            self.isHidden = isHidden
         } else {
-            self.is_favorite = false
+            self.isHidden = false
+        }
+        
+        // Handle isFavorite conversion with default to ""
+        if let isFavorite = try? container.decode(Bool.self, forKey: .isFavorite) {
+            self.isFavorite = isFavorite
+        } else {
+            self.isFavorite = false
         }
     }
 

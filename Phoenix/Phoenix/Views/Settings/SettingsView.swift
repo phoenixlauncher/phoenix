@@ -21,9 +21,9 @@ struct SettingsView: View {
                 }
             HiddenGamesSettingsView()
                 .tabItem {
-                    Label("Deleted Games", systemImage: "eye.slash.fill")
+                    Label("Hidden Games", systemImage: "eye.slash.fill")
                 }
         }
-        .frame(width: 450, height: 250)
+        .frame(width: 500, height: 300)
     }
 }
