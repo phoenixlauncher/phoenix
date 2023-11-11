@@ -18,6 +18,7 @@ extension Defaults.Keys {
     
     //general
     static let isGameDetectionEnabled = Key<Bool>("isGameDetectionEnabled", default: false)
+    static let steamFolder = Key<URL>("steamFolder", default: URL(fileURLWithPath: "~/Library/Application Support/steam/steamapps"))
     static let isMetaDataFetchingEnabled = Key<Bool>("isMetaDataFetchingEnabled", default: true)
     
     //appearance
