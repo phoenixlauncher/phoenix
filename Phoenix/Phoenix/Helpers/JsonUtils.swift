@@ -73,7 +73,7 @@ func detectSteamGamesAndWriteToJSON() {
     /// Currently the app is not sandboxed, so the getApplicationSupportDirectory function will return the first option.
 
     let applicationSupportDirectory = getApplicationSupportDirectory()
-    let steamAppsDirectory = applicationSupportDirectory.appendingPathComponent("steam/steamapps")
+    let steamAppsDirectory = Defaults[.steamFolder]
     let currentGamesList: GamesList
     if fileManager.fileExists(atPath: steamAppsDirectory.path) {
         // Load the current list of games from the JSON file to prevent overwriting
