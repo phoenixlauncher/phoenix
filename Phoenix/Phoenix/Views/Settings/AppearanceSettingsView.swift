@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AppearanceSettingsView: View {
+    @Default(.listIconsHidden) var listIconsHidden
     @Default(.listIconSize) var listIconSize
     
     var body: some View {
@@ -19,7 +20,7 @@ struct AppearanceSettingsView: View {
                 Defaults.Toggle("Show star rating", key: .showStarRating)
                 Divider() //sidebar settings
                 Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
-                if !Defaults[.listIconsHidden] {
+                if !listIconsHidden {
                     Slider(
                         value: $listIconSize,
                         in: 20...48,

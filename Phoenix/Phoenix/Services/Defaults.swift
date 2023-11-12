@@ -17,9 +17,12 @@ extension Defaults.Keys {
     static let sortBy = Key<PhoenixApp.SortBy>("sortBy", default: .platform)
     
     //general
-    static let isGameDetectionEnabled = Key<Bool>("isGameDetectionEnabled", default: false)
-    static let isCrossOverDetectionEnabled = Key<Bool>("isCrossOverDetectionEnabled", default: false)
-    static let steamFolder = Key<URL>("steamFolder", default: URL(fileURLWithPath: "~/Library/Application Support/steam/steamapps"))
+    static let steamDetection = Key<Bool>("steamDetection", default: false)
+    static let steamFolder = Key<URL>("steamFolder", default: getApplicationSupportDirectory().appendingPathComponent("steam/steamapps"))
+    
+    static let crossOverDetection = Key<Bool>("crossOverDetection", default: false)
+    static let crossOverFolder = Key<URL>("crossOverFolder", default: URL(fileURLWithPath: "~/Applications/CrossOver"))
+    
     static let isMetaDataFetchingEnabled = Key<Bool>("isMetaDataFetchingEnabled", default: true)
     
     //appearance

@@ -93,5 +93,6 @@ iOSInjectionProject/
 *.pbxproj
 .vscode
 
-# Shock9616's .nvim directory
-.nvim
+# Shock9616's .nvim stuff
+*.nvim
+profile.log

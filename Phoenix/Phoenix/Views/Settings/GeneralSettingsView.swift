@@ -11,61 +11,35 @@ struct GeneralSettingsView: View {
     
     @State var steamIsImporting: Bool = false
     @State var invalidFolder: Bool = false
+    @State var lastPathComponent: String?
     
+    @Default(.steamDetection) var steamDetection
     @Default(.steamFolder) var steamFolder
+    @Default(.crossOverDetection) var crossOverDetection
+    @Default(.crossOverFolder) var crossOverFolder
     
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
-                Defaults.Toggle("Detect Steam games on launch", key: .isGameDetectionEnabled)
-                Defaults.Toggle("Detect CrossOver games on launch", key: .isCrossOverDetectionEnabled)
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Custom Steam folder")
-                        Text("Selected folder: \(steamFolder.path)")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
-                    }
-                    Spacer()
-                    Button(
-                        action: {
-                            steamIsImporting = true
-                        },
-                        label: {
-                            Text("Browse")
-                        }
-                    )
-                    
+                Defaults.Toggle("Detect Steam games on launch", key: .steamDetection)
+                if steamDetection {
+                    FolderImportButton(type: "Steam", folder: $steamFolder, lastPathComponent: $lastPathComponent, endPath: "'steamapps'", invalidFolder: $invalidFolder)
                 }
-                .fileImporter(
-                    isPresented: $steamIsImporting,
-                    allowedContentTypes: [.folder],
-                    allowsMultipleSelection: false
-                ) { result in
-                    do {
-                        let selectedFolder: URL = try result.get().first ?? URL(fileURLWithPath: "")
-                        if selectedFolder.lastPathComponent != "steamapps" {
-                            invalidFolder = true
-                        } else {
-                            steamFolder = selectedFolder
-                        }
-                    } catch {
-                        // Handle the error, e.g., print an error message or take appropriate action.
-                        logger.write("Error selecting folder: \(error)")
-                    }
+                Defaults.Toggle("Detect CrossOver games on launch", key: .crossOverDetection)
+                if crossOverDetection {
+                    FolderImportButton(type: "CrossOver", folder: $crossOverFolder, lastPathComponent: $lastPathComponent, endPath: nil, invalidFolder: $invalidFolder)
                 }
                 Divider()
                 Defaults.Toggle("Fetch game metadata", key: .isMetaDataFetchingEnabled)
             }
-            .padding(20)
             .alert("Invalid folder", isPresented: $invalidFolder) {
                 VStack {
-                    Button("OK", role: .cancel) {}
+                    Button("Close", role: .cancel) {}
                 }
             } message: {
-                Text("The folder path must end with 'steamapps'")
+                Text("The folder path must end with \(lastPathComponent ?? "")")
             }
-
+            .padding(20)
         }
     }
 }

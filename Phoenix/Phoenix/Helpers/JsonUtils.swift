@@ -158,8 +158,8 @@ func detectSteamGamesAndWriteToJSON() {
 func detectCrossOverGamesAndWriteToJSON() {
     let fileManager = FileManager.default
     
-    // Get ~/Applications/CrossOver
-    let crossoverDirectory = fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications/CrossOver")
+    // Get ~/Applications/CrossOver or the user's custom directory
+    let crossoverDirectory = Defaults[.crossOverFolder]
     let currentGamesList: GamesList
     if fileManager.fileExists(atPath: crossoverDirectory.path) {
         // Load the current list of games from the JSON file to prevent overwriting
@@ -181,7 +181,7 @@ func detectCrossOverGamesAndWriteToJSON() {
             if fileName.hasSuffix(".app") {
                 let name = String(fileName.dropLast(4))
                 let game = Game(
-                    launcher: "open \(fileURL.absoluteString)",
+                    launcher: "open \"\(fileURL.absoluteString)\"",
                     metadata: [
                         "rating": "",
                         "release_data": "",
@@ -194,8 +194,8 @@ func detectCrossOverGamesAndWriteToJSON() {
                     ],
                     icon: "",
                     name: name,
-                    platform: Platform.pc,
-                    status: Status.none,
+                    platform: .pc,
+                    status: .none,
                     isFavorite: false
                 )
                 // Check if the game is already in the list
