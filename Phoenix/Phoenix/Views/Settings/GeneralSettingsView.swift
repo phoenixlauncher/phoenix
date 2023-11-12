@@ -18,6 +18,7 @@ struct GeneralSettingsView: View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
                 Defaults.Toggle("Detect Steam games on launch", key: .isGameDetectionEnabled)
+                Defaults.Toggle("Detect CrossOver games on launch", key: .isCrossOverDetectionEnabled)
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Custom Steam folder")

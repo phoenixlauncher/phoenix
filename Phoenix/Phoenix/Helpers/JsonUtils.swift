@@ -155,7 +155,7 @@ func detectSteamGamesAndWriteToJSON() {
 ///    - Parameters: None
 ///
 ///    - Returns: Void
-func detectCrossoverGamesAndWriteToJSON() {
+func detectCrossOverGamesAndWriteToJSON() {
     let fileManager = FileManager.default
     
     // Get ~/Applications/CrossOver

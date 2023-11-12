@@ -248,7 +248,9 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
 func loadGames() -> GamesList {
     if Defaults[.isGameDetectionEnabled] {
         detectSteamGamesAndWriteToJSON()
-        detectCrossoverGamesAndWriteToJSON()
+    }
+    if Defaults[.isCrossOverDetectionEnabled] {
+        detectCrossOverGamesAndWriteToJSON()
     }
     let res = loadGamesFromJSON()
     return res

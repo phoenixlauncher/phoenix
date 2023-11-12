@@ -92,3 +92,6 @@ fastlane/test_output
 iOSInjectionProject/
 *.pbxproj
 .vscode
+
+# Shock9616's .nvim directory
+.nvim
