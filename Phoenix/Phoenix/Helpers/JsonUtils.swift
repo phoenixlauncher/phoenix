@@ -149,6 +149,80 @@ func detectSteamGamesAndWriteToJSON() {
     }
 }
 
+/// Detects Crossover games from the user Applications directory
+/// And writes them to the games.json file
+///
+///    - Parameters: None
+///
+///    - Returns: Void
+func detectCrossOverGamesAndWriteToJSON() {
+    let fileManager = FileManager.default
+    
+    // Get ~/Applications/CrossOver or the user's custom directory
+    let crossoverDirectory = Defaults[.crossOverFolder]
+    let currentGamesList: GamesList
+    if fileManager.fileExists(atPath: crossoverDirectory.path) {
+        // Load the current list of games from the JSON file to prevent overwriting
+        currentGamesList = loadGamesFromJSON()
+    } else {
+        // The crossoverDirectory does not exist, so we can't continue with the rest of the function
+        logger.write("[INFO]: The crossoverDirectory does not exist at \(crossoverDirectory.path)")
+        logger.write("[INFO]: Skipping the addition of CrossOver games to the game library.")
+        return
+    }
+    
+    var gameNames = Set(currentGamesList.games.map { $0.name })
+    
+    var games = currentGamesList.games
+    
+    if let enumerator = fileManager.enumerator(at: crossoverDirectory, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+        for case let fileURL as URL in enumerator {
+            let fileName = fileURL.lastPathComponent
+            if fileName.hasSuffix(".app") {
+                let name = String(fileName.dropLast(4))
+                let game = Game(
+                    launcher: "open \"\(fileURL.absoluteString)\"",
+                    metadata: [
+                        "rating": "",
+                        "release_data": "",
+                        "last_played": "",
+                        "developer": "",
+                        "header_img": "",
+                        "description": "",
+                        "genre": "",
+                        "publisher": "",
+                    ],
+                    icon: "",
+                    name: name,
+                    platform: .pc,
+                    status: .none,
+                    isFavorite: false
+                )
+                // Check if the game is already in the list
+                if !gameNames.contains(game.name) {
+                    logger.write(
+                        "[INFO]: New CrossOver game - '\(game.name)' was detected. Adding to games list."
+                    )
+                    gameNames.insert(game.name)
+                    games.append(game)
+                } else {
+                    logger.write(
+                        "[INFO]: CrossOver game - '\(game.name)' already exists. not overwriting games.json."
+                    )
+                }
+            }
+        }
+        let gamesList = GamesList(games: games)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        if let encoded = try? encoder.encode(gamesList) {
+            if let jsonString = String(data: encoded, encoding: .utf8) {
+                writeGamesToJSON(data: jsonString)
+            }
+        }
+    }
+}
+
 /// Loads the games data from a JSON file named "games.json" in the "Phoenix"
 /// directory under the application support directory.
 ///
