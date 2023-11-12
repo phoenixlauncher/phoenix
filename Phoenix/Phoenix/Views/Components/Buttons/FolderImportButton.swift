@@ -43,13 +43,11 @@ struct FolderImportButton: View {
         ) { result in
             do {
                 let selectedFolder: URL = try result.get().first ?? URL(fileURLWithPath: "")
-                if let endPath = endPath {
-                    if selectedFolder.lastPathComponent != endPath {
-                        lastPathComponent = endPath
-                        invalidFolder = true
-                    } else {
-                        folder = selectedFolder
-                    }
+                if let endPath = endPath, selectedFolder.lastPathComponent != endPath {
+                    lastPathComponent = endPath
+                    invalidFolder = true
+                } else {
+                    folder = selectedFolder
                 }
             } catch {
                 // Handle the error, e.g., print an error message or take appropriate action.
