@@ -1,10 +1,10 @@
 ![Phoenix's Banner](/Images/phoenix-banner-small.jpg)
 
-<p align="center">
-    <img alt="Discord" src="https://img.shields.io/discord/1059670439917527140?style=for-the-badge&logo=discord">
-    <img alt="macOS 13+" src="https://img.shields.io/badge/macos-13%2B-brightgreen?style=for-the-badge">
+<div align="center">
 
-</p>
+  [![Discord](https://img.shields.io/discord/1059670439917527140?style=for-the-badge&logo=discord)](https://discord.gg/ZJdbcafA9Q)
+  ![macOS Version](https://img.shields.io/badge/macos-13%2B-brightgreen?style=for-the-badge)
+</div>
 
 # Phoenix
 
