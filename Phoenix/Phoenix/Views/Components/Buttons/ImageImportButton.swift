@@ -16,19 +16,22 @@ struct ImageImportButton: View {
     
     var body: some View {
         HStack {
-            Text(type)
-                .frame(width: 70, alignment: .leading)
-                .offset(x: -15)
+            VStack(alignment: .leading) {
+                Text(type)
+                Text("Selected image: \(output)")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            }
+            Spacer()
             Button(
                 action: {
                     isImporting = true
                 },
                 label: {
                     Text("Browse")
-                })
-            Text(output)
+                }
+            )
         }
-        .padding()
         .fileImporter(
             isPresented: $isImporting,
             allowedContentTypes: [.image],
@@ -39,12 +42,13 @@ struct ImageImportButton: View {
                     saveIconToFile(iconData: data, gameID: gameID) { image in
                         output = image
                     }
-                } else if type == "Header" {
-                    saveHeaderToFile(headerData: data, gameID: gameID) { image in
+                } else {
+                    saveImageToFile(data: data, gameID: gameID, type: type) { image in
                         output = image
                     }
                 }
             }
         }
+        .padding()
     }
 }

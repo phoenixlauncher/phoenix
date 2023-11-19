@@ -22,8 +22,8 @@ struct SlotInput<Content>: View where Content: View {
                 .frame(width: 70, alignment: .leading)
             content()
             .labelsHidden()
-            .padding()
             .accessibility(label: Text("\(contentName) Input"))
         }
+        .padding()
     }
 }

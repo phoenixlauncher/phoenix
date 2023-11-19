@@ -90,6 +90,7 @@ struct Game: Codable, Comparable, Hashable {
             "last_played": "",
             "developer": "",
             "header_img": "",
+            "cover": "",
             "description": "",
             "genre": "",
             "publisher": "",

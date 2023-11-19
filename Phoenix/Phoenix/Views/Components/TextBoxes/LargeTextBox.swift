@@ -21,9 +21,9 @@ struct LargeTextBox: View {
                 .border(Color.gray.opacity(0.1), width: 1)
                 .background(Color.gray.opacity(0.05))
                 .frame(minHeight: 50)
-                .padding()
                 .accessibility(label: Text("\(textBoxName) Input"))
         }
+        .padding()
     }
 }
 

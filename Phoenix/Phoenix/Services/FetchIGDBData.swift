@@ -1,5 +1,5 @@
 //
-//  FetchGameData.swift
+//  FetchIGDBData.swift
 //  Phoenix
 //
 //  Created by James Hughes on 9/2/23.
@@ -8,7 +8,7 @@
 import Foundation
 import IGDB_SWIFT_API
 
-struct FetchGameData {
+struct FetchIGDBData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "z035nnaxodjbdkzpjetr3ytol9d363")
     
     func fetchGamesFromName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
@@ -194,7 +194,7 @@ struct FetchGameData {
         if let url = URL(string: imageURL) {	
             URLSession.shared.dataTask(with: url) { headerData, response, error in
                 if let headerData = headerData {
-                    saveHeaderToFile(headerData: headerData, gameID: gameID) { headerImage in
+                    saveImageToFile(data: headerData, gameID: gameID, type: "header") { headerImage in
                         completion(headerImage)
                     }
                 }
@@ -208,7 +208,7 @@ struct FetchGameData {
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
                     if let headerData = headerData {
-                        saveHeaderToFile(headerData: headerData, gameID: gameID) { headerImage in
+                        saveImageToFile(data: headerData, gameID: gameID, type: "header") { headerImage in
                             completion(headerImage)
                         }
                     }

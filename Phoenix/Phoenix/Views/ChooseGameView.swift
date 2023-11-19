@@ -12,27 +12,33 @@ import Kingfisher
 struct ChooseGameView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var games: [Proto_Game]
-    @State var selectedGame: Proto_Game?
+    @Binding var games: [SupabaseGame]
+    @State var selectedGame: SupabaseGame?
     var gameID: UUID
     
     var body: some View {
         VStack {
             List(selection: $selectedGame) {
-                ForEach(games.sorted { $0.id < $1.id }, id: \.self) { game in
+                ForEach(games.sorted { $0.igdb_id < $1.igdb_id }, id: \.self) { game in
                     HStack(spacing: 20) {
-                        KFImage(URL(string: imageBuilder(imageID: game.cover.imageID, size: .COVER_BIG, imageType: .JPEG)))
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 150)
-                            .cornerRadius(5)
+                        if let cover = game.cover {
+                            KFImage(URL(string: cover))
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 150)
+                                .cornerRadius(5)
+                        }
                         VStack {
-                            Text(game.name) // UNCENTER ThIS TEXT
-                                .font(.system(size: 20))
-                                .fontWeight(.semibold)
-                            Text(game.summary) //SHORTEN THIS TEXT TO 2 LINES
-                                .font(.caption)
-                                .lineLimit(3)
+                            if let name = game.name {
+                                Text(name) // UNCENTER ThIS TEXT
+                                    .font(.system(size: 20))
+                                    .fontWeight(.semibold)
+                            }
+                            if let description = game.description {
+                                Text(description) //SHORTEN THIS TEXT TO 2 LINES
+                                    .font(.caption)
+                                    .lineLimit(3)
+                            }
                         }
                     }
                 }
@@ -59,9 +65,9 @@ struct ChooseGameView: View {
         }
     }
     
-    func chooseGame(selectedGame: Proto_Game) {
+    func chooseGame(selectedGame: SupabaseGame) {
         print("converting to igdb")
-        FetchGameData().convertIGDBGame(igdbGame: selectedGame, gameID: gameID)
+        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, gameID: gameID)
     }
 }
 

@@ -72,7 +72,6 @@ func detectSteamGamesAndWriteToJSON() {
     /// Or when App Sandbox is enabled ~/Library/Containers/com.Shock9616.Phoenix/Data/Library/Application Support/Steam/steamapps
     /// Currently the app is not sandboxed, so the getApplicationSupportDirectory function will return the first option.
 
-    let applicationSupportDirectory = getApplicationSupportDirectory()
     let steamAppsDirectory = Defaults[.steamFolder]
     let currentGamesList: GamesList
     if fileManager.fileExists(atPath: steamAppsDirectory.path) {
