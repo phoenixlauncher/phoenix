@@ -22,6 +22,7 @@ struct GameInputView: View {
     @Binding var failureToastText: String
     
     @State private var showChooseGameView: Bool = false
+    @State var chooseGameViewDone = false
     
     @State var fetchedGames: [SupabaseGame] = []
     
@@ -115,6 +116,7 @@ struct GameInputView: View {
                                         fetchedGames = result
                                         saveGames()
                                         if fetchedGames.count != 0 {
+                                            successToastText  = "Game saved!"
                                             showChooseGameView.toggle()
                                         } else {
                                             failureToastText = "No games found."
@@ -144,6 +146,7 @@ struct GameInputView: View {
                                             saveGames()
                                             selectedGame = game.id
                                             if fetchedGames.count != 0 {
+                                                successToastText = "Game created!"
                                                 showChooseGameView.toggle()
                                             } else {
                                                 failureToastText = "No games found."
@@ -159,6 +162,7 @@ struct GameInputView: View {
                                     game.isFavorite = games[idx].isFavorite
                                     games[idx] = game
                                     saveGames()
+                                    successToastText = "Game saved!"
                                     showSuccessToast = true
                                 } else {
                                     failureToastText = "Game couldn't be found."
@@ -187,10 +191,12 @@ struct GameInputView: View {
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
         .sheet(isPresented: $showChooseGameView, onDismiss: {
-            dismiss()
-            showSuccessToast = true
+            if chooseGameViewDone {
+                dismiss()
+                showSuccessToast = true
+            }
         }, content: {
-            ChooseGameView(games: $fetchedGames, gameID: selectedGame)
+            ChooseGameView(games: $fetchedGames, gameID: selectedGame, done: $chooseGameViewDone)
         })
         .onAppear() {
             if !isNewGame, let idx = games.firstIndex(where: { $0.id == selectedGame }) {

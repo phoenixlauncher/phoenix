@@ -15,7 +15,8 @@ struct SupabaseGame: Decodable, Hashable {
     var developer: String?
     var header_img: String?
     var cover: String?
-    var description: String?
+    var storyline: String?
+    var summary: String?
     var genre: String?
     var publisher: String?
     var icon: String?
@@ -33,7 +34,7 @@ struct FetchSupabaseData {
                 let fetchedGames: [SupabaseGame] = try await supabase.database
                     .from("igdb_games")
                     .select()
-                    .eq("name", value: name)
+                    .ilike("name", value: "%\(name)%")
                     .execute()
                     .value
                 
@@ -71,8 +72,12 @@ struct FetchSupabaseData {
             )
             
             fetchedGame.igdbID = String(supabaseGame.igdb_id)
-    
-            fetchedGame.metadata["description"] = supabaseGame.description ?? ""
+            
+            if let storyline = supabaseGame.storyline, storyline.count < 1500, storyline != "" {
+                fetchedGame.metadata["description"] = storyline
+            } else {
+                fetchedGame.metadata["description"] = supabaseGame.summary ?? ""
+            }
     
             fetchedGame.metadata["genre"] = supabaseGame.genre?.replacingOccurrences(of: ", ", with: "\n")
     

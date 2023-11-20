@@ -16,6 +16,8 @@ struct ChooseGameView: View {
     @State var selectedGame: SupabaseGame?
     var gameID: UUID
     
+    @Binding var done: Bool
+    
     var body: some View {
         VStack {
             List(selection: $selectedGame) {
@@ -34,8 +36,8 @@ struct ChooseGameView: View {
                                     .font(.system(size: 20))
                                     .fontWeight(.semibold)
                             }
-                            if let description = game.description {
-                                Text(description) //SHORTEN THIS TEXT TO 2 LINES
+                            if let summary = game.summary {
+                                Text(summary) //SHORTEN THIS TEXT TO 2 LINES
                                     .font(.caption)
                                     .lineLimit(3)
                             }
@@ -66,7 +68,7 @@ struct ChooseGameView: View {
     }
     
     func chooseGame(selectedGame: SupabaseGame) {
-        print("converting to igdb")
+        done = true
         FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, gameID: gameID)
     }
 }
