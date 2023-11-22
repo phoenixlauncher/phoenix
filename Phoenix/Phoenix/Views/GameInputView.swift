@@ -137,13 +137,12 @@ struct GameInputView: View {
                                 id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
+                                games.append(game)
+                                saveGames()
                                 if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
                                         await FetchSupabaseData().fetchGamesFromName(name: game.name) { result in
                                             fetchedGames = result
-                                            games.append(game)
-                                            saveGames()
-                                            selectedGame = game.id
                                             if fetchedGames.count != 0 {
                                                 successToastText = "Game created!"
                                                 showChooseGameView.toggle()
@@ -167,7 +166,6 @@ struct GameInputView: View {
                                     failureToastText = "Game couldn't be found."
                                     showFailureToast = true
                                 }
-                                selectedGame = game.id
                                 dismiss()
                             }
                         },

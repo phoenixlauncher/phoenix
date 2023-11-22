@@ -19,7 +19,7 @@ final class PhoenixUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testAddName() throws {
+    func testAddGame() throws {
         // Launch the app
         let app = XCUIApplication()
         app.launch()
@@ -32,7 +32,7 @@ final class PhoenixUITests: XCTestCase {
         }
 
         // Enter "nameForTestingUI" into the name field
-        let nameField = app.textFields["NameInput"]
+        let nameField = app.textFields["Name Input"]
         nameField.click()
         nameField.typeText("nameForTestingUI")
 
@@ -40,17 +40,16 @@ final class PhoenixUITests: XCTestCase {
         let saveButton = app.buttons["Save Game"]
         saveButton.click()
 
-        // Quit the app and relaunch it
         app.terminate()
         app.launch()
 
         // Check if "nameForTestingUI" is still there (it should be)
-        let nameLabel = app.staticTexts["nameForTestingUI"]
+        let nameLabel = app.staticTexts["nameForTestingUI"].firstMatch
         XCTAssertTrue(nameLabel.exists)
 
         // Delete the game by right clicking on it and clicking "Delete game button"
         nameLabel.rightClick()
-        app.outlines.menuItems["Delete Game"].click() // Delete Game is an accessibility identifier not the actual text
+        app.outlines.menuItems["Delete game"].click() // Delete Game is an accessibility identifier not the actual text
         // Quit the app and relaunch it
         app.terminate()
         app.launch()
@@ -59,16 +58,8 @@ final class PhoenixUITests: XCTestCase {
         XCTAssertFalse(nameLabel.exists)
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
     func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
+        if #available(macOS 13, *) {
             // This measures how long it takes to launch your application.
             measure(metrics: [XCTApplicationLaunchMetric()]) {
                 XCUIApplication().launch()

@@ -18,7 +18,7 @@ struct TextBox: View {
             Text(textBoxName)
                 .frame(width: 70, alignment: .leading)
             TextField(placeholder, text: $input)
-                .accessibility(label: Text("NameInput"))
+                .accessibility(label: Text("\(textBoxName) Input"))
         }
         .padding()
     }
