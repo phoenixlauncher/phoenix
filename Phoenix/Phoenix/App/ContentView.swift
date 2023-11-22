@@ -127,7 +127,7 @@ struct ContentView: View {
         }
         .searchable(text: $searchText, placement: .sidebar)
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: "Game created.")
+            AlertToast(type: .complete(Color.green), title: successToastText)
         }
         .toast(isPresenting: $showFailureToast, tapToDismiss: true) {
             AlertToast(type: .error(Color.red), title: failureToastText)

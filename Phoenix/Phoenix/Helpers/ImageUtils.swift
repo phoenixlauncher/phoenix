@@ -99,7 +99,7 @@ func createCachedImagesDirectoryPath() -> (URL) {
         fatalError("Unable to retrieve application support directory URL")
     }
     
-    let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages/icons", isDirectory: true)
+    let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
     
     if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
         do {
@@ -130,14 +130,8 @@ func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String
             if let tiffRepresentation = newImage.tiffRepresentation {
                 let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
                 if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
-                    let destinationURL: URL = createCachedImagesDirectoryPath().appendingPathComponent("\(gameID)_icon.jpg")
-                    
-                    do {
-                        try pngData.write(to: destinationURL)
-                        completion(destinationURL.relativeString)
-                        print("Resized and saved image to: \(destinationURL.path)")
-                    } catch {
-                        print("Failed to save resized image: \(error.localizedDescription)")
+                    saveImageToFile(data: pngData, gameID: gameID, type: "icon") { icon in
+                        completion(icon)
                     }
                 }
             }
@@ -145,16 +139,16 @@ func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String
     }
 }
 
-func saveHeaderToFile(headerData: Data, gameID: UUID, completion: @escaping ((String) -> Void)) {
+func saveImageToFile(data: Data, gameID: UUID, type: String, completion: @escaping ((String) -> Void)) {
     do {
-        let destinationURL: URL = createCachedImagesDirectoryPath().appendingPathComponent("\(gameID)_header.jpg")
+        let destinationURL: URL = createCachedImagesDirectoryPath().appendingPathComponent("\(gameID)_\(type.lowercased()).jpg")
         
         do {
-            try headerData.write(to: destinationURL)
+            try data.write(to: destinationURL)
             completion(destinationURL.relativeString)
             print("Saved image to: \(destinationURL.path)")
         } catch {
-            print("Failed to save resized image: \(error.localizedDescription)")
+            print("Failed to save image: \(error.localizedDescription)")
         }
     }
 }
