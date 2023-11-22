@@ -69,7 +69,9 @@ struct ChooseGameView: View {
     
     func chooseGame(selectedGame: SupabaseGame) {
         done = true
-        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, gameID: gameID)
+        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, gameID: gameID) { result in
+            FetchSupabaseData().saveFetchedGame(gameID: gameID, fetchedGame: result)
+        }
     }
 }
 

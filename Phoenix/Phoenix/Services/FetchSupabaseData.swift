@@ -46,9 +46,10 @@ struct FetchSupabaseData {
         }
     }
     
-        func convertSupabaseGame(supabaseGame: SupabaseGame, gameID: UUID) {
-            guard let idx = games.firstIndex(where: { $0.id == gameID }) else { return }
-            var fetchedGame: Game = .init(
+    func convertSupabaseGame(supabaseGame: SupabaseGame, gameID: UUID, completion: @escaping (Game) -> Void) {
+        var fetchedGame: Game
+        if let idx = games.firstIndex(where: { $0.id == gameID }) {
+            fetchedGame = .init(
                 id: gameID,
                 steamID: games[idx].steamID,
                 launcher: games[idx].launcher,
@@ -70,50 +71,77 @@ struct FetchSupabaseData {
                 recency: games[idx].recency,
                 isFavorite: games[idx].isFavorite
             )
-            
-            fetchedGame.igdbID = String(supabaseGame.igdb_id)
-            
-            if let storyline = supabaseGame.storyline, storyline.count < 1500, storyline != "" {
-                fetchedGame.metadata["description"] = storyline
-            } else {
-                fetchedGame.metadata["description"] = supabaseGame.summary ?? ""
-            }
-    
-            fetchedGame.metadata["genre"] = supabaseGame.genre?.replacingOccurrences(of: ", ", with: "\n")
-    
-            fetchedGame.metadata["developer"] = supabaseGame.developer?.replacingOccurrences(of: ", ", with: "\n")
-            fetchedGame.metadata["publisher"] = supabaseGame.publisher?.replacingOccurrences(of: ", ", with: "\n")
-    
-            if let release_date = supabaseGame.release_date {
-                // Convert Unix timestamp to Date
-                let date = Date(timeIntervalSince1970: TimeInterval(release_date))
-        
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "MMMM dd, yyyy"
-        
-                fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
-            }
-            
-            if let steam_id = supabaseGame.steam_id {
-                fetchedGame.steamID = String(steam_id)
-            }
-    
-            if let imageURL = supabaseGame.header_img {
-                if let url = URL(string: imageURL) {
-                    URLSession.shared.dataTask(with: url) { headerData, response, error in
-                        if let headerData = headerData {
-                            saveImageToFile(data: headerData, gameID: gameID, type: "header") { headerImage in
-                                fetchedGame.metadata["header_img"] = headerImage
-                                print(headerImage)
-                                saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
-                            }
-                        }
-                    }.resume()
-                }
-            }
-            
-            saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+        } else {
+            fetchedGame = .init(
+                id: gameID,
+                steamID: "",
+                launcher: "",
+                metadata: [
+                    "rating": "",
+                    "release_date": "",
+                    "last_played": "",
+                    "developer": "",
+                    "header_img": "",
+                    "cover": "",
+                    "description": "",
+                    "genre": "",
+                    "publisher": ""
+                ],
+                icon: "",
+                name: supabaseGame.name ?? "",
+                platform: .none,
+                status: .none,
+                recency: .never,
+                isFavorite: false
+            )
         }
+        
+        fetchedGame.igdbID = String(supabaseGame.igdb_id)
+        
+        if let storyline = supabaseGame.storyline, storyline.count < 1500, storyline != "" {
+            fetchedGame.metadata["description"] = storyline
+        } else {
+            fetchedGame.metadata["description"] = supabaseGame.summary ?? ""
+        }
+
+        fetchedGame.metadata["genre"] = supabaseGame.genre?.replacingOccurrences(of: ", ", with: "\n")
+
+        fetchedGame.metadata["developer"] = supabaseGame.developer?.replacingOccurrences(of: ", ", with: "\n")
+        fetchedGame.metadata["publisher"] = supabaseGame.publisher?.replacingOccurrences(of: ", ", with: "\n")
+
+        if let release_date = supabaseGame.release_date {
+            // Convert Unix timestamp to Date
+            let date = Date(timeIntervalSince1970: TimeInterval(release_date))
+    
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM dd, yyyy"
+    
+            fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
+        }
+        
+        if let steam_id = supabaseGame.steam_id {
+            fetchedGame.steamID = String(steam_id)
+            if fetchedGame.launcher == "" {
+                fetchedGame.launcher = "open steam://run/\(steam_id)"
+            }
+        }
+
+        if let imageURL = supabaseGame.header_img {
+            if let url = URL(string: imageURL) {
+                URLSession.shared.dataTask(with: url) { headerData, response, error in
+                    if let headerData = headerData {
+                        saveImageToFile(data: headerData, gameID: gameID, type: "header") { headerImage in
+                            fetchedGame.metadata["header_img"] = headerImage
+                            print(headerImage)
+                            saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+                        }
+                    }
+                }.resume()
+            }
+        }
+        
+        completion(fetchedGame)
+    }
     
     func saveFetchedGame(gameID: UUID, fetchedGame: Game) {
         if let idx = games.firstIndex(where: { $0.id == gameID }) {

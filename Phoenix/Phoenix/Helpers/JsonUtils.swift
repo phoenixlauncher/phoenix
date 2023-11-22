@@ -57,41 +57,48 @@ func parseACFFile(data: Data) -> [String: String] {
     return dict
 }
 
-///  Detects Steam games from application support directory
-///  using the appmanifest_<steamID>.acf files and writes them to the games.json file.
-///
-///    - Parameters: None.
-///
-///    - Returns: Void.
-///
-///    - Throws: An error if there was a problem writing to the file.
-func detectSteamGamesAndWriteToJSON() {
+fileprivate func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String) async {
+    // Create a set of the current game names to prevent duplicates
+    let gameNames = Set(loadGamesFromJSON().games.map { $0.name })
+    if !gameNames.contains(name) {
+        await FetchSupabaseData().fetchGamesFromName(name: name) { fetchedGames in
+            if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
+                FetchSupabaseData().convertSupabaseGame(supabaseGame: supabaseGame, gameID: UUID()) { game in
+                    var game = game
+                    game.platform = platform
+                    game.launcher = launcher
+                    games.append(game)
+                }
+            }
+        }
+    } else {
+        logger.write("[INFO]: Game - '\(name)' already exists. not overwriting games.json.")
+    }
+}
+
+/// Detects Steam games from application support directory
+/// using the appmanifest_<steamID>.acf files and writes them to the games.json file.
+///  
+///   - Parameters: None.
+///  
+///   - Returns: Void.
+///  
+///   - Throws: An error if there was a problem writing to the file.
+func detectSteamGames() async {
     let fileManager = FileManager.default
 
-    /// Get ~/Library/Application Support/Steam/steamapps
+    /// Get ~/Library/Application Support/Steam/steamapps by default.
     /// Or when App Sandbox is enabled ~/Library/Containers/com.Shock9616.Phoenix/Data/Library/Application Support/Steam/steamapps
     /// Currently the app is not sandboxed, so the getApplicationSupportDirectory function will return the first option.
+    /// The user may also set a custom directory of their choice, so we get that  directory if they have.
 
     let steamAppsDirectory = Defaults[.steamFolder]
-    let currentGamesList: GamesList
-    if fileManager.fileExists(atPath: steamAppsDirectory.path) {
-        // Load the current list of games from the JSON file to prevent overwriting
-        currentGamesList = loadGamesFromJSON()
-    } else {
-        // The steamAppsDirectory does not exist, so we can't continue with the rest of the function
-        logger.write("[INFO]: The steamAppsDirectory does not exist at: \(steamAppsDirectory.path)")
-        logger.write("[INFO]: Skipping the addition of Steam games to the game library.")
-        return
-    }
-
-    // Create a set of the current game names to prevent duplicates
-    var gameNames = Set(currentGamesList.games.map { $0.name })
-
+    
     // Find the appmanifest_<steamID>.acf files and parse data from them
     do {
         let steamAppsFiles = try fileManager.contentsOfDirectory(
-            at: steamAppsDirectory, includingPropertiesForKeys: nil)
-        var games = currentGamesList.games
+            at: steamAppsDirectory, includingPropertiesForKeys: nil
+        )
         for steamAppsFile in steamAppsFiles {
             let fileName = steamAppsFile.lastPathComponent
             if fileName.hasSuffix(".acf") {
@@ -99,50 +106,13 @@ func detectSteamGamesAndWriteToJSON() {
                 let manifestFileData = try Data(contentsOf: manifestFilePath)
                 let manifestDictionary = parseACFFile(data: manifestFileData)
                 let name = manifestDictionary["name"]
-                let steamID = manifestDictionary["steamID"]
-                let game = Game(
-                    steamID: steamID ?? "Unknown",
-                    igdbID: "",
-                    launcher: "open steam://run/\(steamID ?? "Unknown")",
-                    metadata: [
-                        "rating": "",
-                        "release_date": "",
-                        "last_played": "",
-                        "developer": "",
-                        "header_img": "",
-                        "description": "",
-                        "genre": "",
-                        "publisher": "",
-                    ],
-                    icon: "",
-                    name: name ?? "Unknown",
-                    platform: Platform.none,
-                    status: Status.none,
-                    isHidden: false,
-                    isFavorite: false
-                )
-                // Check if the game is already in the list
-                if !gameNames.contains(game.name) {
-                    logger.write(
-                        "[INFO]: New Steam game - '\(game.name)' was detected. Adding to games list."
-                    )
-                    gameNames.insert(game.name)
-                    games.append(game)
-                } else {
-                    logger.write(
-                        "[INFO]: Steam game - '\(game.name)' already exists, not overwriting games.json."
-                    )
+                
+                if let name = name {
+                    await saveSupabaseGameFromName(name, platform: .steam, launcher: "")
                 }
             }
         }
-        let gamesList = GamesList(games: games)
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        if let encoded = try? encoder.encode(gamesList) {
-            if let jsonString = String(data: encoded, encoding: .utf8) {
-                writeGamesToJSON(data: jsonString)
-            }
-        }
+        saveGames()
     } catch {
         logger.write("[ERROR]: Error adding to Steam games.")
     }
@@ -154,71 +124,21 @@ func detectSteamGamesAndWriteToJSON() {
 ///    - Parameters: None
 ///
 ///    - Returns: Void
-func detectCrossOverGamesAndWriteToJSON() {
+func detectCrossOverGamesAndWriteToJSON() async {
     let fileManager = FileManager.default
     
     // Get ~/Applications/CrossOver or the user's custom directory
     let crossoverDirectory = Defaults[.crossOverFolder]
-    let currentGamesList: GamesList
-    if fileManager.fileExists(atPath: crossoverDirectory.path) {
-        // Load the current list of games from the JSON file to prevent overwriting
-        currentGamesList = loadGamesFromJSON()
-    } else {
-        // The crossoverDirectory does not exist, so we can't continue with the rest of the function
-        logger.write("[INFO]: The crossoverDirectory does not exist at \(crossoverDirectory.path)")
-        logger.write("[INFO]: Skipping the addition of CrossOver games to the game library.")
-        return
-    }
-    
-    var gameNames = Set(currentGamesList.games.map { $0.name })
-    
-    var games = currentGamesList.games
     
     if let enumerator = fileManager.enumerator(at: crossoverDirectory, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
         for case let fileURL as URL in enumerator {
             let fileName = fileURL.lastPathComponent
             if fileName.hasSuffix(".app") {
                 let name = String(fileName.dropLast(4))
-                let game = Game(
-                    launcher: "open \"\(fileURL.absoluteString)\"",
-                    metadata: [
-                        "rating": "",
-                        "release_data": "",
-                        "last_played": "",
-                        "developer": "",
-                        "header_img": "",
-                        "description": "",
-                        "genre": "",
-                        "publisher": "",
-                    ],
-                    icon: "",
-                    name: name,
-                    platform: .pc,
-                    status: .none,
-                    isFavorite: false
-                )
-                // Check if the game is already in the list
-                if !gameNames.contains(game.name) {
-                    logger.write(
-                        "[INFO]: New CrossOver game - '\(game.name)' was detected. Adding to games list."
-                    )
-                    gameNames.insert(game.name)
-                    games.append(game)
-                } else {
-                    logger.write(
-                        "[INFO]: CrossOver game - '\(game.name)' already exists. not overwriting games.json."
-                    )
-                }
+                await saveSupabaseGameFromName(name, platform: .pc, launcher: "open \"\(fileURL.absoluteString)\"")
             }
         }
-        let gamesList = GamesList(games: games)
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        if let encoded = try? encoder.encode(gamesList) {
-            if let jsonString = String(data: encoded, encoding: .utf8) {
-                writeGamesToJSON(data: jsonString)
-            }
-        }
+        saveGames()
     }
 }
 
