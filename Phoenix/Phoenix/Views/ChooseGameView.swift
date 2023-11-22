@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import IGDB_SWIFT_API
 import Kingfisher
 
 struct ChooseGameView: View {
