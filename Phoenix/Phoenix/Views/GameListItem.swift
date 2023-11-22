@@ -19,7 +19,7 @@ struct GameListItem: View {
     
     var body: some View {
         HStack {
-            if !iconsHidden {
+            if !iconsHidden && game.icon != "" {
                 Image(nsImage: loadImageFromFile(filePath: game.icon))
                     .resizable()
                     .frame(width: iconSize, height: iconSize)

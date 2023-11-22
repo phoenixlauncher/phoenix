@@ -65,7 +65,7 @@ func parseACFFile(data: Data) -> [String: String] {
 ///    - Returns: Void.
 ///
 ///    - Throws: An error if there was a problem writing to the file.
-func detectSteamGamesAndWriteToJSON() {
+func detectSteamGamesAndWriteToJSON() async {
     let fileManager = FileManager.default
 
     /// Get ~/Library/Application Support/Steam/steamapps
@@ -85,13 +85,12 @@ func detectSteamGamesAndWriteToJSON() {
     }
 
     // Create a set of the current game names to prevent duplicates
-    var gameNames = Set(currentGamesList.games.map { $0.name })
+    let gameNames = Set(currentGamesList.games.map { $0.name })
 
     // Find the appmanifest_<steamID>.acf files and parse data from them
     do {
         let steamAppsFiles = try fileManager.contentsOfDirectory(
             at: steamAppsDirectory, includingPropertiesForKeys: nil)
-        var games = currentGamesList.games
         for steamAppsFile in steamAppsFiles {
             let fileName = steamAppsFile.lastPathComponent
             if fileName.hasSuffix(".acf") {
@@ -99,48 +98,17 @@ func detectSteamGamesAndWriteToJSON() {
                 let manifestFileData = try Data(contentsOf: manifestFilePath)
                 let manifestDictionary = parseACFFile(data: manifestFileData)
                 let name = manifestDictionary["name"]
-                let steamID = manifestDictionary["steamID"]
-                let game = Game(
-                    steamID: steamID ?? "Unknown",
-                    igdbID: "",
-                    launcher: "open steam://run/\(steamID ?? "Unknown")",
-                    metadata: [
-                        "rating": "",
-                        "release_date": "",
-                        "last_played": "",
-                        "developer": "",
-                        "header_img": "",
-                        "description": "",
-                        "genre": "",
-                        "publisher": "",
-                    ],
-                    icon: "",
-                    name: name ?? "Unknown",
-                    platform: Platform.none,
-                    status: Status.none,
-                    isHidden: false,
-                    isFavorite: false
-                )
-                // Check if the game is already in the list
-                if !gameNames.contains(game.name) {
-                    logger.write(
-                        "[INFO]: New Steam game - '\(game.name)' was detected. Adding to games list."
-                    )
-                    gameNames.insert(game.name)
-                    games.append(game)
-                } else {
-                    logger.write(
-                        "[INFO]: Steam game - '\(game.name)' already exists, not overwriting games.json."
-                    )
+                
+                if let name = name, !gameNames.contains(name) {
+                    await FetchSupabaseData().fetchGamesFromName(name: name) { fetchedGames in
+                        if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
+                            FetchSupabaseData().convertSupabaseGame(supabaseGame: supabaseGame, gameID: UUID()) { game in
+                                print(game.name)
+                                games.append(game)
+                            }
+                        }
+                    }
                 }
-            }
-        }
-        let gamesList = GamesList(games: games)
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        if let encoded = try? encoder.encode(gamesList) {
-            if let jsonString = String(data: encoded, encoding: .utf8) {
-                writeGamesToJSON(data: jsonString)
             }
         }
     } catch {
