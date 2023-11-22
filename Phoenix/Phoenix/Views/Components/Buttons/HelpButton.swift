@@ -10,14 +10,11 @@ import MarkdownUI
 
 struct HelpButton: View {
     @State var showHelp: Bool = false
-    @State var markdown: String = ""
-    
-    var url: URL
+    @State var markdown: String = "uwu"
     
     var body: some View {
         Button (
             action: {
-                fetchMarkdownContent(from: url)
                 showHelp.toggle()
             }, label: {
                 ZStack {
@@ -37,20 +34,22 @@ struct HelpButton: View {
                 ScrollView {
                     Markdown(markdown)
                         .markdownTheme(.docC)
+                        .onAppear {
+                            if let filepath = Bundle.main.path(forResource: "setup", ofType: "md") {
+                                do {
+                                    markdown = try String(contentsOfFile: filepath)
+                                    print(markdown)
+                                } catch {
+                                    logger.write("[ERROR]: Content of file couldn't be found.")
+                                }
+                            } else {
+                                logger.write("[ERROR]: setup.md couldn't be found.")
+                            }
+                        }
                 }
                 .padding()
             }
             .frame(minWidth: 600, idealWidth: 800, maxWidth: .infinity, minHeight: 300, idealHeight: 600, maxHeight: .infinity)
         })
-    }
-    
-    private func fetchMarkdownContent(from url: URL) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data, let markdownString = String(data: data, encoding: .utf8) {
-                DispatchQueue.main.async {
-                    self.markdown = markdownString
-                }
-            }
-        }.resume()
     }
 }

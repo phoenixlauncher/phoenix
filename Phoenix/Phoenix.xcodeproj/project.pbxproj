@@ -25,8 +25,6 @@
 		0AF378772953AADE00978137 /* PhoenixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378762953AADE00978137 /* PhoenixTests.swift */; };
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
-		AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */ = {isa = PBXBuildFile; productRef = AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */; };
-		AD13CDE82AA542A300C6FD61 /* FetchIGDBData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD13CDE72AA542A300C6FD61 /* FetchIGDBData.swift */; };
 		AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */; };
 		AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287C92AC007CC001673F5 /* TextBox.swift */; };
 		AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */; };
@@ -47,6 +45,7 @@
 		ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = ADB63FFD2AF7F248006B39ED /* Defaults */; };
 		ADB640002AF8391C006B39ED /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB63FFF2AF8391C006B39ED /* Defaults.swift */; };
 		ADB72D5E2AC1359100299AC0 /* ChooseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */; };
+		ADC001012B0DB15C004D9CF6 /* setup.md in Resources */ = {isa = PBXBuildFile; fileRef = ADC001002B0DB15C004D9CF6 /* setup.md */; };
 		ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */; };
 		ADDE703F2B00546C00D006B8 /* FolderImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE703E2B00546C00D006B8 /* FolderImportButton.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
@@ -96,7 +95,6 @@
 		0AF3787C2953AADE00978137 /* PhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		AD13CDE72AA542A300C6FD61 /* FetchIGDBData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchIGDBData.swift; sourceTree = "<group>"; };
 		AD5287C92AC007CC001673F5 /* TextBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBox.swift; sourceTree = "<group>"; };
 		AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageImportButton.swift; sourceTree = "<group>"; };
 		AD5287CD2AC00A1A001673F5 /* SlotInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotInput.swift; sourceTree = "<group>"; };
@@ -112,6 +110,7 @@
 		AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListItem.swift; sourceTree = "<group>"; };
 		ADB63FFF2AF8391C006B39ED /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseGameView.swift; sourceTree = "<group>"; };
+		ADC001002B0DB15C004D9CF6 /* setup.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = setup.md; sourceTree = "<group>"; };
 		ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMetadata.swift; sourceTree = "<group>"; };
 		ADDE703E2B00546C00D006B8 /* FolderImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderImportButton.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
@@ -131,7 +130,6 @@
 				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
-				AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */,
 				ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -156,6 +154,7 @@
 		0AF378582953AADC00978137 = {
 			isa = PBXGroup;
 			children = (
+				ADC001002B0DB15C004D9CF6 /* setup.md */,
 				0AF378632953AADD00978137 /* Phoenix */,
 				0AF378622953AADD00978137 /* Products */,
 				0AF378752953AADE00978137 /* SwiftLauncherTests */,
@@ -260,7 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				ADB63FFF2AF8391C006B39ED /* Defaults.swift */,
-				AD13CDE72AA542A300C6FD61 /* FetchIGDBData.swift */,
 				AD7AD2EC2B098023002DBDCD /* FetchSupabaseData.swift */,
 			);
 			path = Services;
@@ -285,11 +283,11 @@
 				0A87BBB4295D7B1A0009AF47 /* GameDetailView.swift */,
 				0A02F8EB295BB92400FE29F4 /* GameInputView.swift */,
 				0A87BBB0295D57C30009AF47 /* GameListView.swift */,
+				AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */,
 				ADB4CF0B2AB5385600BDF853 /* Updates */,
 				ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */,
 				ADB4CF092AB537CA00BDF853 /* Components */,
 				ADB4CF0A2AB537DC00BDF853 /* Settings */,
-				AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -351,7 +349,6 @@
 			name = Phoenix;
 			packageProductDependencies = (
 				CAFACC752A42638E001C45C4 /* Sparkle */,
-				AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */,
 				AD5E91A52AAE33CB008097C4 /* AlertToast */,
 				AD92C4F52AAEBAF40058E1EA /* Kingfisher */,
 				ADB63FFD2AF7F248006B39ED /* Defaults */,
@@ -433,7 +430,6 @@
 			mainGroup = 0AF378582953AADC00978137;
 			packageReferences = (
 				CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */,
-				AD13CDE22AA53A3B00C6FD61 /* XCRemoteSwiftPackageReference "IGDB-SWIFT-API" */,
 				AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				AD92C4F42AAEBAF40058E1EA /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */,
@@ -457,6 +453,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADC001012B0DB15C004D9CF6 /* setup.md in Resources */,
 				0AF3786C2953AADE00978137 /* Preview Assets.xcassets in Resources */,
 				0A20E1F32957FEAD00B7756E /* games.json in Resources */,
 				0AF378692953AADE00978137 /* Assets.xcassets in Resources */,
@@ -485,7 +482,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD5287D02AC010AA001673F5 /* LargeTextBox.swift in Sources */,
-				AD13CDE82AA542A300C6FD61 /* FetchIGDBData.swift in Sources */,
 				AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */,
 				AD5287D22AC016AD001673F5 /* DateUtils.swift in Sources */,
 				0AE9B6F62A3ADA0E00800850 /* GeneralSettingsView.swift in Sources */,
@@ -852,14 +848,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AD13CDE22AA53A3B00C6FD61 /* XCRemoteSwiftPackageReference "IGDB-SWIFT-API" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/husnjak/IGDB-SWIFT-API";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jxhug/StarRatingViewSwiftUI.git";
@@ -919,11 +907,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD13CDE22AA53A3B00C6FD61 /* XCRemoteSwiftPackageReference "IGDB-SWIFT-API" */;
-			productName = "IGDB-SWIFT-API";
-		};
 		AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */;
