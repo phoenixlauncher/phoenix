@@ -12,6 +12,8 @@ struct HiddenGamesSettingsView: View {
     @State var selectedGame: String?
     @State var refresh: Bool = false
     @State private var timer: Timer?
+    
+    @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     @State var iconSize: Double = Defaults[.listIconSize]
     
     var body: some View {
@@ -23,9 +25,11 @@ struct HiddenGamesSettingsView: View {
                         ForEach(hiddenGames, id: \.id) { game in
                             HStack {
                                 HStack {
-                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
-                                        .resizable()
-                                        .frame(width: iconSize, height: iconSize)
+                                    if !iconsHidden && game.icon != "" {
+                                        Image(nsImage: loadImageFromFile(filePath: game.icon))
+                                            .resizable()
+                                            .frame(width: iconSize, height: iconSize)
+                                    }
                                     Text(game.name)
                                     Text(String(refresh))
                                         .hidden()

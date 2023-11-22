@@ -246,19 +246,23 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
     return false
 }
 
+/// If varying game detection settings are enabled run methods to check for those games
+/// Save the games once the check is done, then parse the saved json to get a list of games
+///
+/// - Returns: An array of Games, aka. GamesList
 func loadGames() -> GamesList {
     if Defaults[.steamDetection] {
         Task {
-            await detectSteamGamesAndWriteToJSON()
+            await detectSteamGames()
         }
     }
 
     if Defaults[.crossOverDetection] {
         Task {
-            detectCrossOverGamesAndWriteToJSON()
+            await detectCrossOverGamesAndWriteToJSON()
         }
     }
-
+    
     let res = loadGamesFromJSON()
     return res
 }
