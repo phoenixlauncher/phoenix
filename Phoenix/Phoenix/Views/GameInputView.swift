@@ -13,6 +13,7 @@ struct GameInputView: View {
     
     var isNewGame: Bool
     @Binding var selectedGame: UUID
+    @Binding var refresh: Bool
     
     @Binding var showSuccessToast: Bool
     @Binding var successToastText: String
@@ -133,12 +134,19 @@ struct GameInputView: View {
                     }
                     Button(
                         action: {
+                            guard !nameInput.isEmpty && !nameInput.trimmingCharacters(in: .whitespaces).isEmpty else {
+                                failureToastText = "Game must have a name."
+                                showFailureToast = true
+                                dismiss()
+                                return
+                            }
                             var game: Game = .init(
                                 id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
                                 games.append(game)
                                 saveGames()
+                                refresh.toggle()
                                 if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
                                         await FetchSupabaseData().fetchGamesFromName(name: game.name) { result in
@@ -173,6 +181,7 @@ struct GameInputView: View {
                             Text("Save Game")
                         }
                     )
+                    .accessibilityLabel("Save Game")
                     .padding()
                     .frame(maxWidth: .infinity)
                 }

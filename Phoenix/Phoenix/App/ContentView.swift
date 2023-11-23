@@ -59,7 +59,7 @@ struct ContentView: View {
                                     self.refresh.toggle()
                                 },
                                 content: {
-                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, refresh: $refresh, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                                 }
                             )
                         }
@@ -109,7 +109,7 @@ struct ContentView: View {
             // The detailed view of the selected game
             GameDetailView(selectedGame: $selectedGame, refresh: $refresh, editingGame: $isEditingGame, playingGame: $isPlayingGame)
                 .sheet(isPresented: $isEditingGame, content: {
-                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                    GameInputView(isNewGame: false, selectedGame: $selectedGame, refresh: $refresh, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                 })
 
             // Refresh detail view

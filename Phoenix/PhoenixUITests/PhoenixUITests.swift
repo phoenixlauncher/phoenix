@@ -19,7 +19,7 @@ final class PhoenixUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testAddGame() throws {
+    func testAddAndDeleteGame() throws {
         // Launch the app
         let app = XCUIApplication()
         app.launch()
@@ -55,6 +55,27 @@ final class PhoenixUITests: XCTestCase {
         app.launch()
 
         // Check if "nameForTestingUI" is still there (it should not be)
+        XCTAssertFalse(nameLabel.exists)
+    }
+    
+    func testAddBlankGame() throws {
+        // Launch the app
+        let app = XCUIApplication()
+        app.launch()
+
+        // Click the "plus" button
+        let plusButtonQuery = app.buttons.matching(identifier: "New Game")
+        if plusButtonQuery.count > 0 {
+            let plusButton = plusButtonQuery.element(boundBy: 0)
+            plusButton.click()
+        }
+
+        // Click the save button
+        let saveButton = app.buttons["Save Game"]
+        saveButton.click()
+
+        // Check if game with name "" is saved (it shouldn't be)
+        let nameLabel = app.staticTexts[""].firstMatch
         XCTAssertFalse(nameLabel.exists)
     }
 

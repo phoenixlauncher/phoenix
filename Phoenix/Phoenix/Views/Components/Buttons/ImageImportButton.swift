@@ -31,6 +31,7 @@ struct ImageImportButton: View {
                     Text("Browse")
                 }
             )
+            .accessibilityLabel("\(type) Input")
         }
         .fileImporter(
             isPresented: $isImporting,
