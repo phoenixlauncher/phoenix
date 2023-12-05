@@ -23,7 +23,7 @@ struct GeneralSettingsView: View {
             VStack(alignment: .leading, spacing: 15) {
                 Defaults.Toggle("Detect Steam games on launch", key: .steamDetection)
                 if steamDetection {
-                    FolderImportButton(type: "Steam", folder: $steamFolder, lastPathComponent: $lastPathComponent, endPath: "'steamapps'", invalidFolder: $invalidFolder)
+                    FolderImportButton(type: "Steam", folder: $steamFolder, lastPathComponent: $lastPathComponent, endPath: "steamapps", invalidFolder: $invalidFolder)
                 }
                 Defaults.Toggle("Detect CrossOver games on launch", key: .crossOverDetection)
                 if crossOverDetection {
