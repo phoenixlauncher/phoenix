@@ -57,22 +57,13 @@ func parseACFFile(data: Data) -> [String: String] {
     return dict
 }
 
-fileprivate func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String) async {
+func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String) async {
+    let newGame = Game(id: UUID(), launcher: launcher, name: name, platform: platform)
     // Create a set of the current game names to prevent duplicates
-    let gameNames = Set(loadGamesFromJSON().games.map { $0.name })
-    if !gameNames.contains(name) {
-        await FetchSupabaseData().fetchGamesFromName(name: name) { fetchedGames in
-            if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
-                FetchSupabaseData().convertSupabaseGame(supabaseGame: supabaseGame, gameID: UUID()) { game in
-                    var game = game
-                    game.platform = platform
-                    game.launcher = launcher
-                    games.append(game)
-                }
-            }
+    await FetchSupabaseData().fetchGamesFromName(name: name) { fetchedGames in
+        if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
+            FetchSupabaseData().convertSupabaseGame(supabaseGame: supabaseGame, game: newGame) { _ in }
         }
-    } else {
-        logger.write("[INFO]: Game - '\(name)' already exists. not overwriting games.json.")
     }
 }
 
@@ -84,15 +75,15 @@ fileprivate func saveSupabaseGameFromName(_ name: String, platform: Platform, la
 ///   - Returns: Void.
 ///  
 ///   - Throws: An error if there was a problem writing to the file.
-func detectSteamGames() async {
+func detectSteamGames() async -> Set<String> {
     let fileManager = FileManager.default
 
     /// Get ~/Library/Application Support/Steam/steamapps by default.
-    /// Or when App Sandbox is enabled ~/Library/Containers/com.Shock9616.Phoenix/Data/Library/Application Support/Steam/steamapps
-    /// Currently the app is not sandboxed, so the getApplicationSupportDirectory function will return the first option.
-    /// The user may also set a custom directory of their choice, so we get that  directory if they have.
+    /// Or when App Sandbox is enabled ~/Library/Containers/com.<username>.Phoenix/Data/Library/Application Support/Steam/steamapps
+    /// The user may also set a custom directory of their choice, so we get that directory if they have.
 
     let steamAppsDirectory = Defaults[.steamFolder]
+    var steamGameNames: Set<String> = []
     
     // Find the appmanifest_<steamID>.acf files and parse data from them
     do {
@@ -106,16 +97,16 @@ func detectSteamGames() async {
                 let manifestFileData = try Data(contentsOf: manifestFilePath)
                 let manifestDictionary = parseACFFile(data: manifestFileData)
                 let name = manifestDictionary["name"]
-                
                 if let name = name {
-                    await saveSupabaseGameFromName(name, platform: .steam, launcher: "")
+                    steamGameNames.insert(name)
+                    logger.write("\(name) detected in Steam directory.")
                 }
             }
         }
-        saveGames()
     } catch {
         logger.write("[ERROR]: Error adding to Steam games.")
     }
+    return steamGameNames
 }
 
 /// Detects Crossover games from the user Applications directory
@@ -124,22 +115,52 @@ func detectSteamGames() async {
 ///    - Parameters: None
 ///
 ///    - Returns: Void
-func detectCrossOverGamesAndWriteToJSON() async {
+func detectCrossoverGames() async -> Set<String> {
     let fileManager = FileManager.default
     
-    // Get ~/Applications/CrossOver or the user's custom directory
-    let crossoverDirectory = Defaults[.crossOverFolder]
+    /// Get ~/Applications/CrossOver by default.
+    /// Or when App Sandbox is enabled ~/Library/Containers/com.<username>.Phoenix/Data/Applications/CrossOver
+    /// The user may also set a custom directory of their choice, so we get that directory if they have.
     
-    if let enumerator = fileManager.enumerator(at: crossoverDirectory, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-        for case let fileURL as URL in enumerator {
-            let fileName = fileURL.lastPathComponent
+    let crossoverDirectory = Defaults[.crossOverFolder]
+    var crossoverGameNames: Set<String> = []
+    
+    // Find the <name>.app files and get name from them
+    do {
+        let crossoverFiles = try fileManager.contentsOfDirectory(
+            at: crossoverDirectory, includingPropertiesForKeys: nil
+        )
+        for crossoverFile in crossoverFiles {
+            let fileName = crossoverFile.lastPathComponent
             if fileName.hasSuffix(".app") {
                 let name = String(fileName.dropLast(4))
-                await saveSupabaseGameFromName(name, platform: .pc, launcher: "open \"\(fileURL.absoluteString)\"")
+                crossoverGameNames.insert(name)
+                logger.write("\(name) detected in CrossOver directory.")
             }
         }
-        saveGames()
     }
+    catch {
+        logger.write("[ERROR]: Error adding to CrossOver games.")
+    }
+    return crossoverGameNames
+}
+
+func compareSteamAndCrossoverGames(steamGameNames: Set<String>, crossoverGameNames: Set<String>) async {
+    let gameNames = Set(loadGamesFromJSON().games.map { $0.name })
+    
+    var steamGameNames = steamGameNames.subtracting(crossoverGameNames)
+    var crossoverGameNames = crossoverGameNames
+    
+    steamGameNames.subtract(gameNames)
+    crossoverGameNames.subtract(gameNames)
+    
+    for steamName in steamGameNames {
+        await saveSupabaseGameFromName(steamName, platform: .steam, launcher: "open steam: //run/%@")
+    }
+    for crossoverName in crossoverGameNames {
+        await saveSupabaseGameFromName(crossoverName, platform: .pc, launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\"")
+    }
+    saveGames()
 }
 
 /// Loads the games data from a JSON file named "games.json" in the "Phoenix"
