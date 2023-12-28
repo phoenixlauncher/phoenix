@@ -120,6 +120,8 @@ struct FetchSupabaseData {
     func saveFetchedGame(gameID: UUID, fetchedGame: Game) {
         if let idx = games.firstIndex(where: { $0.id == gameID }) {
             games[idx] = fetchedGame
+        } else {
+            games.append(fetchedGame)
         }
         saveGames()
     }
