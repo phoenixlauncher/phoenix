@@ -50,7 +50,6 @@ struct FolderImportButton: View {
                     folder = selectedFolder
                 }
             } catch {
-                // Handle the error, e.g., print an error message or take appropriate action.
                 logger.write("Error selecting folder: \(error)")
             }
         }
