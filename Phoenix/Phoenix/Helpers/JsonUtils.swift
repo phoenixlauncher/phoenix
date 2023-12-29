@@ -126,21 +126,15 @@ func detectCrossoverGames() async -> Set<String> {
     var crossoverGameNames: Set<String> = []
     
     // Find the <name>.app files and get name from them
-    do {
-        let crossoverFiles = try fileManager.contentsOfDirectory(
-            at: crossoverDirectory, includingPropertiesForKeys: nil
-        )
-        for crossoverFile in crossoverFiles {
-            let fileName = crossoverFile.lastPathComponent
+    if let enumerator = fileManager.enumerator(at: crossoverDirectory, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+        for case let fileURL as URL in enumerator {
+            let fileName = fileURL.lastPathComponent
             if fileName.hasSuffix(".app") {
                 let name = String(fileName.dropLast(4))
                 crossoverGameNames.insert(name)
                 logger.write("\(name) detected in CrossOver directory.")
             }
         }
-    }
-    catch {
-        logger.write("[ERROR]: Error adding to CrossOver games.")
     }
     return crossoverGameNames
 }
