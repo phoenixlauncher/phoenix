@@ -38,7 +38,6 @@ struct HelpButton: View {
                             if let filepath = Bundle.main.path(forResource: "setup", ofType: "md") {
                                 do {
                                     markdown = try String(contentsOfFile: filepath)
-                                    print(markdown)
                                 } catch {
                                     logger.write("[ERROR]: Content of file couldn't be found.")
                                 }

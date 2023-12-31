@@ -46,55 +46,30 @@ struct FetchSupabaseData {
         }
     }
     
-    func convertSupabaseGame(supabaseGame: SupabaseGame, gameID: UUID, completion: @escaping (Game) -> Void) {
+    func convertSupabaseGame(supabaseGame: SupabaseGame, game: Game, completion: @escaping (Game) -> Void) {
         var fetchedGame: Game
-        if let idx = games.firstIndex(where: { $0.id == gameID }) {
-            fetchedGame = .init(
-                id: gameID,
-                steamID: games[idx].steamID,
-                launcher: games[idx].launcher,
-                metadata: [
-                    "rating": games[idx].metadata["rating"] ?? "",
-                    "release_date": games[idx].metadata["release_date"] ?? "",
-                    "last_played": games[idx].metadata["last_played"] ?? "",
-                    "developer": games[idx].metadata["developer"] ?? "",
-                    "header_img": games[idx].metadata["header_img"] ?? "",
-                    "cover": games[idx].metadata["cover"] ?? "",
-                    "description": games[idx].metadata["description"] ?? "",
-                    "genre": games[idx].metadata["genre"] ?? "",
-                    "publisher": games[idx].metadata["publisher"] ?? "",
-                ],
-                icon: games[idx].icon,
-                name: games[idx].name,
-                platform: games[idx].platform,
-                status: games[idx].status,
-                recency: games[idx].recency,
-                isFavorite: games[idx].isFavorite
-            )
-        } else {
-            fetchedGame = .init(
-                id: gameID,
-                steamID: "",
-                launcher: "",
-                metadata: [
-                    "rating": "",
-                    "release_date": "",
-                    "last_played": "",
-                    "developer": "",
-                    "header_img": "",
-                    "cover": "",
-                    "description": "",
-                    "genre": "",
-                    "publisher": ""
-                ],
-                icon: "",
-                name: supabaseGame.name ?? "",
-                platform: .none,
-                status: .none,
-                recency: .never,
-                isFavorite: false
-            )
-        }
+        fetchedGame = .init(
+            id: game.id,
+            steamID: game.steamID,
+            launcher: game.launcher,
+            metadata: [
+                "rating": game.metadata["rating"] ?? "",
+                "release_date": game.metadata["release_date"] ?? "",
+                "last_played": game.metadata["last_played"] ?? "",
+                "developer": game.metadata["developer"] ?? "",
+                "header_img": game.metadata["header_img"] ?? "",
+                "cover": game.metadata["cover"] ?? "",
+                "description": game.metadata["description"] ?? "",
+                "genre": game.metadata["genre"] ?? "",
+                "publisher": game.metadata["publisher"] ?? "",
+            ],
+            icon: game.icon,
+            name: game.name,
+            platform: game.platform,
+            status: game.status,
+            recency: game.recency,
+            isFavorite: game.isFavorite
+        )
         
         fetchedGame.igdbID = String(supabaseGame.igdb_id)
         
@@ -121,19 +96,18 @@ struct FetchSupabaseData {
         
         if let steam_id = supabaseGame.steam_id {
             fetchedGame.steamID = String(steam_id)
-            if fetchedGame.launcher == "" {
+            if (fetchedGame.launcher == "" || fetchedGame.launcher.contains("%@")) && fetchedGame.platform == .steam {
                 fetchedGame.launcher = "open steam://run/\(steam_id)"
-            }
+            }   
         }
 
         if let imageURL = supabaseGame.header_img {
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
                     if let headerData = headerData {
-                        saveImageToFile(data: headerData, gameID: gameID, type: "header") { headerImage in
+                        saveImageToFile(data: headerData, gameID: fetchedGame.id, type: "header") { headerImage in
                             fetchedGame.metadata["header_img"] = headerImage
-                            print(headerImage)
-                            saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+                            saveFetchedGame(gameID: fetchedGame.id, fetchedGame: fetchedGame)
                         }
                     }
                 }.resume()
@@ -146,6 +120,8 @@ struct FetchSupabaseData {
     func saveFetchedGame(gameID: UUID, fetchedGame: Game) {
         if let idx = games.firstIndex(where: { $0.id == gameID }) {
             games[idx] = fetchedGame
+        } else {
+            games.append(fetchedGame)
         }
         saveGames()
     }

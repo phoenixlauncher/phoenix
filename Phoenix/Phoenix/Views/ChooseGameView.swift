@@ -31,7 +31,7 @@ struct ChooseGameView: View {
                         }
                         VStack {
                             if let name = game.name {
-                                Text(name) // UNCENTER ThIS TEXT
+                                Text(name)
                                     .font(.system(size: 20))
                                     .fontWeight(.semibold)
                             }
@@ -68,7 +68,7 @@ struct ChooseGameView: View {
     
     func chooseGame(selectedGame: SupabaseGame) {
         done = true
-        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, gameID: gameID) { result in
+        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, game: Game(id: gameID)) { result in
             FetchSupabaseData().saveFetchedGame(gameID: gameID, fetchedGame: result)
         }
     }

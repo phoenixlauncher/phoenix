@@ -89,7 +89,7 @@ func resultIntoData(result: Result<[URL], Error>, completion: @escaping ((Data) 
         completion(data)
     }
     catch {
-        print("Failed to convert file to data: \(error.localizedDescription)")
+        logger.write("Failed to convert file to data: \(error.localizedDescription)")
     }
 }
 
@@ -104,7 +104,7 @@ func createCachedImagesDirectoryPath() -> (URL) {
     if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
         do {
             try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-            print("Created 'Phoenix/cachedImages' directory")
+            logger.write("Created 'Phoenix/cachedImages' directory")
         } catch {
             fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
         }
@@ -146,9 +146,9 @@ func saveImageToFile(data: Data, gameID: UUID, type: String, completion: @escapi
         do {
             try data.write(to: destinationURL)
             completion(destinationURL.relativeString)
-            print("Saved image to: \(destinationURL.path)")
+            logger.write("Saved image to: \(destinationURL.path)")
         } catch {
-            print("Failed to save image: \(error.localizedDescription)")
+            logger.write("Failed to save image: \(error.localizedDescription)")
         }
     }
 }
