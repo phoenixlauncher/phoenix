@@ -19,8 +19,6 @@ struct ContentView: View {
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
     @Default(.selectedGame) var selectedGame
-    @State var refresh: Bool = false
-    @State private var timer: Timer?
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
@@ -40,7 +38,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText, isAddingGame: $isAddingGame)
+            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, searchText: $searchText, isAddingGame: $isAddingGame)
                 .toolbar {
                     if !showSidebarAddGameButton {
                         ToolbarItem(placement: .primaryAction) {
@@ -55,12 +53,8 @@ struct ContentView: View {
                             )
                             .sheet(
                                 isPresented: $isAddingGame,
-                                onDismiss: {
-                                    // Refresh game list
-                                    self.refresh.toggle()
-                                },
                                 content: {
-                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, refresh: $refresh, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                                 }
                             )
                         }
@@ -108,21 +102,12 @@ struct ContentView: View {
                 }
         } detail: {
             // The detailed view of the selected game
-            GameDetailView(selectedGame: $selectedGame, refresh: $refresh, editingGame: $isEditingGame, playingGame: $isPlayingGame)
+            GameDetailView(selectedGame: $selectedGame, editingGame: $isEditingGame, playingGame: $isPlayingGame)
                 .sheet(isPresented: $isEditingGame, content: {
-                    GameInputView(isNewGame: false, selectedGame: $selectedGame, refresh: $refresh, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                 })
-
-            // Refresh detail view
-            Text(String(refresh))
-                .hidden()
         }
-        .onAppear {
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                refresh.toggle()
-                Defaults[.sortBy] = sortBy
-            }
-        }
+        .environmentObject(supabaseViewModel)
         .onChange(of: sortBy) { _ in
             animate.toggle()
         }

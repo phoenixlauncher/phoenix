@@ -8,7 +8,7 @@
 import Foundation
 import Supabase
 
-final class SupabaseViewModel: ObservableObject {
+class SupabaseViewModel: ObservableObject {
     
     let supabase = SupabaseClient(supabaseURL: URL(string: "https://xcvgscmerrimxzykhwwj.supabase.co")!, supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdmdzY21lcnJpbXh6eWtod3dqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTY1NzI0MzQsImV4cCI6MjAxMjE0ODQzNH0.HQmy-ngtIcJxQmyopQ9xaRYlVXlCVwDNYwQ1WOxmMus")
         
@@ -110,5 +110,4 @@ final class SupabaseViewModel: ObservableObject {
             completion(fetchedGame)
         }
     }
-
 }

@@ -17,7 +17,6 @@ struct GameInputView: View {
     
     var isNewGame: Bool
     @Binding var selectedGame: UUID
-    @Binding var refresh: Bool
     
     @Binding var showSuccessToast: Bool
     @Binding var successToastText: String
@@ -148,9 +147,8 @@ struct GameInputView: View {
                                 id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
-                                gameViewModel.games.append(game)
+                                gameViewModel.addGame(game)
                                 gameViewModel.saveGames()
-                                refresh.toggle()
                                 if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
                                         await supabaseViewModel.fetchGamesFromName(name: game.name) { result in

@@ -72,7 +72,7 @@ struct ChooseGameView: View {
     func chooseGame(selectedGame: SupabaseGame) {
         done = true
         supabaseViewModel.convertSupabaseGame(supabaseGame: selectedGame, game: Game(id: gameID)) { result in
-            gameViewModel.addGame(game: result)
+            gameViewModel.addGame(result)
         }
     }
 }

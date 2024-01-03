@@ -12,8 +12,6 @@ struct HiddenGamesSettingsView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     
     @State var selectedGame: String?
-    @State var refresh: Bool = false
-    @State private var timer: Timer?
     
     @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     @State var iconSize: Double = Defaults[.listIconSize]
@@ -33,8 +31,6 @@ struct HiddenGamesSettingsView: View {
                                             .frame(width: iconSize, height: iconSize)
                                     }
                                     Text(game.name)
-                                    Text(String(refresh))
-                                        .hidden()
                                 }
                                 Spacer()
                                 HStack {
@@ -42,7 +38,6 @@ struct HiddenGamesSettingsView: View {
                                         if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                                             gameViewModel.games[idx].isHidden = false
                                         }
-                                        self.refresh.toggle()
                                         gameViewModel.saveGames()
                                     }) {
                                         Text("Show game")
@@ -53,7 +48,6 @@ struct HiddenGamesSettingsView: View {
                                             gameViewModel.games.remove(at: idx)
                                         }
                                         gameViewModel.saveGames()
-                                        self.refresh.toggle()
                                     }) {
                                         Image(systemName: "trash")
                                     }
@@ -68,13 +62,6 @@ struct HiddenGamesSettingsView: View {
                             .font(.system(size: 20))
                     }
                 }
-            }
-        }
-        .onAppear {
-            self.refresh.toggle()
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                self.refresh.toggle()
-                // This code will be executed every 1 second
             }
         }
         .onChange(of: Defaults[.listIconSize]) { value in

@@ -1,12 +1,12 @@
 import Foundation
 
-final class GameViewModel: ObservableObject {
+class GameViewModel: ObservableObject {
     @Published var games: [Game] = []
-    @Published var supabaseViewModel = SupabaseViewModel()
+    var supabaseViewModel = SupabaseViewModel()
     
     init() {
         // Now call the loadGames method
-        games = loadGames()
+        games = loadGames().sorted()
     }
     
     func getGameFromName(name: String) -> Game? {
@@ -25,7 +25,8 @@ final class GameViewModel: ObservableObject {
         }
     }
 
-    func addGame(game: Game) {
+    func addGame(_ game: Game) {
+        logger.write("Adding game \(game.name).")
         if let idx = games.firstIndex(where: { $0.id == game.id }) {
             games[idx] = game
         } else {
@@ -35,6 +36,7 @@ final class GameViewModel: ObservableObject {
     }
 
     func saveGames() {
+        print("Saving games")
         games = games.sorted()
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
@@ -169,7 +171,7 @@ final class GameViewModel: ObservableObject {
         await self.supabaseViewModel.fetchGamesFromName(name: name) { fetchedGames in
             if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
                 self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: newGame) { game in
-                    self.addGame(game: game)
+                    self.addGame(game)
                 }
             }
         }

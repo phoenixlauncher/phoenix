@@ -13,7 +13,6 @@ struct GameListItem: View {
     
     @Binding var selectedGame: UUID
     @State var game: Game
-    @Binding var refresh: Bool
     @State var iconSize: Double = Defaults[.listIconSize]
     @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     
@@ -109,7 +108,6 @@ struct GameListItem: View {
                             gameViewModel.games[idx].icon = image
 >>>>>>> 2e1e90c (mvvm basics)
                             game.icon = image
-                            refresh.toggle()
                             gameViewModel.saveGames()
                         }
                     }

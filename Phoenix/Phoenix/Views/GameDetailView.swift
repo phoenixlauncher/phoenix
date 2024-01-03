@@ -9,20 +9,17 @@ import AlertToast
 import StarRatingViewSwiftUI
 
 struct GameDetailView: View {
-    
     @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var supabaseViewModel: SupabaseViewModel
     
     @State var showingAlert: Bool = false
     @Binding var selectedGame: UUID
     @State var selectedGameName: String?
-    @Binding var refresh: Bool
     @Binding var editingGame: Bool
     @Binding var playingGame: Bool
     @State var showSuccessToast: Bool = false
     
     @State var rating: Float = 0
-    
-    @State private var timer: Timer?
     
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
@@ -62,12 +59,17 @@ struct GameDetailView: View {
                             SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
-                                  .frame(width: 300, height: 30)
-                                  .padding()
+                                .frame(width: 300, height: 30)
+                                .padding()
+                                .onHover { _ in
+                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                                        gameViewModel.games[idx].metadata["rating"] = String(rating)
+                                    }
+                                    gameViewModel.saveGames()
+                                }
                             }
                         } // hstack
                         .frame(alignment: .leading)
-
                         HStack(alignment: .top) {
                             //description
                             VStack(alignment: .leading) {
@@ -114,28 +116,12 @@ struct GameDetailView: View {
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
-            // Usage
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                // This code will be executed every 1 second
-                refresh.toggle()
-            }
-        }
-        .onDisappear {
-            // Invalidate the timer when the view disappears
-            timer?.invalidate()
-            timer = nil
         }
         .onChange(of: playingGame) { _ in
             let game = gameViewModel.getGameFromID(id: selectedGame)
             if let game = game {
                 playGame(game: game)
             }
-        }
-        .onChange(of: rating) { _ in
-            if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
-                gameViewModel.games[idx].metadata["rating"] = String(rating)
-            }
-            gameViewModel.saveGames()
         }
         .onChange(of: selectedGame) { _ in
             if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
