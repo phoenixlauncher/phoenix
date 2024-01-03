@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct GameListItem: View {
+    
+    @EnvironmentObject var gameViewModel: GameViewModel
+    
     @Binding var selectedGame: UUID
     @State var game: Game
     @Binding var refresh: Bool
@@ -28,32 +31,32 @@ struct GameListItem: View {
         }
         .contextMenu {
             Button(action: {
-                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                    games[idx].isFavorite.toggle()
+                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    gameViewModel.games[idx].isFavorite.toggle()
                 }
-                saveGames()
+                gameViewModel.saveGames()
             }) {
                 Image(systemName: game.isFavorite ? "star.slash" : "star")
                 Text("\(game.isFavorite ? "Unfavorite" : "Favorite") game")
             }
             .accessibility(identifier: "Favorite game")
             Button(action: {
-                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                    games[idx].isHidden = true
+                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    gameViewModel.games[idx].isHidden = true
                 }
-                selectedGame = games[0].id
-                saveGames()
+                selectedGame = gameViewModel.games[0].id
+                gameViewModel.saveGames()
             }) {
                 Image(systemName: "eye.slash")
                 Text("Hide game")
             }
             .accessibility(identifier: "Hide game")
             Button(action: {
-                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                    games.remove(at: idx)
+                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    gameViewModel.games.remove(at: idx)
                 }
-                selectedGame = games[0].id
-                saveGames()
+                selectedGame = gameViewModel.games[0].id
+                gameViewModel.saveGames()
             }) {
                 Image(systemName: "trash")
                 Text("Delete game")
@@ -96,19 +99,32 @@ struct GameListItem: View {
         ) { result in
             resultIntoData(result: result) { data in
                 if importType == "icon" {
+<<<<<<< HEAD
                     saveIconToFile(iconData: data, gameID: selectedGame) { image in
                         if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                             games[idx].icon = image
+=======
+                    saveIconToFile(iconData: data, gameID: game.id) { image in
+                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                            gameViewModel.games[idx].icon = image
+>>>>>>> 2e1e90c (mvvm basics)
                             game.icon = image
                             refresh.toggle()
-                            saveGames()
+                            gameViewModel.saveGames()
                         }
                     }
                 } else {
+<<<<<<< HEAD
                     saveImageToFile(data: data, gameID: selectedGame, type: importType) { image in
                         if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                             games[idx].metadata["header_img"] = image
                             saveGames()
+=======
+                    saveImageToFile(data: data, gameID: game.id, type: importType) { image in
+                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                            gameViewModel.games[idx].metadata["header_img"] = image
+                            gameViewModel.saveGames()
+>>>>>>> 2e1e90c (mvvm basics)
                         }
                     }
                 }

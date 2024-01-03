@@ -9,6 +9,10 @@ import SwiftUI
 import AlertToast
 
 struct GameInputView: View {
+    
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
@@ -105,16 +109,16 @@ struct GameInputView: View {
                                 var game: Game = .init(
                                     id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
                                 )
-                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                                    game.recency = games[idx].recency
-                                    game.isFavorite = games[idx].isFavorite
-                                    games[idx] = game
-                                    saveGames()
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                                    game.recency = gameViewModel.games[idx].recency
+                                    game.isFavorite = gameViewModel.games[idx].isFavorite
+                                    gameViewModel.games[idx] = game
+                                    gameViewModel.saveGames()
                                 }
                                 Task {
-                                    await FetchSupabaseData().fetchGamesFromName(name: game.name) { result in
+                                    await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
                                         fetchedGames = result
-                                        saveGames()
+                                        gameViewModel.saveGames()
                                         if fetchedGames.count != 0 {
                                             successToastText  = "Game saved!"
                                             showChooseGameView.toggle()
@@ -144,12 +148,12 @@ struct GameInputView: View {
                                 id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
-                                games.append(game)
-                                saveGames()
+                                gameViewModel.games.append(game)
+                                gameViewModel.saveGames()
                                 refresh.toggle()
                                 if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
-                                        await FetchSupabaseData().fetchGamesFromName(name: game.name) { result in
+                                        await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
                                             fetchedGames = result
                                             if fetchedGames.count != 0 {
                                                 successToastText = "Game created!"
@@ -163,11 +167,11 @@ struct GameInputView: View {
                                     }
                                 }
                             } else {
-                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                                    game.recency = games[idx].recency
-                                    game.isFavorite = games[idx].isFavorite
-                                    games[idx] = game
-                                    saveGames()
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                                    game.recency = gameViewModel.games[idx].recency
+                                    game.isFavorite = gameViewModel.games[idx].isFavorite
+                                    gameViewModel.games[idx] = game
+                                    gameViewModel.saveGames()
                                     successToastText = "Game saved!"
                                     showSuccessToast = true
                                 } else {
@@ -203,8 +207,8 @@ struct GameInputView: View {
             ChooseGameView(games: $fetchedGames, gameID: selectedGame, done: $chooseGameViewDone)
         })
         .onAppear() {
-            if !isNewGame, let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                let currentGame = games[idx]
+            if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                let currentGame = gameViewModel.games[idx]
                 id = currentGame.id
                 nameInput = currentGame.name
                 iconInput = currentGame.icon

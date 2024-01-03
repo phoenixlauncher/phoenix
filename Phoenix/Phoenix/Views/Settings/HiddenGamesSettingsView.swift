@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HiddenGamesSettingsView: View {
     
+    @EnvironmentObject var gameViewModel: GameViewModel
+    
     @State var selectedGame: String?
     @State var refresh: Bool = false
     @State private var timer: Timer?
@@ -20,7 +22,7 @@ struct HiddenGamesSettingsView: View {
         Form {
             VStack {
                 List(selection: $selectedGame) {
-                    let hiddenGames = games.filter { $0.isHidden == true}
+                    let hiddenGames = gameViewModel.games.filter { $0.isHidden == true}
                     if !hiddenGames.isEmpty {
                         ForEach(hiddenGames, id: \.id) { game in
                             HStack {
@@ -37,22 +39,21 @@ struct HiddenGamesSettingsView: View {
                                 Spacer()
                                 HStack {
                                     Button(action: {
-                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                            games[idx].isHidden = false
+                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                            gameViewModel.games[idx].isHidden = false
                                         }
                                         self.refresh.toggle()
-                                        saveGames()
+                                        gameViewModel.saveGames()
                                     }) {
                                         Text("Show game")
                                     }
                                     .accessibility(identifier: "Show Game")
                                     Button(action: {
-                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                            games.remove(at: idx)
+                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                            gameViewModel.games.remove(at: idx)
                                         }
-                                        saveGames()
+                                        gameViewModel.saveGames()
                                         self.refresh.toggle()
-                                        saveGames()
                                     }) {
                                         Image(systemName: "trash")
                                     }

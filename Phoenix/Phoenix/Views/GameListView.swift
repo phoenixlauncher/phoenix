@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct GameListView: View {
+    @EnvironmentObject var gameViewModel: GameViewModel
     
     @Binding var sortBy: PhoenixApp.SortBy
     @Binding var selectedGame: UUID
@@ -25,7 +26,7 @@ struct GameListView: View {
     var body: some View {
         VStack {
             List(selection: $selectedGame) {
-                let favoriteGames = games.filter {
+                let favoriteGames = gameViewModel.games.filter {
                     $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == true
                 }
                 if !favoriteGames.isEmpty {
@@ -38,7 +39,7 @@ struct GameListView: View {
                 switch sortBy {
                 case .platform:
                     ForEach(Platform.allCases, id: \.self) { platform in
-                        let gamesForPlatform = games.filter {
+                        let gamesForPlatform = gameViewModel.games.filter {
                             $0.platform == platform && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForPlatform.isEmpty {
@@ -51,7 +52,7 @@ struct GameListView: View {
                     }
                 case .status:
                     ForEach(Status.allCases, id: \.self) { status in
-                        let gamesForStatus = games.filter {
+                        let gamesForStatus = gameViewModel.games.filter {
                             $0.status == status && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForStatus.isEmpty {
@@ -63,7 +64,7 @@ struct GameListView: View {
                         }
                     }
                 case .name:
-                    let gamesForName = games.filter {
+                    let gamesForName = gameViewModel.games.filter {
                         $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                     }.sorted(by: { $0.name < $1.name })
                     if !gamesForName.isEmpty {
@@ -75,7 +76,7 @@ struct GameListView: View {
                     }
                 case .recency:
                     ForEach(Recency.allCases, id: \.self) { recency in
-                        let gamesForRecency = games.filter {
+                        let gamesForRecency = gameViewModel.games.filter {
                             $0.recency == recency && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForRecency.isEmpty {

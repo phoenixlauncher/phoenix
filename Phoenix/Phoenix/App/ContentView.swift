@@ -11,9 +11,10 @@ import AlertToast
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
 
-var games = loadGames().games.sorted()
-
 struct ContentView: View {
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @StateObject var supabaseViewModel = SupabaseViewModel()
+    
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""

@@ -9,6 +9,9 @@ import SwiftUI
 import Kingfisher
 
 struct ChooseGameView: View {
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    
     @Environment(\.dismiss) private var dismiss
     
     @Binding var games: [SupabaseGame]
@@ -68,8 +71,8 @@ struct ChooseGameView: View {
     
     func chooseGame(selectedGame: SupabaseGame) {
         done = true
-        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, game: Game(id: gameID)) { result in
-            FetchSupabaseData().saveFetchedGame(gameID: gameID, fetchedGame: result)
+        supabaseViewModel.convertSupabaseGame(supabaseGame: selectedGame, game: Game(id: gameID)) { result in
+            gameViewModel.addGame(game: result)
         }
     }
 }

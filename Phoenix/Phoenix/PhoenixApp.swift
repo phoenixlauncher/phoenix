@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct PhoenixApp: App {
+    @StateObject var gameViewModel = GameViewModel()
     @StateObject var updaterViewModel = UpdaterViewModel()
     
     enum SortBy: String, Codable, CaseIterable, Identifiable, Defaults.Serializable {
@@ -68,6 +69,7 @@ struct PhoenixApp: App {
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity
                 )
+                .environmentObject(gameViewModel)
         }.commands {
             CommandGroup(before: CommandGroupPlacement.newItem) {
                 Button("Add Game") {
@@ -117,6 +119,7 @@ struct PhoenixApp: App {
         
         Settings {
             SettingsView()
+                .environmentObject(gameViewModel)
         }
     }
 }
