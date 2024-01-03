@@ -13,7 +13,6 @@ struct GameDetailView: View {
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
     
     @State var showingAlert: Bool = false
-    @Binding var selectedGame: UUID
     @State var selectedGameName: String?
     @Binding var editingGame: Bool
     @Binding var playingGame: Bool
@@ -27,7 +26,7 @@ struct GameDetailView: View {
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
-                let game = gameViewModel.getGameFromID(id: selectedGame)
+                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                 if let game = game {
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
@@ -51,7 +50,7 @@ struct GameDetailView: View {
                             // play button
                             LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             .alert(
-                                "No launcher configured. Please configure a launch command to run \(selectedGameName ?? "this game")",
+                                "No launcher configured. Please configure a launch command to run \(gameViewModel.selectedGameName)",
                                 isPresented: $showingAlert
                             ) {}
                             
@@ -62,7 +61,7 @@ struct GameDetailView: View {
                                 .frame(width: 300, height: 30)
                                 .padding()
                                 .onHover { _ in
-                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                                         gameViewModel.games[idx].metadata["rating"] = String(rating)
                                     }
                                     gameViewModel.saveGames()
@@ -73,7 +72,7 @@ struct GameDetailView: View {
                         HStack(alignment: .top) {
                             //description
                             VStack(alignment: .leading) {
-                                let game = gameViewModel.getGameFromID(id: selectedGame)
+                                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                                 if game?.metadata["description"] != "" {
                                     TextCard(text: game?.metadata["description"] ?? "No game selected")
                                 } else {
@@ -83,7 +82,7 @@ struct GameDetailView: View {
                             .padding(.trailing, 7.5)
                             
                             SlotCard(content: {
-                                let game = gameViewModel.getGameFromID(id: selectedGame)
+                                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                                 if let game = game {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
@@ -110,24 +109,25 @@ struct GameDetailView: View {
                 }
             }
         }
-        .navigationTitle(selectedGameName ?? "Phoenix")
+        .navigationTitle(gameViewModel.selectedGameName)
         .onAppear {
-            let game = gameViewModel.getGameFromID(id: selectedGame)
+            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
         }
         .onChange(of: playingGame) { _ in
-            let game = gameViewModel.getGameFromID(id: selectedGame)
+            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let game = game {
                 playGame(game: game)
             }
         }
-        .onChange(of: selectedGame) { _ in
-            if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
-                selectedGameName = gameViewModel.games[idx].name
+        .onChange(of: gameViewModel.selectedGame) { _ in
+            if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                Defaults[.selectedGame] = gameViewModel.selectedGame
+                gameViewModel.selectedGameName = gameViewModel.games[idx].name
             }
-            let game = gameViewModel.getGameFromID(id: selectedGame)
+            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
@@ -164,7 +164,7 @@ struct GameDetailView: View {
         let dateString = dateFormatter.string(from: currentDate)
 
         // Update the value of "last_played" in the game's metadata
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
             gameViewModel.games[idx].metadata["last_played"] = dateString
             gameViewModel.games[idx].recency = .day
             gameViewModel.saveGames()

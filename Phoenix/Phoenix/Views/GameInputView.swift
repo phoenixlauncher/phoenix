@@ -16,7 +16,7 @@ struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    @Binding var selectedGame: UUID
+
     
     @Binding var showSuccessToast: Bool
     @Binding var successToastText: String
@@ -55,7 +55,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconInput, gameID: selectedGame)
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconInput, gameID: gameViewModel.selectedGame)
         
                     SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
@@ -81,9 +81,9 @@ struct GameInputView: View {
                         
                         LargeTextBox(textBoxName: "Genres", input: $genreInput)
                         
-                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headerInput, gameID: selectedGame)
+                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headerInput, gameID: gameViewModel.selectedGame)
                         
-                        ImageImportButton(type: "Cover", isImporting: $coverIsImporting, output: $coverInput, gameID: selectedGame)
+                        ImageImportButton(type: "Cover", isImporting: $coverIsImporting, output: $coverInput, gameID: gameViewModel.selectedGame)
                         
                         if !Defaults[.showStarRating] {
                             TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
@@ -108,7 +108,7 @@ struct GameInputView: View {
                                 var game: Game = .init(
                                     id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
                                 )
-                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                                     game.recency = gameViewModel.games[idx].recency
                                     game.isFavorite = gameViewModel.games[idx].isFavorite
                                     gameViewModel.games[idx] = game
@@ -128,7 +128,7 @@ struct GameInputView: View {
                                         }
                                     }
                                 }
-                                selectedGame = game.id
+                                gameViewModel.selectedGame = game.id
                             },
                             label: {
                                 Text("Fetch Metadata")
@@ -165,7 +165,7 @@ struct GameInputView: View {
                                     }
                                 }
                             } else {
-                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                                     game.recency = gameViewModel.games[idx].recency
                                     game.isFavorite = gameViewModel.games[idx].isFavorite
                                     gameViewModel.games[idx] = game
@@ -202,10 +202,10 @@ struct GameInputView: View {
                 showSuccessToast = true
             }
         }, content: {
-            ChooseGameView(games: $fetchedGames, gameID: selectedGame, done: $chooseGameViewDone)
+            ChooseGameView(games: $fetchedGames, gameID: gameViewModel.selectedGame, done: $chooseGameViewDone)
         })
         .onAppear() {
-            if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == selectedGame }) {
+            if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                 let currentGame = gameViewModel.games[idx]
                 id = currentGame.id
                 nameInput = currentGame.name

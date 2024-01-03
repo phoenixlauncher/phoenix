@@ -179,7 +179,6 @@
 		0AF378632953AADD00978137 /* Phoenix */ = {
 			isa = PBXGroup;
 			children = (
-				ADA0D89F2B3F88EB00487C4D /* ViewModels */,
 				ADB4CF042AB535C300BDF853 /* App */,
 				0AF378682953AADE00978137 /* Assets.xcassets */,
 				ADB4CF072AB536FC00BDF853 /* Helpers */,
@@ -190,6 +189,7 @@
 				0AF378642953AADD00978137 /* PhoenixApp.swift */,
 				0AF3786A2953AADE00978137 /* Preview Content */,
 				ADB4CF082AB537C100BDF853 /* Views */,
+				ADA0D89F2B3F88EB00487C4D /* ViewModels */,
 			);
 			path = Phoenix;
 			sourceTree = "<group>";
@@ -296,8 +296,8 @@
 				0A02F8EB295BB92400FE29F4 /* GameInputView.swift */,
 				0A87BBB0295D57C30009AF47 /* GameListView.swift */,
 				AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */,
-				ADB4CF0B2AB5385600BDF853 /* Updates */,
 				ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */,
+				ADB4CF0B2AB5385600BDF853 /* Updates */,
 				ADB4CF092AB537CA00BDF853 /* Components */,
 				ADB4CF0A2AB537DC00BDF853 /* Settings */,
 			);

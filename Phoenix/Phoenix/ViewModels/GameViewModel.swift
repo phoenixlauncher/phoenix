@@ -2,11 +2,22 @@ import Foundation
 
 class GameViewModel: ObservableObject {
     @Published var games: [Game] = []
+    @Published var selectedGame: UUID
+    @Published var selectedGameName: String
     var supabaseViewModel = SupabaseViewModel()
     
     init() {
-        // Now call the loadGames method
+        // Initialize selectedGame and selectedGameName
+        selectedGame = Defaults[.selectedGame]
+        selectedGameName = ""
+        
+        // Load games and assign the value to the optional variable
         games = loadGames().sorted()
+        
+        // Update selectedGameName using the loaded games
+        if let game = getGameFromID(id: Defaults[.selectedGame]) {
+            selectedGameName = game.name
+        }
     }
     
     func getGameFromName(name: String) -> Game? {

@@ -18,7 +18,6 @@ struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
-    @Default(.selectedGame) var selectedGame
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
@@ -38,7 +37,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, searchText: $searchText, isAddingGame: $isAddingGame)
+            GameListView(sortBy: $sortBy, searchText: $searchText, isAddingGame: $isAddingGame)
                 .toolbar {
                     if !showSidebarAddGameButton {
                         ToolbarItem(placement: .primaryAction) {
@@ -54,7 +53,7 @@ struct ContentView: View {
                             .sheet(
                                 isPresented: $isAddingGame,
                                 content: {
-                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                                    GameInputView(isNewGame: true, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                                 }
                             )
                         }
@@ -102,9 +101,9 @@ struct ContentView: View {
                 }
         } detail: {
             // The detailed view of the selected game
-            GameDetailView(selectedGame: $selectedGame, editingGame: $isEditingGame, playingGame: $isPlayingGame)
+            GameDetailView(editingGame: $isEditingGame, playingGame: $isPlayingGame)
                 .sheet(isPresented: $isEditingGame, content: {
-                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                    GameInputView(isNewGame: false, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                 })
         }
         .environmentObject(supabaseViewModel)

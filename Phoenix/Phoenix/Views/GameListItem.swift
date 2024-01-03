@@ -11,7 +11,7 @@ struct GameListItem: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
     
-    @Binding var selectedGame: UUID
+
     @State var game: Game
     @State var iconSize: Double = Defaults[.listIconSize]
     @State var iconsHidden: Bool = Defaults[.listIconsHidden]
@@ -43,7 +43,7 @@ struct GameListItem: View {
                 if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                     gameViewModel.games[idx].isHidden = true
                 }
-                selectedGame = gameViewModel.games[0].id
+                gameViewModel.selectedGame = gameViewModel.games[0].id
                 gameViewModel.saveGames()
             }) {
                 Image(systemName: "eye.slash")
@@ -54,7 +54,7 @@ struct GameListItem: View {
                 if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                     gameViewModel.games.remove(at: idx)
                 }
-                selectedGame = gameViewModel.games[0].id
+                gameViewModel.selectedGame = gameViewModel.games[0].id
                 gameViewModel.saveGames()
             }) {
                 Image(systemName: "trash")

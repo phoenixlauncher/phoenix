@@ -10,7 +10,7 @@ struct GameListView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     
     @Binding var sortBy: PhoenixApp.SortBy
-    @Binding var selectedGame: UUID
+
     @Binding var searchText: String
     @Binding var isAddingGame: Bool
     @State private var timer: Timer?
@@ -24,14 +24,14 @@ struct GameListView: View {
     
     var body: some View {
         VStack {
-            List(selection: $selectedGame) {
+            List(selection: $gameViewModel.selectedGame) {
                 let favoriteGames = gameViewModel.games.filter {
                     $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == true
                 }
                 if !favoriteGames.isEmpty {
                     Section(header: Text("Favorites \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            GameListItem(selectedGame: $selectedGame, game: game)
+                            GameListItem(game: game)
                         }
                     }
                 }
@@ -44,7 +44,7 @@ struct GameListView: View {
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    GameListItem(selectedGame: $selectedGame, game: game)
+                                    GameListItem(game: game)
                                 }
                             }
                         }
@@ -57,7 +57,7 @@ struct GameListView: View {
                         if !gamesForStatus.isEmpty {
                             Section(header: Text("\(status.displayName) \(showSortByNumber ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    GameListItem(selectedGame: $selectedGame, game: game)
+                                    GameListItem(game: game)
                                 }
                             }
                         }
@@ -69,7 +69,7 @@ struct GameListView: View {
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
                             ForEach(gamesForName, id: \.id) { game in
-                                GameListItem(selectedGame: $selectedGame, game: game)
+                                GameListItem(game: game)
                             }
                         }
                     }
@@ -81,7 +81,7 @@ struct GameListView: View {
                         if !gamesForRecency.isEmpty {
                             Section(header: Text("\(recency.displayName) \(showSortByNumber ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    GameListItem(selectedGame: $selectedGame, game: game)
+                                    GameListItem(game: game)
                                 }
                             }
                         }

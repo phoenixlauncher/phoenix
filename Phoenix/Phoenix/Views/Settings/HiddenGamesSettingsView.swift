@@ -11,15 +11,13 @@ struct HiddenGamesSettingsView: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
     
-    @State var selectedGame: String?
-    
     @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     @State var iconSize: Double = Defaults[.listIconSize]
     
     var body: some View {
         Form {
             VStack {
-                List(selection: $selectedGame) {
+                List(selection: $gameViewModel.selectedGame) {
                     let hiddenGames = gameViewModel.games.filter { $0.isHidden == true}
                     if !hiddenGames.isEmpty {
                         ForEach(hiddenGames, id: \.id) { game in
