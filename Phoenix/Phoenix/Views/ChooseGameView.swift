@@ -9,18 +9,21 @@ import SwiftUI
 import Kingfisher
 
 struct ChooseGameView: View {
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var games: [SupabaseGame]
-    @State var selectedGame: SupabaseGame?
-    var gameID: UUID
+    @Binding var supabaseGames: [SupabaseGame]
+    @State var supabaseGame: SupabaseGame?
+    var game: Game
     
     @Binding var done: Bool
     
     var body: some View {
         VStack {
-            List(selection: $selectedGame) {
-                ForEach(games.sorted { $0.igdb_id < $1.igdb_id }, id: \.self) { game in
+            List(selection: $supabaseGame) {
+                ForEach(supabaseGames.sorted { $0.igdb_id < $1.igdb_id }, id: \.self) { game in
                     HStack(spacing: 20) {
                         if let cover = game.cover {
                             KFImage(URL(string: cover))
@@ -46,8 +49,8 @@ struct ChooseGameView: View {
             }
             Button(
                 action: {
-                    if let selectedGame = selectedGame {
-                        chooseGame(selectedGame: selectedGame)
+                    if let supabaseGame = supabaseGame {
+                        chooseGame(supabaseGame)
                         dismiss()
                     }
                 },
@@ -59,17 +62,17 @@ struct ChooseGameView: View {
         .padding()
         .frame(minWidth: 720, minHeight: 250, idealHeight: 400)
         .onAppear {
-            if games.count == 1 {
-                chooseGame(selectedGame: $games.wrappedValue[0])
+            if supabaseGames .count == 1 {
+                chooseGame($supabaseGames.wrappedValue[0])
                 dismiss()
             }
         }
     }
     
-    func chooseGame(selectedGame: SupabaseGame) {
+    func chooseGame(_ supabaseGame: SupabaseGame) {
         done = true
-        FetchSupabaseData().convertSupabaseGame(supabaseGame: selectedGame, game: Game(id: gameID)) { result in
-            FetchSupabaseData().saveFetchedGame(gameID: gameID, fetchedGame: result)
+        supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game) { result in
+            gameViewModel.addGame(result)
         }
     }
 }

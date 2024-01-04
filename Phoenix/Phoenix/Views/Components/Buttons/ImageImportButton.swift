@@ -11,6 +11,7 @@ struct ImageImportButton: View {
     
     var type: String
     @Binding var isImporting: Bool
+    @Binding var input: String
     @Binding var output: String
     var gameID: UUID
     
@@ -18,7 +19,7 @@ struct ImageImportButton: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(type)
-                Text("Selected image: \(output)")
+                Text("Selected image: \(input)")
                     .foregroundColor(.secondary)
                     .font(.caption)
             }
@@ -38,6 +39,7 @@ struct ImageImportButton: View {
             allowedContentTypes: [.image],
             allowsMultipleSelection: false
         ) { result in
+            input = (try? result.get().first?.path) ?? ""
             resultIntoData(result: result) { data in
                 if type == "Icon" {
                     saveIconToFile(iconData: data, gameID: gameID) { image in

@@ -2,44 +2,31 @@
 //  GameInputView.swift
 //  Phoenix
 //
-//  Created by James Hughes onon 2022-12-27.
+//  Created by James Hughes on 2022-12-27.
 //
 import Foundation
 import SwiftUI
 import AlertToast
 
 struct GameInputView: View {
+    
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    @Binding var selectedGame: UUID
-    @Binding var refresh: Bool
-    
-    @Binding var showSuccessToast: Bool
-    @Binding var successToastText: String
-    
-    @Binding var showFailureToast: Bool
-    @Binding var failureToastText: String
     
     @State private var showChooseGameView: Bool = false
     @State var chooseGameViewDone = false
     
     @State var fetchedGames: [SupabaseGame] = []
     
-    @State private var id: UUID?
-    
-    @State private var nameInput: String = ""
+    @State private var game: Game = Game()
     @State private var iconInput: String = ""
-    @State private var platInput: Platform = .none
-    @State private var statusInput: Status = .none
-    @State private var cmdInput: String = ""
-    @State private var descInput: String = ""
     @State private var headerInput: String = ""
     @State private var coverInput: String = ""
-    @State private var rateInput: String = ""
-    @State private var genreInput: String = ""
-    @State private var devInput: String = ""
-    @State private var pubInput: String = ""
     @State private var dateInput: Date = .now
 
     @State private var iconIsImporting: Bool = false
@@ -50,12 +37,12 @@ struct GameInputView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 Group {
-                    TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
+                    TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $game.name) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconInput, gameID: selectedGame)
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, input: $iconInput, output: $game.icon, gameID: gameViewModel.selectedGame)
         
                     SlotInput(contentName: "Platform", content: {
-                        Picker("", selection: $platInput) {
+                        Picker("", selection: $game.platform) {
                             ForEach(Platform.allCases) { platform in
                                 Text(platform.displayName)
                             }
@@ -63,32 +50,32 @@ struct GameInputView: View {
                     })
                     
                     SlotInput(contentName: "Status", content: {
-                        Picker("", selection: $statusInput) {
+                        Picker("", selection: $game.status) {
                             ForEach(Status.allCases) { status in
                                 Text(status.displayName)
                             }
                         }
                     })
                     
-                    TextBox(textBoxName: "Command", placeholder: "Enter terminal command to launch game", input: $cmdInput)
+                    TextBox(textBoxName: "Command", placeholder: "Enter terminal command to launch game", input: $game.launcher)
                 }
                 DisclosureGroup("Advanced") {
                     VStack(alignment: .leading) {
-                        LargeTextBox(textBoxName: "Description", input: $descInput)
+                        LargeTextBox(textBoxName: "Description", input: binding(for: "description"))
                         
-                        LargeTextBox(textBoxName: "Genres", input: $genreInput)
+                        LargeTextBox(textBoxName: "Genres", input: binding(for: "description"))
                         
-                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headerInput, gameID: selectedGame)
+                        ImageImportButton(type: "Header", isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: gameViewModel.selectedGame)
                         
-                        ImageImportButton(type: "Cover", isImporting: $coverIsImporting, output: $coverInput, gameID: selectedGame)
+                        ImageImportButton(type: "Cover", isImporting: $coverIsImporting, input: $coverInput, output: binding(for: "cover"), gameID: gameViewModel.selectedGame)
                         
                         if !Defaults[.showStarRating] {
-                            TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
+                            TextBox(textBoxName: "Rating", placeholder: "X / 10", input: binding(for: "rating"))
                         }
                         
-                        TextBox(textBoxName: "Developer", placeholder: "Enter game developer", input: $devInput)
+                        TextBox(textBoxName: "Developer", placeholder: "Enter game developer", input: binding(for: "developer"))
                         
-                        TextBox(textBoxName: "Publisher", placeholder: "Enter game publisher", input: $pubInput)
+                        TextBox(textBoxName: "Publisher", placeholder: "Enter game publisher", input: binding(for: "publisher"))
                         
                         DatePicker("Release Date", selection: $dateInput, in: ...Date(), displayedComponents: .date)
                             .padding()
@@ -102,30 +89,25 @@ struct GameInputView: View {
                     if !isNewGame {
                         Button (
                             action: {
-                                var game: Game = .init(
-                                    id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
-                                )
-                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                                    game.recency = games[idx].recency
-                                    game.isFavorite = games[idx].isFavorite
-                                    games[idx] = game
-                                    saveGames()
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                                    game.recency = gameViewModel.games[idx].recency
+                                    game.isFavorite = gameViewModel.games[idx].isFavorite
+                                    gameViewModel.games[idx] = game
+                                    gameViewModel.saveGames()
                                 }
                                 Task {
-                                    await FetchSupabaseData().fetchGamesFromName(name: game.name) { result in
+                                    await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
                                         fetchedGames = result
-                                        saveGames()
+                                        gameViewModel.saveGames()
                                         if fetchedGames.count != 0 {
-                                            successToastText  = "Game saved!"
                                             showChooseGameView.toggle()
                                         } else {
-                                            failureToastText = "No games found."
-                                            showFailureToast = true
+                                            appViewModel.showFailureToast("No games found.")
                                             dismiss()
                                         }
                                     }
                                 }
-                                selectedGame = game.id
+                                gameViewModel.selectedGame = game.id
                             },
                             label: {
                                 Text("Fetch Metadata")
@@ -134,45 +116,34 @@ struct GameInputView: View {
                     }
                     Button(
                         action: {
-                            guard !nameInput.isEmpty && !nameInput.trimmingCharacters(in: .whitespaces).isEmpty else {
-                                failureToastText = "Game must have a name."
-                                showFailureToast = true
+                            guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
+                                appViewModel.showFailureToast("Game must have a name.")
                                 dismiss()
                                 return
                             }
-                            var game: Game = .init(
-                                id: id ?? UUID(), launcher: cmdInput, metadata: ["description": descInput, "header_img": headerInput, "cover": coverInput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconInput, name: nameInput, platform: platInput, status: statusInput
-                            )
                             if isNewGame {
-                                games.append(game)
-                                saveGames()
-                                refresh.toggle()
                                 if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
-                                        await FetchSupabaseData().fetchGamesFromName(name: game.name) { result in
+                                        await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
                                             fetchedGames = result
                                             if fetchedGames.count != 0 {
-                                                successToastText = "Game created!"
                                                 showChooseGameView.toggle()
                                             } else {
-                                                failureToastText = "No games found."
-                                                showFailureToast = true
+                                                appViewModel.showFailureToast("No games found.")
                                                 dismiss()
                                             }
                                         }
                                     }
                                 }
                             } else {
-                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                                    game.recency = games[idx].recency
-                                    game.isFavorite = games[idx].isFavorite
-                                    games[idx] = game
-                                    saveGames()
-                                    successToastText = "Game saved!"
-                                    showSuccessToast = true
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                                    game.recency = gameViewModel.games[idx].recency
+                                    game.isFavorite = gameViewModel.games[idx].isFavorite
+                                    gameViewModel.games[idx] = game
+                                    gameViewModel.saveGames()
+                                    appViewModel.showSuccessToast("Game saved!")
                                 } else {
-                                    failureToastText = "Game couldn't be found."
-                                    showFailureToast = true
+                                    appViewModel.showFailureToast("Game couldn't be found.")
                                 }
                                 dismiss()
                             }
@@ -197,29 +168,40 @@ struct GameInputView: View {
         .sheet(isPresented: $showChooseGameView, onDismiss: {
             if chooseGameViewDone {
                 dismiss()
-                showSuccessToast = true
+                appViewModel.showSuccessToast("Game saved!")
             }
         }, content: {
-            ChooseGameView(games: $fetchedGames, gameID: selectedGame, done: $chooseGameViewDone)
+            ChooseGameView(supabaseGames: $fetchedGames, game: game, done: $chooseGameViewDone)
         })
         .onAppear() {
-            if !isNewGame, let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                let currentGame = games[idx]
-                id = currentGame.id
-                nameInput = currentGame.name
-                iconInput = currentGame.icon
-                platInput = currentGame.platform
-                statusInput = currentGame.status
-                cmdInput = currentGame.launcher
-                descInput = currentGame.metadata["description"] ?? ""
-                genreInput = currentGame.metadata["genre"] ?? ""
-                headerInput = currentGame.metadata["header_img"] ?? ""
-                rateInput = currentGame.metadata["rating"] ?? ""
-                devInput = currentGame.metadata["developer"] ?? ""
-                pubInput = currentGame.metadata["publisher"] ?? ""
+            if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                let currentGame = gameViewModel.games[idx]
+                game.id = currentGame.id
+                game.name = currentGame.name
+                game.icon = currentGame.icon
+                game.platform = currentGame.platform
+                game.status = currentGame.status
+                game.launcher = currentGame.launcher
+                game.metadata["description"] = currentGame.metadata["description"] ?? ""
+                game.metadata["genre"] = currentGame.metadata["genre"] ?? ""
+                game.metadata["header_img"] = currentGame.metadata["header_img"] ?? ""
+                game.metadata["cover"] = currentGame.metadata["cover"] ?? ""
+                game.metadata["rating"] = currentGame.metadata["rating"] ?? ""
+                game.metadata["developer"] = currentGame.metadata["developer"] ?? ""
+                game.metadata["publisher"] = currentGame.metadata["publisher"] ?? ""
                 // Create Date Formatter
                 dateInput = convertIntoDate(input: currentGame.metadata["release_date"] ?? "")
+            } else {
+                game.id = UUID()
             }
         }
+    }
+    
+    private func binding(for key: String) -> Binding<String> {
+        return Binding(get: {
+            return self.game.metadata[key] ?? ""
+        }, set: {
+            self.game.metadata[key] = $0
+        })
     }
 }

@@ -11,27 +11,17 @@ import AlertToast
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
 
-var games = loadGames().games.sorted()
-
 struct ContentView: View {
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @StateObject var supabaseViewModel = SupabaseViewModel()
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
-    @Default(.selectedGame) var selectedGame
-    @State var refresh: Bool = false
-    @State private var timer: Timer?
-    @Binding var isAddingGame: Bool
-    @Binding var isEditingGame: Bool
-    @Binding var isPlayingGame: Bool
     
     @Default(.showPickerText) var showPickerText
     @Default(.showSidebarAddGameButton) var showSidebarAddGameButton
-    
-    @State var showSuccessToast: Bool = false
-    @State var successToastText: String = "Success"
-    
-    @State var showFailureToast: Bool = false
-    @State var failureToastText: String = "Failure"
     
     @State var animate: Bool = false
 
@@ -39,27 +29,23 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // The sidebar
-            GameListView(sortBy: $sortBy, selectedGame: $selectedGame, refresh: $refresh, searchText: $searchText, isAddingGame: $isAddingGame)
+            GameListView(sortBy: $sortBy, searchText: $searchText)
                 .toolbar {
                     if !showSidebarAddGameButton {
                         ToolbarItem(placement: .primaryAction) {
                             // Add game button
                             Button(
                                 action: {
-                                    self.isAddingGame.toggle()
+                                    appViewModel.isAddingGame.toggle()
                                 },
                                 label: {
                                     Label("New Game", systemImage: "plus")
                                 }
                             )
                             .sheet(
-                                isPresented: $isAddingGame,
-                                onDismiss: {
-                                    // Refresh game list
-                                    self.refresh.toggle()
-                                },
+                                isPresented: $appViewModel.isAddingGame,
                                 content: {
-                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, refresh: $refresh, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                                    GameInputView(isNewGame: true)
                                 }
                             )
                         }
@@ -107,30 +93,22 @@ struct ContentView: View {
                 }
         } detail: {
             // The detailed view of the selected game
-            GameDetailView(selectedGame: $selectedGame, refresh: $refresh, editingGame: $isEditingGame, playingGame: $isPlayingGame)
-                .sheet(isPresented: $isEditingGame, content: {
-                    GameInputView(isNewGame: false, selectedGame: $selectedGame, refresh: $refresh, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+            GameDetailView()
+                .sheet(isPresented: $appViewModel.isEditingGame, content: {
+                    GameInputView(isNewGame: false)
                 })
-
-            // Refresh detail view
-            Text(String(refresh))
-                .hidden()
         }
-        .onAppear {
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                refresh.toggle()
-                Defaults[.sortBy] = sortBy
-            }
-        }
+        .environmentObject(supabaseViewModel)
+        .environmentObject(appViewModel)
         .onChange(of: sortBy) { _ in
             animate.toggle()
         }
         .searchable(text: $searchText, placement: .sidebar)
-        .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: successToastText)
+        .toast(isPresenting: $appViewModel.showSuccessToast, tapToDismiss: true) {
+            AlertToast(type: .complete(Color.green), title: appViewModel.successToastText)
         }
-        .toast(isPresenting: $showFailureToast, tapToDismiss: true) {
-            AlertToast(type: .error(Color.red), title: failureToastText)
+        .toast(isPresenting: $appViewModel.showFailureToast, tapToDismiss: true) {
+            AlertToast(type: .error(Color.red), title: appViewModel.failureToastText)
         }
     }
 }

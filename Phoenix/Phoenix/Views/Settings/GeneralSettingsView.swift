@@ -30,7 +30,7 @@ struct GeneralSettingsView: View {
                     FolderImportButton(type: "CrossOver", folder: $crossOverFolder, lastPathComponent: $lastPathComponent, endPath: nil, invalidFolder: $invalidFolder)
                 }
                 Divider()
-                Defaults.Toggle("Fetch game metadata", key: .isMetaDataFetchingEnabled)
+                Defaults.Toggle("Fetch game metadata automatically", key: .isMetaDataFetchingEnabled)
             }
             .alert("Invalid folder", isPresented: $invalidFolder) {
                 VStack {

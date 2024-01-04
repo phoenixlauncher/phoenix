@@ -9,9 +9,7 @@ import SwiftUI
 
 struct HiddenGamesSettingsView: View {
     
-    @State var selectedGame: String?
-    @State var refresh: Bool = false
-    @State private var timer: Timer?
+    @EnvironmentObject var gameViewModel: GameViewModel
     
     @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     @State var iconSize: Double = Defaults[.listIconSize]
@@ -19,8 +17,8 @@ struct HiddenGamesSettingsView: View {
     var body: some View {
         Form {
             VStack {
-                List(selection: $selectedGame) {
-                    let hiddenGames = games.filter { $0.isHidden == true}
+                List(selection: $gameViewModel.selectedGame) {
+                    let hiddenGames = gameViewModel.games.filter { $0.isHidden == true}
                     if !hiddenGames.isEmpty {
                         ForEach(hiddenGames, id: \.id) { game in
                             HStack {
@@ -31,28 +29,23 @@ struct HiddenGamesSettingsView: View {
                                             .frame(width: iconSize, height: iconSize)
                                     }
                                     Text(game.name)
-                                    Text(String(refresh))
-                                        .hidden()
                                 }
                                 Spacer()
                                 HStack {
                                     Button(action: {
-                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                            games[idx].isHidden = false
+                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                            gameViewModel.games[idx].isHidden = false
                                         }
-                                        self.refresh.toggle()
-                                        saveGames()
+                                        gameViewModel.saveGames()
                                     }) {
                                         Text("Show game")
                                     }
                                     .accessibility(identifier: "Show Game")
                                     Button(action: {
-                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                            games.remove(at: idx)
+                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                            gameViewModel.games.remove(at: idx)
                                         }
-                                        saveGames()
-                                        self.refresh.toggle()
-                                        saveGames()
+                                        gameViewModel.saveGames()
                                     }) {
                                         Image(systemName: "trash")
                                     }
@@ -67,13 +60,6 @@ struct HiddenGamesSettingsView: View {
                             .font(.system(size: 20))
                     }
                 }
-            }
-        }
-        .onAppear {
-            self.refresh.toggle()
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                self.refresh.toggle()
-                // This code will be executed every 1 second
             }
         }
         .onChange(of: Defaults[.listIconSize]) { value in

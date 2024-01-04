@@ -123,28 +123,18 @@ struct Game: Codable, Comparable, Hashable {
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        launcher = try container.decode(String.self, forKey: .launcher)
-        metadata = try container.decode([String: String].self, forKey: .metadata)
-        icon = try container.decode(String.self, forKey: .icon)
-        name = try container.decode(String.self, forKey: .name)
+        self.launcher = (try? container.decode(String.self, forKey: .launcher)) ?? ""
+        self.metadata = (try? container.decode([String: String].self, forKey: .metadata)) ?? ["": ""]
+        self.icon = (try? container.decode(String.self, forKey: .icon)) ?? ""
+        self.name = (try? container.decode(String.self, forKey: .name)) ?? ""
         
         var platformRawValue = try container.decode(String.self, forKey: .platform)
         platformRawValue = platformRawValue.lowercased()
-        
-        if let platform = Platform(rawValue: platformRawValue) {
-            self.platform = platform
-        } else {
-            self.platform = .none
-        }
+        self.platform = Platform(rawValue: platformRawValue) ?? .none
         
         var statusRawValue = try container.decode(String.self, forKey: .status)
         statusRawValue = statusRawValue.lowercased()
-
-        if let status = Status(rawValue: statusRawValue) {
-            self.status = status
-        } else {
-            self.status = .none
-        }
+        self.status = Status(rawValue: statusRawValue) ?? .none
         
         // Decode recency, or derive it from last_played
         let dateString = metadata["last_played"] ?? ""
@@ -155,57 +145,31 @@ struct Game: Codable, Comparable, Hashable {
             dateFormatter.dateFormat = "MMM dd, yyyy"
             let lastPlayedDate = dateFormatter.date(from: dateString)
             let timeInterval = lastPlayedDate?.timeIntervalSinceNow ?? 0
-            if abs(timeInterval) <= 24 * 60 * 60 {
+            let dayInSecs: TimeInterval = 24 * 60 * 60
+            switch abs(timeInterval) {
+            case 0...dayInSecs:
                 self.recency = .day
-            } else if abs(timeInterval) <= 7 * 24 * 60 * 60 {
+            case 0...7 * dayInSecs:
                 self.recency = .week
-            } else if abs(timeInterval) <= 30 * 24 * 60 * 60 {
+            case 0...30 * dayInSecs:
                 self.recency = .month
-            } else if abs(timeInterval) <= 90 * 24 * 60 * 60 {
+            case 0...90 * dayInSecs:
                 self.recency = .three_months
-            } else if abs(timeInterval) <= 180 * 24 * 60 * 60 {
+            case 0...180 * dayInSecs:
                 self.recency = .six_months
-            } else if abs(timeInterval) <= 365 * 24 * 60 * 60 {
+            case 0...365 * dayInSecs:
                 self.recency = .year
-            } else {
+            default:
                 self.recency = .never
             }
         }
         
-        // Handle steamID conversion with default to ""
-        if let steamID = try? container.decode(String.self, forKey: .steamID) {
-            self.steamID = steamID
-        } else {
-            self.steamID = ""
-        }
+        self.steamID = (try? container.decode(String.self, forKey: .steamID)) ?? ""
+        self.igdbID = (try? container.decode(String.self, forKey: .igdbID)) ?? ""
         
-        // Handle igdbID conversion with default to ""
-        if let igdbID = try? container.decode(String.self, forKey: .igdbID) {
-            self.igdbID = igdbID
-        } else {
-            self.igdbID = ""
-        }
-        
-        // Handle id conversion
-        if let id = try? container.decode(UUID.self, forKey: .id) {
-            self.id = id
-        } else {
-            self.id = UUID()
-        }
-        
-        // Handle isHidden conversion with default to ""
-        if let isHidden = try? container.decode(Bool.self, forKey: .isHidden) {
-            self.isHidden = isHidden
-        } else {
-            self.isHidden = false
-        }
-        
-        // Handle isFavorite conversion with default to ""
-        if let isFavorite = try? container.decode(Bool.self, forKey: .isFavorite) {
-            self.isFavorite = isFavorite
-        } else {
-            self.isFavorite = false
-        }
+        self.id = (try? container.decode(UUID.self, forKey: .id)) ?? UUID()
+        self.isHidden = (try? container.decode(Bool.self, forKey: .isHidden)) ?? false
+        self.isFavorite = (try? container.decode(Bool.self, forKey: .isFavorite)) ?? false
     }
 
     /**
@@ -244,32 +208,6 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
     }
 
     return false
-}
-
-/// If varying game detection settings are enabled run methods to check for those games
-/// Save the games once the check is done, then parse the saved json to get a list of games
-///
-/// - Returns: An array of Games, aka. GamesList
-func loadGames() -> GamesList {
-    Task {
-        var steamGameNames: Set<String> = []
-        var crossoverGameNames: Set<String> = []
-        
-        if Defaults[.steamDetection] {
-            steamGameNames = await detectSteamGames()
-        }
-        
-        if Defaults[.crossOverDetection] {
-            crossoverGameNames = await detectCrossoverGames()
-        }
-        
-        await compareSteamAndCrossoverGames(steamGameNames: steamGameNames, crossoverGameNames: crossoverGameNames)
-    }
-    
-    
-    
-    let res = loadGamesFromJSON()
-    return res
 }
 
 

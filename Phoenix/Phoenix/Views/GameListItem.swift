@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct GameListItem: View {
-    @Binding var selectedGame: UUID
+    
+    @EnvironmentObject var gameViewModel: GameViewModel
+
     @State var game: Game
-    @Binding var refresh: Bool
-    @State var iconSize: Double = Defaults[.listIconSize]
-    @State var iconsHidden: Bool = Defaults[.listIconsHidden]
+    
+    @Default(.listIconSize) var iconSize
+    @Default(.listIconsHidden) var iconsHidden
     
     @State var isImporting: Bool = false
     @State var importType: String = "icon"
@@ -28,32 +30,32 @@ struct GameListItem: View {
         }
         .contextMenu {
             Button(action: {
-                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                    games[idx].isFavorite.toggle()
+                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    gameViewModel.games[idx].isFavorite.toggle()
                 }
-                saveGames()
+                gameViewModel.saveGames()
             }) {
                 Image(systemName: game.isFavorite ? "star.slash" : "star")
                 Text("\(game.isFavorite ? "Unfavorite" : "Favorite") game")
             }
             .accessibility(identifier: "Favorite game")
             Button(action: {
-                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                    games[idx].isHidden = true
+                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    gameViewModel.games[idx].isHidden = true
                 }
-                selectedGame = games[0].id
-                saveGames()
+                gameViewModel.selectedGame = gameViewModel.games[0].id
+                gameViewModel.saveGames()
             }) {
                 Image(systemName: "eye.slash")
                 Text("Hide game")
             }
             .accessibility(identifier: "Hide game")
             Button(action: {
-                if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                    games.remove(at: idx)
+                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    gameViewModel.games.remove(at: idx)
                 }
-                selectedGame = games[0].id
-                saveGames()
+                gameViewModel.selectedGame = gameViewModel.games[0].id
+                gameViewModel.saveGames()
             }) {
                 Image(systemName: "trash")
                 Text("Delete game")
@@ -83,12 +85,6 @@ struct GameListItem: View {
             .accessibility(identifier: "Edit header")
             .padding()
         }
-        .onChange(of: Defaults[.listIconSize]) { value in
-            iconSize = value
-        }
-        .onChange(of: Defaults[.listIconsHidden]) { value in
-            iconsHidden = value
-        }
         .fileImporter(
             isPresented: $isImporting,
             allowedContentTypes: [.image],
@@ -96,19 +92,18 @@ struct GameListItem: View {
         ) { result in
             resultIntoData(result: result) { data in
                 if importType == "icon" {
-                    saveIconToFile(iconData: data, gameID: selectedGame) { image in
-                        if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                            games[idx].icon = image
+                    saveIconToFile(iconData: data, gameID: game.id) { image in
+                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                            gameViewModel.games[idx].icon = image
                             game.icon = image
-                            refresh.toggle()
-                            saveGames()
+                            gameViewModel.saveGames()
                         }
                     }
                 } else {
-                    saveImageToFile(data: data, gameID: selectedGame, type: importType) { image in
-                        if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                            games[idx].metadata["header_img"] = image
-                            saveGames()
+                    saveImageToFile(data: data, gameID: game.id, type: importType) { image in
+                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                            gameViewModel.games[idx].metadata["header_img"] = image
+                            gameViewModel.saveGames()
                         }
                     }
                 }

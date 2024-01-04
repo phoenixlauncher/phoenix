@@ -31,17 +31,19 @@
 		AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CD2AC00A1A001673F5 /* SlotInput.swift */; };
 		AD5287D02AC010AA001673F5 /* LargeTextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */; };
 		AD5287D22AC016AD001673F5 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D12AC016AD001673F5 /* DateUtils.swift */; };
-		AD5287D42AC01841001673F5 /* GameUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D32AC01841001673F5 /* GameUtils.swift */; };
 		AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D52AC018B8001673F5 /* HelpButton.swift */; };
 		AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */; };
 		AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */; };
 		AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCC12AC7E57200D3A301 /* Cards.swift */; };
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
-		AD7AD2ED2B098023002DBDCD /* FetchSupabaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7AD2EC2B098023002DBDCD /* FetchSupabaseData.swift */; };
+		AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */; };
 		AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AD7AD2EF2B09819E002DBDCD /* Supabase */; };
 		AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */; };
 		AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD8718FC2AFDE14D0008F144 /* MarkdownUI */; };
 		AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AD92C4F52AAEBAF40058E1EA /* Kingfisher */; };
+		ADA0D8A12B3F890800487C4D /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A02B3F890800487C4D /* GameViewModel.swift */; };
+		ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */; };
+		ADA0D8A62B3FA5B900487C4D /* SupabaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */; };
 		ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = ADB63FFD2AF7F248006B39ED /* Defaults */; };
 		ADB640002AF8391C006B39ED /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB63FFF2AF8391C006B39ED /* Defaults.swift */; };
 		ADB72D5E2AC1359100299AC0 /* ChooseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */; };
@@ -100,14 +102,16 @@
 		AD5287CD2AC00A1A001673F5 /* SlotInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotInput.swift; sourceTree = "<group>"; };
 		AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextBox.swift; sourceTree = "<group>"; };
 		AD5287D12AC016AD001673F5 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
-		AD5287D32AC01841001673F5 /* GameUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUtils.swift; sourceTree = "<group>"; };
 		AD5287D52AC018B8001673F5 /* HelpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpButton.swift; sourceTree = "<group>"; };
 		AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCC12AC7E57200D3A301 /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
-		AD7AD2EC2B098023002DBDCD /* FetchSupabaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSupabaseData.swift; sourceTree = "<group>"; };
+		AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		AD7AD2F62B099C12002DBDCD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListItem.swift; sourceTree = "<group>"; };
+		ADA0D8A02B3F890800487C4D /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseViewModel.swift; sourceTree = "<group>"; };
+		ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseGame.swift; sourceTree = "<group>"; };
 		ADB63FFF2AF8391C006B39ED /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseGameView.swift; sourceTree = "<group>"; };
 		ADC001002B0DB15C004D9CF6 /* setup.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = setup.md; sourceTree = "<group>"; };
@@ -185,6 +189,7 @@
 				0AF378642953AADD00978137 /* PhoenixApp.swift */,
 				0AF3786A2953AADE00978137 /* Preview Content */,
 				ADB4CF082AB537C100BDF853 /* Views */,
+				ADA0D89F2B3F88EB00487C4D /* ViewModels */,
 			);
 			path = Phoenix;
 			sourceTree = "<group>";
@@ -235,6 +240,17 @@
 			path = TextBoxes;
 			sourceTree = "<group>";
 		};
+		ADA0D89F2B3F88EB00487C4D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */,
+				ADA0D8A02B3F890800487C4D /* GameViewModel.swift */,
+				ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */,
+				AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		ADB4CF042AB535C300BDF853 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,7 +264,7 @@
 			children = (
 				0A20E1F22957FEAD00B7756E /* games.json */,
 				0A20E1EE2957E8B900B7756E /* Game.swift */,
-				CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */,
+				ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -257,7 +273,6 @@
 			isa = PBXGroup;
 			children = (
 				ADB63FFF2AF8391C006B39ED /* Defaults.swift */,
-				AD7AD2EC2B098023002DBDCD /* FetchSupabaseData.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -270,7 +285,6 @@
 				0A20E1F02957FD4C00B7756E /* JsonUtils.swift */,
 				CAFAFAA82967600700B89003 /* LogUtils.swift */,
 				AD5287D12AC016AD001673F5 /* DateUtils.swift */,
-				AD5287D32AC01841001673F5 /* GameUtils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -282,8 +296,8 @@
 				0A02F8EB295BB92400FE29F4 /* GameInputView.swift */,
 				0A87BBB0295D57C30009AF47 /* GameListView.swift */,
 				AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */,
-				ADB4CF0B2AB5385600BDF853 /* Updates */,
 				ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */,
+				ADB4CF0B2AB5385600BDF853 /* Updates */,
 				ADB4CF092AB537CA00BDF853 /* Components */,
 				ADB4CF0A2AB537DC00BDF853 /* Settings */,
 			);
@@ -480,8 +494,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD5287D02AC010AA001673F5 /* LargeTextBox.swift in Sources */,
+				ADA0D8A62B3FA5B900487C4D /* SupabaseGame.swift in Sources */,
 				AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */,
 				AD5287D22AC016AD001673F5 /* DateUtils.swift in Sources */,
+				ADA0D8A12B3F890800487C4D /* GameViewModel.swift in Sources */,
 				0AE9B6F62A3ADA0E00800850 /* GeneralSettingsView.swift in Sources */,
 				ADDE703F2B00546C00D006B8 /* FolderImportButton.swift in Sources */,
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
@@ -489,7 +505,6 @@
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
 				AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */,
 				ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */,
-				AD7AD2ED2B098023002DBDCD /* FetchSupabaseData.swift in Sources */,
 				0AE9B6F82A3ADAD700800850 /* AppearanceSettingsView.swift in Sources */,
 				AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */,
 				0A02F8EC295BB92400FE29F4 /* GameInputView.swift in Sources */,
@@ -504,12 +519,13 @@
 				AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
 				AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */,
-				AD5287D42AC01841001673F5 /* GameUtils.swift in Sources */,
+				AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */,
 				AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */,
 				B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */,
 				AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */,
 				ADB640002AF8391C006B39ED /* Defaults.swift in Sources */,
 				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
+				ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */,
 				0A87BBB1295D57C30009AF47 /* GameListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -551,6 +567,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -613,6 +630,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -692,6 +710,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shock9616.Phoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -724,6 +743,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shock9616.Phoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

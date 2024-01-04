@@ -9,18 +9,13 @@ import AlertToast
 import StarRatingViewSwiftUI
 
 struct GameDetailView: View {
+    @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     
-    @State var showingAlert: Bool = false
-    @Binding var selectedGame: UUID
     @State var selectedGameName: String?
-    @Binding var refresh: Bool
-    @Binding var editingGame: Bool
-    @Binding var playingGame: Bool
-    @State var showSuccessToast: Bool = false
     
     @State var rating: Float = 0
-    
-    @State private var timer: Timer?
     
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
@@ -28,7 +23,7 @@ struct GameDetailView: View {
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
-                let game = getGameFromID(id: selectedGame)
+                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                 if let game = game {
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
@@ -50,26 +45,26 @@ struct GameDetailView: View {
                     VStack(alignment: .leading) {
                         HStack(alignment: .center) {
                             // play button
-                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
-                            .alert(
-                                "No launcher configured. Please configure a launch command to run \(selectedGameName ?? "this game")",
-                                isPresented: $showingAlert
-                            ) {}
-                            
+                            LargeToggleButton(toggle: $appViewModel.isPlayingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             // settings button
-                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
+                            SmallToggleButton(toggle: $appViewModel.isEditingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
-                                  .frame(width: 300, height: 30)
-                                  .padding()
+                                .frame(width: 300, height: 30)
+                                .padding()
+                                .onHover { _ in
+                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                                        gameViewModel.games[idx].metadata["rating"] = String(rating)
+                                    }
+                                    gameViewModel.saveGames()
+                                }
                             }
                         } // hstack
                         .frame(alignment: .leading)
-
                         HStack(alignment: .top) {
                             //description
                             VStack(alignment: .leading) {
-                                let game = getGameFromID(id: selectedGame)
+                                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                                 if game?.metadata["description"] != "" {
                                     TextCard(text: game?.metadata["description"] ?? "No game selected")
                                 } else {
@@ -79,7 +74,7 @@ struct GameDetailView: View {
                             .padding(.trailing, 7.5)
                             
                             SlotCard(content: {
-                                let game = getGameFromID(id: selectedGame)
+                                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                                 if let game = game {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
@@ -106,46 +101,28 @@ struct GameDetailView: View {
                 }
             }
         }
-        .navigationTitle(selectedGameName ?? "Phoenix")
+        .navigationTitle(gameViewModel.selectedGameName)
         .onAppear {
-            let game = getGameFromID(id: selectedGame)
+            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
-            // Usage
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                // This code will be executed every 1 second
-                refresh.toggle()
-            }
         }
-        .onDisappear {
-            // Invalidate the timer when the view disappears
-            timer?.invalidate()
-            timer = nil
-        }
-        .onChange(of: playingGame) { _ in
-            let game = getGameFromID(id: selectedGame)
+        .onChange(of: appViewModel.isPlayingGame) { _ in
+            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let game = game {
                 playGame(game: game)
             }
         }
-        .onChange(of: rating) { _ in
-            if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                 games[idx].metadata["rating"] = String(rating)
+        .onChange(of: gameViewModel.selectedGame) { _ in
+            if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                Defaults[.selectedGame] = gameViewModel.selectedGame
+                gameViewModel.selectedGameName = gameViewModel.games[idx].name
             }
-            saveGames()
-        }
-        .onChange(of: selectedGame) { _ in
-            if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                selectedGameName = games[idx].name
-            }
-            let game = getGameFromID(id: selectedGame)
+            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
-        }
-        .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: "Game saved!")
         }
     }
     
@@ -157,7 +134,7 @@ struct GameDetailView: View {
             if game.launcher != "" {
                 try shell(game)
             } else {
-                showingAlert = true
+                appViewModel.showFailureToast("No launcher configured. Please configure a launch command to run \(gameViewModel.selectedGameName)")
             }
         } catch {
             logger.write("\(error)") // handle or silence the error here
@@ -176,10 +153,10 @@ struct GameDetailView: View {
         let dateString = dateFormatter.string(from: currentDate)
 
         // Update the value of "last_played" in the game's metadata
-        if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-            games[idx].metadata["last_played"] = dateString
-            games[idx].recency = .day
-            saveGames()
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+            gameViewModel.games[idx].metadata["last_played"] = dateString
+            gameViewModel.games[idx].recency = .day
+            gameViewModel.saveGames()
         }
     }
 }

@@ -22,7 +22,7 @@ final class UpdaterViewModel: ObservableObject {
             .assign(to: &$canCheckForUpdates)
     }
     
-    func checkForUpdates() {
+    @MainActor func checkForUpdates() {
         updaterController.checkForUpdates(nil)
     }
 }
