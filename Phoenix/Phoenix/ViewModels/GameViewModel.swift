@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 class GameViewModel: ObservableObject {
     @Published var games: [Game] = []
     @Published var selectedGame: UUID

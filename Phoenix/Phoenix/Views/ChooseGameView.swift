@@ -14,16 +14,16 @@ struct ChooseGameView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var games: [SupabaseGame]
+    @Binding var supabaseGames: [SupabaseGame]
     @State var supabaseGame: SupabaseGame?
-    var gameID: UUID
+    var game: Game
     
     @Binding var done: Bool
     
     var body: some View {
         VStack {
             List(selection: $supabaseGame) {
-                ForEach(games.sorted { $0.igdb_id < $1.igdb_id }, id: \.self) { game in
+                ForEach(supabaseGames.sorted { $0.igdb_id < $1.igdb_id }, id: \.self) { game in
                     HStack(spacing: 20) {
                         if let cover = game.cover {
                             KFImage(URL(string: cover))
@@ -62,8 +62,8 @@ struct ChooseGameView: View {
         .padding()
         .frame(minWidth: 720, minHeight: 250, idealHeight: 400)
         .onAppear {
-            if games.count == 1 {
-                chooseGame($games.wrappedValue[0])
+            if supabaseGames .count == 1 {
+                chooseGame($supabaseGames.wrappedValue[0])
                 dismiss()
             }
         }
@@ -71,7 +71,7 @@ struct ChooseGameView: View {
     
     func chooseGame(_ supabaseGame: SupabaseGame) {
         done = true
-        supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: gameID)) { result in
+        supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game) { result in
             gameViewModel.addGame(result)
         }
     }
