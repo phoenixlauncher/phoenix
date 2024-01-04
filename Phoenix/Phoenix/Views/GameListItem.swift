@@ -10,11 +10,11 @@ import SwiftUI
 struct GameListItem: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
-    
 
     @State var game: Game
-    @State var iconSize: Double = Defaults[.listIconSize]
-    @State var iconsHidden: Bool = Defaults[.listIconsHidden]
+    
+    @Default(.listIconSize) var iconSize
+    @Default(.listIconsHidden) var iconsHidden
     
     @State var isImporting: Bool = false
     @State var importType: String = "icon"
@@ -84,12 +84,6 @@ struct GameListItem: View {
             }
             .accessibility(identifier: "Edit header")
             .padding()
-        }
-        .onChange(of: Defaults[.listIconSize]) { value in
-            iconSize = value
-        }
-        .onChange(of: Defaults[.listIconsHidden]) { value in
-            iconsHidden = value
         }
         .fileImporter(
             isPresented: $isImporting,
