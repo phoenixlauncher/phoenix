@@ -11,12 +11,9 @@ import StarRatingViewSwiftUI
 struct GameDetailView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     
-    @State var showingAlert: Bool = false
     @State var selectedGameName: String?
-    @Binding var editingGame: Bool
-    @Binding var playingGame: Bool
-    @State var showSuccessToast: Bool = false
     
     @State var rating: Float = 0
     
@@ -48,14 +45,9 @@ struct GameDetailView: View {
                     VStack(alignment: .leading) {
                         HStack(alignment: .center) {
                             // play button
-                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
-                            .alert(
-                                "No launcher configured. Please configure a launch command to run \(gameViewModel.selectedGameName)",
-                                isPresented: $showingAlert
-                            ) {}
-                            
+                            LargeToggleButton(toggle: $appViewModel.isPlayingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             // settings button
-                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
+                            SmallToggleButton(toggle: $appViewModel.isEditingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
                                 .frame(width: 300, height: 30)
@@ -116,7 +108,7 @@ struct GameDetailView: View {
                 rating = Float(gameRating) ?? 0
             }
         }
-        .onChange(of: playingGame) { _ in
+        .onChange(of: appViewModel.isPlayingGame) { _ in
             let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let game = game {
                 playGame(game: game)
@@ -132,9 +124,6 @@ struct GameDetailView: View {
                 rating = Float(gameRating) ?? 0
             }
         }
-        .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: "Game saved!")
-        }
     }
     
     func playGame(game: Game) {
@@ -145,7 +134,7 @@ struct GameDetailView: View {
             if game.launcher != "" {
                 try shell(game)
             } else {
-                showingAlert = true
+                appViewModel.showFailureToast("No launcher configured. Please configure a launch command to run \(gameViewModel.selectedGameName)")
             }
         } catch {
             logger.write("\(error)") // handle or silence the error here

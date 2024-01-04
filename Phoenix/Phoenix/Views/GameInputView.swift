@@ -12,16 +12,11 @@ struct GameInputView: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    
-    @Binding var showSuccessToast: Bool
-    @Binding var successToastText: String
-    
-    @Binding var showFailureToast: Bool
-    @Binding var failureToastText: String
     
     @State private var showChooseGameView: Bool = false
     @State var chooseGameViewDone = false
@@ -105,11 +100,9 @@ struct GameInputView: View {
                                         fetchedGames = result
                                         gameViewModel.saveGames()
                                         if fetchedGames.count != 0 {
-                                            successToastText  = "Game saved!"
                                             showChooseGameView.toggle()
                                         } else {
-                                            failureToastText = "No games found."
-                                            showFailureToast = true
+                                            appViewModel.showFailureToast("No games found.")
                                             dismiss()
                                         }
                                     }
@@ -124,8 +117,7 @@ struct GameInputView: View {
                     Button(
                         action: {
                             guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
-                                failureToastText = "Game must have a name."
-                                showFailureToast = true
+                                appViewModel.showFailureToast("Game must have a name.")
                                 dismiss()
                                 return
                             }
@@ -135,11 +127,9 @@ struct GameInputView: View {
                                         await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
                                             fetchedGames = result
                                             if fetchedGames.count != 0 {
-                                                successToastText = "Game created!"
                                                 showChooseGameView.toggle()
                                             } else {
-                                                failureToastText = "No games found."
-                                                showFailureToast = true
+                                                appViewModel.showFailureToast("No games found.")
                                                 dismiss()
                                             }
                                         }
@@ -151,11 +141,9 @@ struct GameInputView: View {
                                     game.isFavorite = gameViewModel.games[idx].isFavorite
                                     gameViewModel.games[idx] = game
                                     gameViewModel.saveGames()
-                                    successToastText = "Game saved!"
-                                    showSuccessToast = true
+                                    appViewModel.showSuccessToast("Game saved!")
                                 } else {
-                                    failureToastText = "Game couldn't be found."
-                                    showFailureToast = true
+                                    appViewModel.showFailureToast("Game couldn't be found.")
                                 }
                                 dismiss()
                             }
@@ -180,7 +168,7 @@ struct GameInputView: View {
         .sheet(isPresented: $showChooseGameView, onDismiss: {
             if chooseGameViewDone {
                 dismiss()
-                showSuccessToast = true
+                appViewModel.showSuccessToast("Game saved!")
             }
         }, content: {
             ChooseGameView(supabaseGames: $fetchedGames, game: game, done: $chooseGameViewDone)

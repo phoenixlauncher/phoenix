@@ -36,6 +36,7 @@
 		AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */; };
 		AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCC12AC7E57200D3A301 /* Cards.swift */; };
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
+		AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */; };
 		AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AD7AD2EF2B09819E002DBDCD /* Supabase */; };
 		AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */; };
 		AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD8718FC2AFDE14D0008F144 /* MarkdownUI */; };
@@ -105,6 +106,7 @@
 		AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCC12AC7E57200D3A301 /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
+		AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		AD7AD2F62B099C12002DBDCD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListItem.swift; sourceTree = "<group>"; };
 		ADA0D8A02B3F890800487C4D /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */,
 				ADA0D8A02B3F890800487C4D /* GameViewModel.swift */,
 				ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */,
+				AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
 				AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */,
+				AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */,
 				AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */,
 				B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */,
 				AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */,
@@ -706,6 +710,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shock9616.Phoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -738,6 +743,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shock9616.Phoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

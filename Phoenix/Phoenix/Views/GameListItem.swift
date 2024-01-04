@@ -92,31 +92,18 @@ struct GameListItem: View {
         ) { result in
             resultIntoData(result: result) { data in
                 if importType == "icon" {
-<<<<<<< HEAD
-                    saveIconToFile(iconData: data, gameID: selectedGame) { image in
-                        if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                            games[idx].icon = image
-=======
                     saveIconToFile(iconData: data, gameID: game.id) { image in
                         if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                             gameViewModel.games[idx].icon = image
->>>>>>> 2e1e90c (mvvm basics)
                             game.icon = image
                             gameViewModel.saveGames()
                         }
                     }
                 } else {
-<<<<<<< HEAD
-                    saveImageToFile(data: data, gameID: selectedGame, type: importType) { image in
-                        if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
-                            games[idx].metadata["header_img"] = image
-                            saveGames()
-=======
                     saveImageToFile(data: data, gameID: game.id, type: importType) { image in
                         if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                             gameViewModel.games[idx].metadata["header_img"] = image
                             gameViewModel.saveGames()
->>>>>>> 2e1e90c (mvvm basics)
                         }
                     }
                 }

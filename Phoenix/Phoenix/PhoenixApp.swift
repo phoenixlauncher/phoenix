@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct PhoenixApp: App {
     @StateObject var gameViewModel = GameViewModel()
+    @StateObject var appViewModel = AppViewModel()
     @StateObject var updaterViewModel = UpdaterViewModel()
     
     enum SortBy: String, Codable, CaseIterable, Identifiable, Defaults.Serializable {
@@ -56,32 +57,29 @@ struct PhoenixApp: App {
     
     @State var sortBy: SortBy = Defaults[.sortBy]
     
-    @State var isAddingGame: Bool = false
-    @State var isEditingGame: Bool = false
-    @State var isPlayingGame: Bool = false
-    
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
-            ContentView(sortBy: $sortBy, isAddingGame: $isAddingGame, isEditingGame: $isEditingGame, isPlayingGame: $isPlayingGame)
+            ContentView(sortBy: $sortBy)
                 .frame(
                     minWidth: 750, idealWidth: 1900, maxWidth: .infinity,
                     minHeight: 445, idealHeight: 1080, maxHeight: .infinity
                 )
                 .environmentObject(gameViewModel)
+                .environmentObject(appViewModel)
         }.commands {
             CommandGroup(before: CommandGroupPlacement.newItem) {
                 Button("Add Game") {
-                    self.isAddingGame.toggle()
+                    appViewModel.isAddingGame.toggle()
                 }
                 .keyboardShortcut("n", modifiers: [.shift, .command])
                 Button("Edit Game") {
-                    self.isEditingGame.toggle()
+                    appViewModel.isEditingGame.toggle()
                 }
                 .keyboardShortcut("e", modifiers: [.shift, .command])
                 Button("Play Game") {
-                    self.isPlayingGame.toggle()
+                    appViewModel.isPlayingGame.toggle()
                 }
                 .keyboardShortcut("p", modifiers: [.shift, .command])
             }

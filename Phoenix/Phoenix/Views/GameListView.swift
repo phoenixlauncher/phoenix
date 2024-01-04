@@ -8,11 +8,11 @@ import SwiftUI
 
 struct GameListView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     
     @Binding var sortBy: PhoenixApp.SortBy
 
     @Binding var searchText: String
-    @Binding var isAddingGame: Bool
     @State private var timer: Timer?
     @State private var minWidth: CGFloat = 296
     
@@ -91,7 +91,7 @@ struct GameListView: View {
             
             if showSidebarAddGameButton {
                 Button(action: {
-                    isAddingGame.toggle()
+                    appViewModel.isAddingGame.toggle()
                 }, label: {
                     Image(systemName: "plus.app")
                         .font(.system(size: 16))
