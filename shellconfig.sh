@@ -4,7 +4,7 @@
 ##############################################
 # Xcode configuration
 # APP_VERSION is the version number of the app (This is the only thing you should change, the rest of the file can be left as is unless you want to change the app name or the destination directory for the archive)
-APP_VERSION="0.1.0"
+APP_VERSION="0.1.2"
 
 # Set the app name and destination directory for the archive
 APP_NAME="Phoenix"
