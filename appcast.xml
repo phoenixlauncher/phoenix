@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Phoenix</title>
+        <item>
+            <title>0.1.1</title>
+            <pubDate>Thu, 04 Jan 2024 19:48:04 -0800</pubDate>
+            <sparkle:version>1</sparkle:version>
+            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://phoenixlauncher.github.io/phoenix/rw.17401.Phoenix.dmg" length="38838272" type="application/octet-stream" sparkle:edSignature="rtpeUhUL18FwmUOJAGiOAxpiGLj7YSPRUEb0ECOm/SJVCHbCSoe6ehZ3yhOxzeMB4fVw1db4aYkr2pOoLuZ3Aw=="/>
+            <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
+        <sparkle:releaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases/tag/v0.1.1</sparkle:releaseNotesLink>
+<sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
+</item>
+    </channel>
+</rss>
