@@ -4,12 +4,11 @@
         <title>Phoenix</title>
         <item>
             <title>0.1.2</title>
-            <pubDate>Thu, 04 Jan 2024 20:02:00 -0800</pubDate>
+            <pubDate>Thu, 04 Jan 2024 20:35:43 -0800</pubDate>
             <sparkle:version>1</sparkle:version>
             <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://phoenixlauncher.github.io/phoenix/rw.25439.Phoenix.dmg" length="38838272" type="application/octet-stream" sparkle:edSignature="EUSRlDSLE8ukQRHISzZFcwxANZnQUREarYigc3PHOOEu3MBJXq84Jc5uRPxiP6zI2X6ekRRMrN5HSO9EO62KDg=="/>
-            <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
+            <enclosure url="https://phoenixlauncher.github.io/phoenix/Phoenix.dmg" length="5350715" type="application/octet-stream" sparkle:edSignature="YwHnoMkX8YXuTT+zffHNlzOHwLakfNr1jPJHh/Wpg/+xPDMUUBBg6xSQw2fv75wachAKfAKCpd7zcypUzxaGDg=="/>
         <sparkle:releaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases/tag/v0.1.2</sparkle:releaseNotesLink>
 <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
 </item>
