@@ -8,7 +8,8 @@
             <sparkle:version>1</sparkle:version>
             <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://phoenixlauncher.github.io/phoenix/rw.17401.Phoenix.dmg" length="38838272" type="application/octet-stream" sparkle:edSignature="rtpeUhUL18FwmUOJAGiOAxpiGLj7YSPRUEb0ECOm/SJVCHbCSoe6ehZ3yhOxzeMB4fVw1db4aYkr2pOoLuZ3Aw=="/>
+            <enclosure url="https://phoenixlauncher.github.io/phoenix/rw.18588.Phoenix.dmg" length="38838272" type="application/octet-stream" sparkle:edSignature="QA4Zj2IlCR9XTd27i9SZonlx2+//SGJPAGF+39LMEBuYLXE89fz/UklEmZqLRHGJNEjotRSQ5rrx2VsPb0w4BQ=="/>
+            <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
             <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
         <sparkle:releaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases/tag/v0.1.1</sparkle:releaseNotesLink>
 <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
