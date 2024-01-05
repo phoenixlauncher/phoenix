@@ -3,15 +3,13 @@
     <channel>
         <title>Phoenix</title>
         <item>
-            <title>0.1.1</title>
-            <pubDate>Thu, 04 Jan 2024 19:48:04 -0800</pubDate>
+            <title>0.1.2</title>
+            <pubDate>Thu, 04 Jan 2024 20:02:00 -0800</pubDate>
             <sparkle:version>1</sparkle:version>
-            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://phoenixlauncher.github.io/phoenix/rw.18588.Phoenix.dmg" length="38838272" type="application/octet-stream" sparkle:edSignature="QA4Zj2IlCR9XTd27i9SZonlx2+//SGJPAGF+39LMEBuYLXE89fz/UklEmZqLRHGJNEjotRSQ5rrx2VsPb0w4BQ=="/>
-            <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
-            <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
-        <sparkle:releaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases/tag/v0.1.1</sparkle:releaseNotesLink>
+            <enclosure url="https://phoenixlauncher.github.io/phoenix/Phoenix.dmg" length="5350684" type="application/octet-stream" sparkle:edSignature="awKkKMd2Qi6/NJnGhd7s3aBPvobsLYDlLcuFvgYRKzTPiXDtML3xK7QAemmT3wYBWbsJ4Qi4zo/JYw89bYPRCg=="/>
+        <sparkle:releaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases/tag/v0.1.2</sparkle:releaseNotesLink>
 <sparkle:fullReleaseNotesLink>https://github.com/phoenixlauncher/Phoenix/releases</sparkle:fullReleaseNotesLink>
 </item>
     </channel>
