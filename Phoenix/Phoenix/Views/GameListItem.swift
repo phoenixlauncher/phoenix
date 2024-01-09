@@ -11,7 +11,7 @@ struct GameListItem: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
 
-    @State var game: Game
+    @State var gameIndex: Int
     
     @Default(.listIconSize) var iconSize
     @Default(.listIconsHidden) var iconsHidden
@@ -21,28 +21,24 @@ struct GameListItem: View {
     
     var body: some View {
         HStack {
-            if !iconsHidden && game.icon != "" {
-                Image(nsImage: loadImageFromFile(filePath: game.icon))
+            if !iconsHidden && gameViewModel.games[gameIndex].icon != "" {
+                Image(nsImage: loadImageFromFile(filePath: gameViewModel.games[gameIndex].icon))
                     .resizable()
                     .frame(width: iconSize, height: iconSize)
             }
-            Text(game.name)
+            Text(gameViewModel.games[gameIndex].name)
         }
         .contextMenu {
             Button(action: {
-                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                    gameViewModel.games[idx].isFavorite.toggle()
-                }
+                gameViewModel.games[gameIndex].isFavorite.toggle()
                 gameViewModel.saveGames()
             }) {
-                Image(systemName: game.isFavorite ? "star.slash" : "star")
-                Text("\(game.isFavorite ? "Unfavorite" : "Favorite") game")
+                Image(systemName: gameViewModel.games[gameIndex].isFavorite ? "star.slash" : "star")
+                Text("\(gameViewModel.games[gameIndex].isFavorite ? "Unfavorite" : "Favorite") game")
             }
             .accessibility(identifier: "Favorite game")
             Button(action: {
-                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                    gameViewModel.games[idx].isHidden = true
-                }
+                gameViewModel.games[gameIndex].isHidden = true
                 gameViewModel.selectedGame = gameViewModel.games[0].id
                 gameViewModel.saveGames()
             }) {
@@ -51,9 +47,7 @@ struct GameListItem: View {
             }
             .accessibility(identifier: "Hide game")
             Button(action: {
-                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                    gameViewModel.games.remove(at: idx)
-                }
+                gameViewModel.games.remove(at: gameIndex)
                 gameViewModel.selectedGame = gameViewModel.games[0].id
                 gameViewModel.saveGames()
             }) {
@@ -92,19 +86,14 @@ struct GameListItem: View {
         ) { result in
             resultIntoData(result: result) { data in
                 if importType == "icon" {
-                    saveIconToFile(iconData: data, gameID: game.id) { image in
-                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                            gameViewModel.games[idx].icon = image
-                            game.icon = image
-                            gameViewModel.saveGames()
-                        }
+                    saveIconToFile(iconData: data, gameID: gameViewModel.games[gameIndex].id) { image in
+                        gameViewModel.games[gameIndex].icon = image
+                        gameViewModel.saveGames()
                     }
                 } else {
-                    saveImageToFile(data: data, gameID: game.id, type: importType) { image in
-                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                            gameViewModel.games[idx].metadata["header_img"] = image
-                            gameViewModel.saveGames()
-                        }
+                    saveImageToFile(data: data, gameID: gameViewModel.games[gameIndex].id, type: importType) { image in
+                        gameViewModel.games[gameIndex].metadata["header_img"] = image
+                        gameViewModel.saveGames()
                     }
                 }
             }

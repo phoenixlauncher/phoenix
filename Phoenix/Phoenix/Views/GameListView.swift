@@ -31,7 +31,9 @@ struct GameListView: View {
                 if !favoriteGames.isEmpty {
                     Section(header: Text("Favorites \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            GameListItem(game: game)
+                            if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                GameListItem(gameIndex: gameIndex)
+                            }
                         }
                     }
                 }
@@ -44,7 +46,9 @@ struct GameListView: View {
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    GameListItem(game: game)
+                                    if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                        GameListItem(gameIndex: gameIndex)
+                                    }
                                 }
                             }
                         }
@@ -57,7 +61,9 @@ struct GameListView: View {
                         if !gamesForStatus.isEmpty {
                             Section(header: Text("\(status.displayName) \(showSortByNumber ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    GameListItem(game: game)
+                                    if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                        GameListItem(gameIndex: gameIndex)
+                                    }
                                 }
                             }
                         }
@@ -69,7 +75,9 @@ struct GameListView: View {
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
                             ForEach(gamesForName, id: \.id) { game in
-                                GameListItem(game: game)
+                                if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                    GameListItem(gameIndex: gameIndex)
+                                }
                             }
                         }
                     }
@@ -81,7 +89,9 @@ struct GameListView: View {
                         if !gamesForRecency.isEmpty {
                             Section(header: Text("\(recency.displayName) \(showSortByNumber ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    GameListItem(game: game)
+                                    if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                        GameListItem(gameIndex: gameIndex)
+                                    }
                                 }
                             }
                         }
