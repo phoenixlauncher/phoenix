@@ -6,9 +6,9 @@
             <title>0.1.1</title>
             <pubDate>Tue, 09 Jan 2024 19:34:33 -0800</pubDate>
             <sparkle:version>15</sparkle:version>
-            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/phoenixlauncher/phoenix/releases/download/v0.1.1-beta/Phoenix.dmg" length="12322540" type="application/octet-stream" sparkle:edSignature="COU+2KTmcOI6LH+khfdLGNBkiZBrBF5Ha3gAYrdyHNPDWHf8zOOW78o1nlGxB2dVelVojG9ooyroA4AHLI4NDA=="/>
+            <enclosure url="https://github.com/phoenixlauncher/phoenix/releases/download/v0.1.2-beta/Phoenix.dmg" length="12322540" type="application/octet-stream" sparkle:edSignature="COU+2KTmcOI6LH+khfdLGNBkiZBrBF5Ha3gAYrdyHNPDWHf8zOOW78o1nlGxB2dVelVojG9ooyroA4AHLI4NDA=="/>
         </item>
     </channel>
 </rss>
