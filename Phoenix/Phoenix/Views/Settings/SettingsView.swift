@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct SettingsView: View {
-    
     var body: some View {
         TabView {
             GeneralSettingsView()
                 .tabItem {
-                    Label("General", systemImage: "gear")
+                    Label(String(localized: "prefs_General"), systemImage: "gear")
                 }
             AppearanceSettingsView()
                 .tabItem {
-                    Label("Appearance", systemImage: "paintpalette")
+                    Label(String(localized: "prefs_Appearance"), systemImage: "paintpalette")
                 }
             HiddenGamesSettingsView()
                 .tabItem {
-                    Label("Hidden Games", systemImage: "eye.slash.fill")
+                    Label(String(localized: "prefs_Hidden"), systemImage: "eye.slash.fill")
                 }
         }
         .frame(idealWidth: 400)

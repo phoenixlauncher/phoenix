@@ -22,7 +22,7 @@ struct FolderImportButton: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Custom \(type) folder")
-                Text("Selected folder: \(folder.path)")
+                Text("\(String(localized: "general_SelectedFolder")): \(folder.path)")
                     .foregroundColor(.secondary)
                     .font(.caption)
             }
@@ -32,7 +32,7 @@ struct FolderImportButton: View {
                     isImporting = true
                 },
                 label: {
-                    Text("Browse")
+                    Text(String(localized: "editGame_Browse"))
                 }
             )
         }

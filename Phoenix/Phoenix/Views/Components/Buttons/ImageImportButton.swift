@@ -19,7 +19,7 @@ struct ImageImportButton: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(type)
-                Text("Selected image: \(input)")
+                Text("\(String(localized: "editGame_SelectedImage")): \(input)")
                     .foregroundColor(.secondary)
                     .font(.caption)
             }
@@ -29,7 +29,7 @@ struct ImageImportButton: View {
                     isImporting = true
                 },
                 label: {
-                    Text("Browse")
+                    Text(String(localized: "editGame_Browse"))
                 }
             )
             .accessibilityLabel("\(type) Input")

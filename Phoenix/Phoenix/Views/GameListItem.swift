@@ -34,27 +34,27 @@ struct GameListItem: View {
                 gameViewModel.saveGames()
             }) {
                 Image(systemName: gameViewModel.games[gameIndex].isFavorite ? "star.slash" : "star")
-                Text("\(gameViewModel.games[gameIndex].isFavorite ? "Unfavorite" : "Favorite") game")
+                Text("\(gameViewModel.games[gameIndex].isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(String(localized: "context_Game"))")
             }
-            .accessibility(identifier: "Favorite game")
+            .accessibility(identifier: String(localized: "context_FavoriteGame"))
             Button(action: {
                 gameViewModel.games[gameIndex].isHidden = true
                 gameViewModel.selectedGame = gameViewModel.games[0].id
                 gameViewModel.saveGames()
             }) {
                 Image(systemName: "eye.slash")
-                Text("Hide game")
+                Text(String(localized: "context_HideGame"))
             }
-            .accessibility(identifier: "Hide game")
+            .accessibility(identifier: String(localized: "context_HideGame"))
             Button(action: {
                 gameViewModel.games.remove(at: gameIndex)
                 gameViewModel.selectedGame = gameViewModel.games[0].id
                 gameViewModel.saveGames()
             }) {
                 Image(systemName: "trash")
-                Text("Delete game")
+                Text(LocalizedStringKey("context_DeleteGame"))
             }
-            .accessibility(identifier: "Delete game")
+            .accessibility(identifier: String(localized: "context_DeleteGame"))
             Divider()
             Button(action: {
                 isImporting.toggle()
@@ -62,10 +62,10 @@ struct GameListItem: View {
             }) {
                 HStack {
                     Image(systemName: "app.dashed")
-                    Text("Edit icon")
+                    Text(LocalizedStringKey("context_EditIcon"))
                 }
             }
-            .accessibility(identifier: "Edit icon")
+            .accessibility(identifier: String(localized: "context_EditIcon"))
             .padding()
             Button(action: {
                 isImporting.toggle()
@@ -73,10 +73,10 @@ struct GameListItem: View {
             }) {
                 HStack {
                     Image(systemName: "photo")
-                    Text("Edit header")
+                    Text(LocalizedStringKey("context_EditHeader"))
                 }
             }
-            .accessibility(identifier: "Edit header")
+            .accessibility(identifier: String(localized: "context_EditHeader"))
             .padding()
         }
         .fileImporter(

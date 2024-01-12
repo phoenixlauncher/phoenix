@@ -8,36 +8,35 @@
 import SwiftUI
 
 struct GeneralSettingsView: View {
-    
     @State var steamIsImporting: Bool = false
     @State var invalidFolder: Bool = false
     @State var lastPathComponent: String?
-    
+
     @Default(.steamDetection) var steamDetection
     @Default(.steamFolder) var steamFolder
     @Default(.crossOverDetection) var crossOverDetection
     @Default(.crossOverFolder) var crossOverFolder
-    
+
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
-                Defaults.Toggle("Detect Steam games on launch", key: .steamDetection)
+                Defaults.Toggle(String(localized: "general_DetectSteam"), key: .steamDetection)
                 if steamDetection {
                     FolderImportButton(type: "Steam", folder: $steamFolder, lastPathComponent: $lastPathComponent, endPath: "steamapps", invalidFolder: $invalidFolder)
                 }
-                Defaults.Toggle("Detect CrossOver games on launch", key: .crossOverDetection)
+                Defaults.Toggle(String(localized: "general_DetectCX"), key: .crossOverDetection)
                 if crossOverDetection {
                     FolderImportButton(type: "CrossOver", folder: $crossOverFolder, lastPathComponent: $lastPathComponent, endPath: nil, invalidFolder: $invalidFolder)
                 }
                 Divider()
-                Defaults.Toggle("Fetch game metadata automatically", key: .isMetaDataFetchingEnabled)
+                Defaults.Toggle(String(localized: "general_FetchMeta"), key: .isMetaDataFetchingEnabled)
             }
-            .alert("Invalid folder", isPresented: $invalidFolder) {
+            .alert(String(localized: "alert_InvalidFolder"), isPresented: $invalidFolder) {
                 VStack {
                     Button("Close", role: .cancel) {}
                 }
             } message: {
-                Text("The folder path must end with \(lastPathComponent ?? "")")
+                Text("\(String(localized: "alert_InvalidFolderMsg")) \(lastPathComponent ?? "")")
             }
             .padding(20)
         }

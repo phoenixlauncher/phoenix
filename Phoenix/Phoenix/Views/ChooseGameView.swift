@@ -55,7 +55,7 @@ struct ChooseGameView: View {
                     }
                 },
                 label: {
-                    Text("Select Game")
+                    Text(LocalizedStringKey("editGame_SelectGame"))
                 }
             )
         }

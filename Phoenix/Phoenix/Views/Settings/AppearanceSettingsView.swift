@@ -10,23 +10,23 @@ import SwiftUI
 struct AppearanceSettingsView: View {
     @Default(.listIconsHidden) var listIconsHidden
     @Default(.listIconSize) var listIconSize
-    
+
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
-                //detail settings
-                Defaults.Toggle("Accent color UI", key: .accentColorUI)
-                Defaults.Toggle("Gradient UI", key: .gradientUI)
-                Defaults.Toggle("Show star rating", key: .showStarRating)
-                Divider() //sidebar settings
-                Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
+                // detail settings
+                Defaults.Toggle(String(localized: "appearance_Accent"), key: .accentColorUI)
+                Defaults.Toggle(String(localized: "appearance_Gradient"), key: .gradientUI)
+                Defaults.Toggle(String(localized: "appearance_Star"), key: .showStarRating)
+                Divider() // sidebar settings
+                Defaults.Toggle(String(localized: "appearance_HideIcons"), key: .listIconsHidden)
                 if !listIconsHidden {
                     Slider(
                         value: $listIconSize,
-                        in: 20...48,
+                        in: 20 ... 48,
                         step: 4
                     ) {
-                        Text("List icon size")
+                        Text(LocalizedStringKey("appearance_IconSize"))
                     } minimumValueLabel: {
                         Text("20 px")
                     } maximumValueLabel: {
@@ -34,11 +34,11 @@ struct AppearanceSettingsView: View {
                     }
                     .frame(maxWidth: 225)
                 }
-                Defaults.Toggle("Show amount of games in sidebar", key: .showSortByNumber)
-                Defaults.Toggle("Show add game button in sidebar", key: .showSidebarAddGameButton)
-                Divider() //toolbar settings
-                Defaults.Toggle("Show animation of category picker", key: .showAnimationOfSortByIcon)
-                Defaults.Toggle("Show text in category picker", key: .showPickerText)
+                Defaults.Toggle(String(localized: "appearance_GameCount"), key: .showSortByNumber)
+                Defaults.Toggle(String(localized: "apearance_ShowAdd"), key: .showSidebarAddGameButton)
+                Divider() // toolbar settings
+                Defaults.Toggle(String(localized: "appearance_CategoryAnimation"), key: .showAnimationOfSortByIcon)
+                Defaults.Toggle(String(localized: "appearance_CategoryText"), key: .showPickerText)
             }
             .padding(20)
         }
