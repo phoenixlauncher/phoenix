@@ -35,7 +35,7 @@ struct AppearanceSettingsView: View {
                     .frame(maxWidth: 225)
                 }
                 Defaults.Toggle(String(localized: "appearance_GameCount"), key: .showSortByNumber)
-                Defaults.Toggle(String(localized: "apearance_ShowAdd"), key: .showSidebarAddGameButton)
+                Defaults.Toggle(String(localized: "appearance_ShowAdd"), key: .showSidebarAddGameButton)
                 Divider() // toolbar settings
                 Defaults.Toggle(String(localized: "appearance_CategoryAnimation"), key: .showAnimationOfSortByIcon)
                 Defaults.Toggle(String(localized: "appearance_CategoryText"), key: .showPickerText)
