@@ -90,7 +90,7 @@
 "appearance_CategoryText" = "Show text in category picker";
 "prefs_Hidden" = "Hidden Games";
 "hidden_ShowGame" = "Show game";
-"hidden_NoGames" = "No hidden games found."
+"hidden_NoGames" = "No hidden games found.";
 "file_AddGame" = "Add Game";
 "file_EditGame" = "Edit Game";
 "file_PlayGame" = "Play Game";
