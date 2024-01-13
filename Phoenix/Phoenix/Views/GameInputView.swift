@@ -37,11 +37,11 @@ struct GameInputView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 Group {
-                    TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $game.name) // Name input
+                    TextBox(textBoxName: String(localized: "editGame_Name"), placeholder: String(localized: "editGame_NameDesc"), input: $game.name) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, input: $iconInput, output: $game.icon, gameID: gameViewModel.selectedGame)
+                    ImageImportButton(type: String(localized: "editGame_Icon"), isImporting: $iconIsImporting, input: $iconInput, output: $game.icon, gameID: gameViewModel.selectedGame)
         
-                    SlotInput(contentName: "Platform", content: {
+                    SlotInput(contentName: String(localized: "editGame_Platform"), content: {
                         Picker("", selection: $game.platform) {
                             ForEach(Platform.allCases) { platform in
                                 Text(platform.displayName)
@@ -49,7 +49,7 @@ struct GameInputView: View {
                         }
                     })
                     
-                    SlotInput(contentName: "Status", content: {
+                    SlotInput(contentName: String(localized: "editGame_Status"), content: {
                         Picker("", selection: $game.status) {
                             ForEach(Status.allCases) { status in
                                 Text(status.displayName)
@@ -57,27 +57,27 @@ struct GameInputView: View {
                         }
                     })
                     
-                    TextBox(textBoxName: "Command", placeholder: "Enter terminal command to launch game", input: $game.launcher)
+                    TextBox(textBoxName: String(localized: "editGame_Command"), placeholder: String(localized: "editGame_CommandDesc"), input: $game.launcher)
                 }
-                DisclosureGroup("Advanced") {
+                DisclosureGroup(String(localized: "editGame_Advanced")) {
                     VStack(alignment: .leading) {
-                        LargeTextBox(textBoxName: "Description", input: binding(for: "description"))
+                        LargeTextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                         
-                        LargeTextBox(textBoxName: "Genres", input: binding(for: "description"))
+                        LargeTextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "description"))
                         
-                        ImageImportButton(type: "Header", isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: gameViewModel.selectedGame)
+                        ImageImportButton(type: String(localized: "editGame_Header"), isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: gameViewModel.selectedGame)
                         
-                        ImageImportButton(type: "Cover", isImporting: $coverIsImporting, input: $coverInput, output: binding(for: "cover"), gameID: gameViewModel.selectedGame)
+                        ImageImportButton(type: String(localized: "editGame_Cover"), isImporting: $coverIsImporting, input: $coverInput, output: binding(for: "cover"), gameID: gameViewModel.selectedGame)
                         
                         if !Defaults[.showStarRating] {
-                            TextBox(textBoxName: "Rating", placeholder: "X / 10", input: binding(for: "rating"))
+                            TextBox(textBoxName: String(localized: "editGame_Rating"), placeholder: "X / 10", input: binding(for: "rating"))
                         }
                         
-                        TextBox(textBoxName: "Developer", placeholder: "Enter game developer", input: binding(for: "developer"))
+                        TextBox(textBoxName: String(localized: "editGame_Dev"), placeholder: String(localized: "editGame_DevDesc"), input: binding(for: "developer"))
                         
-                        TextBox(textBoxName: "Publisher", placeholder: "Enter game publisher", input: binding(for: "publisher"))
+                        TextBox(textBoxName: String(localized: "editGame_Pub"), placeholder: String(localized: "editGame_PubDesc"), input: binding(for: "publisher"))
                         
-                        DatePicker("Release Date", selection: $dateInput, in: ...Date(), displayedComponents: .date)
+                        DatePicker(String(localized: "editGame_Release"), selection: $dateInput, in: ...Date(), displayedComponents: .date)
                             .padding()
                     }
                 }
@@ -102,7 +102,7 @@ struct GameInputView: View {
                                         if fetchedGames.count != 0 {
                                             showChooseGameView.toggle()
                                         } else {
-                                            appViewModel.showFailureToast("No games found.")
+                                            appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
                                             dismiss()
                                         }
                                     }
@@ -110,14 +110,14 @@ struct GameInputView: View {
                                 gameViewModel.selectedGame = game.id
                             },
                             label: {
-                                Text("Fetch Metadata")
+                                Text(LocalizedStringKey("editGame_Fetch"))
                             }
                         )
                     }
                     Button(
                         action: {
                             guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
-                                appViewModel.showFailureToast("Game must have a name.")
+                                appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
                                 dismiss()
                                 return
                             }
@@ -129,7 +129,7 @@ struct GameInputView: View {
                                             if fetchedGames.count != 0 {
                                                 showChooseGameView.toggle()
                                             } else {
-                                                appViewModel.showFailureToast("No games found.")
+                                                appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
                                                 dismiss()
                                             }
                                         }
@@ -141,18 +141,18 @@ struct GameInputView: View {
                                     game.isFavorite = gameViewModel.games[idx].isFavorite
                                     gameViewModel.games[idx] = game
                                     gameViewModel.saveGames()
-                                    appViewModel.showSuccessToast("Game saved!")
+                                    appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                 } else {
-                                    appViewModel.showFailureToast("Game couldn't be found.")
+                                    appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
                                 }
                                 dismiss()
                             }
                         },
                         label: {
-                            Text("Save Game")
+                            Text(LocalizedStringKey("editGame_SaveGame"))
                         }
                     )
-                    .accessibilityLabel("Save Game")
+                    .accessibilityLabel(String(localized: "editGame_SaveGame"))
                     .padding()
                     .frame(maxWidth: .infinity)
                 }
@@ -168,7 +168,7 @@ struct GameInputView: View {
         .sheet(isPresented: $showChooseGameView, onDismiss: {
             if chooseGameViewDone {
                 dismiss()
-                appViewModel.showSuccessToast("Game saved!")
+                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
             }
         }, content: {
             ChooseGameView(supabaseGames: $fetchedGames, game: game, done: $chooseGameViewDone)

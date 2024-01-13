@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct HiddenGamesSettingsView: View {
-    
     @EnvironmentObject var gameViewModel: GameViewModel
-    
+
     @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     @State var iconSize: Double = Defaults[.listIconSize]
-    
+
     var body: some View {
         Form {
             VStack {
                 List(selection: $gameViewModel.selectedGame) {
-                    let hiddenGames = gameViewModel.games.filter { $0.isHidden == true}
+                    let hiddenGames = gameViewModel.games.filter { $0.isHidden == true }
                     if !hiddenGames.isEmpty {
                         ForEach(hiddenGames, id: \.id) { game in
                             HStack {
@@ -38,7 +37,7 @@ struct HiddenGamesSettingsView: View {
                                         }
                                         gameViewModel.saveGames()
                                     }) {
-                                        Text("Show game")
+                                        Text(LocalizedStringKey("hidden_ShowGame"))
                                     }
                                     .accessibility(identifier: "Show Game")
                                     Button(action: {
@@ -50,12 +49,11 @@ struct HiddenGamesSettingsView: View {
                                         Image(systemName: "trash")
                                     }
                                     .accessibility(identifier: "Delete Game")
-
                                 }
                             }
                         }.scrollDisabled(true)
                     } else {
-                        Text("No hidden games found.")
+                        Text(LocalizedStringKey("hidden_NoGames"))
                             .fontWeight(.semibold)
                             .font(.system(size: 20))
                     }

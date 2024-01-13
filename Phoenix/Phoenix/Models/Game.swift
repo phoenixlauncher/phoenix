@@ -14,16 +14,16 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .mac: return "Mac"
-        case .steam: return "Steam"
-        case .gog: return "GOG"
-        case .epic: return "Epic"
-        case .pc: return "PC"
-        case .ps: return "Playstation"
-        case .nin: return "Nintendo"
-        case .sega: return "Sega"
-        case .xbox: return "Xbox"
-        case .none: return "Other"
+        case .mac: return String(localized: "platforms_Mac")
+        case .steam: return String(localized: "platforms_Steam")
+        case .gog: return String(localized: "platforms_GOG")
+        case .epic: return String(localized: "platforms_Epic")
+        case .pc: return String(localized: "platforms_PC")
+        case .ps: return String(localized: "platforms_Playstation")
+        case .nin: return String(localized: "platforms_Nintendo")
+        case .sega: return String(localized: "platforms_Sega")
+        case .xbox: return String(localized: "platforms_Xbox")
+        case .none: return String(localized: "platforms_Other")
         }
     }
 }
@@ -35,14 +35,14 @@ enum Status: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .playing: return "Playing"
-        case .shelved: return "Shelved"
-        case .occasional: return "Occasional"
-        case .backlog: return "Backlog"
-        case .beaten: return "Beaten"
-        case .completed: return "Completed"
-        case .abandoned: return "Abandoned"
-        case .none: return "Other"
+        case .playing: return String(localized: "status_Playing")
+        case .shelved: return String(localized: "status_Shelved")
+        case .occasional: return String(localized: "status_Occasional")
+        case .backlog: return String(localized: "status_Backlog")
+        case .beaten: return String(localized: "status_Beaten")
+        case .completed: return String(localized: "status_Completed")
+        case .abandoned: return String(localized: "status_Abandoned")
+        case .none: return String(localized: "status_Other")
         }
     }
 }
@@ -54,13 +54,13 @@ enum Recency: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .day: return "Today"
-        case .week: return "This Week"
-        case .month: return "This Month"
-        case .three_months: return "Last 3 Months"
-        case .six_months: return "Last 6 Months"
-        case .year: return "This Year"
-        case .never: return "Never"
+        case .day: return String(localized: "recency_Today")
+        case .week: return String(localized: "recency_ThisWeek")
+        case .month: return String(localized: "recency_ThisMonth")
+        case .three_months: return String(localized: "recency_Last3Months")
+        case .six_months: return String(localized: "recency_Last6Months")
+        case .year: return String(localized: "recency_ThisYear")
+        case .never: return String(localized: "recency_Never")
         }
     }
 }
@@ -116,26 +116,26 @@ struct Game: Codable, Comparable, Hashable {
         self.isHidden = isHidden
         self.isFavorite = isFavorite
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id, steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, isHidden, isFavorite
     }
-        
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.launcher = (try? container.decode(String.self, forKey: .launcher)) ?? ""
         self.metadata = (try? container.decode([String: String].self, forKey: .metadata)) ?? ["": ""]
         self.icon = (try? container.decode(String.self, forKey: .icon)) ?? ""
         self.name = (try? container.decode(String.self, forKey: .name)) ?? ""
-        
+
         var platformRawValue = try container.decode(String.self, forKey: .platform)
         platformRawValue = platformRawValue.lowercased()
         self.platform = Platform(rawValue: platformRawValue) ?? .none
-        
+
         var statusRawValue = try container.decode(String.self, forKey: .status)
         statusRawValue = statusRawValue.lowercased()
         self.status = Status(rawValue: statusRawValue) ?? .none
-        
+
         // Decode recency, or derive it from last_played
         let dateString = metadata["last_played"] ?? ""
         if dateString == "" || dateString == "Never" {
@@ -163,10 +163,10 @@ struct Game: Codable, Comparable, Hashable {
                 self.recency = .never
             }
         }
-        
+
         self.steamID = (try? container.decode(String.self, forKey: .steamID)) ?? ""
         self.igdbID = (try? container.decode(String.self, forKey: .igdbID)) ?? ""
-        
+
         self.id = (try? container.decode(UUID.self, forKey: .id)) ?? UUID()
         self.isHidden = (try? container.decode(Bool.self, forKey: .isHidden)) ?? false
         self.isFavorite = (try? container.decode(Bool.self, forKey: .isFavorite)) ?? false
@@ -209,5 +209,3 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
 
     return false
 }
-
-

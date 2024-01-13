@@ -4,19 +4,19 @@
 //
 //  Created by Kaleb Rosborough on 2022-12-28.
 //
-import SwiftUI
 import AlertToast
 import StarRatingViewSwiftUI
+import SwiftUI
 
 struct GameDetailView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
     @EnvironmentObject var appViewModel: AppViewModel
-    
+
     @State var selectedGameName: String?
-    
+
     @State var rating: Float = 0
-    
+
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
 
@@ -27,7 +27,7 @@ struct GameDetailView: View {
                 if let game = game {
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
-                        Image(nsImage: loadImageFromFile(filePath: (headerImage.replacingOccurrences(of: "\\", with: ":"))))
+                        Image(nsImage: loadImageFromFile(filePath: headerImage.replacingOccurrences(of: "\\", with: ":")))
                             .resizable()
                             .scaledToFill()
                             .frame(
@@ -45,48 +45,48 @@ struct GameDetailView: View {
                     VStack(alignment: .leading) {
                         HStack(alignment: .center) {
                             // play button
-                            LargeToggleButton(toggle: $appViewModel.isPlayingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
+                            LargeToggleButton(toggle: $appViewModel.isPlayingGame, symbol: "play.fill", text: String(localized: "detail_Play"), textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             // settings button
                             SmallToggleButton(toggle: $appViewModel.isEditingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
-                                .frame(width: 300, height: 30)
-                                .padding()
-                                .onHover { _ in
-                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                        gameViewModel.games[idx].metadata["rating"] = String(rating)
+                                    .frame(width: 300, height: 30)
+                                    .padding()
+                                    .onHover { _ in
+                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                                            gameViewModel.games[idx].metadata["rating"] = String(rating)
+                                        }
+                                        gameViewModel.saveGames()
                                     }
-                                    gameViewModel.saveGames()
-                                }
                             }
                         } // hstack
                         .frame(alignment: .leading)
                         HStack(alignment: .top) {
-                            //description
+                            // description
                             VStack(alignment: .leading) {
                                 let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                                 if game?.metadata["description"] != "" {
-                                    TextCard(text: game?.metadata["description"] ?? "No game selected")
+                                    TextCard(text: game?.metadata["description"] ?? String(localized: "detail_NoGame"))
                                 } else {
-                                    TextCard(text: "No description found.")
+                                    TextCard(text: String(localized: "detail_NoDesc"))
                                 }
                             }
                             .padding(.trailing, 7.5)
-                            
+
                             SlotCard(content: {
                                 let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                                 if let game = game {
                                     VStack(alignment: .leading, spacing: 7.5) {
-                                        GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
-                                        GameMetadata(field: "Platform", value: game.platform.displayName)
-                                        GameMetadata(field: "Status", value: game.status.displayName)
+                                        GameMetadata(field: String(localized: "detail_LP"), value: game.metadata["last_played"] ?? String(localized: "recency_Never"))
+                                        GameMetadata(field: String(localized: "detail_Platform"), value: game.platform.displayName)
+                                        GameMetadata(field: String(localized: "detail_Status"), value: game.status.displayName)
                                         if !showStarRating {
-                                            GameMetadata(field: "Rating", value: game.metadata["rating"] ?? "")
+                                            GameMetadata(field: String(localized: "detail_Rating"), value: game.metadata["rating"] ?? "")
                                         }
-                                        GameMetadata(field: "Genres", value: game.metadata["genre"] ?? "")
-                                        GameMetadata(field: "Developer", value: game.metadata["developer"] ?? "")
-                                        GameMetadata(field: "Publisher", value: game.metadata["publisher"] ?? "")
-                                        GameMetadata(field: "Release Date", value: game.metadata["release_date"] ?? "")
+                                        GameMetadata(field: String(localized: "detail_Genres"), value: game.metadata["genre"] ?? "")
+                                        GameMetadata(field: String(localized: "detail_Dev"), value: game.metadata["developer"] ?? "")
+                                        GameMetadata(field: String(localized: "detail_Pub"), value: game.metadata["publisher"] ?? "")
+                                        GameMetadata(field: String(localized: "detail_Release"), value: game.metadata["release_date"] ?? "")
                                     }
                                     .padding(.trailing, 10)
                                     .frame(minWidth: 150, alignment: .leading)
@@ -125,7 +125,7 @@ struct GameDetailView: View {
             }
         }
     }
-    
+
     func playGame(game: Game) {
         do {
             let currentDate = Date()
@@ -134,12 +134,11 @@ struct GameDetailView: View {
             if game.launcher != "" {
                 try shell(game)
             } else {
-                appViewModel.showFailureToast("No launcher configured. Please configure a launch command to run \(gameViewModel.selectedGameName)")
+                appViewModel.showFailureToast("\(String(localized: "toast_Failure")) \(gameViewModel.selectedGameName)")
             }
         } catch {
             logger.write("\(error)") // handle or silence the error here
         }
-        
     }
 
     func updateLastPlayedDate(currentDate: Date) {
@@ -160,4 +159,3 @@ struct GameDetailView: View {
         }
     }
 }
-

@@ -14,7 +14,7 @@ struct CheckForUpdatesView: View {
     @ObservedObject var UpdaterViewModel: UpdaterViewModel
     
     var body: some View {
-        Button("Check for Updates", action: UpdaterViewModel.checkForUpdates)
+        Button(String(localized: "update_CheckForUpdates"), action: UpdaterViewModel.checkForUpdates)
             .disabled(!UpdaterViewModel.canCheckForUpdates)
     }
 }

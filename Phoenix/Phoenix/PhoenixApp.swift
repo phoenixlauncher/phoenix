@@ -20,19 +20,19 @@ struct PhoenixApp: App {
         
         var displayName: String {
             switch self {
-            case .platform: return "Platform"
-            case .status: return "Status"
-            case .name: return "Name"
-            case .recency: return "Recency"
+            case .platform: return String(localized: "category_Platform")
+            case .status: return String(localized: "category_Status")
+            case .name: return String(localized: "category_Name")
+            case .recency: return String(localized: "category_Recency")
             }
         }
         
         var spaces: String {
             switch self {
-            case .platform: return "        Platform"
-            case .status: return "       Status"
-            case .name: return "         Name"
-            case .recency: return "      Recency"
+            case .platform: return "        \(String(localized: "category_Platform"))"
+            case .status: return "       \(String(localized: "category_Status"))"
+            case .name: return "         \(String(localized: "category_Name"))"
+            case .recency: return "      \(String(localized: "category_Recency"))"
             }
         }
         
@@ -92,7 +92,7 @@ struct PhoenixApp: App {
                 }
                 .keyboardShortcut("o", modifiers: [.command, .shift])
             }
-            CommandGroup(replacing: CommandGroupPlacement.sidebar) {                                                                               
+            CommandGroup(replacing: CommandGroupPlacement.sidebar) {
                 Button("Sort Sidebar by Platform", action: {
                     sortBy = SortBy.platform
                 })

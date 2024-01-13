@@ -29,7 +29,7 @@ struct GameListView: View {
                     $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == true
                 }
                 if !favoriteGames.isEmpty {
-                    Section(header: Text("Favorites \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
+                    Section(header: Text("\(String(localized: "platforms_Favorites")) \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
                             if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                                 GameListItem(gameIndex: gameIndex)
@@ -106,7 +106,7 @@ struct GameListView: View {
                     Image(systemName: "plus.app")
                         .font(.system(size: 16))
                         .foregroundColor(Color.white)
-                    Text("Add new game")
+                    Text(LocalizedStringKey("gameList_AddGame"))
                         .foregroundColor(Color.white)
                         .font(.system(size: 15))
                 })
