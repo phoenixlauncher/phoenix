@@ -110,7 +110,7 @@ struct GameInputView: View {
                                 gameViewModel.selectedGame = game.id
                             },
                             label: {
-                                Text(String(localized: "editGame_Fetch"))
+                                Text(LocalizedStringKey("editGame_Fetch"))
                             }
                         )
                     }
@@ -149,7 +149,7 @@ struct GameInputView: View {
                             }
                         },
                         label: {
-                            Text(String(localized: "editGame_SaveGame"))
+                            Text(LocalizedStringKey("editGame_SaveGame"))
                         }
                     )
                     .accessibilityLabel(String(localized: "editGame_SaveGame"))

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FolderImportButton: View {
-    
     @State var isImporting: Bool = false
     let type: String
     
@@ -32,7 +31,7 @@ struct FolderImportButton: View {
                     isImporting = true
                 },
                 label: {
-                    Text(String(localized: "editGame_Browse"))
+                    Text(LocalizedStringKey("editGame_Browse"))
                 }
             )
         }

@@ -43,7 +43,7 @@ struct GameListItem: View {
                 gameViewModel.saveGames()
             }) {
                 Image(systemName: "eye.slash")
-                Text(String(localized: "context_HideGame"))
+                Text(LocalizedStringKey("context_HideGame"))
             }
             .accessibility(identifier: String(localized: "context_HideGame"))
             Button(action: {

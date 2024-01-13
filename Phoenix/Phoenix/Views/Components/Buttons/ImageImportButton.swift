@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct ImageImportButton: View {
-    
     var type: String
     @Binding var isImporting: Bool
     @Binding var input: String
     @Binding var output: String
     var gameID: UUID
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -29,7 +28,7 @@ struct ImageImportButton: View {
                     isImporting = true
                 },
                 label: {
-                    Text(String(localized: "editGame_Browse"))
+                    Text(LocalizedStringKey("editGame_Browse"))
                 }
             )
             .accessibilityLabel("\(type) Input")
