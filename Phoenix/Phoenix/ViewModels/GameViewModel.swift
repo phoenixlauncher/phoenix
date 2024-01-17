@@ -22,19 +22,11 @@ class GameViewModel: ObservableObject {
     }
     
     func getGameFromName(name: String) -> Game? {
-        if let idx = games.firstIndex(where: { $0.name == name }) {
-            return games[idx]
-        } else {
-            return nil
-        }
+        return games.first { $0.name == name }
     }
 
     func getGameFromID(id: UUID) -> Game? {
-        if let idx = games.firstIndex(where: { $0.id == id }) {
-            return games[idx]
-        } else {
-            return nil
-        }
+        return games.first { $0.id == id }
     }
 
     func addGame(_ game: Game) {
