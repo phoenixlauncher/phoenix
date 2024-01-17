@@ -42,12 +42,6 @@ struct ContentView: View {
                                     Label("New Game", systemImage: "plus")
                                 }
                             )
-                            .sheet(
-                                isPresented: $appViewModel.isAddingGame,
-                                content: {
-                                    GameInputView(isNewGame: true)
-                                }
-                            )
                         }
                     }
                     ToolbarItem(placement: .primaryAction) {
@@ -94,9 +88,12 @@ struct ContentView: View {
         } detail: {
             // The detailed view of the selected game
             GameDetailView()
-                .sheet(isPresented: $appViewModel.isEditingGame, content: {
-                    GameInputView(isNewGame: false)
-                })
+        }
+        .sheet(isPresented: $appViewModel.isAddingGame) {
+            GameInputView(isNewGame: true)
+        }
+        .sheet(isPresented: $appViewModel.isEditingGame) {
+            GameInputView(isNewGame: false)
         }
         .environmentObject(supabaseViewModel)
         .environmentObject(appViewModel)

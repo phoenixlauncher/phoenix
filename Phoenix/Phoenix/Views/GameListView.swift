@@ -31,9 +31,7 @@ struct GameListView: View {
                 if !favoriteGames.isEmpty {
                     Section(header: Text("\(String(localized: "platforms_Favorites")) \(showSortByNumber ? "(\(favoriteGames.count))" : "")")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                GameListItem(gameIndex: gameIndex)
-                            }
+                            GameListItem(gameID: game.id)
                         }
                     }
                 }
@@ -46,9 +44,7 @@ struct GameListView: View {
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                        GameListItem(gameIndex: gameIndex)
-                                    }
+                                    GameListItem(gameID: game.id)
                                 }
                             }
                         }
@@ -61,9 +57,7 @@ struct GameListView: View {
                         if !gamesForStatus.isEmpty {
                             Section(header: Text("\(status.displayName) \(showSortByNumber ? "(\(gamesForStatus.count))" : "")")) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                        GameListItem(gameIndex: gameIndex)
-                                    }
+                                    GameListItem(gameID: game.id)
                                 }
                             }
                         }
@@ -73,11 +67,9 @@ struct GameListView: View {
                         $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                     }.sorted(by: { $0.name < $1.name })
                     if !gamesForName.isEmpty {
-                        Section(header: Text("Name")) {
+                        Section(header: Text(LocalizedStringKey("category_Name"))) {
                             ForEach(gamesForName, id: \.id) { game in
-                                if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                    GameListItem(gameIndex: gameIndex)
-                                }
+                                GameListItem(gameID: game.id)
                             }
                         }
                     }
@@ -89,9 +81,7 @@ struct GameListView: View {
                         if !gamesForRecency.isEmpty {
                             Section(header: Text("\(recency.displayName) \(showSortByNumber ? "(\(gamesForRecency.count))" : "")")) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    if let gameIndex = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                        GameListItem(gameIndex: gameIndex)
-                                    }
+                                    GameListItem(gameID: game.id)
                                 }
                             }
                         }
@@ -103,15 +93,18 @@ struct GameListView: View {
                 Button(action: {
                     appViewModel.isAddingGame.toggle()
                 }, label: {
-                    Image(systemName: "plus.app")
-                        .font(.system(size: 16))
-                        .foregroundColor(Color.white)
-                    Text(LocalizedStringKey("gameList_AddGame"))
-                        .foregroundColor(Color.white)
-                        .font(.system(size: 15))
+                    HStack {
+                        Image(systemName: "plus.app")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color.white)
+                        Text(LocalizedStringKey("gameList_AddGame"))
+                            .foregroundColor(Color.white)
+                            .font(.system(size: 15))
+                    }
+                    .frame(minWidth: 200, maxWidth: .infinity, maxHeight: 35)
+                    .contentShape(RoundedRectangle(cornerRadius: 7.5))
                 })
                 .buttonStyle(.plain)
-                .frame(minWidth: 200, maxWidth: .infinity, maxHeight: 35)
                 .background(
                     Group {
                         if gradientUI {
