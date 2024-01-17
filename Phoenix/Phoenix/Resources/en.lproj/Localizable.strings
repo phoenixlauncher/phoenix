@@ -71,6 +71,7 @@
 "editGame_SaveGame" = "Save Game";
 "editGame_SelectGame" = "Select Game";
 "editGame_Fetch" = "Fetch Metadata";
+"editGame_NoGamesFailure" = "No games found";
 "prefs_General" = "General";
 "general_SelectedFolder" = "Selected folder";
 "general_DetectSteam" = "Detect Steam games on launch";

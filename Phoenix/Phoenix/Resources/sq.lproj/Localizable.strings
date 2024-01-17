@@ -71,6 +71,7 @@
 "editGame_SaveGame" = "Ruaj Lojën";
 "editGame_SelectGame" = "Selekto Lojën";
 "editGame_Fetch" = "Fito Metadata";
+"editGame_NoGamesFailure" = "Asnjë lojë nuk është gjetë";
 "prefs_General" = "Gjeneral";
 "general_SelectedFolder" = "Folderi i selektuar";
 "general_DetectSteam" = "Dedekto loja në Steam në hapje";
