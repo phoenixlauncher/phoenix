@@ -23,9 +23,10 @@ struct SmallToggleButton: View {
                 .fontWeight(.bold)
                 .foregroundColor(textColor)
                 .font(.system(size: 27))
+                .frame(width: 50, height: 50)
+                .contentShape(RoundedRectangle(cornerRadius: 10))
         }
         .buttonStyle(.plain)
-        .frame(width: 50, height: 50)
         .background(
             Group {
                 if gradientUI {

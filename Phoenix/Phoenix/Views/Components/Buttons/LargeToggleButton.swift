@@ -30,9 +30,10 @@ struct LargeToggleButton: View {
                     .foregroundColor(textColor)
                     .font(.system(size: 25))
             }
+            .frame(width: 175, height: 50)
+            .contentShape(RoundedRectangle(cornerRadius: 10))
         }
         .buttonStyle(.plain)
-        .frame(width: 175, height: 50)
         .background(
             Group {
                 if gradientUI {
