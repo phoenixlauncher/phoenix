@@ -67,7 +67,7 @@ struct GameListView: View {
                         $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                     }.sorted(by: { $0.name < $1.name })
                     if !gamesForName.isEmpty {
-                        Section(header: Text("Name")) {
+                        Section(header: Text(LocalizedStringKey("category_Name"))) {
                             ForEach(gamesForName, id: \.id) { game in
                                 GameListItem(gameID: game.id)
                             }

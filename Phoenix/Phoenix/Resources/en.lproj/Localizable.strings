@@ -111,12 +111,15 @@
 "toast_LaunchFailure" = "Please configure a launch command to run";
 "alert_InvalidFolder" = "Invalid folder";
 "alert_InvalidFolderMsg" = "The folder path must end with";
+"alert_Cancel" = "Cancel";
+"alert_Save" = "Save";
 "context_Favorite" = "Favorite";
 "context_Unfavorite" = "Unfavorite";
 "context_Game" = "Game";
 "context_FavoriteGame" = "Favorite game";
-"context_HideGame" = "HideGame";
+"context_HideGame" = "Hide game";
 "context_DeleteGame" = "Delete game";
+"context_EditName" = "Edit name";
 "context_EditIcon" = "Edit icon";
 "context_EditHeader" = "Edit header";
 "update_CheckForUpdates" = "Check for Updates";

@@ -21,7 +21,7 @@ struct GameListItem: View {
     @Default(.listIconsHidden) var iconsHidden
     
     @State var changeName: Bool = false
-    @State var name: String = "uwuwuwu"
+    @State var name: String = ""
     @State var isImporting: Bool = false
     @State var importType: String = "icon"
     
@@ -43,9 +43,9 @@ struct GameListItem: View {
                     gameViewModel.saveGames()
                 }) {
                     Image(systemName: game.isFavorite ? "star.slash" : "star")
-                    Text("\(game.isFavorite ? "Unfavorite" : "Favorite") game")
+                    Text("\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(String(localized: "context_Game"))")
                 }
-                .accessibility(identifier: "Favorite game")
+                .accessibility(identifier: String(localized: "context_FavoriteGame"))
                 Button(action: {
                     if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                         gameViewModel.games[idx].isHidden = true
@@ -54,9 +54,9 @@ struct GameListItem: View {
                     gameViewModel.saveGames()
                 }) {
                     Image(systemName: "eye.slash")
-                    Text("Hide game")
+                    Text(LocalizedStringKey("context_HideGame"))
                 }
-                .accessibility(identifier: "Hide game")
+                .accessibility(identifier: String(localized: "context_HideGame"))
                 Button(action: {
                     if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                         gameViewModel.games.remove(at: idx)
@@ -65,19 +65,19 @@ struct GameListItem: View {
                     gameViewModel.saveGames()
                 }) {
                     Image(systemName: "trash")
-                    Text("Delete game")
+                    Text(LocalizedStringKey("context_DeleteGame"))
                 }
-                .accessibility(identifier: "Delete game")
+                .accessibility(identifier: String(localized: "context_DeleteGame"))
                 Divider()
                 Button(action: {
                     changeName.toggle()
                 }) {
                     HStack {
                         Image(systemName: "character.cursor.ibeam")
-                        Text("Edit name")
+                        Text(LocalizedStringKey("context_EditName"))
                     }
                 }
-                .accessibility(identifier: "Edit name")
+                .accessibility(identifier: String(localized: "context_EditName"))
                 .padding()
                 Button(action: {
                     isImporting.toggle()
@@ -85,10 +85,10 @@ struct GameListItem: View {
                 }) {
                     HStack {
                         Image(systemName: "app.dashed")
-                        Text("Edit icon")
+                        Text(LocalizedStringKey("context_EditIcon"))
                     }
                 }
-                .accessibility(identifier: "Edit icon")
+                .accessibility(identifier: String(localized: "context_EditIcon"))
                 .padding()
                 Button(action: {
                     isImporting.toggle()
@@ -96,10 +96,10 @@ struct GameListItem: View {
                 }) {
                     HStack {
                         Image(systemName: "photo")
-                        Text("Edit header")
+                        Text(LocalizedStringKey("context_EditHeader"))
                     }
                 }
-                .accessibility(identifier: "Edit header")
+                .accessibility(identifier: String(localized: "context_EditHeader"))
                 .padding()
             }
             .sheet(isPresented: $changeName) {

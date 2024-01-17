@@ -24,7 +24,7 @@ struct TextBoxAlert: View {
                     dismiss()
                 }) {
                     HStack {
-                        Text("Cancel")
+                        Text(LocalizedStringKey("alert_Cancel"))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
                         .font(.system(size: 16))
@@ -38,7 +38,7 @@ struct TextBoxAlert: View {
                     dismiss()
                 }) {
                     HStack {
-                        Text("Save")
+                        Text(LocalizedStringKey("alert_Save"))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
                         .font(.system(size: 16))
