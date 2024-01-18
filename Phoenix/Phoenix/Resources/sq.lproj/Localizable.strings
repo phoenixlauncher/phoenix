@@ -5,6 +5,7 @@
 //  Created by AriRay on 2024-01-14.
 //
 
+"category_SortBy" = "Ndaj sipas";
 "category_Platform" = "Platforma";
 "category_Status" = "Statusi";
 "category_Name" = "Emri";
@@ -74,11 +75,9 @@
 "editGame_NoGamesFailure" = "Asnjë lojë nuk është gjetë";
 "prefs_General" = "Gjeneral";
 "general_SelectedFolder" = "Folderi i selektuar";
-"general_DetectSteam" = "Dedekto loja në Steam në hapje";
-"general_CustomSteam" = "Folder i Steam-it tjetër";
-"general_DetectCX" = "Dedekto loja në Crossover në hapje";
-"general_CustomCX" = "Folder i Crossover-it tjetër";
-"general_FetchMeta" = "Nxjerr të dhëna automatikisht";
+"general_Detect" = "Dedekto loja në %@ në hapje"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
+"general_CustomFolder" = "Follderi i ndryshëm i %@-it"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
+"general_FetchMeta" = "Fito të dhënat automatikisht";
 "prefs_Appearance" = "Pamja";
 "appearance_Accent" = "Ngjyra aksentuese e UI";
 "appearance_Gradient" = "Gradienta e UI";

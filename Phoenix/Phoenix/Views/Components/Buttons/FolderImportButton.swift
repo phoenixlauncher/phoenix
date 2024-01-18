@@ -20,7 +20,7 @@ struct FolderImportButton: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("Custom \(type) folder")
+                Text(String(format: String(localized: "general_CustomFolder"), type))
                 Text("\(String(localized: "general_SelectedFolder")): \(folder.path)")
                     .foregroundColor(.secondary)
                     .font(.caption)

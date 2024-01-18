@@ -48,7 +48,7 @@ struct ContentView: View {
                         ZStack(alignment: .leading) {
                             if #available(macOS 14, *), Defaults[.showAnimationOfSortByIcon] {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
-                                    Text("Sort by:")
+                                    Text("\(String(localized: "category_SortBy")):")
                                     ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
                                             action: {
@@ -67,7 +67,7 @@ struct ContentView: View {
                                     .padding(.leading, 7)
                             } else {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
-                                    Text("Sort by:")
+                                    Text("\(String(localized: "category_SortBy")):")
                                     ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
                                             action: {
@@ -100,7 +100,7 @@ struct ContentView: View {
         .onChange(of: sortBy) { _ in
             animate.toggle()
         }
-        .searchable(text: $searchText, placement: .sidebar)
+        .searchable(text: $searchText, placement: .sidebar, prompt: String(localized: "gameList_Search"))
         .toast(isPresenting: $appViewModel.showSuccessToast, tapToDismiss: true) {
             AlertToast(type: .complete(Color.green), title: appViewModel.successToastText)
         }
