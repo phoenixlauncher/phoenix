@@ -6,10 +6,10 @@
 //
 
 "category_SortBy" = "Ndaj sipas";
-"category_Platform" = "Platforma";
-"category_Status" = "Statusi";
-"category_Name" = "Emri";
-"category_Recency" = "Fundit";
+"category_Platform" = "Platformës";
+"category_Status" = "Statusit";
+"category_Name" = "Emrit";
+"category_Recency" = "Herës së fundit";
 "gameList_Search" = "Kërko";
 "gameList_AddGame" = "Shto lojë të re";
 "platforms_Favorites" = "Preferuarat";
