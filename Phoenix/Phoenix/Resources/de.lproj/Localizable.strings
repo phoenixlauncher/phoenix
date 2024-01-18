@@ -5,6 +5,7 @@
   Created by akeschmidi on 2024-01-18.
   
 */
+"category_SortBy" = "Sortiert nach";
 "category_Platform" = "Plattform";
 "category_Status" = "Status";
 "category_Name" = "Name";
@@ -74,10 +75,8 @@
 "editGame_NoGamesFailure" = "Keine Spiele gefunden";
 "prefs_General" = "Allgemein";
 "general_SelectedFolder" = "Ausgewählter Ordner";
-"general_DetectSteam" = "Steam-Spiele beim Start erkennen";
-"general_CustomSteam" = "Benutzerdefinierter Steam-Ordner";
-"general_DetectCX" = "CrossOver-Spiele beim Start erkennen";
-"general_CustomCX" = "Benutzerdefinierter CrossOver-Ordner";
+"general_Detect" = "Erkenne %@ Spiele beim Start"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
+"general_CustomFolder" = "Benutzerdefinierter %@ Ordner"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
 "general_FetchMeta" = "Automatischer Abruf von Spiel-Metadaten";
 "prefs_Appearance" = "Erscheinungsbild";
 "appearance_Accent" = "Akzentfarbe UI";
