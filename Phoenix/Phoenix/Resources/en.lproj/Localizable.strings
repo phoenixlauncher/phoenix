@@ -5,6 +5,7 @@
   Created by Kaleb Rosborough on 2024-01-11.
   
 */
+"category_SortBy" = "Sort by";
 "category_Platform" = "Platform";
 "category_Status" = "Status";
 "category_Name" = "Name";
@@ -74,10 +75,8 @@
 "editGame_NoGamesFailure" = "No games found";
 "prefs_General" = "General";
 "general_SelectedFolder" = "Selected folder";
-"general_DetectSteam" = "Detect Steam games on launch";
-"general_CustomSteam" = "Custom Steam folder";
-"general_DetectCX" = "Detect CrossOver games on launch";
-"general_CustomCX" = "Custom CrossOver folder";
+"general_Detect" = "Detect %@ games on launch"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
+"general_CustomFolder" = "Custom %@ folder"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
 "general_FetchMeta" = "Fetch game metadata automatically";
 "prefs_Appearance" = "Appearance";
 "appearance_Accent" = "Accent color UI";

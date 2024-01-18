@@ -20,11 +20,11 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
-                Defaults.Toggle(String(localized: "general_DetectSteam"), key: .steamDetection)
+                Defaults.Toggle(String(format: String(localized: "general_Detect"), "Steam"), key: .steamDetection)
                 if steamDetection {
                     FolderImportButton(type: "Steam", folder: $steamFolder, lastPathComponent: $lastPathComponent, endPath: "steamapps", invalidFolder: $invalidFolder)
                 }
-                Defaults.Toggle(String(localized: "general_DetectCX"), key: .crossOverDetection)
+                Defaults.Toggle(String(format: String(localized: "general_Detect"), "CrossOver"), key: .crossOverDetection)
                 if crossOverDetection {
                     FolderImportButton(type: "CrossOver", folder: $crossOverFolder, lastPathComponent: $lastPathComponent, endPath: nil, invalidFolder: $invalidFolder)
                 }
