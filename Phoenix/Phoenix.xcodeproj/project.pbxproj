@@ -123,6 +123,7 @@
 		ADDE703E2B00546C00D006B8 /* FolderImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderImportButton.swift; sourceTree = "<group>"; };
 		ADF8FB3F2B57960800AFD38E /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
+		C9435D262B594B6E0032DB7A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
 		CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterViewModel.swift; sourceTree = "<group>"; };
 		CAFAFAA82967600700B89003 /* LogUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
@@ -454,6 +455,7 @@
 				en,
 				Base,
 				sq,
+				de,
 			);
 			mainGroup = 0AF378582953AADC00978137;
 			packageReferences = (
@@ -586,6 +588,7 @@
 			children = (
 				0A2B7BD12B50B9F400D56DA6 /* en */,
 				ADF8FB3F2B57960800AFD38E /* sq */,
+				C9435D262B594B6E0032DB7A /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
