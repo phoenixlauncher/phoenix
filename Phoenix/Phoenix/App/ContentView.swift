@@ -39,7 +39,7 @@ struct ContentView: View {
                                     appViewModel.isAddingGame.toggle()
                                 },
                                 label: {
-                                    Label("New Game", systemImage: "plus")
+                                    Label(String(localized: "file_AddGame"), systemImage: "plus")
                                 }
                             )
                         }
