@@ -91,9 +91,11 @@ func loadGamesFromJSON() -> GamesList {
         logger.write("[INFO]: Couldn't find games.json. Creating new one.")
         let jsonFileURL = Bundle.main.url(forResource: "games", withExtension: "json")
         do {
-            let jsonData = try Data(contentsOf: jsonFileURL!)
-            let jsonString = String(decoding: jsonData, as: UTF8.self)
-            writeGamesToJSON(data: jsonString)
+            if let jsonFileURL = jsonFileURL {
+                let jsonData = try Data(contentsOf: jsonFileURL)
+                let jsonString = String(decoding: jsonData, as: UTF8.self)
+                writeGamesToJSON(data: jsonString)
+            }
         } catch {
             logger.write(
                 "[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'"

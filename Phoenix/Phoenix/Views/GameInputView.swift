@@ -129,6 +129,8 @@ struct GameInputView: View {
                                             if fetchedGames.count != 0 {
                                                 showChooseGameView.toggle()
                                             } else {
+                                                gameViewModel.games.append(game)
+                                                gameViewModel.selectedGame = game.id
                                                 appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
                                                 dismiss()
                                             }
@@ -140,6 +142,7 @@ struct GameInputView: View {
                                     game.recency = gameViewModel.games[idx].recency
                                     game.isFavorite = gameViewModel.games[idx].isFavorite
                                     gameViewModel.games[idx] = game
+                                    gameViewModel.selectedGame = game.id
                                     gameViewModel.saveGames()
                                     appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                 } else {
