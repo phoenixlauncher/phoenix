@@ -61,7 +61,9 @@ struct GameListItem: View {
                     if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
                         gameViewModel.games.remove(at: idx)
                     }
-                    gameViewModel.selectedGame = gameViewModel.games[0].id
+                    if gameViewModel.games.indices.contains(0) {
+                        gameViewModel.selectedGame = gameViewModel.games[0].id
+                    }
                     gameViewModel.saveGames()
                 }) {
                     Image(systemName: "trash")
