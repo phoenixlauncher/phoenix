@@ -129,6 +129,7 @@ struct GameInputView: View {
                                             if fetchedGames.count != 0 {
                                                 showChooseGameView.toggle()
                                             } else {
+                                                gameViewModel.games.append(game)
                                                 appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
                                                 dismiss()
                                             }
