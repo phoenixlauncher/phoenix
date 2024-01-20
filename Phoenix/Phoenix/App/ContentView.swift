@@ -86,8 +86,12 @@ struct ContentView: View {
                     }
                 }
         } detail: {
-            // The detailed view of the selected game
-            GameDetailView()
+            if gameViewModel.games.count > 0 {
+                // The detailed view of the selected game
+                GameDetailView()
+            } else {
+                OnboardingDetailView()
+            }
         }
         .sheet(isPresented: $appViewModel.isAddingGame) {
             GameInputView(isNewGame: true)

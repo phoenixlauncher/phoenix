@@ -45,6 +45,8 @@
 		ADA0D8A12B3F890800487C4D /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A02B3F890800487C4D /* GameViewModel.swift */; };
 		ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */; };
 		ADA0D8A62B3FA5B900487C4D /* SupabaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */; };
+		ADA7355A2B5B8A190001B9A7 /* Colorful in Frameworks */ = {isa = PBXBuildFile; productRef = ADA735592B5B8A190001B9A7 /* Colorful */; };
+		ADA7355C2B5B8A710001B9A7 /* OnboardingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA7355B2B5B8A710001B9A7 /* OnboardingDetailView.swift */; };
 		ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = ADB63FFD2AF7F248006B39ED /* Defaults */; };
 		ADB640002AF8391C006B39ED /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB63FFF2AF8391C006B39ED /* Defaults.swift */; };
 		ADB72D5E2AC1359100299AC0 /* ChooseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */; };
@@ -114,6 +116,7 @@
 		ADA0D8A02B3F890800487C4D /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseViewModel.swift; sourceTree = "<group>"; };
 		ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseGame.swift; sourceTree = "<group>"; };
+		ADA7355B2B5B8A710001B9A7 /* OnboardingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDetailView.swift; sourceTree = "<group>"; };
 		ADB63FFF2AF8391C006B39ED /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseGameView.swift; sourceTree = "<group>"; };
 		ADC001002B0DB15C004D9CF6 /* setup.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = setup.md; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
+				ADA7355A2B5B8A190001B9A7 /* Colorful in Frameworks */,
 				ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,6 +314,7 @@
 				0A87BBB0295D57C30009AF47 /* GameListView.swift */,
 				AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */,
 				ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */,
+				ADA7355B2B5B8A710001B9A7 /* OnboardingDetailView.swift */,
 				ADB4CF0B2AB5385600BDF853 /* Updates */,
 				ADB4CF092AB537CA00BDF853 /* Components */,
 				ADB4CF0A2AB537DC00BDF853 /* Settings */,
@@ -380,6 +385,7 @@
 				AD8718FC2AFDE14D0008F144 /* MarkdownUI */,
 				AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */,
 				AD7AD2EF2B09819E002DBDCD /* Supabase */,
+				ADA735592B5B8A190001B9A7 /* Colorful */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -463,6 +469,7 @@
 				AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
 				AD7AD2EE2B09819E002DBDCD /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -542,6 +549,7 @@
 				ADB640002AF8391C006B39ED /* Defaults.swift in Sources */,
 				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
 				ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */,
+				ADA7355C2B5B8A710001B9A7 /* OnboardingDetailView.swift in Sources */,
 				0A87BBB1295D57C30009AF47 /* GameListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -935,6 +943,14 @@
 				minimumVersion = 7.9.1;
 			};
 		};
+		ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Lakr233/Colorful.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 		ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -978,6 +994,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD92C4F42AAEBAF40058E1EA /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		ADA735592B5B8A190001B9A7 /* Colorful */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */;
+			productName = Colorful;
 		};
 		ADB63FFD2AF7F248006B39ED /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;

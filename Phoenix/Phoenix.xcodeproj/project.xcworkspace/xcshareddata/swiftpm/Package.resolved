@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "colorful",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Lakr233/Colorful.git",
+      "state" : {
+        "revision" : "0bcf960c856d9f7cde10a0b464208585736c5e47",
+        "version" : "1.1.0"
+      }
+    },
+    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
