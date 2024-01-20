@@ -73,6 +73,7 @@ struct ChooseGameView: View {
         done = true
         supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game) { result in
             gameViewModel.addGame(result)
+            gameViewModel.selectedGame = result.id
         }
     }
 }
