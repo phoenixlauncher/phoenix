@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct ChooseGameView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
@@ -26,11 +25,12 @@ struct ChooseGameView: View {
                 ForEach(supabaseGames.sorted { $0.igdb_id < $1.igdb_id }, id: \.self) { game in
                     HStack(spacing: 20) {
                         if let cover = game.cover {
-                            KFImage(URL(string: cover))
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 150)
-                                .cornerRadius(5)
+                            AsyncImage(url: URL(string: cover)) { image in
+                                image.image?.resizable()
+                            }
+                            .scaledToFit()
+                            .frame(height: 150)
+                            .cornerRadius(5)
                         }
                         VStack {
                             if let name = game.name {

@@ -41,7 +41,6 @@
 		AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AD7AD2EF2B09819E002DBDCD /* Supabase */; };
 		AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7AD2F82B0BECC2002DBDCD /* GameListItem.swift */; };
 		AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD8718FC2AFDE14D0008F144 /* MarkdownUI */; };
-		AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AD92C4F52AAEBAF40058E1EA /* Kingfisher */; };
 		ADA0D8A12B3F890800487C4D /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A02B3F890800487C4D /* GameViewModel.swift */; };
 		ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */; };
 		ADA0D8A62B3FA5B900487C4D /* SupabaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */; };
@@ -135,7 +134,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */,
 				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
 				CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */,
 				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
@@ -380,7 +378,6 @@
 			packageProductDependencies = (
 				CAFACC752A42638E001C45C4 /* Sparkle */,
 				AD5E91A52AAE33CB008097C4 /* AlertToast */,
-				AD92C4F52AAEBAF40058E1EA /* Kingfisher */,
 				ADB63FFD2AF7F248006B39ED /* Defaults */,
 				AD8718FC2AFDE14D0008F144 /* MarkdownUI */,
 				AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */,
@@ -464,7 +461,6 @@
 			packageReferences = (
 				CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
-				AD92C4F42AAEBAF40058E1EA /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */,
 				AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
@@ -935,14 +931,6 @@
 				minimumVersion = 2.2.0;
 			};
 		};
-		AD92C4F42AAEBAF40058E1EA /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.9.1;
-			};
-		};
 		ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Lakr233/Colorful.git";
@@ -989,11 +977,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
-		};
-		AD92C4F52AAEBAF40058E1EA /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD92C4F42AAEBAF40058E1EA /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 		ADA735592B5B8A190001B9A7 /* Colorful */ = {
 			isa = XCSwiftPackageProductDependency;
