@@ -2,7 +2,7 @@
 
 <div align="center">
 
-  [![Discord](https://img.shields.io/discord/1059670439917527140?style=for-the-badge&logo=discord)](https://discord.gg/ZJdbcafA9Q)
+  [![Discord](https://img.shields.io/discord/1059670439917527140?style=for-the-badge&logo=discord)](https://discord.gg/S5Kje5WQ4R)
   ![macOS Version](https://img.shields.io/badge/macos-13%2B-brightgreen?style=for-the-badge)
 </div>
 
