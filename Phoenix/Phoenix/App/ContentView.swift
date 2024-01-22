@@ -17,7 +17,7 @@ struct ContentView: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
     @Environment(\.openWindow) var openWindow
-    @Binding var sortBy: PhoenixApp.SortBy
+    @Binding var sortBy: SortBy
     @State var searchText: String = ""
     
     @Default(.showPickerText) var showPickerText
@@ -39,7 +39,7 @@ struct ContentView: View {
                                     appViewModel.isAddingGame.toggle()
                                 },
                                 label: {
-                                    Label("New Game", systemImage: "plus")
+                                    Label(String(localized: "file_AddGame"), systemImage: "plus")
                                 }
                             )
                         }
@@ -48,8 +48,8 @@ struct ContentView: View {
                         ZStack(alignment: .leading) {
                             if #available(macOS 14, *), Defaults[.showAnimationOfSortByIcon] {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
-                                    Text("Sort by:")
-                                    ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                    Text("\(String(localized: "category_SortBy")):")
+                                    ForEach(SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
                                             action: {
                                                 sortBy = currentSortBy
@@ -67,8 +67,8 @@ struct ContentView: View {
                                     .padding(.leading, 7)
                             } else {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
-                                    Text("Sort by:")
-                                    ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                    Text("\(String(localized: "category_SortBy")):")
+                                    ForEach(SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
                                             action: {
                                                 sortBy = currentSortBy
@@ -86,8 +86,12 @@ struct ContentView: View {
                     }
                 }
         } detail: {
-            // The detailed view of the selected game
-            GameDetailView()
+            if gameViewModel.games.count > 0 {
+                // The detailed view of the selected game
+                GameDetailView()
+            } else {
+                OnboardingDetailView()
+            }
         }
         .sheet(isPresented: $appViewModel.isAddingGame) {
             GameInputView(isNewGame: true)
@@ -100,7 +104,7 @@ struct ContentView: View {
         .onChange(of: sortBy) { _ in
             animate.toggle()
         }
-        .searchable(text: $searchText, placement: .sidebar)
+        .searchable(text: $searchText, placement: .sidebar, prompt: String(localized: "gameList_Search"))
         .toast(isPresenting: $appViewModel.showSuccessToast, tapToDismiss: true) {
             AlertToast(type: .complete(Color.green), title: appViewModel.successToastText)
         }

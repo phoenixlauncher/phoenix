@@ -13,7 +13,7 @@ struct TextBoxAlert: View {
     
     @Binding var text: String
     
-    var saveAction: (() -> Void)
+    let saveAction: (() -> Void)
     
     var body: some View {
         VStack {
@@ -26,13 +26,18 @@ struct TextBoxAlert: View {
                     HStack {
                         Text(LocalizedStringKey("alert_Cancel"))
                         .fontWeight(.medium)
-                        .foregroundColor(Color.white)
                         .font(.system(size: 16))
+                        .foregroundStyle(Color.primary)
                         .padding()
                         .frame(width: 100, height: 40)
                     }
+                    .cornerRadius(10)
+                    .contentShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .cornerRadius(10)
+                .background(Color.secondary.opacity(0.2).cornerRadius(10))
+                .buttonStyle(.plain)
+                
                 Button(action: {
                     saveAction()
                     dismiss()

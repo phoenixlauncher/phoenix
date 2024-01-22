@@ -13,48 +13,6 @@ struct PhoenixApp: App {
     @StateObject var appViewModel = AppViewModel()
     @StateObject var updaterViewModel = UpdaterViewModel()
     
-    enum SortBy: String, Codable, CaseIterable, Identifiable, Defaults.Serializable {
-        case platform, status, name, recency
-
-        var id: SortBy { self }
-        
-        var displayName: String {
-            switch self {
-            case .platform: return String(localized: "category_Platform")
-            case .status: return String(localized: "category_Status")
-            case .name: return String(localized: "category_Name")
-            case .recency: return String(localized: "category_Recency")
-            }
-        }
-        
-        var spaces: String {
-            switch self {
-            case .platform: return "        \(String(localized: "category_Platform"))"
-            case .status: return "       \(String(localized: "category_Status"))"
-            case .name: return "         \(String(localized: "category_Name"))"
-            case .recency: return "      \(String(localized: "category_Recency"))"
-            }
-        }
-        
-        var spacedName: String {
-            switch self {
-            case .platform: return "       "
-            case .status: return "     "
-            case .name: return "       "
-            case .recency: return "    "
-            }
-        }
-        
-        var symbol: String {
-            switch self {
-            case .platform: return "gamecontroller"
-            case .status: return "trophy"
-            case .name: return "textformat.abc.dottedunderline"
-            case .recency: return "clock"
-            }
-        }
-    }
-    
     @State var sortBy: SortBy = Defaults[.sortBy]
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -70,21 +28,21 @@ struct PhoenixApp: App {
                 .environmentObject(appViewModel)
         }.commands {
             CommandGroup(before: CommandGroupPlacement.newItem) {
-                Button("Add Game") {
+                Button(String(localized: "file_AddGame")) {
                     appViewModel.isAddingGame.toggle()
                 }
                 .keyboardShortcut("n", modifiers: [.shift, .command])
-                Button("Edit Game") {
+                Button(String(localized: "file_EditGame")) {
                     appViewModel.isEditingGame.toggle()
                 }
                 .keyboardShortcut("e", modifiers: [.shift, .command])
-                Button("Play Game") {
+                Button(String(localized: "file_PlayGame")) {
                     appViewModel.isPlayingGame.toggle()
                 }
                 .keyboardShortcut("p", modifiers: [.shift, .command])
             }
             CommandGroup(replacing: CommandGroupPlacement.importExport) {
-                Button("Open Phoenix Data Folder") {
+                Button(String(localized: "file_PhoenixFolder")) {
                     if let phoenixDirectory = getPhoenixDirectory() {
                         NSWorkspace.shared.open(phoenixDirectory)
                         logger.write("[INFO]: Opened Application Support/Phoenix.")
@@ -93,19 +51,19 @@ struct PhoenixApp: App {
                 .keyboardShortcut("o", modifiers: [.command, .shift])
             }
             CommandGroup(replacing: CommandGroupPlacement.sidebar) {
-                Button("Sort Sidebar by Platform", action: {
+                Button(String(localized: "view_Platform"), action: {
                     sortBy = SortBy.platform
                 })
                 .keyboardShortcut("1", modifiers: .command)
-                Button("Sort Sidebar by Status", action: {
+                Button(String(localized: "view_Status"), action: {
                     sortBy = SortBy.status
                 })
                 .keyboardShortcut("2", modifiers: .command)
-                Button("Sort Sidebar by Name", action: {
+                Button(String(localized: "view_Name"), action: {
                     sortBy = SortBy.name
                 })
                 .keyboardShortcut("3", modifiers: .command)
-                Button("Sort Sidebar by Recency", action: {
+                Button(String(localized: "view_Recency"), action: {
                     sortBy = SortBy.recency
                 })
                 .keyboardShortcut("4", modifiers: .command)

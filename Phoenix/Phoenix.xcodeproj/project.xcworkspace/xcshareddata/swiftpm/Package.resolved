@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "colorful",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Lakr233/Colorful.git",
+      "state" : {
+        "revision" : "0bcf960c856d9f7cde10a0b464208585736c5e47",
+        "version" : "1.1.0"
+      }
+    },
+    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
@@ -25,15 +34,6 @@
       "state" : {
         "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
         "version" : "4.2.2"
-      }
-    },
-    {
-      "identity" : "kingfisher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher.git",
-      "state" : {
-        "revision" : "add0a87ec4e31e2ca2a0b2085f0559201e4f5918",
-        "version" : "7.10.1"
       }
     },
     {

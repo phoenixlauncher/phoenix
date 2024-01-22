@@ -38,6 +38,27 @@ class GameViewModel: ObservableObject {
         }
         saveGames()
     }
+    
+    func toggleFavoriteFromID(_ id: UUID) {
+        if let idx = games.firstIndex(where: { $0.id == id }) {
+            games[idx].isFavorite.toggle()
+        }
+        saveGames()
+    }
+    
+    func toggleHiddenFromID(_ id: UUID) {
+        if let idx = games.firstIndex(where: { $0.id == id }) {
+            games[idx].isHidden.toggle()
+        }
+        saveGames()
+    }
+    
+    func deleteGameFromID(_ id: UUID) {
+        if let idx = games.firstIndex(where: { $0.id == id }) {
+            games.remove(at: idx)
+        }
+        saveGames()
+    }
 
     func saveGames() {
         print("Saving games")
