@@ -17,7 +17,7 @@ struct ContentView: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
     @Environment(\.openWindow) var openWindow
-    @Binding var sortBy: PhoenixApp.SortBy
+    @Binding var sortBy: SortBy
     @State var searchText: String = ""
     
     @Default(.showPickerText) var showPickerText
@@ -49,7 +49,7 @@ struct ContentView: View {
                             if #available(macOS 14, *), Defaults[.showAnimationOfSortByIcon] {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
                                     Text("\(String(localized: "category_SortBy")):")
-                                    ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                    ForEach(SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
                                             action: {
                                                 sortBy = currentSortBy
@@ -68,7 +68,7 @@ struct ContentView: View {
                             } else {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
                                     Text("\(String(localized: "category_SortBy")):")
-                                    ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                    ForEach(SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
                                             action: {
                                                 sortBy = currentSortBy

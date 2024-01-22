@@ -122,5 +122,7 @@
 "context_EditName" = "Edit name";
 "context_EditIcon" = "Edit icon";
 "context_EditHeader" = "Edit header";
+"context_EditPlatform" = "Edit platform";
+"context_EditStatus" = "Edit status";
 "update_CheckForUpdates" = "Check for Updates";
 

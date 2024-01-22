@@ -70,6 +70,7 @@ struct GameListItem: View {
                     Text(LocalizedStringKey("context_DeleteGame"))
                 }
                 .accessibility(identifier: String(localized: "context_DeleteGame"))
+                //edit name button
                 Divider()
                 Button(action: {
                     changeName.toggle()
@@ -81,6 +82,7 @@ struct GameListItem: View {
                 }
                 .accessibility(identifier: String(localized: "context_EditName"))
                 .padding()
+                //edit icon button
                 Button(action: {
                     isImporting.toggle()
                     importType = "icon"
@@ -92,6 +94,7 @@ struct GameListItem: View {
                 }
                 .accessibility(identifier: String(localized: "context_EditIcon"))
                 .padding()
+                //edit header button
                 Button(action: {
                     isImporting.toggle()
                     importType = "header"
@@ -102,6 +105,53 @@ struct GameListItem: View {
                     }
                 }
                 .accessibility(identifier: String(localized: "context_EditHeader"))
+                .padding()
+                Divider()
+                //edit platform menu
+                Menu(content: {
+                    ForEach(Platform.allCases) { platform in
+                        Button(action: {
+                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                gameViewModel.games[idx].platform = platform
+                            }
+                            gameViewModel.saveGames()
+                        }) {
+                            Text(platform.displayName)
+                        }
+                        .accessibility(identifier: String(platform.displayName))
+                        .padding()
+                    }
+                },
+                label: {
+                    HStack {
+                        Image(systemName: "gamecontroller")
+                        Text(LocalizedStringKey("context_EditPlatform"))
+                    }
+                })
+                .accessibility(identifier: String(localized: "context_EditPlatform"))
+                .padding()
+                //edit status menu
+                Menu(content: {
+                    ForEach(Status.allCases) { status in
+                        Button(action: {
+                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                gameViewModel.games[idx].status = status
+                            }
+                            gameViewModel.saveGames()
+                        }) {
+                            Text(status.displayName)
+                        }
+                        .accessibility(identifier: String(status.displayName))
+                        .padding()
+                    }
+                },
+                label: {
+                    HStack {
+                        Image(systemName: "trophy")
+                        Text(LocalizedStringKey("context_EditStatus"))
+                    }
+                })
+                .accessibility(identifier: String(localized: "context_EditStatus"))
                 .padding()
             }
             .sheet(isPresented: $changeName) {

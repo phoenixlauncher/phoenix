@@ -7,64 +7,6 @@
 
 import Foundation
 
-enum Platform: String, Codable, CaseIterable, Identifiable {
-    case mac, steam, gog, epic, pc, ps, nin, sega, xbox, none
-
-    var id: Platform { self }
-
-    var displayName: String {
-        switch self {
-        case .mac: return String(localized: "platforms_Mac")
-        case .steam: return String(localized: "platforms_Steam")
-        case .gog: return String(localized: "platforms_GOG")
-        case .epic: return String(localized: "platforms_Epic")
-        case .pc: return String(localized: "platforms_PC")
-        case .ps: return String(localized: "platforms_Playstation")
-        case .nin: return String(localized: "platforms_Nintendo")
-        case .sega: return String(localized: "platforms_Sega")
-        case .xbox: return String(localized: "platforms_Xbox")
-        case .none: return String(localized: "platforms_Other")
-        }
-    }
-}
-
-enum Status: String, Codable, CaseIterable, Identifiable {
-    case playing, shelved, occasional, backlog, beaten, completed, abandoned, none
-
-    var id: Status { self }
-
-    var displayName: String {
-        switch self {
-        case .playing: return String(localized: "status_Playing")
-        case .shelved: return String(localized: "status_Shelved")
-        case .occasional: return String(localized: "status_Occasional")
-        case .backlog: return String(localized: "status_Backlog")
-        case .beaten: return String(localized: "status_Beaten")
-        case .completed: return String(localized: "status_Completed")
-        case .abandoned: return String(localized: "status_Abandoned")
-        case .none: return String(localized: "status_Other")
-        }
-    }
-}
-
-enum Recency: String, Codable, CaseIterable, Identifiable {
-    case day, week, month, three_months, six_months, year, never
-
-    var id: Recency { self }
-
-    var displayName: String {
-        switch self {
-        case .day: return String(localized: "recency_Today")
-        case .week: return String(localized: "recency_ThisWeek")
-        case .month: return String(localized: "recency_ThisMonth")
-        case .three_months: return String(localized: "recency_Last3Months")
-        case .six_months: return String(localized: "recency_Last6Months")
-        case .year: return String(localized: "recency_ThisYear")
-        case .never: return String(localized: "recency_Never")
-        }
-    }
-}
-
 struct Game: Codable, Comparable, Hashable {
     var id: UUID
     var steamID: String
