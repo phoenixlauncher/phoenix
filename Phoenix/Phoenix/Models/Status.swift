@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Status: String, Codable, CaseIterable, Identifiable {
+enum Status: String, Codable, CaseIterable, Identifiable, CaseIterableEnum {
     case playing, shelved, occasional, backlog, beaten, completed, abandoned, none
 
     var id: Status { self }

@@ -56,6 +56,8 @@
 		ADE201FF2B5DF9A100047322 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE201FE2B5DF9A100047322 /* Status.swift */; };
 		ADE202012B5DF9B200047322 /* Recency.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202002B5DF9B200047322 /* Recency.swift */; };
 		ADE202032B5DF9D300047322 /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202022B5DF9D300047322 /* SortBy.swift */; };
+		ADE202052B5DFF7400047322 /* ContextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202042B5DFF7400047322 /* ContextButton.swift */; };
+		ADE202082B5E04ED00047322 /* ContextButtonMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
 		CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = CAFACC752A42638E001C45C4 /* Sparkle */; };
@@ -129,6 +131,8 @@
 		ADE201FE2B5DF9A100047322 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		ADE202002B5DF9B200047322 /* Recency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recency.swift; sourceTree = "<group>"; };
 		ADE202022B5DF9D300047322 /* SortBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBy.swift; sourceTree = "<group>"; };
+		ADE202042B5DFF7400047322 /* ContextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButton.swift; sourceTree = "<group>"; };
+		ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButtonMenu.swift; sourceTree = "<group>"; };
 		ADF8FB3F2B57960800AFD38E /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		C9435D262B594B6E0032DB7A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -250,6 +254,7 @@
 				AD5287D52AC018B8001673F5 /* HelpButton.swift */,
 				AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */,
 				ADDE703E2B00546C00D006B8 /* FolderImportButton.swift */,
+				ADE202042B5DFF7400047322 /* ContextButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -335,6 +340,7 @@
 		ADB4CF092AB537CA00BDF853 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				ADE202062B5E04E300047322 /* Menus */,
 				ADD4C7C62AC9CCD20052DFCB /* Misc */,
 				AD53FCC02AC7E52100D3A301 /* TextBoxes */,
 				AD53FCBF2AC7E50A00D3A301 /* Buttons */,
@@ -369,6 +375,14 @@
 				ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */,
 			);
 			path = Misc;
+			sourceTree = "<group>";
+		};
+		ADE202062B5E04E300047322 /* Menus */ = {
+			isa = PBXGroup;
+			children = (
+				ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */,
+			);
+			path = Menus;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -545,6 +559,7 @@
 				AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* ImageUtils.swift in Sources */,
 				CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */,
+				ADE202082B5E04ED00047322 /* ContextButtonMenu.swift in Sources */,
 				CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */,
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
 				AD2E38AB2B5785EA0068943E /* TextBoxAlert.swift in Sources */,
@@ -562,6 +577,7 @@
 				ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */,
 				ADA7355C2B5B8A710001B9A7 /* OnboardingDetailView.swift in Sources */,
 				ADE202012B5DF9B200047322 /* Recency.swift in Sources */,
+				ADE202052B5DFF7400047322 /* ContextButton.swift in Sources */,
 				0A87BBB1295D57C30009AF47 /* GameListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

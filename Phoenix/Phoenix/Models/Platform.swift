@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Platform: String, Codable, CaseIterable, Identifiable {
+enum Platform: String, Codable, CaseIterable, Identifiable, CaseIterableEnum {
     case mac, steam, gog, epic, pc, ps, nin, sega, xbox, none
 
     var id: Platform { self }

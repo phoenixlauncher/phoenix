@@ -13,7 +13,7 @@ struct TextBoxAlert: View {
     
     @Binding var text: String
     
-    var saveAction: (() -> Void)
+    let saveAction: (() -> Void)
     
     var body: some View {
         VStack {
