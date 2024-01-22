@@ -157,6 +157,15 @@ struct GameInputView: View {
                     .frame(maxWidth: .infinity)
                 }
 
+                Button (
+                    action: {
+                        dismiss()
+                    },
+                    label: {
+                        Text(LocalizedStringKey("alert_Cancel"))
+                    }
+                )
+
                 HStack {
                     Spacer().frame(maxWidth: .infinity)
                     Spacer().frame(maxWidth: .infinity)
