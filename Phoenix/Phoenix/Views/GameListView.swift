@@ -10,7 +10,7 @@ struct GameListView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var appViewModel: AppViewModel
     
-    @Binding var sortBy: PhoenixApp.SortBy
+    @Binding var sortBy: SortBy
 
     @Binding var searchText: String
     @State private var timer: Timer?

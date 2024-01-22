@@ -36,73 +36,46 @@ struct GameListItem: View {
                 Text(game.name)
             }
             .contextMenu {
-                Button(action: {
-                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                        gameViewModel.games[idx].isFavorite.toggle()
-                    }
-                    gameViewModel.saveGames()
-                }) {
-                    Image(systemName: game.isFavorite ? "star.slash" : "star")
-                    Text("\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(String(localized: "context_Game"))")
-                }
-                .accessibility(identifier: String(localized: "context_FavoriteGame"))
-                Button(action: {
-                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                        gameViewModel.games[idx].isHidden = true
-                    }
-                    gameViewModel.selectedGame = gameViewModel.games[0].id
-                    gameViewModel.saveGames()
-                }) {
-                    Image(systemName: "eye.slash")
-                    Text(LocalizedStringKey("context_HideGame"))
-                }
-                .accessibility(identifier: String(localized: "context_HideGame"))
-                Button(action: {
-                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                        gameViewModel.games.remove(at: idx)
-                    }
+                //toggle favorite button
+                ContextButton(action: {
+                    gameViewModel.toggleFavoriteFromID(game.id)
+                }, symbol: game.isFavorite ? "star.slash" : "star", text: "\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(String(localized: "context_Game"))")
+                
+                //toggle hidden button
+                ContextButton(action: {
+                    gameViewModel.toggleHiddenFromID(game.id)
                     if gameViewModel.games.indices.contains(0) {
                         gameViewModel.selectedGame = gameViewModel.games[0].id
                     }
-                    gameViewModel.saveGames()
-                }) {
-                    Image(systemName: "trash")
-                    Text(LocalizedStringKey("context_DeleteGame"))
-                }
-                .accessibility(identifier: String(localized: "context_DeleteGame"))
+                }, symbol: "eye.slash", text: String(localized: ("context_HideGame")))
+                
+                //delete game button
+                ContextButton(action: {
+                    gameViewModel.deleteGameFromID(game.id)
+                    if gameViewModel.games.indices.contains(0) {
+                        gameViewModel.selectedGame = gameViewModel.games[0].id
+                    }
+                }, symbol: "trash", text: String(localized: "context_DeleteGame"))
+
                 Divider()
-                Button(action: {
-                    changeName.toggle()
-                }) {
-                    HStack {
-                        Image(systemName: "character.cursor.ibeam")
-                        Text(LocalizedStringKey("context_EditName"))
-                    }
-                }
-                .accessibility(identifier: String(localized: "context_EditName"))
-                .padding()
-                Button(action: {
-                    isImporting.toggle()
-                    importType = "icon"
-                }) {
-                    HStack {
-                        Image(systemName: "app.dashed")
-                        Text(LocalizedStringKey("context_EditIcon"))
-                    }
-                }
-                .accessibility(identifier: String(localized: "context_EditIcon"))
-                .padding()
-                Button(action: {
-                    isImporting.toggle()
-                    importType = "header"
-                }) {
-                    HStack {
-                        Image(systemName: "photo")
-                        Text(LocalizedStringKey("context_EditHeader"))
-                    }
-                }
-                .accessibility(identifier: String(localized: "context_EditHeader"))
-                .padding()
+                
+                //edit name button
+                ContextButton(action: { changeName.toggle() }, symbol: "character.cursor.ibeam", text: String(localized: "context_EditName"))
+                
+                //edit icon button
+                ContextButton(action: editIcon, symbol: "app.dashed", text: String(localized: "context_EditIcon"))
+
+                //edit header button
+                ContextButton(action: editHeader, symbol: "photo", text: String(localized: "context_EditHeader"))
+                
+                Divider()
+                
+                //edit platform menu
+                ContextButtonMenu(forEachEnum: Platform.self, action: { editPlatform(thing: $0, id: game.id) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
+        
+                //edit platform menu
+                ContextButtonMenu(forEachEnum: Status.self, action: { editStatus(thing: $0, id: game.id) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
+                
             }
             .sheet(isPresented: $changeName) {
                 TextBoxAlert(text: $name, saveAction: {
@@ -140,4 +113,29 @@ struct GameListItem: View {
             }
         }
     }
+    
+    private func editIcon() {
+        isImporting.toggle()
+        importType = "icon"
+    }
+    
+    private func editHeader() {
+        isImporting.toggle()
+        importType = "header"
+    }
+    
+    func editPlatform(thing: any CaseIterableEnum, id: UUID) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), thing is Platform {
+            gameViewModel.games[idx].platform = thing as! Platform
+        }
+        gameViewModel.saveGames()
+    }
+    
+    func editStatus(thing: any CaseIterableEnum, id: UUID) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), thing is Status {
+            gameViewModel.games[idx].status = thing as! Status
+        }
+        gameViewModel.saveGames()
+    }
 }
+

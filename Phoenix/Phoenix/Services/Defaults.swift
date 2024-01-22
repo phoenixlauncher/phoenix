@@ -14,7 +14,7 @@ typealias Default = _Default
 extension Defaults.Keys {
     //app
     static let selectedGame = Key<UUID>("selectedGame", default: UUID())
-    static let sortBy = Key<PhoenixApp.SortBy>("sortBy", default: .platform)
+    static let sortBy = Key<SortBy>("sortBy", default: .platform)
     
     //general
     static let steamDetection = Key<Bool>("steamDetection", default: true)
