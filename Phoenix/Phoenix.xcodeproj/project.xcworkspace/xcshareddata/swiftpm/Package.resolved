@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "expandabletext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jxhug/ExpandableText.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "45f54bdd2cd19d93f42b5c48000a42fcb5dc7a84"
+      }
+    },
+    {
       "identity" : "keychainaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",

@@ -16,6 +16,10 @@ struct GameDetailView: View {
     @State var selectedGameName: String?
 
     @State var rating: Float = 0
+    
+    var game: Game? {
+        gameViewModel.getGameFromID(id: gameViewModel.selectedGame) ?? nil
+     }
 
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
@@ -23,7 +27,6 @@ struct GameDetailView: View {
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
-                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
                 if let game = game {
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
@@ -64,34 +67,34 @@ struct GameDetailView: View {
                         HStack(alignment: .top) {
                             // description
                             VStack(alignment: .leading) {
-                                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
-                                if game?.metadata["description"] != "" {
-                                    TextCard(text: game?.metadata["description"] ?? String(localized: "detail_NoGame"))
+                                if let description = game?.metadata["description"] {
+                                    TextCard(text: description)
                                 } else {
                                     TextCard(text: String(localized: "detail_NoDesc"))
                                 }
                             }
                             .padding(.trailing, 7.5)
-
-                            SlotCard(content: {
-                                let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
-                                if let game = game {
-                                    VStack(alignment: .leading, spacing: 7.5) {
-                                        GameMetadata(field: String(localized: "detail_LP"), value: game.metadata["last_played"] ?? String(localized: "recency_Never"))
-                                        GameMetadata(field: String(localized: "detail_Platform"), value: game.platform.displayName)
-                                        GameMetadata(field: String(localized: "detail_Status"), value: game.status.displayName)
-                                        if !showStarRating {
-                                            GameMetadata(field: String(localized: "detail_Rating"), value: game.metadata["rating"] ?? "")
+                            Spacer()
+                            VStack {
+                                SlotCard(content: {
+                                    if let game = game {
+                                        VStack(alignment: .leading, spacing: 7.5) {
+                                            GameMetadata(field: String(localized: "detail_LP"), value: game.metadata["last_played"] ?? String(localized: "recency_Never"))
+                                            GameMetadata(field: String(localized: "detail_Platform"), value: game.platform.displayName)
+                                            GameMetadata(field: String(localized: "detail_Status"), value: game.status.displayName)
+                                            if !showStarRating {
+                                                GameMetadata(field: String(localized: "detail_Rating"), value: game.metadata["rating"] ?? "")
+                                            }
+                                            GameMetadata(field: String(localized: "detail_Genres"), value: game.metadata["genre"] ?? "")
+                                            GameMetadata(field: String(localized: "detail_Dev"), value: game.metadata["developer"] ?? "")
+                                            GameMetadata(field: String(localized: "detail_Pub"), value: game.metadata["publisher"] ?? "")
+                                            GameMetadata(field: String(localized: "detail_Release"), value: game.metadata["release_date"] ?? "")
                                         }
-                                        GameMetadata(field: String(localized: "detail_Genres"), value: game.metadata["genre"] ?? "")
-                                        GameMetadata(field: String(localized: "detail_Dev"), value: game.metadata["developer"] ?? "")
-                                        GameMetadata(field: String(localized: "detail_Pub"), value: game.metadata["publisher"] ?? "")
-                                        GameMetadata(field: String(localized: "detail_Release"), value: game.metadata["release_date"] ?? "")
+                                        .padding(.trailing, 10)
+                                        .frame(minWidth: 150, alignment: .leading)
                                     }
-                                    .padding(.trailing, 10)
-                                    .frame(minWidth: 150, alignment: .leading)
-                                }
-                            })
+                                })
+                            }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .padding(.top, 10)
@@ -103,7 +106,6 @@ struct GameDetailView: View {
         }
         .navigationTitle(gameViewModel.selectedGameName)
         .onAppear {
-            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
