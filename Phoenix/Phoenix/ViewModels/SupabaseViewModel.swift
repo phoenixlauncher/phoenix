@@ -58,7 +58,7 @@ class SupabaseViewModel: ObservableObject {
         }
         
         if let steam_id = supabaseGame.steam_id {
-            game.steamID = String(steam_id)
+            game.steamID = steam_id
             if (game.launcher == "" || game.launcher.contains("%@")) && game.platform == .steam {
                 game.launcher = "open steam://run/\(steam_id)"
             }
