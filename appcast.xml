@@ -3,12 +3,12 @@
     <channel>
         <title>Phoenix</title>
         <item>
-            <title>0.1.4</title>
-            <pubDate>Sun, 21 Jan 2024 22:02:23 -0800</pubDate>
-            <sparkle:version>19</sparkle:version>
-            <sparkle:shortVersionString>0.1.4</sparkle:shortVersionString>
+            <title>0.1.5</title>
+            <pubDate>Tue, 06 Feb 2024 09:31:19 -0800</pubDate>
+            <sparkle:version>20</sparkle:version>
+            <sparkle:shortVersionString>0.1.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/phoenixlauncher/phoenix/releases/download/v0.1.4-beta/Phoenix.dmg" type="application/octet-stream" sparkle:edSignature="xMQ1FiisJWKLIL8CYLQ7102L+ywVDHZir0YjzLttZogNLz4daUHxmP1DVZ2aWiS08SZh0Lzd+N24ndzAwOJOBQ==" length="7030935"/>
+            <enclosure url="https://github.com/phoenixlauncher/phoenix/releases/download/v0.1.5-beta/Phoenix.dmg" length="7031128" type="application/octet-stream" sparkle:edSignature="r/ZrmqxnZxDeqRxE7RelsHEsa1Fp5Yec0ssNeriqFA4tj/KpopTBXofUlUJ7qGhvZ3VhTJi7ah9PGEvfqySeDg=="/>
         </item>
     </channel>
 </rss>
