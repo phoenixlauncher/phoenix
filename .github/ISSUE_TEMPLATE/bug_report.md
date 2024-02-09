@@ -2,10 +2,12 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: bug, enhancement
+labels: bug
 assignees: ''
 
 ---
+
+*NOTE: Please submit website issues [here](https://github.com/phoenixlauncher/website/issues)*
 
 **Describe the bug**
 A clear and concise description of what the bug is.
