@@ -7,7 +7,7 @@
 
 struct SupabaseGame: Decodable, Hashable {
     var igdb_id: Int
-    var steam_id: Int?
+    var steam_id: String?
     var release_date: Int?
     var developer: String?
     var header_img: String?

@@ -1,0 +1,10 @@
+{
+    "title": "Phoenix",
+    "icon": "icon.icns",
+    "background": "background.png",
+    "contents": [
+        { "x": 165, "y": 185, "type": "file", "path": "Phoenix.app" },
+        { "x": 590, "y": 190, "type": "link", "path": "/Applications" }
+    ],
+    "icon-size": 150
+}
