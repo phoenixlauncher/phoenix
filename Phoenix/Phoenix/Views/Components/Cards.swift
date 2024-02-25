@@ -15,20 +15,20 @@ struct TextCard: View {
         VStack(alignment: .leading) {
             ExpandableText(text)
             .font(.system(size: 14))
-            .moreButtonFont(.system(size: 13))
-            .moreButtonColor(.accentColor)
+            .buttonFont(.system(size: 13))
+            .buttonColor(.accentColor)
             .lineLimit(7)
             .trimMultipleNewlinesWhenTruncated(false)
             .lineSpacing(3.5)
             .padding(10)
         }
-        .frame(idealWidth: 400, maxWidth: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
+        .frame(idealWidth: 400, maxWidth: 1280, alignment: .topLeading) // controls the dimensions and alignment of the description text
         .background(Color.gray.opacity(0.05))
         .overlay(
             RoundedRectangle(cornerRadius: 7.5)
             .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
         )
-        .cornerRadius(7.5)
+        .cornerRadius(7.5) 
         .font(.system(size: 14.5))
     }
 }

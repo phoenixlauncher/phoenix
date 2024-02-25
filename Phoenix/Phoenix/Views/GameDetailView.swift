@@ -74,7 +74,6 @@ struct GameDetailView: View {
                                 }
                             }
                             .padding(.trailing, 7.5)
-                            Spacer()
                             VStack {
                                 SlotCard(content: {
                                     if let game = game {
