@@ -59,6 +59,7 @@
 		ADE202032B5DF9D300047322 /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202022B5DF9D300047322 /* SortBy.swift */; };
 		ADE202052B5DFF7400047322 /* ContextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202042B5DFF7400047322 /* ContextButton.swift */; };
 		ADE202082B5E04ED00047322 /* ContextButtonMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */; };
+		B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
 		CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = CAFACC752A42638E001C45C4 /* Sparkle */; };
@@ -135,6 +136,7 @@
 		ADE202042B5DFF7400047322 /* ContextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButton.swift; sourceTree = "<group>"; };
 		ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButtonMenu.swift; sourceTree = "<group>"; };
 		ADF8FB3F2B57960800AFD38E /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropFilePickerButton.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		C9435D262B594B6E0032DB7A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 			children = (
 				AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */,
 				AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */,
+				B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */,
 				AD5287D52AC018B8001673F5 /* HelpButton.swift */,
 				AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */,
 				ADDE703E2B00546C00D006B8 /* FolderImportButton.swift */,
@@ -578,6 +581,7 @@
 				AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */,
 				ADB640002AF8391C006B39ED /* Defaults.swift in Sources */,
 				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
+				B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */,
 				ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */,
 				ADA7355C2B5B8A710001B9A7 /* OnboardingDetailView.swift in Sources */,
 				ADE202012B5DF9B200047322 /* Recency.swift in Sources */,
@@ -760,13 +764,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Phoenix/Phoenix.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = SPWQRB7M9L;
+				DEVELOPMENT_TEAM = J7HJF74585;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -795,13 +799,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Phoenix/Phoenix.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = SPWQRB7M9L;
+				DEVELOPMENT_TEAM = J7HJF74585;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

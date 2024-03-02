@@ -58,6 +58,7 @@
 "editGame_Status" = "Status";
 "editGame_Command" = "Command";
 "editGame_CommandDesc" = "Enter terminal command to launch game";
+"editGame_Command_DragDrop" = "Pick or Drag/Drop an Application Here";
 "editGame_Advanced" = "Advanced";
 "editGame_Desc" = "Description";
 "editGame_Genres" = "Genres";
