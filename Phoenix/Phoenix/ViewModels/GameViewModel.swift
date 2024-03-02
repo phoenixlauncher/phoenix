@@ -39,6 +39,18 @@ class GameViewModel: ObservableObject {
         saveGames()
     }
     
+    func addGames(_ addedGames: [Game]) {
+        for game in addedGames {
+            logger.write("Adding game \(game.name).")
+            if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                games[idx] = game
+            } else {
+                games.append(game)
+            }
+        }
+        saveGames()
+    }
+    
     func toggleFavoriteFromID(_ id: UUID) {
         if let idx = games.firstIndex(where: { $0.id == id }) {
             games[idx].isFavorite.toggle()
@@ -182,23 +194,28 @@ class GameViewModel: ObservableObject {
         steamGameNames.subtract(gameNames)
         crossoverGameNames.subtract(gameNames)
         
+        var newGames: [Game] = []
+        
         for steamName in steamGameNames {
-            await saveSupabaseGameFromName(steamName, platform: Platform.steam, launcher: "open steam: //run/%@")
+            newGames.append(await saveSupabaseGameFromName(steamName, platform: Platform.steam, launcher: "open steam: //run/%@"))
         }
         for crossoverName in crossoverGameNames {
-            await saveSupabaseGameFromName(crossoverName, platform: Platform.pc, launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\"")
+            newGames.append(await saveSupabaseGameFromName(crossoverName, platform: Platform.pc, launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\""))
         }
+        
+        addGames(newGames)
     }
     
-    func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String) async {
-        let newGame = Game(id: UUID(), launcher: launcher, name: name, platform: platform)
+    func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String) async -> Game {
+        var newGame = Game(id: UUID(), launcher: launcher, name: name, platform: platform)
         // Create a set of the current game names to prevent duplicates
         await self.supabaseViewModel.fetchGamesFromName(name: name) { fetchedGames in
             if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
                 self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: newGame) { game in
-                    self.addGame(game)
+                    newGame = game
                 }
             }
         }
+        return newGame
     }
 }
