@@ -195,27 +195,34 @@ class GameViewModel: ObservableObject {
         crossoverGameNames.subtract(gameNames)
         
         var newGames: [Game] = []
-        
+
         for steamName in steamGameNames {
-            newGames.append(await saveSupabaseGameFromName(steamName, platform: Platform.steam, launcher: "open steam: //run/%@"))
+            await saveSupabaseGameFromName(steamName, platform: Platform.steam, launcher: "open steam: //run/%@") { gameFound, game in
+                if gameFound {
+                    newGames.append(game)
+                }
+            }
         }
+        
         for crossoverName in crossoverGameNames {
-            newGames.append(await saveSupabaseGameFromName(crossoverName, platform: Platform.pc, launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\""))
+            await saveSupabaseGameFromName(crossoverName, platform: Platform.pc, launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\"") { gameFound, game in
+                if gameFound {
+                    newGames.append(game)
+                }
+            }
         }
         
         addGames(newGames)
     }
     
-    func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String) async -> Game {
-        var newGame = Game(id: UUID(), launcher: launcher, name: name, platform: platform)
+    func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String, completion: @escaping (Bool, Game) -> Void) async {
         // Create a set of the current game names to prevent duplicates
         await self.supabaseViewModel.fetchGamesFromName(name: name) { fetchedGames in
             if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
-                self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: newGame) { game in
-                    newGame = game
+                self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: UUID(), launcher: launcher, name: name, platform: platform)) { game in
+                    completion(true, game)
                 }
             }
         }
-        return newGame
     }
 }

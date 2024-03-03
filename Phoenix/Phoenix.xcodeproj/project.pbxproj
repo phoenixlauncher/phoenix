@@ -37,6 +37,7 @@
 		AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */; };
 		AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */; };
 		AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCC12AC7E57200D3A301 /* Cards.swift */; };
+		AD5A47BF2B93EC4C0037DFA2 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = AD5A47BE2B93EC4C0037DFA2 /* Sparkle */; };
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
 		AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */; };
 		AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AD7AD2EF2B09819E002DBDCD /* Supabase */; };
@@ -62,7 +63,6 @@
 		B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
-		CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = CAFACC752A42638E001C45C4 /* Sparkle */; };
 		CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */; };
 		CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAFAA82967600700B89003 /* LogUtils.swift */; };
 /* End PBXBuildFile section */
@@ -150,7 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
-				CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */,
+				AD5A47BF2B93EC4C0037DFA2 /* Sparkle in Frameworks */,
 				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
@@ -407,7 +407,6 @@
 			);
 			name = Phoenix;
 			packageProductDependencies = (
-				CAFACC752A42638E001C45C4 /* Sparkle */,
 				AD5E91A52AAE33CB008097C4 /* AlertToast */,
 				ADB63FFD2AF7F248006B39ED /* Defaults */,
 				AD8718FC2AFDE14D0008F144 /* MarkdownUI */,
@@ -415,6 +414,7 @@
 				AD7AD2EF2B09819E002DBDCD /* Supabase */,
 				ADA735592B5B8A190001B9A7 /* Colorful */,
 				AD0971D82B60D8B1009F3742 /* ExpandableText */,
+				AD5A47BE2B93EC4C0037DFA2 /* Sparkle */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -491,7 +491,6 @@
 			);
 			mainGroup = 0AF378582953AADC00978137;
 			packageReferences = (
-				CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */,
 				AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
@@ -499,6 +498,7 @@
 				AD7AD2EE2B09819E002DBDCD /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */,
 				AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */,
+				AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -764,13 +764,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Phoenix/Phoenix.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = J7HJF74585;
+				DEVELOPMENT_TEAM = SPWQRB7M9L;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -799,13 +799,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Phoenix/Phoenix.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = J7HJF74585;
+				DEVELOPMENT_TEAM = SPWQRB7M9L;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -961,6 +961,14 @@
 				kind = branch;
 			};
 		};
+		AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.2;
+			};
+		};
 		AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast.git";
@@ -1001,14 +1009,6 @@
 				kind = branch;
 			};
 		};
-		CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sparkle-project/Sparkle";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.4.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1021,6 +1021,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */;
 			productName = StarRatingViewSwiftUI;
+		};
+		AD5A47BE2B93EC4C0037DFA2 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 		AD5E91A52AAE33CB008097C4 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1046,11 +1051,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
-		};
-		CAFACC752A42638E001C45C4 /* Sparkle */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */;
-			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
