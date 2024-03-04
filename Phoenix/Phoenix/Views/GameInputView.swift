@@ -60,7 +60,7 @@ struct GameInputView: View {
                     
                     if game.platform != .mac && game.platform != .pc {
                         TextBox(textBoxName: String(localized: "editGame_Command"), placeholder: String(localized: "editGame_CommandDesc"), input: $game.launcher)
-                    } else if game.platform != .none {
+                    } else {
                         DragDropFilePickerButton(launcher: $game.launcher)
                     }
                 
