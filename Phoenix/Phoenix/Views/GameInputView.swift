@@ -57,7 +57,13 @@ struct GameInputView: View {
                         }
                     })
                     
-                    TextBox(textBoxName: String(localized: "editGame_Command"), placeholder: String(localized: "editGame_CommandDesc"), input: $game.launcher)
+                    
+                    if game.platform != .mac && game.platform != .pc {
+                        TextBox(textBoxName: String(localized: "editGame_Command"), placeholder: String(localized: "editGame_CommandDesc"), input: $game.launcher)
+                    } else {
+                        DragDropFilePickerButton(launcher: $game.launcher)
+                    }
+                
                 }
                 DisclosureGroup(String(localized: "editGame_Advanced")) {
                     VStack(alignment: .leading) {
