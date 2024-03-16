@@ -41,6 +41,12 @@ class SupabaseViewModel: ObservableObject {
         } else {
             game.metadata["description"] = supabaseGame.summary ?? ""
         }
+        
+        for screenshot in supabaseGame.screenshots {
+            if let screenshot = screenshot {
+                game.screenshots.append(screenshot)
+            }
+        }
 
         game.metadata["genre"] = supabaseGame.genre?.replacingOccurrences(of: ", ", with: "\n")
 
