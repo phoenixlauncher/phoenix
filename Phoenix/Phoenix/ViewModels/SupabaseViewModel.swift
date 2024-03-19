@@ -34,16 +34,15 @@ class SupabaseViewModel: ObservableObject {
     func convertSupabaseGame(supabaseGame: SupabaseGame, game: Game, completion: @escaping (Game) -> Void) {
         var game = game
         
-        game.igdbID = String(supabaseGame.igdb_id)
+        game.igdbID = "\(supabaseGame.igdb_id)"
         
         if let storyline = supabaseGame.storyline, storyline.count < 1500, storyline != "" {
             game.metadata["description"] = storyline
         } else {
             game.metadata["description"] = supabaseGame.summary ?? ""
         }
-        
-        for screenshot in supabaseGame.screenshots {
-            if let screenshot = screenshot {
+        if let screenshots = supabaseGame.screenshots {
+            for screenshot in screenshots {
                 game.screenshots.append(screenshot)
             }
         }
@@ -91,6 +90,27 @@ class SupabaseViewModel: ObservableObject {
         // When all tasks in the dispatch group are done
         dispatchGroup.notify(queue: .main) {
             completion(game)
+        }
+    }
+    
+    func fetchScreenshotsFromIGDBID(_ id: Int, completion: @escaping ([String?]) -> Void) async {
+        print("getting screesnht")
+        print(id)
+        // Create a select request from supabase and save it to games
+        do {
+            let response: [SupabaseScreenshots] = try await supabase.database
+                .from("igdb_games")
+                .select("screenshots")
+                .eq("igdb_id", value: id)
+                .execute()
+                .value
+            let screenshots = response[0].screenshots
+            print("sending em back")
+            print(response)
+            completion(screenshots)
+        } catch {
+            // Handle the error
+            print("An error occurred: \(error)")
         }
     }
 }

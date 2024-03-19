@@ -191,6 +191,7 @@ struct GameInputView: View {
                 game.platform = currentGame.platform
                 game.status = currentGame.status
                 game.launcher = currentGame.launcher
+                game.screenshots = currentGame.screenshots
                 game.metadata["description"] = currentGame.metadata["description"] ?? ""
                 game.metadata["genre"] = currentGame.metadata["genre"] ?? ""
                 game.metadata["header_img"] = currentGame.metadata["header_img"] ?? ""

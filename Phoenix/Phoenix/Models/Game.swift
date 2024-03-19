@@ -38,7 +38,7 @@ struct Game: Codable, Comparable, Hashable {
             "genre": "",
             "publisher": "",
         ],
-        screenshots: [String?] = [""],
+        screenshots: [String] = [],
         icon: String = "",
         name: String = "",
         platform: Platform = Platform.none,
@@ -70,7 +70,7 @@ struct Game: Codable, Comparable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.launcher = (try? container.decode(String.self, forKey: .launcher)) ?? ""
         self.metadata = (try? container.decode([String: String].self, forKey: .metadata)) ?? ["": ""]
-        self.screenshots = (try? container.decode([String?].self, forKey: .screenshots)) ?? [""]
+        self.screenshots = (try? container.decode([String].self, forKey: .screenshots)) ?? []
         self.icon = (try? container.decode(String.self, forKey: .icon)) ?? ""
         self.name = (try? container.decode(String.self, forKey: .name)) ?? ""
 
