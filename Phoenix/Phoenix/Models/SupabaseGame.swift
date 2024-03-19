@@ -22,6 +22,10 @@ struct SupabaseGame: Decodable, Hashable {
 }
 
 struct SupabaseScreenshots: Decodable, Hashable {
-    var screenshots: [String?]
+    var screenshots: [String]?
+}
+
+struct SupabaseIgdbID: Decodable, Hashable {
+    var igdb_id: Int
 }
 

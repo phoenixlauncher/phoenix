@@ -72,38 +72,30 @@ struct GameDetailView: View {
                                 } else {
                                     TextCard(text: String(localized: "detail_NoDesc"))
                                 }
-                                HStack {
-                                    ForEach(game?.screenshots ?? [], id: \.self) { screenshot in
-                                        if let screenshot = screenshot, let screenshotURL = URL(string: screenshot) {
-                                            AsyncImage(url: screenshotURL) { image in
-                                                image.image?.resizable()
+                                ScrollView([.horizontal]) {
+                                    HStack {
+                                        ForEach(game?.screenshots ?? [], id: \.self) { screenshot in
+                                            if let screenshot = screenshot, let screenshotURL = URL(string: screenshot) {
+                                                AsyncImage(url: screenshotURL) { phase in
+                                                    switch phase {
+                                                    case .success(let image):
+                                                        image.resizable()
+                                                    default:
+                                                        ProgressView()
+                                                    }
+                                                }
+                                                .cornerRadius(7.5)
+                                                .scaledToFit()
+                                                .frame(height: 225)
                                             }
-                                            .cornerRadius(7.5)
-                                            .scaledToFit()
-                                            .frame(height: 225)
                                         }
                                     }
                                 }
-//                                AsyncImage(url: URL(string: game?.screenshots[0] ?? ""))
+                                .cornerRadius(7.5)
+                                .frame(maxWidth: 1280)
                                 .task {
-                                    print("task start")
-                                    if game?.screenshots == [] || game?.screenshots == [""] {
-                                        if let igdbID = game?.igdbID, let igdbID = Int(igdbID), let id = game?.id {
-                                            print("no scrreshots & valid id:")
-                                            print(igdbID)
-                                            await supabaseViewModel.fetchScreenshotsFromIGDBID(igdbID) { screenshots in
-                                                print("screenshots back")
-                                                updateGameScreenshots(id, screenshots: screenshots)
-                                            }
-                                        } else {
-                                            print("no igdbID found")
-                                            
-                                        }
-                                    } else {
-                                        print("screenshots exist")
-                                    }
+                                    checkScreenshots()
                                 }
- 
                             }
                             .padding(.trailing, 7.5)
                             VStack {
@@ -156,6 +148,7 @@ struct GameDetailView: View {
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
+            checkScreenshots()
         }
     }
 
@@ -165,6 +158,46 @@ struct GameDetailView: View {
         if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
             print("found index")
             gameViewModel.games[idx].screenshots = screenshots
+            gameViewModel.saveGames()
+            print("games saved")
+        }
+    }
+    
+    private func checkScreenshots() {
+        Task {
+            print("task start")
+            if game?.screenshots == [] || game?.screenshots == [""], let name = game?.name, let id = game?.id {
+                if let igdbID = game?.igdbID, let igdbID = Int(igdbID) {
+                    print("no scrreshots & valid id:")
+                    print(igdbID)
+                    await supabaseViewModel.fetchScreenshotsFromIgdbID(igdbID) { screenshots in
+                        print("screenshots back")
+                        updateGameScreenshots(id, screenshots: screenshots)
+                    }
+                } else {
+                    print("invalid igdbID")
+                    await supabaseViewModel.fetchIgdbIDFromName(name: name) { igdbID in
+                        updateGameIgdbID(id, igdbID: String(igdbID))
+                        Task {
+                            await supabaseViewModel.fetchScreenshotsFromIgdbID(igdbID) { screenshots in
+                                print("screenshots back")
+                                updateGameScreenshots(id, screenshots: screenshots)
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("screenshots exist")
+            }
+        }
+    }
+    
+    @MainActor
+    private func updateGameIgdbID(_ id: UUID, igdbID: String) {
+        print("update func called")
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            print("found index")
+            gameViewModel.games[idx].igdbID = igdbID
             gameViewModel.saveGames()
             print("games saved")
         }
