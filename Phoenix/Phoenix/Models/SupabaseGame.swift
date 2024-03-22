@@ -12,6 +12,7 @@ struct SupabaseGame: Decodable, Hashable {
     var developer: String?
     var header_img: String?
     var cover: String?
+    var screenshots: [String]?
     var storyline: String?
     var summary: String?
     var genre: String?
@@ -19,3 +20,12 @@ struct SupabaseGame: Decodable, Hashable {
     var icon: String?
     var name: String?
 }
+
+struct SupabaseScreenshots: Decodable, Hashable {
+    var screenshots: [String]?
+}
+
+struct SupabaseIgdbID: Decodable, Hashable {
+    var igdb_id: Int
+}
+

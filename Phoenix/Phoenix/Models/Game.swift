@@ -13,6 +13,7 @@ struct Game: Codable, Comparable, Hashable {
     var igdbID: String
     var launcher: String
     var metadata: [String: String]
+    var screenshots: [String?]
     var icon: String
     var name: String
     var platform: Platform
@@ -37,6 +38,7 @@ struct Game: Codable, Comparable, Hashable {
             "genre": "",
             "publisher": "",
         ],
+        screenshots: [String] = [],
         icon: String = "",
         name: String = "",
         platform: Platform = Platform.none,
@@ -50,6 +52,7 @@ struct Game: Codable, Comparable, Hashable {
         self.igdbID = igdbID
         self.launcher = launcher
         self.metadata = metadata
+        self.screenshots = screenshots
         self.icon = icon
         self.name = name
         self.platform = platform
@@ -60,13 +63,14 @@ struct Game: Codable, Comparable, Hashable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, isHidden, isFavorite
+        case id, steamID, igdbID, launcher, metadata, screenshots, icon, name, platform, status, recency, isHidden, isFavorite
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.launcher = (try? container.decode(String.self, forKey: .launcher)) ?? ""
         self.metadata = (try? container.decode([String: String].self, forKey: .metadata)) ?? ["": ""]
+        self.screenshots = (try? container.decode([String].self, forKey: .screenshots)) ?? []
         self.icon = (try? container.decode(String.self, forKey: .icon)) ?? ""
         self.name = (try? container.decode(String.self, forKey: .name)) ?? ""
 

@@ -37,6 +37,7 @@
 		AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */; };
 		AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */; };
 		AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCC12AC7E57200D3A301 /* Cards.swift */; };
+		AD5542E92BA935C300AE7F3E /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = AD5542E82BA935C300AE7F3E /* CachedAsyncImage */; };
 		AD5A47BF2B93EC4C0037DFA2 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = AD5A47BE2B93EC4C0037DFA2 /* Sparkle */; };
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
 		AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */; };
@@ -152,6 +153,7 @@
 				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
 				AD5A47BF2B93EC4C0037DFA2 /* Sparkle in Frameworks */,
 				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
+				AD5542E92BA935C300AE7F3E /* CachedAsyncImage in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
 				ADA7355A2B5B8A190001B9A7 /* Colorful in Frameworks */,
@@ -415,6 +417,7 @@
 				ADA735592B5B8A190001B9A7 /* Colorful */,
 				AD0971D82B60D8B1009F3742 /* ExpandableText */,
 				AD5A47BE2B93EC4C0037DFA2 /* Sparkle */,
+				AD5542E82BA935C300AE7F3E /* CachedAsyncImage */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -499,6 +502,7 @@
 				ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */,
 				AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */,
 				AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				AD5542E72BA935C300AE7F3E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -770,7 +774,7 @@
 				CURRENT_PROJECT_VERSION = 22;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = UC7RC43VZH;
+				DEVELOPMENT_TEAM = SPWQRB7M9L;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -805,7 +809,7 @@
 				CURRENT_PROJECT_VERSION = 22;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
-				DEVELOPMENT_TEAM = UC7RC43VZH;
+				DEVELOPMENT_TEAM = SPWQRB7M9L;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -961,6 +965,14 @@
 				kind = branch;
 			};
 		};
+		AD5542E72BA935C300AE7F3E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
 		AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
@@ -1021,6 +1033,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */;
 			productName = StarRatingViewSwiftUI;
+		};
+		AD5542E82BA935C300AE7F3E /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD5542E72BA935C300AE7F3E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
 		};
 		AD5A47BE2B93EC4C0037DFA2 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -70,6 +70,8 @@
 "editGame_DevDesc" = "Enter game developer";
 "editGame_Pub" = "Publisher";
 "editGame_PubDesc" = "Enter game publisher";
+"editGame_igdbID" = "IGDB ID";
+"editGame_igdbIDDesc" = "Enter game IGDB ID";
 "editGame_Release" = "Release Date";
 "editGame_SaveGame" = "Save Game";
 "editGame_SelectGame" = "Select Game";
@@ -84,6 +86,10 @@
 "appearance_Accent" = "Accent color UI";
 "appearance_Gradient" = "Gradient UI";
 "appearance_Star" = "Show star rating";
+"appearance_GradientHeader" = "Fade header into background";
+"appearance_ShowScreenshots" = "Show screenshots";
+"appearance_ScreenshotSize" = "Screenshot size";
+"appearance_FadeLeadingScreenshots" = "Fade leading screenshots into background";
 "appearance_HideIcons" = "Hide icons in sidebar";
 "appearance_IconSize" = "List icon size";
 "appearance_GameCount" = "Show number of games in sidebar";

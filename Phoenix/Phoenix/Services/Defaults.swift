@@ -29,6 +29,10 @@ extension Defaults.Keys {
     static let accentColorUI = Key<Bool>("accentColorUI", default: true)
     static let gradientUI = Key<Bool>("gradientUI", default: true)
     static let showStarRating = Key<Bool>("showStarRating", default: true)
+    static let gradientHeader = Key<Bool>("gradientHeader", default: false)
+    static let showScreenshots = Key<Bool>("showScreenshots", default: true)
+    static let screenshotSize = Key<Double>("screenshotSize", default: 220.0)
+    static let fadeLeadingScreenshots = Key<Bool>("fadeLeadingScreenshots", default: false)
     
     static let listIconsHidden = Key<Bool>("listIconsHidden", default: false)
     static let listIconSize = Key<Double>("listIconSize", default: 24.0)

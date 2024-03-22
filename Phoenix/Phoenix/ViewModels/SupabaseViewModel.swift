@@ -26,7 +26,28 @@ class SupabaseViewModel: ObservableObject {
                 completion(games)
             } catch {
                 // Handle the error
-                print("An error occurred: \(error)")
+                logger.write("An error occurred: \(error)")
+            }
+        }
+    }
+    
+    func fetchIgdbIDFromName(name: String, completion: @escaping (Int) -> Void) async {
+        // Create a select request from supabase and save it to games
+        if name != "" {
+            do {
+                let response: [SupabaseIgdbID] = try await supabase.database
+                    .from("igdb_games")
+                    .select("igdb_id")
+                    .ilike("name", value: name)
+                    .execute()
+                    .value
+                if response.count > 0 {
+                    let igdbID = response[0].igdb_id
+                    completion(igdbID)
+                }
+            } catch {
+                // Handle the error
+                logger.write("An error occurred: \(error)")
             }
         }
     }
@@ -34,12 +55,15 @@ class SupabaseViewModel: ObservableObject {
     func convertSupabaseGame(supabaseGame: SupabaseGame, game: Game, completion: @escaping (Game) -> Void) {
         var game = game
         
-        game.igdbID = String(supabaseGame.igdb_id)
+        game.igdbID = "\(supabaseGame.igdb_id)"
         
         if let storyline = supabaseGame.storyline, storyline.count < 1500, storyline != "" {
             game.metadata["description"] = storyline
         } else {
             game.metadata["description"] = supabaseGame.summary ?? ""
+        }
+        if let screenshots = supabaseGame.screenshots {
+            game.screenshots = screenshots
         }
 
         game.metadata["genre"] = supabaseGame.genre?.replacingOccurrences(of: ", ", with: "\n")
@@ -85,6 +109,28 @@ class SupabaseViewModel: ObservableObject {
         // When all tasks in the dispatch group are done
         dispatchGroup.notify(queue: .main) {
             completion(game)
+        }
+    }
+    
+    func fetchScreenshotsFromIgdbID(_ id: Int, completion: @escaping ([String?]) -> Void) async {
+        print("getting screesnht")
+        print(id)
+        // Create a select request from supabase and save it to games
+        do {
+            let response: [SupabaseScreenshots] = try await supabase.database
+                .from("igdb_games")
+                .select("screenshots")
+                .eq("igdb_id", value: id)
+                .execute()
+                .value
+            if let screenshots = response[0].screenshots {
+                print("sending em back")
+                print(response)
+                completion(screenshots)
+            }
+        } catch {
+            // Handle the error
+            logger.write("An error occurred: \(error)")
         }
     }
 }

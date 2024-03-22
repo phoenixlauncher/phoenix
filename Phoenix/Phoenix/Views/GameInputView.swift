@@ -85,6 +85,8 @@ struct GameInputView: View {
                         
                         DatePicker(String(localized: "editGame_Release"), selection: $dateInput, in: ...Date(), displayedComponents: .date)
                             .padding()
+                        
+                        TextBox(textBoxName: String(localized: "editGame_igdbID"), placeholder: String(localized: "editGame_igdbIDDesc"), input: $game.igdbID)
                     }
                 }
             }
@@ -186,11 +188,14 @@ struct GameInputView: View {
             if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                 let currentGame = gameViewModel.games[idx]
                 game.id = currentGame.id
+                game.igdbID = currentGame.igdbID
+                game.steamID = currentGame.steamID
                 game.name = currentGame.name
                 game.icon = currentGame.icon
                 game.platform = currentGame.platform
                 game.status = currentGame.status
                 game.launcher = currentGame.launcher
+                game.screenshots = currentGame.screenshots
                 game.metadata["description"] = currentGame.metadata["description"] ?? ""
                 game.metadata["genre"] = currentGame.metadata["genre"] ?? ""
                 game.metadata["header_img"] = currentGame.metadata["header_img"] ?? ""

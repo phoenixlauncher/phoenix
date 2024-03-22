@@ -8,6 +8,21 @@ import AlertToast
 import StarRatingViewSwiftUI
 import SwiftUI
 
+extension View {
+    /// Applies the given transform if the given condition evaluates to `true`.
+    /// - Parameters:
+    ///   - condition: The condition to evaluate.
+    ///   - transform: The transform to apply to the source `View`.
+    /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+}
+
 struct GameDetailView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
@@ -23,6 +38,10 @@ struct GameDetailView: View {
 
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
+    @Default(.gradientHeader) var gradientHeader
+    @Default(.showScreenshots) var showScreenshots
+    @Default(.screenshotSize) var screenshotSize
+    @Default(.fadeLeadingScreenshots) var fadeLeadingScreenshots
 
     var body: some View {
         ScrollView {
@@ -34,10 +53,18 @@ struct GameDetailView: View {
                             .resizable()
                             .scaledToFill()
                             .frame(
-                                width: geometry.size.width, height: getHeightForHeaderImage(geometry)
+                                width: geometry.size.width, height: getHeightForHeaderImage(geometry) + (gradientHeader ? 25 : 0)
                             )
+                            .if(gradientHeader) { view in
+                                view.mask(LinearGradient(gradient: Gradient(stops: [
+                                    .init(color: Color.white, location: 0.3),
+                                    .init(color: Color.clear, location: 0.97)
+                            ]), startPoint: .top, endPoint: .bottom))
+                            }
+                            .if(!gradientHeader) { view in
+                                view.clipped()
+                            }
                             .blur(radius: getBlurRadiusForImage(geometry))
-                            .clipped()
                             .offset(x: 0, y: getOffsetForHeaderImage(geometry))
                     }
                 }
@@ -71,6 +98,45 @@ struct GameDetailView: View {
                                     TextCard(text: description)
                                 } else {
                                     TextCard(text: String(localized: "detail_NoDesc"))
+                                }
+                                if showScreenshots {
+                                    ScrollView([.horizontal]) {
+                                        HStack {
+                                            ForEach(game?.screenshots ?? [], id: \.self) { screenshot in
+                                                if let screenshot = screenshot, let screenshotURL = URL(string: screenshot) {
+                                                    AsyncImage(url: screenshotURL) { phase in
+                                                        switch phase {
+                                                        case .success(let image):
+                                                            image.resizable()
+                                                        default:
+                                                            EmptyView()
+                                                        }
+                                                    }
+                                                    .cornerRadius(7.5)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .frame(height: screenshotSize)
+                                                }
+                                            }
+                                        }
+                                        
+                                    }
+                                    .mask(
+                                        LinearGradient(
+                                            gradient: Gradient(stops: [
+                                                .init(color: fadeLeadingScreenshots ? Color.clear : Color.white, location: 0.0),
+                                                .init(color: fadeLeadingScreenshots ? Color.white : Color.white, location: 0.15),
+                                                .init(color: Color.white, location: 0.85),
+                                                .init(color: Color.clear, location: 1.0)
+                                            ]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                                    .cornerRadius(7.5)
+                                    .frame(maxWidth: 1280)
+                                    .task {
+                                        checkScreenshots()
+                                    }
                                 }
                             }
                             .padding(.trailing, 7.5)
@@ -124,6 +190,58 @@ struct GameDetailView: View {
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
+            if showScreenshots { checkScreenshots() }
+        }
+    }
+
+    @MainActor
+    private func updateGameScreenshots(_ id: UUID, screenshots: [String?]) {
+        print("update func called")
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            print("found index")
+            gameViewModel.games[idx].screenshots = screenshots
+            gameViewModel.saveGames()
+            print("games saved")
+        }
+    }
+    
+    private func checkScreenshots() {
+        Task {
+            print("task start")
+            if game?.screenshots == [] || game?.screenshots == [""], let name = game?.name, let id = game?.id {
+                if let igdbID = game?.igdbID, let igdbID = Int(igdbID) {
+                    print("no scrreshots & valid id:")
+                    print(igdbID)
+                    await supabaseViewModel.fetchScreenshotsFromIgdbID(igdbID) { screenshots in
+                        print("screenshots back")
+                        updateGameScreenshots(id, screenshots: screenshots)
+                    }
+                } else {
+                    print("invalid igdbID")
+                    await supabaseViewModel.fetchIgdbIDFromName(name: name) { igdbID in
+                        updateGameIgdbID(id, igdbID: String(igdbID))
+                        Task {
+                            await supabaseViewModel.fetchScreenshotsFromIgdbID(igdbID) { screenshots in
+                                print("screenshots back")
+                                updateGameScreenshots(id, screenshots: screenshots)
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("screenshots exist")
+            }
+        }
+    }
+    
+    @MainActor
+    private func updateGameIgdbID(_ id: UUID, igdbID: String) {
+        print("update func called")
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            print("found index")
+            gameViewModel.games[idx].igdbID = igdbID
+            gameViewModel.saveGames()
+            print("games saved")
         }
     }
 
