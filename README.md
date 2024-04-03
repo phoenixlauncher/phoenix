@@ -19,6 +19,10 @@ Phoenix is a lightweight game launcher built in SwiftUI for macOS.
 To setup the app refer to
 [the setup page](https://github.com/phoenixlauncher/phoenix/wiki/1.-Setup).
 
+## Translations
+
+You can contribute translations for the app on [Crowdin](https://translate.phoenixlauncher.app).
+
 ## Building
 
 If you want to build this app for yourself, just clone this repository
