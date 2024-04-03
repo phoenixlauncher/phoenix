@@ -5,8 +5,8 @@
   Created by Kaleb Rosborough on 2024-01-11.
   
 */
-"category_SortBy" = "Sort by";
-"category_Platform" = "Platform";
+"category_SortBy" = "Ndaj sipas";
+"category_Platform" = "Platformat";
 "category_Status" = "Status";
 "category_Name" = "Name";
 "category_Recency" = "Recency";
