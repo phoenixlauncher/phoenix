@@ -17,7 +17,7 @@ struct TextBox: View {
         HStack {
             Text(textBoxName)
                 .frame(width: 70, alignment: .leading)
-            TextField(placeholder, text: $input)
+            TextField(placeholder, text: $input, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .accessibility(label: Text("\(textBoxName) Input"))
         }

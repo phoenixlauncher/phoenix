@@ -67,9 +67,9 @@ struct GameInputView: View {
                 }
                 DisclosureGroup(String(localized: "editGame_Advanced")) {
                     VStack(alignment: .leading) {
-                        LargeTextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
+                        TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                         
-                        LargeTextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
+                        TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
                         
                         ImageImportButton(type: String(localized: "editGame_Header"), isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: gameViewModel.selectedGame)
                         
