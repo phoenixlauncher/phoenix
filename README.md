@@ -21,7 +21,7 @@ To setup the app refer to
 
 ## Translations
 
-You can contribute translations for the app on [Crowdin](https://translate.phoenixlauncher.app).
+You can contribute translations for the app on [Crowdin](https://crowdin.com/project/phoenixlauncher).
 
 ## Building
 
