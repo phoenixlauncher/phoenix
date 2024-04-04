@@ -60,6 +60,8 @@
 		ADE202032B5DF9D300047322 /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202022B5DF9D300047322 /* SortBy.swift */; };
 		ADE202052B5DFF7400047322 /* ContextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202042B5DFF7400047322 /* ContextButton.swift */; };
 		ADE202082B5E04ED00047322 /* ContextButtonMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */; };
+		B54BBA252BC0642900575AC2 /* PaneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54BBA242BC0642900575AC2 /* PaneTextField.swift */; };
+		B54BBA282BC0645300575AC2 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */; };
 		B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
@@ -135,6 +137,7 @@
 		ADE202042B5DFF7400047322 /* ContextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButton.swift; sourceTree = "<group>"; };
 		ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButtonMenu.swift; sourceTree = "<group>"; };
 		ADF8FB3F2B57960800AFD38E /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B54BBA242BC0642900575AC2 /* PaneTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaneTextField.swift; path = ../../../../../../../../Desktop/test/test/PaneTextField.swift; sourceTree = "<group>"; };
 		B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropFilePickerButton.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		C9435D262B594B6E0032DB7A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -151,6 +154,7 @@
 				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
 				AD5A47BF2B93EC4C0037DFA2 /* Sparkle in Frameworks */,
 				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
+				B54BBA282BC0645300575AC2 /* SwiftUIIntrospect in Frameworks */,
 				AD5542E92BA935C300AE7F3E /* CachedAsyncImage in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
@@ -267,6 +271,7 @@
 		AD53FCC02AC7E52100D3A301 /* TextBoxes */ = {
 			isa = PBXGroup;
 			children = (
+				B54BBA242BC0642900575AC2 /* PaneTextField.swift */,
 				AD5287C92AC007CC001673F5 /* TextBox.swift */,
 				AD2E38AA2B5785EA0068943E /* TextBoxAlert.swift */,
 			);
@@ -415,6 +420,7 @@
 				AD0971D82B60D8B1009F3742 /* ExpandableText */,
 				AD5A47BE2B93EC4C0037DFA2 /* Sparkle */,
 				AD5542E82BA935C300AE7F3E /* CachedAsyncImage */,
+				B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -500,6 +506,7 @@
 				AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */,
 				AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				AD5542E72BA935C300AE7F3E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				B54BBA262BC0645300575AC2 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -554,6 +561,7 @@
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
+				B54BBA252BC0642900575AC2 /* PaneTextField.swift in Sources */,
 				ADE202032B5DF9D300047322 /* SortBy.swift in Sources */,
 				AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */,
 				ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */,
@@ -1017,6 +1025,14 @@
 				kind = branch;
 			};
 		};
+		B54BBA262BC0645300575AC2 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1064,6 +1080,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B54BBA262BC0645300575AC2 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = SwiftUIIntrospect;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

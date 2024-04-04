@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct TextBox: View {
-    
     var textBoxName: String
     var placeholder: String
     @Binding var input: String
@@ -17,8 +16,7 @@ struct TextBox: View {
         HStack {
             Text(textBoxName)
                 .frame(width: 70, alignment: .leading)
-            TextField(placeholder, text: $input, axis: .vertical)
-                .textFieldStyle(.roundedBorder)
+            PaneTextField(placeholder, text: $input, axis: .vertical)
                 .accessibility(label: Text("\(textBoxName) Input"))
         }
         .padding()

@@ -67,9 +67,9 @@ struct GameInputView: View {
                 }
                 DisclosureGroup(String(localized: "editGame_Advanced")) {
                     VStack(alignment: .leading) {
-                        TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
+                        TextBox(textBoxName: String(localized: "editGame_Desc"), placeholder: String(localized: "editGame_DescDesc"), input: binding(for: "description"))
                         
-                        TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
+                        TextBox(textBoxName: String(localized: "editGame_Genres"), placeholder: String(localized: "editGame_GenresDesc"), input: binding(for: "genre"))
                         
                         ImageImportButton(type: String(localized: "editGame_Header"), isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: gameViewModel.selectedGame)
                         
@@ -98,8 +98,6 @@ struct GameInputView: View {
                         Button (
                             action: {
                                 if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                    game.recency = gameViewModel.games[idx].recency
-                                    game.isFavorite = gameViewModel.games[idx].isFavorite
                                     gameViewModel.games[idx] = game
                                     gameViewModel.saveGames()
                                 }
@@ -147,12 +145,23 @@ struct GameInputView: View {
                                 }
                             } else {
                                 if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                    game.recency = gameViewModel.games[idx].recency
-                                    game.isFavorite = gameViewModel.games[idx].isFavorite
-                                    gameViewModel.games[idx] = game
-                                    gameViewModel.selectedGame = game.id
-                                    gameViewModel.saveGames()
-                                    appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                    if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID) {
+                                        Task {
+                                            await supabaseViewModel.fetchGameFromIgdbID(igdbID) { response in
+                                                supabaseViewModel.convertSupabaseGame(supabaseGame: response, game: game) { newGame in
+                                                    gameViewModel.games[idx] = newGame
+                                                    gameViewModel.selectedGame = newGame.id
+                                                    gameViewModel.saveGames()
+                                                    appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        gameViewModel.games[idx] = game
+                                        gameViewModel.selectedGame = game.id
+                                        gameViewModel.saveGames()
+                                        appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                    }   
                                 } else {
                                     appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
                                 }
@@ -194,6 +203,8 @@ struct GameInputView: View {
                 game.icon = currentGame.icon
                 game.platform = currentGame.platform
                 game.status = currentGame.status
+                game.recency = currentGame.recency
+                game.isFavorite = currentGame.isFavorite
                 game.launcher = currentGame.launcher
                 game.screenshots = currentGame.screenshots
                 game.metadata["description"] = currentGame.metadata["description"] ?? ""
