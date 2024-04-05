@@ -58,8 +58,8 @@
 "editGame_Status" = "Statusi";
 "editGame_Command" = "Komanda";
 "editGame_CommandDesc" = "Shëno komandën terminale";
-"editGame_Command_DragDrop" = "Select or drag and drop a game";
-"editGame_Command_SelectedGame" = "Selected game";
+"editGame_Command_DragDrop" = "Selektop ose hudh një lojë";
+"editGame_Command_SelectedGame" = "Loja e selektuar";
 "editGame_Advanced" = "Më Tepër";
 "editGame_Desc" = "Përshkrimi";
 "editGame_Genres" = "Zhanra";
@@ -70,8 +70,8 @@
 "editGame_DevDesc" = "Shëno krijuesin e lojës";
 "editGame_Pub" = "Botuesi";
 "editGame_PubDesc" = "Shëno botuesin e lojës";
-"editGame_igdbID" = "IGDB ID";
-"editGame_igdbIDDesc" = "Enter game IGDB ID";
+"editGame_igdbID" = "ID-ja nga IGDB";
+"editGame_igdbIDDesc" = "Shëno ID-ën e lojës për IGDB";
 "editGame_Release" = "Data e Botimit";
 "editGame_SaveGame" = "Ruaj Lojën";
 "editGame_SelectGame" = "Selekto Lojën";
@@ -86,10 +86,10 @@
 "appearance_Accent" = "Ngjyra aksentuese e UI";
 "appearance_Gradient" = "Gradienta e UI";
 "appearance_Star" = "Trego vlerësimin në yje";
-"appearance_GradientHeader" = "Fade header into background";
-"appearance_ShowScreenshots" = "Show screenshots";
-"appearance_ScreenshotSize" = "Screenshot size";
-"appearance_FadeLeadingScreenshots" = "Fade leading screenshots into background";
+"appearance_GradientHeader" = "Zbeh header-in në sfond";
+"appearance_ShowScreenshots" = "Shfaq screenshot-at";
+"appearance_ScreenshotSize" = "Madhësia e Screenshot-it";
+"appearance_FadeLeadingScreenshots" = "Zbeh screenshot-at në sfond";
 "appearance_HideIcons" = "Mshef ikonat ne skaje";
 "appearance_IconSize" = "Madhësia e ikonave";
 "appearance_GameCount" = "Shfaq numrin e lojave";
@@ -130,6 +130,6 @@
 "context_EditName" = "Ndrysho emri";
 "context_EditIcon" = "Ndrysho ikonën";
 "context_EditHeader" = "Ndrysho header-in";
-"context_EditPlatform" = "Edit platform";
-"context_EditStatus" = "Edit status";
+"context_EditPlatform" = "Ndrysho platformën";
+"context_EditStatus" = "Ndrysho statusin";
 "update_CheckForUpdates" = "Shiko për updata";
