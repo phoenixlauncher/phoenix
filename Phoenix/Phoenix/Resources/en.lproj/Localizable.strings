@@ -67,6 +67,7 @@
 "editGame_GenresDesc" = "Enter game genres";
 "editGame_Header" = "Header";
 "editGame_Cover" = "Cover";
+"editGame_Screenshots" = "Screenshots";
 "editGame_Rating" = "Rating";
 "editGame_Dev" = "Developer";
 "editGame_DevDesc" = "Enter game developer";

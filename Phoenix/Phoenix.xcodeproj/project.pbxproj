@@ -60,8 +60,8 @@
 		ADE202032B5DF9D300047322 /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202022B5DF9D300047322 /* SortBy.swift */; };
 		ADE202052B5DFF7400047322 /* ContextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202042B5DFF7400047322 /* ContextButton.swift */; };
 		ADE202082B5E04ED00047322 /* ContextButtonMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */; };
-		B54BBA252BC0642900575AC2 /* PaneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54BBA242BC0642900575AC2 /* PaneTextField.swift */; };
 		B54BBA282BC0645300575AC2 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */; };
+		B54BBA2A2BC1137F00575AC2 /* PaneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54BBA292BC1137F00575AC2 /* PaneTextField.swift */; };
 		B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
@@ -137,7 +137,7 @@
 		ADE202042B5DFF7400047322 /* ContextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButton.swift; sourceTree = "<group>"; };
 		ADE202072B5E04ED00047322 /* ContextButtonMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButtonMenu.swift; sourceTree = "<group>"; };
 		ADF8FB3F2B57960800AFD38E /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
-		B54BBA242BC0642900575AC2 /* PaneTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaneTextField.swift; path = ../../../../../../../../Desktop/test/test/PaneTextField.swift; sourceTree = "<group>"; };
+		B54BBA292BC1137F00575AC2 /* PaneTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaneTextField.swift; sourceTree = "<group>"; };
 		B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropFilePickerButton.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		C9435D262B594B6E0032DB7A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -271,7 +271,7 @@
 		AD53FCC02AC7E52100D3A301 /* TextBoxes */ = {
 			isa = PBXGroup;
 			children = (
-				B54BBA242BC0642900575AC2 /* PaneTextField.swift */,
+				B54BBA292BC1137F00575AC2 /* PaneTextField.swift */,
 				AD5287C92AC007CC001673F5 /* TextBox.swift */,
 				AD2E38AA2B5785EA0068943E /* TextBoxAlert.swift */,
 			);
@@ -561,7 +561,7 @@
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
-				B54BBA252BC0642900575AC2 /* PaneTextField.swift in Sources */,
+				B54BBA2A2BC1137F00575AC2 /* PaneTextField.swift in Sources */,
 				ADE202032B5DF9D300047322 /* SortBy.swift in Sources */,
 				AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */,
 				ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */,

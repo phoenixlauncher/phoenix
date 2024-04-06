@@ -32,6 +32,10 @@ struct GameInputView: View {
     @State private var iconIsImporting: Bool = false
     @State private var headIsImporting: Bool = false
     @State private var coverIsImporting: Bool = false
+    @State private var screenshotIsImporting: Bool = false
+    var newScreenshot: String?
+    
+    @State private var hoveredScreenshot: String?
 
     var body: some View {
         ScrollView {
@@ -39,7 +43,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: String(localized: "editGame_Name"), placeholder: String(localized: "editGame_NameDesc"), input: $game.name) // Name input
                     
-                    ImageImportButton(type: String(localized: "editGame_Icon"), isImporting: $iconIsImporting, input: $iconInput, output: $game.icon, gameID: gameViewModel.selectedGame)
+                    ImageImportButton(type: String(localized: "editGame_Icon"), isImporting: $iconIsImporting, input: $iconInput, output: $game.icon, gameID: game.id)
         
                     SlotInput(contentName: String(localized: "editGame_Platform"), content: {
                         Picker("", selection: $game.platform) {
@@ -71,9 +75,88 @@ struct GameInputView: View {
                         
                         TextBox(textBoxName: String(localized: "editGame_Genres"), placeholder: String(localized: "editGame_GenresDesc"), input: binding(for: "genre"))
                         
-                        ImageImportButton(type: String(localized: "editGame_Header"), isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: gameViewModel.selectedGame)
+                        ImageImportButton(type: String(localized: "editGame_Header"), isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: game.id)
                         
-                        ImageImportButton(type: String(localized: "editGame_Cover"), isImporting: $coverIsImporting, input: $coverInput, output: binding(for: "cover"), gameID: gameViewModel.selectedGame)
+                        ImageImportButton(type: String(localized: "editGame_Cover"), isImporting: $coverIsImporting, input: $coverInput, output: binding(for: "cover"), gameID: game.id)
+                        
+                        DisclosureGroup(String(localized: "editGame_Screenshots")) {
+                            ScrollView([.horizontal]) {
+                                HStack {
+                                    Rectangle()
+                                        .background(.gray)
+                                        .opacity(0.15)
+                                        .overlay {
+                                            Button(action: {
+                                                screenshotIsImporting.toggle()
+                                            }) {
+                                                Image(systemName: "plus")
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 27))
+                                                    .frame(width: 50, height: 50)
+                                                    .contentShape(RoundedRectangle(cornerRadius: 25))
+                                            }
+                                            .buttonStyle(.plain)
+                                            .background(.white.opacity(0.5))
+                                            .cornerRadius(25)
+                                        }
+                                        .frame(width: 300, height: 175)
+                                        .cornerRadius(7.5)
+                                        .fileImporter(isPresented: $screenshotIsImporting, allowedContentTypes: [.image], allowsMultipleSelection: false) { result in
+                                            resultIntoData(result: result) { data in
+                                                saveImageToFile(data: data, gameID: game.id, type: "screenshot_\(UUID())") { image in
+                                                    game.screenshots.insert(image, at: 0)
+                                                }
+                                            }
+                                        }
+                                    ForEach(game.screenshots, id: \.self) { screenshot in
+                                        if let screenshot = screenshot, let screenshotURL = URL(string: screenshot) {
+                                            AsyncImage(url: screenshotURL) { phase in
+                                                switch phase {
+                                                case .success(let image):
+                                                    image.resizable()
+                                                default:
+                                                    EmptyView()
+                                                }
+                                            }
+                                            .opacity((hoveredScreenshot == screenshot) ? 0.5 : 1)
+                                            .cornerRadius(7.5)
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(height: 175)
+                                            .overlay {
+                                                if hoveredScreenshot == screenshot {
+                                                    Button(action: {
+                                                        if let idx = game.screenshots.firstIndex(where: { $0 == screenshot }) {
+                                                            game.screenshots.remove(at: idx)
+                                                        }
+                                                    }) {
+                                                        Image(systemName: "xmark")
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.white)
+                                                            .font(.system(size: 27))
+                                                            .frame(width: 50, height: 50)
+                                                            .contentShape(RoundedRectangle(cornerRadius: 25))
+                                                    }
+                                                    .buttonStyle(.plain)
+                                                    .background(.red)
+                                                    .cornerRadius(25)
+                                                }
+                                            }
+                                            .animation(.easeInOut(duration: 0.1), value: (hoveredScreenshot == screenshot))
+                                            .onHover { hover in
+                                                if hover {
+                                                    hoveredScreenshot = screenshot
+                                                } else {
+                                                    hoveredScreenshot = nil
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .cornerRadius(7.5)
+                        }
+                        .padding()
                         
                         if !Defaults[.showStarRating] {
                             TextBox(textBoxName: String(localized: "editGame_Rating"), placeholder: "X / 10", input: binding(for: "rating"))
