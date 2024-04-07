@@ -57,7 +57,12 @@ struct AppearanceSettingsView: View {
                 Defaults.Toggle(String(localized: "appearance_GameCount"), key: .showSortByNumber)
                 Defaults.Toggle(String(localized: "appearance_ShowAdd"), key: .showSidebarAddGameButton)
                 Divider() // toolbar settings
-                Defaults.Toggle(String(localized: "appearance_CategoryAnimation"), key: .showAnimationOfSortByIcon)
+                VStack(alignment: .leading) {
+                    Defaults.Toggle(String(localized: "appearance_CategoryAnimation"), key: .showAnimationOfSortByIcon)
+                    Text(LocalizedStringKey("prefs_SonomaRequired"))
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
                 Defaults.Toggle(String(localized: "appearance_CategoryText"), key: .showPickerText)
             }
             .padding(20)

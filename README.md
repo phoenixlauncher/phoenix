@@ -57,3 +57,7 @@ Big thanks to the creators of these dependencies for creating such great tools!
   rating view for SwiftUI
 - [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) -
   Display and customize Markdown text in SwiftUI
+
+## Other Credits
+
+Thanks to [Austin Condiff](https://twitter.com/austincondiff) and the [CodeEdit app](https://codeedit.app) for `PaneTextField.swift`.

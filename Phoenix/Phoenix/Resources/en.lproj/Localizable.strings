@@ -62,9 +62,12 @@
 "editGame_Command_SelectedGame" = "Selected game";
 "editGame_Advanced" = "Advanced";
 "editGame_Desc" = "Description";
+"editGame_DescDesc" = "Enter game description";
 "editGame_Genres" = "Genres";
+"editGame_GenresDesc" = "Enter game genres";
 "editGame_Header" = "Header";
 "editGame_Cover" = "Cover";
+"editGame_Screenshots" = "Screenshots";
 "editGame_Rating" = "Rating";
 "editGame_Dev" = "Developer";
 "editGame_DevDesc" = "Enter game developer";
@@ -77,6 +80,7 @@
 "editGame_SelectGame" = "Select Game";
 "editGame_Fetch" = "Fetch Metadata";
 "editGame_NoGamesFailure" = "No games found";
+"prefs_SonomaRequired" = "macOS 14 (Sonoma) is required for this feature.";
 "prefs_General" = "General";
 "general_SelectedFolder" = "Selected folder";
 "general_Detect" = "Detect %@ games on launch"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
