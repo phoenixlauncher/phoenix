@@ -62,12 +62,12 @@
 "editGame_Command_SelectedGame" = "Loja e selektuar";
 "editGame_Advanced" = "Më Tepër";
 "editGame_Desc" = "Përshkrimi";
-"editGame_DescDesc" = "Enter game description";
+"editGame_DescDesc" = "Shkruaj përshkrimin e lojës";
 "editGame_Genres" = "Zhanra";
-"editGame_GenresDesc" = "Enter game genres";
+"editGame_GenresDesc" = "Shëno zhanrën e lojës";
 "editGame_Header" = "Fillim";
 "editGame_Cover" = "Mbulim";
-"editGame_Screenshots" = "Screenshots";
+"editGame_Screenshots" = "Screenshotat";
 "editGame_Rating" = "Vlerësimi";
 "editGame_Dev" = "Krijuesi";
 "editGame_DevDesc" = "Shëno krijuesin e lojës";
