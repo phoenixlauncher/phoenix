@@ -62,9 +62,12 @@
 "editGame_Command_SelectedGame" = "Loja e selektuar";
 "editGame_Advanced" = "Më Tepër";
 "editGame_Desc" = "Përshkrimi";
+"editGame_DescDesc" = "Enter game description";
 "editGame_Genres" = "Zhanra";
+"editGame_GenresDesc" = "Enter game genres";
 "editGame_Header" = "Fillim";
 "editGame_Cover" = "Mbulim";
+"editGame_Screenshots" = "Screenshots";
 "editGame_Rating" = "Vlerësimi";
 "editGame_Dev" = "Krijuesi";
 "editGame_DevDesc" = "Shëno krijuesin e lojës";
@@ -77,6 +80,7 @@
 "editGame_SelectGame" = "Selekto Lojën";
 "editGame_Fetch" = "Fito Metadata";
 "editGame_NoGamesFailure" = "Asnjë lojë nuk është gjetë";
+"prefs_SonomaRequired" = "macOS 14 (Sonoma) is required for this feature.";
 "prefs_General" = "Gjeneral";
 "general_SelectedFolder" = "Folderi i selektuar";
 "general_Detect" = "Dedekto loja në %@ në hapje"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
