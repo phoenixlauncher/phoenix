@@ -80,7 +80,7 @@
 "editGame_SelectGame" = "Selekto Lojën";
 "editGame_Fetch" = "Fito Metadata";
 "editGame_NoGamesFailure" = "Asnjë lojë nuk është gjetë";
-"prefs_SonomaRequired" = "macOS 14 (Sonoma) is required for this feature.";
+"prefs_SonomaRequired" = "macOS 14 (Sonoma) është e nevojitur për këtë opsion.";
 "prefs_General" = "Gjeneral";
 "general_SelectedFolder" = "Folderi i selektuar";
 "general_Detect" = "Dedekto loja në %@ në hapje"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
