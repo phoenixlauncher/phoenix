@@ -1,0 +1,19 @@
+{
+	"name": "xcode build server",
+	"version": "0.2",
+	"bspVersion": "2.0",
+	"languages": [
+		"c",
+		"cpp",
+		"objective-c",
+		"objective-cpp",
+		"swift"
+	],
+	"argv": [
+		"/opt/homebrew/bin/xcode-build-server"
+	],
+	"workspace": "/Users/kalebrosborough/Documents/Programming/Swift/Phoenix/Phoenix/Phoenix.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/kalebrosborough/Library/Developer/Xcode/DerivedData/Phoenix-gpxvxziajcutvmawzmxykrgnsols",
+	"scheme": "Phoenix",
+	"kind": "xcode"
+}
