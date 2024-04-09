@@ -1,6 +1,6 @@
 //
-//  PaneTextField.swift
-//  CodeEdit (now Phoenix)
+//  RoundTextEditor.swift (formerly PaneTextField.swift)
+//  Phoenix (formerly CodeEdit)
 //
 //  Created by Austin Condiff on 11/2/23.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import SwiftUIIntrospect
 
-struct PaneTextField<LeadingAccessories: View, TrailingAccessories: View>: View {
+struct RoundTextEditor<LeadingAccessories: View, TrailingAccessories: View>: View {
     @Environment(\.colorScheme)
     var colorScheme
 
@@ -18,11 +18,7 @@ struct PaneTextField<LeadingAccessories: View, TrailingAccessories: View>: View 
 
     @FocusState private var isFocused: Bool
 
-    var label: String
-
     @Binding private var text: String
-
-    let axis: Axis
 
     let leadingAccessories: LeadingAccessories?
 
@@ -35,18 +31,14 @@ struct PaneTextField<LeadingAccessories: View, TrailingAccessories: View>: View 
     var hasValue: Bool
 
     init(
-        _ label: String,
         text: Binding<String>,
-        axis: Axis? = .horizontal,
         @ViewBuilder leadingAccessories: () -> LeadingAccessories? = { EmptyView() },
         @ViewBuilder trailingAccessories: () -> TrailingAccessories? = { EmptyView() },
         clearable: Bool? = false,
         onClear: (() -> Void)? = {},
         hasValue: Bool? = false
     ) {
-        self.label = label
         _text = text
-        self.axis = axis ?? .horizontal
         self.leadingAccessories = leadingAccessories()
         self.trailingAccessories = trailingAccessories()
         self.clearable = clearable ?? false
@@ -84,11 +76,12 @@ struct PaneTextField<LeadingAccessories: View, TrailingAccessories: View>: View 
                     .frame(height: 20)
             }
             VStack {
-                TextField(label, text: $text, axis: axis)
-                    .textFieldStyle(.plain)
+                TextEditor(text: $text)
+                    .font(.custom("SF Pro", fixedSize: 13))
                     .focused($isFocused)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3.5)
+                    .background(.clear)
+                    .padding(.horizontal, 3)
+                    .padding(.vertical, 4)
                     .foregroundStyle(.primary)
             }
             if clearable == true {
@@ -98,7 +91,6 @@ struct PaneTextField<LeadingAccessories: View, TrailingAccessories: View>: View 
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
-                
                 .opacity(text.isEmpty ? 0 : 1)
                 .disabled(text.isEmpty)
             }
@@ -107,8 +99,6 @@ struct PaneTextField<LeadingAccessories: View, TrailingAccessories: View>: View 
             }
         }
         .fixedSize(horizontal: false, vertical: true)
-        
-        
         .frame(minHeight: 22)
         .background(
             selectionBackground(isFocused)

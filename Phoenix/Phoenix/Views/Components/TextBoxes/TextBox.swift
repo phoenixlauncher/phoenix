@@ -16,7 +16,7 @@ struct TextBox: View {
         HStack {
             Text(textBoxName)
                 .frame(width: 70, alignment: .leading)
-            PaneTextField(placeholder, text: $input, axis: .vertical)
+            PaneTextField(text: $input)
                 .accessibility(label: Text("\(textBoxName) Input"))
         }
         .padding()
