@@ -118,7 +118,6 @@ struct GameDetailView: View {
                                                 }
                                             }
                                         }
-                                        
                                     }
                                     .mask(
                                         LinearGradient(
