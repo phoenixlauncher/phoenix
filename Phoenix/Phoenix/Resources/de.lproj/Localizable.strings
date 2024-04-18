@@ -116,6 +116,7 @@
 "view_Name" = "Seitenleiste nach Name sortieren";
 "view_Recency" = "Seitenleiste nach Aktualität sortieren";
 "help_Help" = "Phoenix Hilfe";
+"help_Donate" = "Donate to Phoenix";
 "toast_GameSavedSuccess" = "Spiel gespeichert!";
 "toast_NoGamesFailure" = "Keine Spiele gefunden.";
 "toast_GameNotFoundFailure" = "Das Spiel konnte nicht gefunden werden.";

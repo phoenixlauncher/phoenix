@@ -116,6 +116,7 @@
 "view_Name" = "Rendit lojrat sipas emrit";
 "view_Recency" = "Rendit lojrat sipas kohëve të fundit";
 "help_Help" = "Ndihmë me Phoenix";
+"help_Donate" = "Donate to Phoenix";
 "toast_GameSavedSuccess" = "Loja e ruajtur!";
 "toast_NoGamesFailure" = "ASnjë lojë nuk është gjetur.";
 "toast_GameNotFoundFailure" = "Loja nuk mund të gjendej.";
