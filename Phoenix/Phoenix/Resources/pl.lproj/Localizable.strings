@@ -116,6 +116,7 @@
 "view_Name" = "Sort Sidebar by Name";
 "view_Recency" = "Sort Sidebar by Recency";
 "help_Help" = "Phoenix Help";
+"help_Donate" = "Donate to Phoenix";
 "toast_GameSavedSuccess" = "Game saved!";
 "toast_NoGamesFailure" = "No games found.";
 "toast_GameNotFoundFailure" = "Game couldn't be found.";
