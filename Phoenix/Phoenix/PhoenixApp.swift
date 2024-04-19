@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct PhoenixApp: App {
+    @Environment(\.openURL) var openURL
     @StateObject var gameViewModel = GameViewModel()
     @StateObject var appViewModel = AppViewModel()
     @StateObject var updaterViewModel = UpdaterViewModel()
@@ -70,6 +71,14 @@ struct PhoenixApp: App {
             }
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(UpdaterViewModel: updaterViewModel)
+            }
+            CommandGroup(replacing: .help) {
+                Button(String(localized: "help_Help"), action: {
+                    openURL(URL(string: "https://github.com/phoenixlauncher/phoenix/wiki/0.-Home")!)
+                })
+                Button(String(localized: "help_Donate"), action: {
+                    openURL(URL(string: "https://www.ko-fi.com/phoenixlauncher")!)
+                })
             }
         }
         
