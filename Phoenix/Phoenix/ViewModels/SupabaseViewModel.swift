@@ -100,7 +100,7 @@ class SupabaseViewModel: ObservableObject {
         
         if let steam_id = supabaseGame.steam_id {
             game.steamID = steam_id
-            if (game.launcher == "" || game.launcher.contains("%@")) && game.platform == .steam {
+            if (game.launcher == "" || game.launcher.contains("%@")) && game.platformName == "Steam" {
                 game.launcher = "open steam://run/\(steam_id)"
             }
         }
@@ -126,6 +126,32 @@ class SupabaseViewModel: ObservableObject {
         // When all tasks in the dispatch group are done
         dispatchGroup.notify(queue: .main) {
             completion(game)
+        }
+    }
+    
+    func fetchAndSaveHeaderOf(gameID: UUID, igdbID: Int) async throws -> Data? {
+        // Create a select request from supabase and save it to games
+        let dispatchGroup = DispatchGroup()
+        do {
+            let response: [SupabaseHeader] = try await supabase.database
+                .from("igdb_games")
+                .select("header_img")
+                .eq("igdb_id", value: igdbID)
+                .execute()
+                .value
+            if let header = response[0].header_img, let url = URL(string: header) {
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: url)
+                    return data
+                } catch {
+                    throw error
+                }
+            } else {
+                return nil
+            }
+        } catch {
+            // Handle the error
+            throw error
         }
     }
     

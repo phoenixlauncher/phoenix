@@ -34,7 +34,14 @@ struct GameDetailView: View {
     
     var game: Game? {
         gameViewModel.getGameFromID(id: gameViewModel.selectedGame) ?? nil
-     }
+    }
+    
+    var currentPlatform: Platform? {
+        appViewModel.platforms.first(where: {game?.platformName == $0.name})
+    }
+    
+    @State var headerFound = true
+    @State var animate = false
 
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
@@ -68,6 +75,9 @@ struct GameDetailView: View {
                             .offset(x: 0, y: getOffsetForHeaderImage(geometry))
                     }
                 }
+            }
+            .task {
+                checkHeader()
             }
             .frame(height: 400)
             VStack(alignment: .leading) {
@@ -144,7 +154,7 @@ struct GameDetailView: View {
                                     if let game = game {
                                         VStack(alignment: .leading, spacing: 7.5) {
                                             GameMetadata(field: String(localized: "detail_LP"), value: game.metadata["last_played"] ?? String(localized: "recency_Never"))
-                                            GameMetadata(field: String(localized: "detail_Platform"), value: game.platform.displayName)
+                                            GameMetadata(field: String(localized: "detail_Platform"), value: game.platformName)
                                             GameMetadata(field: String(localized: "detail_Status"), value: game.status.displayName)
                                             if !showStarRating {
                                                 GameMetadata(field: String(localized: "detail_Rating"), value: game.metadata["rating"] ?? "")
@@ -189,11 +199,73 @@ struct GameDetailView: View {
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
+            checkHeader()
             if showScreenshots { checkScreenshots() }
         }
     }
+    
+//    @MainActor
+//    private func updateGameHeader(_ id: UUID, header: String) {
+//        print("update func called")
+//        if let headerURL = URL(string: header) {
+//            print("valid url")
+//            print(headerURL)
+//            URLSession.shared.dataTask(with: headerURL) { headerData, response, error in
+//                if let error = error {
+//                   print(error)
+//               }
+//                print("url task")
+//                if let headerData = headerData {
+//                    print("hedaerdata")
+//                    saveImageToFile(data: headerData, gameID: id, type: "header") { headerImage in
+//                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+//                            print("found index")
+//                            gameViewModel.games[idx].metadata["header_img"] = headerImage
+//                            gameViewModel.saveGames()
+//                            print("games saved")
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-    @MainActor
+    private func checkHeader() {
+        Task {
+            print("header check starting ‼️")
+            let fileManager = FileManager.default
+            if let headerImage = game?.metadata["header_img"], let headerURL = URL(string: headerImage), fileManager.fileExists(atPath: headerURL.path) {
+                print("header exists!!!!")
+            } else {
+                headerFound = false
+                if let name = game?.name, let id = game?.id {
+                    guard let igdbID = game?.igdbID, let igdbID = Int(igdbID) else {
+                        await supabaseViewModel.fetchIgdbIDFromName(name: name) { igdbID in
+                            updateGameIgdbID(id, igdbID: String(igdbID))
+                        }
+                        return
+                    }
+                    print("no header & valid id:")
+                    print(igdbID)
+                    print("asking supabsae now!!")
+                    let headerData = try await supabaseViewModel.fetchAndSaveHeaderOf(gameID: id, igdbID: igdbID)
+                    if let headerData = headerData {
+                        saveImageToFile(data: headerData, gameID: id, type: "header") { headerImage in
+                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+                                print("found index")
+                                gameViewModel.games[idx].metadata["header_img"] = headerImage
+                                gameViewModel.saveGames()
+                                print("games saved")
+                            }
+                        }
+                        headerFound = true
+                    }
+                }
+            }
+        }
+    }
+
+//    @MainActor
     private func updateGameScreenshots(_ id: UUID, screenshots: [String?]) {
         print("update func called")
         if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
@@ -250,9 +322,11 @@ struct GameDetailView: View {
             // Update the last played date and write the updated information to the JSON file
             updateLastPlayedDate(currentDate: currentDate)
             if game.launcher != "" {
-                try shell(game)
+                try shell(game.launcher)
+            } else if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", game.gameFile != "" {
+                try shell(String(format: currentPlatform.commandTemplate, game.gameFile))
             } else {
-                appViewModel.showFailureToast("\(String(localized: "toast_Failure")) \(gameViewModel.selectedGameName)")
+                appViewModel.showFailureToast("\(String(localized: "toast_LaunchFailure")) \(gameViewModel.selectedGameName)")
             }
         } catch {
             logger.write("\(error)") // handle or silence the error here

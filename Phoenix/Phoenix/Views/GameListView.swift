@@ -37,12 +37,12 @@ struct GameListView: View {
                 }
                 switch sortBy {
                 case .platform:
-                    ForEach(Platform.allCases, id: \.self) { platform in
+                    ForEach(appViewModel.platforms, id: \.self) { platform in
                         let gamesForPlatform = gameViewModel.games.filter {
-                            $0.platform == platform && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
+                            $0.platformName == platform.name && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }
                         if !gamesForPlatform.isEmpty {
-                            Section(header: Text("\(platform.displayName) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
+                            Section(header: Text("\(platform.name) \(showSortByNumber ? "(\(gamesForPlatform.count))" : "")")) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
                                     GameListItem(gameID: game.id)
                                 }

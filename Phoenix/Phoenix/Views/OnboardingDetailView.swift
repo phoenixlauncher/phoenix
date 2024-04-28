@@ -17,10 +17,14 @@ struct OnboardingDetailView: View {
                     .font(.system(size: 40))
                     .foregroundStyle(.white)
                     .fontWeight(.bold)
-                Text("Click the 􀅼 in the top left to get started.")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
-                    .fontWeight(.medium)
+                HStack {
+                    Text("Click the")
+                    Image(systemName: "plus.app")
+                    Text("in the top left to get started.")
+                }
+                .font(.system(size: 20))
+                .foregroundStyle(.white)
+                .fontWeight(.medium)
             }
         }
     }

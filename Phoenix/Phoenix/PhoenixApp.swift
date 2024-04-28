@@ -85,6 +85,7 @@ struct PhoenixApp: App {
         Settings {
             SettingsView()
                 .environmentObject(gameViewModel)
+                .environmentObject(appViewModel)
         }
     }
 }
