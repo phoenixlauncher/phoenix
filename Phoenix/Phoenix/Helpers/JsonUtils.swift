@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 /// Returns the URL for the application support directory for the current user.
 ///
@@ -67,61 +68,28 @@ func parseACFFile(data: Data) -> [String: String] {
 /// decoding the data.
 func loadGamesFromJSON() -> GamesList {
     let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
-    var games: GamesList?
-    do {
-        let jsonData = try Data(contentsOf: url)
-        // Custom decoding strategy to convert "isDeleted" to "isHidden"
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
-            let key = keys.last!
-            if key.stringValue == "isDeleted" || key.stringValue == "is_deleted" {
-                return AnyCodingKey(stringValue: "isHidden")!
-            } else if key.stringValue == "appID" || key.stringValue == "steam_id" {
-                return AnyCodingKey(stringValue: "steamID")!
-            } else if key.stringValue == "is_favorite" {
-                return AnyCodingKey(stringValue: "isFavorite")!
-            } else {
-                return key
-            }
-        }
-        
-        games = try decoder.decode(GamesList.self, from: jsonData)
-        return games ?? GamesList(games: [])
-    } catch {
-        logger.write("[INFO]: Couldn't find games.json. Creating new one.")
-        let jsonFileURL = Bundle.main.url(forResource: "games", withExtension: "json")
-        do {
-            if let jsonFileURL = jsonFileURL {
-                let jsonData = try Data(contentsOf: jsonFileURL)
-                let jsonString = String(decoding: jsonData, as: UTF8.self)
-                writeGamesToJSON(data: jsonString)
-            }
-        } catch {
-            logger.write(
-                "[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'"
-            )
-        }
-
-        do {
-            let jsonData = try Data(contentsOf: url)
-            // Custom decoding strategy to convert "isDeleted" to "isHidden"
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
-                let key = keys.last!
-                if key.stringValue == "isDeleted" {
-                    return AnyCodingKey(stringValue: "isHidden")!
-                }
-                return key
-            }
-            
-            games = try decoder.decode(GamesList.self, from: jsonData)
-            return games ?? GamesList(games: [])
-        } catch {
-            logger.write("[ERROR]: Couldn't read from new 'games.json'")
+    var games: [Game] = []
+    if let json = try? JSON(data: Data(contentsOf: url)) {
+        let gamesArray = json["games"].arrayValue
+        for game in gamesArray {
+            games.append(Game(
+                id: UUID(uuidString: (game["id"].stringValue)) ?? UUID(),
+                steamID: game["steam_id"].stringValue,
+                igdbID: game["igdb_id"].stringValue,
+                launcher: game["launcher"].stringValue,
+                metadata: game["metadata"].dictionaryObject as? [String: String] ?? ["":""],
+                screenshots: game["screenshots"].arrayValue.map({ $0.stringValue }),
+                icon: game["icon"].stringValue,
+                name: game["name"].stringValue,
+                platform: Platform(rawValue: game["platform"].stringValue) ?? .none,
+                status: Status(rawValue: game["status"].stringValue) ?? .none,
+                recency: Recency(rawValue: game["recency"].stringValue) ?? .never,
+                isHidden: game["is_hidden"].boolValue,
+                isFavorite: game["is_favorite"].boolValue
+            ))
         }
     }
-
-    return GamesList(games: [])
+    return GamesList(games: games)
 }
 
 /// Writes the given data to a JSON file named "games.json" in the "Phoenix"
