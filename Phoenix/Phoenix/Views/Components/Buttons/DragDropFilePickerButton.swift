@@ -11,17 +11,16 @@ import UniformTypeIdentifiers
 struct DragDropFilePickerButton: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
-    @Binding var launcher: String
+    var gameType: String
+    @Binding var gameFile: String
     
     @State private var isImporting: Bool = false
-    @State var appURL: URL?
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Game")
-                let path = (launcher.range(of: #""([^"]+)""#, options: .regularExpression) != nil) ? String(launcher[launcher.range(of: #""([^"]+)""#, options: .regularExpression)!].dropFirst().dropLast()) : ""
-                if let url = URL(string: path) {
+                if let url = URL(string: gameFile) {
                     Text(("\(String(localized: "editGame_Command_SelectedGame")): \(url.path)"))
                         .foregroundColor(.secondary)
                         .font(.caption)
@@ -42,13 +41,12 @@ struct DragDropFilePickerButton: View {
             )
         }
         .padding()
-        .fileImporter(isPresented: $isImporting , allowedContentTypes: [.application], allowsMultipleSelection: false)
+        .fileImporter(isPresented: $isImporting , allowedContentTypes: [UTType(filenameExtension: gameType) ?? .data], allowsMultipleSelection: false)
         { result in
             do {
-                let selectedAppURL: URL? = try result.get().first
-                if let selectedAppURL = selectedAppURL {
-                    appURL = selectedAppURL
-                    launcher = "open \"\(selectedAppURL.absoluteString)\""
+                let selectedFileURL: URL? = try result.get().first
+                if let selectedFileURL = selectedFileURL {
+                    gameFile = selectedFileURL.absoluteString
                 }
             }
             catch {
@@ -57,7 +55,7 @@ struct DragDropFilePickerButton: View {
                 appViewModel.showFailureToast.toggle()
             }
        }
-        .onDrop(of: [.application], isTargeted: nil) { selectedApp in
+        .onDrop(of: [UTType(filenameExtension: gameType) ?? .data], isTargeted: nil) { selectedApp in
             handleDrop(providers: selectedApp)
             return true
         }
@@ -67,7 +65,7 @@ struct DragDropFilePickerButton: View {
         for provider in providers {
             print(provider)
             // Check if the dropped item is a file URL
-            provider.loadItem(forTypeIdentifier: UTType.application.identifier, options: nil) { item, error in
+            provider.loadItem(forTypeIdentifier: ".app", options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
                     appViewModel.failureToastText = "Unable to create application launch command: \(error)"
@@ -76,8 +74,8 @@ struct DragDropFilePickerButton: View {
                 }
                 if let url = (item as? URL) {
                     // Update the droppedURL state
-                    appURL = url
-                    launcher = "open \"\(url.absoluteString)\""
+                    gameFile = url.absoluteString
+                    
                 }
             }
         }

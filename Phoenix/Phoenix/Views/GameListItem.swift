@@ -71,10 +71,10 @@ struct GameListItem: View {
                 Divider()
                 
                 //edit platform menu
-                ContextButtonMenu(forEachEnum: Platform.self, action: { editPlatform(thing: $0, id: game.id) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
+                PlatformContextButtonMenu(platforms: [], action: { editPlatform(platform: $0, id: game.id) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
         
                 //edit platform menu
-                ContextButtonMenu(forEachEnum: Status.self, action: { editStatus(thing: $0, id: game.id) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
+                EnumContextButtonMenu(forEachEnum: Status.self, action: { editStatus(status: $0, id: game.id) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
                 
             }
             .sheet(isPresented: $changeName) {
@@ -124,16 +124,16 @@ struct GameListItem: View {
         importType = "header"
     }
     
-    func editPlatform(thing: any CaseIterableEnum, id: UUID) {
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), thing is Platform {
-            gameViewModel.games[idx].platform = thing as! Platform
+    func editPlatform(platform: Platform, id: UUID) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            gameViewModel.games[idx].platformName = platform.name
         }
         gameViewModel.saveGames()
     }
     
-    func editStatus(thing: any CaseIterableEnum, id: UUID) {
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), thing is Status {
-            gameViewModel.games[idx].status = thing as! Status
+    func editStatus(status: Status, id: UUID) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            gameViewModel.games[idx].status = status
         }
         gameViewModel.saveGames()
     }

@@ -36,19 +36,23 @@ struct GameInputView: View {
     var newScreenshot: String?
     
     @State private var hoveredScreenshot: String?
+    
+    var currentPlatform: Platform? {
+        appViewModel.platforms.first(where: {game.platformName == $0.name})
+    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 Group {
-                    TextBox(textBoxName: String(localized: "editGame_Name"), placeholder: String(localized: "editGame_NameDesc"), input: $game.name) // Name input
+                    TextBox(textBoxName: String(localized: "editGame_Name"), input: $game.name) // Name input
                     
-                    ImageImportButton(type: String(localized: "editGame_Icon"), isImporting: $iconIsImporting, input: $iconInput, output: $game.icon, gameID: game.id)
+                    ImageImportButton(type: String(localized: "editGame_Icon"), input: $iconInput, output: $game.icon, gameID: game.id)
         
                     SlotInput(contentName: String(localized: "editGame_Platform"), content: {
-                        Picker("", selection: $game.platform) {
-                            ForEach(Platform.allCases) { platform in
-                                Text(platform.displayName)
+                        Picker("Platform", selection: $game.platformName) {
+                            ForEach(appViewModel.platforms.map({ $0.name }), id: \.self) { platformName in
+                                Text(platformName)
                             }
                         }
                     })
@@ -61,23 +65,22 @@ struct GameInputView: View {
                         }
                     })
                     
-                    
-                    if game.platform != .mac && game.platform != .pc {
-                        TextBox(textBoxName: String(localized: "editGame_Command"), placeholder: String(localized: "editGame_CommandDesc"), input: $game.launcher)
-                    } else {
-                        DragDropFilePickerButton(launcher: $game.launcher)
+                    if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
+                        DragDropFilePickerButton(gameType: currentPlatform.gameType, gameFile: $game.gameFile)
+                    } else if currentPlatform?.name != "Steam" {
+                        TextBox(textBoxName: String(localized: "editGame_Command"), input: $game.launcher)
                     }
                 
                 }
                 DisclosureGroup(String(localized: "editGame_Advanced")) {
                     VStack(alignment: .leading) {
-                        TextBox(textBoxName: String(localized: "editGame_Desc"), placeholder: String(localized: "editGame_DescDesc"), input: binding(for: "description"))
+                        TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                         
-                        TextBox(textBoxName: String(localized: "editGame_Genres"), placeholder: String(localized: "editGame_GenresDesc"), input: binding(for: "genre"))
+                        TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
                         
-                        ImageImportButton(type: String(localized: "editGame_Header"), isImporting: $headIsImporting, input: $headerInput, output: binding(for: "header_img"), gameID: game.id)
+                        ImageImportButton(type: String(localized: "editGame_Header"), input: $headerInput, output: binding(for: "header_img"), gameID: game.id)
                         
-                        ImageImportButton(type: String(localized: "editGame_Cover"), isImporting: $coverIsImporting, input: $coverInput, output: binding(for: "cover"), gameID: game.id)
+                        ImageImportButton(type: String(localized: "editGame_Cover"), input: $coverInput, output: binding(for: "cover"), gameID: game.id)
                         
                         DisclosureGroup(String(localized: "editGame_Screenshots")) {
                             ScrollView([.horizontal]) {
@@ -159,17 +162,17 @@ struct GameInputView: View {
                         .padding()
                         
                         if !Defaults[.showStarRating] {
-                            TextBox(textBoxName: String(localized: "editGame_Rating"), placeholder: "X / 10", input: binding(for: "rating"))
+                            TextBox(textBoxName: String(localized: "editGame_Rating"), caption: "X / 10", input: binding(for: "rating"))
                         }
                         
-                        TextBox(textBoxName: String(localized: "editGame_Dev"), placeholder: String(localized: "editGame_DevDesc"), input: binding(for: "developer"))
+                        TextBox(textBoxName: String(localized: "editGame_Dev"), input: binding(for: "developer"))
                         
-                        TextBox(textBoxName: String(localized: "editGame_Pub"), placeholder: String(localized: "editGame_PubDesc"), input: binding(for: "publisher"))
+                        TextBox(textBoxName: String(localized: "editGame_Pub"), input: binding(for: "publisher"))
                         
                         DatePicker(String(localized: "editGame_Release"), selection: $dateInput, in: ...Date(), displayedComponents: .date)
                             .padding()
                         
-                        TextBox(textBoxName: String(localized: "editGame_igdbID"), placeholder: String(localized: "editGame_igdbIDDesc"), input: $game.igdbID)
+                        TextBox(textBoxName: String(localized: "editGame_igdbID"), caption: String(localized: "editGame_igdbIDDesc"), input: $game.igdbID)
                     }
                 }
             }
@@ -279,24 +282,7 @@ struct GameInputView: View {
         .onAppear() {
             if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                 let currentGame = gameViewModel.games[idx]
-                game.id = currentGame.id
-                game.igdbID = currentGame.igdbID
-                game.steamID = currentGame.steamID
-                game.name = currentGame.name
-                game.icon = currentGame.icon
-                game.platform = currentGame.platform
-                game.status = currentGame.status
-                game.recency = currentGame.recency
-                game.isFavorite = currentGame.isFavorite
-                game.launcher = currentGame.launcher
-                game.screenshots = currentGame.screenshots
-                game.metadata["description"] = currentGame.metadata["description"] ?? ""
-                game.metadata["genre"] = currentGame.metadata["genre"] ?? ""
-                game.metadata["header_img"] = currentGame.metadata["header_img"] ?? ""
-                game.metadata["cover"] = currentGame.metadata["cover"] ?? ""
-                game.metadata["rating"] = currentGame.metadata["rating"] ?? ""
-                game.metadata["developer"] = currentGame.metadata["developer"] ?? ""
-                game.metadata["publisher"] = currentGame.metadata["publisher"] ?? ""
+                game = currentGame
                 // Create Date Formatter
                 dateInput = convertIntoDate(input: currentGame.metadata["release_date"] ?? "")
             } else {

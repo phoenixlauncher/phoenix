@@ -21,6 +21,10 @@ struct SupabaseGame: Decodable, Hashable {
     var name: String?
 }
 
+struct SupabaseHeader: Decodable, Hashable {
+    var header_img: String?
+}
+
 struct SupabaseScreenshots: Decodable, Hashable {
     var screenshots: [String]?
 }

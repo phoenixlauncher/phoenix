@@ -48,25 +48,8 @@ struct RoundTextEditor<LeadingAccessories: View, TrailingAccessories: View>: Vie
 
     @ViewBuilder
     public func selectionBackground(
-        _ isFocused: Bool = false
     ) -> some View {
-        if self.controlActive != .inactive || !text.isEmpty || hasValue {
-            if isFocused || !text.isEmpty || hasValue {
-                Color(.textBackgroundColor)
-            } else {
-                if colorScheme == .light {
-                    Color.black.opacity(0.06)
-                } else {
-                    Color.white.opacity(0.24)
-                }
-            }
-        } else {
-            if colorScheme == .light {
-                Color.clear
-            } else {
-                Color.white.opacity(0.14)
-            }
-        }
+        Color(.textBackgroundColor)
     }
 
     var body: some View {
@@ -101,13 +84,13 @@ struct RoundTextEditor<LeadingAccessories: View, TrailingAccessories: View>: Vie
         .fixedSize(horizontal: false, vertical: true)
         .frame(minHeight: 22)
         .background(
-            selectionBackground(isFocused)
+            selectionBackground()
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .edgesIgnoringSafeArea(.all)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 6)
-                .stroke(isFocused || !text.isEmpty || hasValue ? .tertiary : .quaternary, lineWidth: 1.25)
+                .stroke(isFocused ? .secondary : .tertiary, lineWidth: 1.5)
                 .cornerRadius(6)
                 .disabled(true)
                 .edgesIgnoringSafeArea(.all)

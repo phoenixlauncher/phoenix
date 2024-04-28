@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ImageImportButton: View {
     var type: String
-    @Binding var isImporting: Bool
+    @State var file: Bool = false
+    @State var isImporting: Bool = false
     @Binding var input: String
     @Binding var output: String
     var gameID: UUID
@@ -25,7 +26,9 @@ struct ImageImportButton: View {
             Spacer()
             Button(
                 action: {
-                    isImporting = true
+                    if file {
+                        isImporting = true
+                    }
                 },
                 label: {
                     Text(LocalizedStringKey("editGame_Browse"))

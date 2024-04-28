@@ -9,13 +9,20 @@ import SwiftUI
 
 struct TextBox: View {
     var textBoxName: String
-    var placeholder: String
+    var caption: String?
     @Binding var input: String
     
     var body: some View {
         HStack {
-            Text(textBoxName)
-                .frame(width: 70, alignment: .leading)
+            VStack(alignment: .leading) {
+                Text(textBoxName)
+                if let caption = caption {
+                    Text(caption)
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
+            .frame(width: caption != nil ? 150 : 70, alignment: .leading)
             RoundTextEditor(text: $input)
                 .accessibility(label: Text("\(textBoxName) Input"))
         }
