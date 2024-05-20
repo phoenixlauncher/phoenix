@@ -27,7 +27,7 @@ struct Game: Codable, Comparable, Hashable, Sendable {
     var screenshots: [String?] = []
     var icon: String = ""
     var name: String = ""
-    var platformName: String = ""
+    var platformName: String = "Other"
     var status: Status = Status.none
     var recency: Recency = Recency.never
     var isHidden: Bool = false

@@ -74,6 +74,10 @@ struct GameInputView: View {
                 }
                 DisclosureGroup(String(localized: "editGame_Advanced")) {
                     VStack(alignment: .leading) {
+                        if currentPlatform?.name == "Steam" {
+                            TextBox(textBoxName: String(localized: "editGame_Command"), input: $game.launcher)
+                        }
+                        
                         TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                         
                         TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))

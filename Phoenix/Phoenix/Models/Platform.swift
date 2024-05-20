@@ -13,4 +13,5 @@ struct Platform: Identifiable, Encodable, Decodable, Hashable {
     var name: String = "" // Name of game
     var gameType: String = "" // Type of game (.app, .bin, .exe, .z64)
     var commandTemplate: String = "" // Command template for launching ("open %@")
+    var deletable: Bool = true
 }

@@ -46,7 +46,7 @@ struct DragDropFilePickerButton: View {
             do {
                 let selectedFileURL: URL? = try result.get().first
                 if let selectedFileURL = selectedFileURL {
-                    gameFile = selectedFileURL.absoluteString
+                    gameFile = selectedFileURL.path
                 }
             }
             catch {
@@ -74,7 +74,7 @@ struct DragDropFilePickerButton: View {
                 }
                 if let url = (item as? URL) {
                     // Update the droppedURL state
-                    gameFile = url.absoluteString
+                    gameFile = url.path
                     
                 }
             }

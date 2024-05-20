@@ -48,15 +48,24 @@ struct PlatformsSettingsSidebar: View {
                         Text(element.name)
                     }
                 }
+                .onMove { from, to in
+                    appViewModel.platforms.move(fromOffsets: from, toOffset: to)
+                }
             }
-            SystemToolbar(plusAction: {
+            SystemToolbar(selectedPlatform: $selectedPlatform, plusAction: {
                 appViewModel.platforms.insert(Platform(name: "New Platform"), at: selectedPlatform + 1  )
                 selectedPlatform += 1
                 appViewModel.savePlatforms()
             }, minusAction: {
-                appViewModel.platforms.remove(at: selectedPlatform)
-                selectedPlatform -= 1
-                appViewModel.savePlatforms()
+                if appViewModel.platforms.count > 1 {
+                    appViewModel.platforms.remove(at: selectedPlatform)
+                    if selectedPlatform != 0 {
+                        selectedPlatform -= 1
+                    } else {
+                        selectedPlatform += 1
+                    }
+                    appViewModel.savePlatforms()
+                }
             })
         }
         .clipShape(RoundedRectangle(cornerRadius: 6))
@@ -143,7 +152,9 @@ struct PlatformsSettingsDetail: View {
             platform = appViewModel.platforms[selectedPlatform]
         }
         .sheet(isPresented: $searchingForIcon, onDismiss: {
-            appViewModel.platforms[selectedPlatform].iconURL = platform.iconURL
+            if platform.iconURL != "" {
+                appViewModel.platforms[selectedPlatform].iconURL = platform.iconURL
+            }
         }) {
             IconSearch(selectedIcon: $platform.iconURL)
         }
