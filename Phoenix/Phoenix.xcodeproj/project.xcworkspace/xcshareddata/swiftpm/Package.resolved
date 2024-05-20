@@ -10,15 +10,6 @@
       }
     },
     {
-      "identity" : "colorful",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Lakr233/Colorful.git",
-      "state" : {
-        "revision" : "0bcf960c856d9f7cde10a0b464208585736c5e47",
-        "version" : "1.1.0"
-      }
-    },
-    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
@@ -34,6 +25,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "041180c9156feb71c1c070c4c6bdf148bfee2f58"
+      }
+    },
+    {
+      "identity" : "fluidgradient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Cindori/FluidGradient",
+      "state" : {
+        "revision" : "9ddda4cf23671ef0228e88681ec6210cb3e0d7f7",
+        "version" : "1.0.0"
       }
     },
     {

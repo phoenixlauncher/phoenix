@@ -25,6 +25,7 @@
 		0AF378772953AADE00978137 /* PhoenixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378762953AADE00978137 /* PhoenixTests.swift */; };
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
+		AD0897FD2BFC38EF00C4820D /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = AD0897FC2BFC38EF00C4820D /* FluidGradient */; };
 		AD0971D92B60D8B1009F3742 /* ExpandableText in Frameworks */ = {isa = PBXBuildFile; productRef = AD0971D82B60D8B1009F3742 /* ExpandableText */; };
 		AD0B643B2BEF02EA00C7FF28 /* PlatformsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0B643A2BEF02EA00C7FF28 /* PlatformsSettingsView.swift */; };
 		AD23F7442BF81B5400FD221B /* IconSearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23F7432BF81B5400FD221B /* IconSearchButton.swift */; };
@@ -50,7 +51,6 @@
 		ADA0D8A12B3F890800487C4D /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A02B3F890800487C4D /* GameViewModel.swift */; };
 		ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */; };
 		ADA0D8A62B3FA5B900487C4D /* SupabaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0D8A52B3FA5B900487C4D /* SupabaseGame.swift */; };
-		ADA7355A2B5B8A190001B9A7 /* Colorful in Frameworks */ = {isa = PBXBuildFile; productRef = ADA735592B5B8A190001B9A7 /* Colorful */; };
 		ADA7355C2B5B8A710001B9A7 /* OnboardingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA7355B2B5B8A710001B9A7 /* OnboardingDetailView.swift */; };
 		ADA8FB312BDECB8800BC5131 /* PlatformContextButtonMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA8FB302BDECB8800BC5131 /* PlatformContextButtonMenu.swift */; };
 		ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = ADB63FFD2AF7F248006B39ED /* Defaults */; };
@@ -169,8 +169,8 @@
 				B5C147892BDE23C700F38CD3 /* SwiftyJSON in Frameworks */,
 				AD5542E92BA935C300AE7F3E /* CachedAsyncImage in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
+				AD0897FD2BFC38EF00C4820D /* FluidGradient in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
-				ADA7355A2B5B8A190001B9A7 /* Colorful in Frameworks */,
 				ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */,
 				AD0971D92B60D8B1009F3742 /* ExpandableText in Frameworks */,
 			);
@@ -433,12 +433,12 @@
 				AD8718FC2AFDE14D0008F144 /* MarkdownUI */,
 				AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */,
 				AD7AD2EF2B09819E002DBDCD /* Supabase */,
-				ADA735592B5B8A190001B9A7 /* Colorful */,
 				AD0971D82B60D8B1009F3742 /* ExpandableText */,
 				AD5A47BE2B93EC4C0037DFA2 /* Sparkle */,
 				AD5542E82BA935C300AE7F3E /* CachedAsyncImage */,
 				B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */,
 				B5C147882BDE23C700F38CD3 /* SwiftyJSON */,
+				AD0897FC2BFC38EF00C4820D /* FluidGradient */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -520,12 +520,12 @@
 				AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
 				AD7AD2EE2B09819E002DBDCD /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */,
 				AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */,
 				AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				AD5542E72BA935C300AE7F3E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				B54BBA262BC0645300575AC2 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				B5C147872BDE23C700F38CD3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -977,6 +977,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Cindori/FluidGradient";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jxhug/ExpandableText.git";
@@ -1033,14 +1041,6 @@
 				minimumVersion = 2.2.0;
 			};
 		};
-		ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Lakr233/Colorful.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
 		ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -1068,6 +1068,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AD0897FC2BFC38EF00C4820D /* FluidGradient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */;
+			productName = FluidGradient;
+		};
 		AD0971D82B60D8B1009F3742 /* ExpandableText */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */;
@@ -1102,11 +1107,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
-		};
-		ADA735592B5B8A190001B9A7 /* Colorful */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ADA735582B5B8A190001B9A7 /* XCRemoteSwiftPackageReference "Colorful" */;
-			productName = Colorful;
 		};
 		ADB63FFD2AF7F248006B39ED /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;

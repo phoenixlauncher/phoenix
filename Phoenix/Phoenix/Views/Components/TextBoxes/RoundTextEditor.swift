@@ -9,6 +9,16 @@ import SwiftUI
 import Combine
 import SwiftUIIntrospect
 
+// hack to work-around the smart quote issue
+extension NSTextView {
+    open override var frame: CGRect {
+        didSet {
+            self.isAutomaticQuoteSubstitutionEnabled = false
+            self.isAutomaticDashSubstitutionEnabled = false
+        }
+    }
+}
+
 struct RoundTextEditor<LeadingAccessories: View, TrailingAccessories: View>: View {
     @Environment(\.colorScheme)
     var colorScheme

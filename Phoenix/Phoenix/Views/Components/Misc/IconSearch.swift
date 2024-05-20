@@ -22,27 +22,31 @@ struct IconSearch: View {
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 10)
     
     func getSearch() {
-        print("Searhchchchch")
+        logger.write("Enter key pressed")
         let query = "\(searchTerm) palette=false"
-        if let url = URL(string: "https://api.iconify.design/search?query=\(query)") {
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                    return
-                }
-                guard let data = data else {
-                    print("No data received")
-                    return
-                }
-                let json = try? JSON(data: data)
-                fetchedIcons = json?["icons"].arrayValue.map({$0.stringValue}) ?? []
-                print(fetchedIcons)
-            }
-            task.resume()
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: "https://api.iconify.design/search?query=\(encodedQuery)&pretty=1")
+        else {
+            print("Invalid URL")
+            return
         }
+        logger.write("Valid URL")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            logger.write("Search request made")
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+            let json = try? JSON(data: data)
+            fetchedIcons = json?["icons"].arrayValue.map({$0.stringValue}) ?? []
+            print(fetchedIcons)
+        }
+        task.resume()
     }
     
     var body: some View {

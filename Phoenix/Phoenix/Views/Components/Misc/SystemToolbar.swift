@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct SystemToolbar: View {
+    @Binding var selectedPlatform: Int
+    @EnvironmentObject var appViewModel: AppViewModel
     let plusAction: (() -> Void)
     let minusAction: (() -> Void)
+    
     var body: some View {
         HStack(spacing: 0.5) {
-            ListButton(imageName: "plus", action: plusAction)
-            ListButton(imageName: "minus", action: minusAction)
+            ListButton(imageName: "plus", action: plusAction, disabled: false)
+            ListButton(imageName: "minus", action: minusAction, disabled: (appViewModel.platforms[selectedPlatform].deletable == false))
             Spacer()
         }
         .padding(.leading, 2)
@@ -24,13 +27,18 @@ struct SystemToolbar: View {
 struct ListButton: View {
     var imageName: String
     let action: (() -> Void)
+    let disabled: Bool
     @State var buttonHovered: Bool = false
 
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            if !disabled {
+                action()
+            }
+        }) {
             Image(systemName: imageName)
                 .font(.system(size: 15))
-                .foregroundStyle(buttonHovered ? Color.primary.opacity(0.75) : .gray)
+                .foregroundStyle((buttonHovered && !disabled) ? Color.primary.opacity(0.75) : .gray)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

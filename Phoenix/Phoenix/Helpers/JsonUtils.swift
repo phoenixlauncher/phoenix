@@ -134,13 +134,14 @@ func loadPlatformsFromJSON() -> [Platform] {
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: ".app", commandTemplate: "open %@"),
-            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", commandTemplate: "open steam://run/%@"),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: ".app", commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", commandTemplate: "open steam://run/%@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
-            Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC", commandTemplate: ""),
-            Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", commandTemplate: ""),
-            Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", commandTemplate: ""),
-            Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", commandTemplate: "")
+            Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation"),
+            Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox"),
+            Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo"),
+            Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled", name: "Other", deletable: false)
         ]
         // create empty games.json if it doesn't exist
         logger.write("[INFO]: Couldn't find platforms.json. Creating new one.")

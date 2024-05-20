@@ -103,7 +103,7 @@
 "platforms_GameType" = "Game Type";
 "platforms_GameTypeDesc" = "The file type of game (.app, .bin, .exe, .z64)";
 "platforms_CommandTemplate" = "Command Template";
-"platforms_CommandTemplateDesc" = "Template for launching game \n(use %@ for the file)";
+"platforms_CommandTemplateDesc" = "Template for launching game \n(use %@ for the file path)";
 "platforms_SavePlatform" = "Save Platform";
 "hidden_ShowGame" = "Show game";
 "hidden_NoGames" = "No hidden games found.";
