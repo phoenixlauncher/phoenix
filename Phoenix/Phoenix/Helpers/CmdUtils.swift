@@ -25,7 +25,7 @@ func shell(_ command: String) throws {
     task.executableURL = URL(fileURLWithPath: "/bin/zsh")
     task.standardInput = nil
     logger.write(
-        "[INFO]: Executing command: \(task.arguments!.joined(separator: " ")) \(command)."
+        "[INFO]: Executing command: \"\(command)\"."
     )
     try task.run()
 

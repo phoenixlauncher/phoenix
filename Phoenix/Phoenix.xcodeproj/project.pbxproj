@@ -26,8 +26,9 @@
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
 		AD0897FD2BFC38EF00C4820D /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = AD0897FC2BFC38EF00C4820D /* FluidGradient */; };
+		AD0897FF2BFC489F00C4820D /* PlatformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0897FE2BFC489F00C4820D /* PlatformViewModel.swift */; };
 		AD0971D92B60D8B1009F3742 /* ExpandableText in Frameworks */ = {isa = PBXBuildFile; productRef = AD0971D82B60D8B1009F3742 /* ExpandableText */; };
-		AD0B643B2BEF02EA00C7FF28 /* PlatformsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0B643A2BEF02EA00C7FF28 /* PlatformsSettingsView.swift */; };
+		AD0B643B2BEF02EA00C7FF28 /* PlatformSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0B643A2BEF02EA00C7FF28 /* PlatformSettingsView.swift */; };
 		AD23F7442BF81B5400FD221B /* IconSearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23F7432BF81B5400FD221B /* IconSearchButton.swift */; };
 		AD23F7462BF85A1E00FD221B /* IconSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23F7452BF85A1E00FD221B /* IconSearch.swift */; };
 		AD23F7482BF85A4E00FD221B /* SystemToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23F7472BF85A4E00FD221B /* SystemToolbar.swift */; };
@@ -115,7 +116,8 @@
 		0AF3787C2953AADE00978137 /* PhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		AD0B643A2BEF02EA00C7FF28 /* PlatformsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformsSettingsView.swift; sourceTree = "<group>"; };
+		AD0897FE2BFC489F00C4820D /* PlatformViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewModel.swift; sourceTree = "<group>"; };
+		AD0B643A2BEF02EA00C7FF28 /* PlatformSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSettingsView.swift; sourceTree = "<group>"; };
 		AD23F7432BF81B5400FD221B /* IconSearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconSearchButton.swift; sourceTree = "<group>"; };
 		AD23F7452BF85A1E00FD221B /* IconSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconSearch.swift; sourceTree = "<group>"; };
 		AD23F7472BF85A4E00FD221B /* SystemToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemToolbar.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				ADA0D8A02B3F890800487C4D /* GameViewModel.swift */,
 				ADA0D8A22B3FA49F00487C4D /* SupabaseViewModel.swift */,
 				AD5FF2CA2B467C0B00C77C8B /* AppViewModel.swift */,
+				AD0897FE2BFC489F00C4820D /* PlatformViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -379,7 +382,7 @@
 				0AE9B6F52A3ADA0E00800850 /* GeneralSettingsView.swift */,
 				0AE9B6F72A3ADAD700800850 /* AppearanceSettingsView.swift */,
 				B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */,
-				AD0B643A2BEF02EA00C7FF28 /* PlatformsSettingsView.swift */,
+				AD0B643A2BEF02EA00C7FF28 /* PlatformSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -580,7 +583,7 @@
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
-				AD0B643B2BEF02EA00C7FF28 /* PlatformsSettingsView.swift in Sources */,
+				AD0B643B2BEF02EA00C7FF28 /* PlatformSettingsView.swift in Sources */,
 				B54BBA2A2BC1137F00575AC2 /* RoundTextEditor.swift in Sources */,
 				ADE202032B5DF9D300047322 /* SortBy.swift in Sources */,
 				AD7AD2F92B0BECC2002DBDCD /* GameListItem.swift in Sources */,
@@ -599,6 +602,7 @@
 				ADE202082B5E04ED00047322 /* EnumContextButtonMenu.swift in Sources */,
 				CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */,
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
+				AD0897FF2BFC489F00C4820D /* PlatformViewModel.swift in Sources */,
 				AD2E38AB2B5785EA0068943E /* TextBoxAlert.swift in Sources */,
 				AD23F7482BF85A4E00FD221B /* SystemToolbar.swift in Sources */,
 				0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */,

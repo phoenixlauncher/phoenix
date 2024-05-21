@@ -9,6 +9,7 @@ import SwiftUI
 struct GameListView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
     
     @Binding var sortBy: SortBy
 
@@ -37,7 +38,7 @@ struct GameListView: View {
                 }
                 switch sortBy {
                 case .platform:
-                    ForEach(appViewModel.platforms, id: \.self) { platform in
+                    ForEach(platformViewModel.platforms, id: \.self) { platform in
                         let gamesForPlatform = gameViewModel.games.filter {
                             $0.platformName == platform.name && $0.isHidden == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.isFavorite == false
                         }

@@ -99,6 +99,7 @@ func loadGamesFromJSON() -> [Game] {
                 steamID: game["steamID"].stringValue,
                 igdbID: game["igdbID"].stringValue,
                 gameFile: gameFile,
+                launcher: game["launcher"].stringValue,
                 metadata: game["metadata"].dictionaryObject as? [String: String] ?? ["":""],
                 screenshots: game["screenshots"].arrayValue.map({ $0.stringValue }),
                 icon: game["icon"].stringValue,
@@ -134,7 +135,7 @@ func loadPlatformsFromJSON() -> [Platform] {
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: ".app", commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", commandTemplate: "open %@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", commandTemplate: "open steam://run/%@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
             Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC", deletable: false),

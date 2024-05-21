@@ -24,7 +24,7 @@ struct SettingsView: View {
                 .tabItem {
                     Label(String(localized: "prefs_Hidden"), systemImage: "eye.slash.fill")
                 }
-            PlatformsSettingsView()
+            PlatformSettingsView()
                 .tabItem {
                     Label(String(localized: "prefs_Platforms"), systemImage: "gamecontroller")
                 }

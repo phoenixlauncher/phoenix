@@ -56,6 +56,8 @@
 "editGame_Platform" = "Platform";
 "editGame_Status" = "Status";
 "editGame_Command" = "Command";
+"editGame_CommandOverride" = "Overrides the templated command for the game's platform.";
+"editGame_Override" = "This is currently overrided by the custom launch command.";
 "editGame_Command_DragDrop" = "Select or drag and drop a game";
 "editGame_Command_SelectedGame" = "Selected game";
 "editGame_Advanced" = "Advanced";
@@ -101,7 +103,7 @@
 "platforms_SearchIconDesc" = "Search for icon";
 "platforms_SelectedIcon" = "Selected icon";
 "platforms_GameType" = "Game Type";
-"platforms_GameTypeDesc" = "The file type of game (.app, .bin, .exe, .z64)";
+"platforms_GameTypeDesc" = "The file type of game (app, bin, exe, z64)";
 "platforms_CommandTemplate" = "Command Template";
 "platforms_CommandTemplateDesc" = "Template for launching game \n(use %@ for the file path)";
 "platforms_SavePlatform" = "Save Platform";

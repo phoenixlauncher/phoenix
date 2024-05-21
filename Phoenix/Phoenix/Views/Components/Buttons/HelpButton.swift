@@ -28,7 +28,6 @@ struct HelpButton: View {
             }
         )
         .buttonStyle(PlainButtonStyle())
-        .frame(maxWidth: .infinity)
         .sheet(isPresented: $showHelp, content: {
             VStack {
                 ScrollView {

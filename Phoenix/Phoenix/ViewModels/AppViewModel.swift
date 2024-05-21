@@ -23,13 +23,6 @@ class AppViewModel: ObservableObject {
     @Published var isEditingGame: Bool = false
     @Published var isPlayingGame: Bool = false
     
-    //platforms
-    @Published var platforms: [Platform] = []
-    
-    init() {
-        platforms = loadPlatforms()
-    }
-    
     func showSuccessToast(_ message: String) {
         successToastText = message
         showSuccessToast = true
@@ -48,15 +41,5 @@ class AppViewModel: ObservableObject {
     func showSettingsFailureToast(_ message: String) {
         failureToastText = message
         showSettingsFailureToast = true
-    }
-    
-    func loadPlatforms() -> [Platform] {
-        let res = loadPlatformsFromJSON()
-        return res
-    }
-    
-    func savePlatforms() {
-        print("Saving platforms")
-        saveJSONData(to: "platforms", with: convertPlatformsToJSONString(platforms))
     }
 }
