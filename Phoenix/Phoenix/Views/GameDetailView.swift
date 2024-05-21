@@ -7,6 +7,7 @@
 import AlertToast
 import StarRatingViewSwiftUI
 import SwiftUI
+import QuickLook
 
 extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
@@ -27,6 +28,7 @@ struct GameDetailView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
 
     @State var selectedGameName: String?
 
@@ -37,11 +39,12 @@ struct GameDetailView: View {
     }
     
     var currentPlatform: Platform? {
-        appViewModel.platforms.first(where: {game?.platformName == $0.name})
+        platformViewModel.platforms.first(where: {game?.platformName == $0.name})
     }
     
     @State var headerFound = true
     @State var animate = false
+    @State var selectedScreenshot: URL?
 
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
@@ -125,6 +128,10 @@ struct GameDetailView: View {
                                                     .cornerRadius(7.5)
                                                     .aspectRatio(contentMode: .fill)
                                                     .frame(height: screenshotSize)
+                                                    .onTapGesture(count: 2) {
+                                                        selectedScreenshot = screenshotURL
+                                                    }
+                                                    .quickLookPreview($selectedScreenshot)
                                                 }
                                             }
                                         }
@@ -203,32 +210,6 @@ struct GameDetailView: View {
             if showScreenshots { checkScreenshots() }
         }
     }
-    
-//    @MainActor
-//    private func updateGameHeader(_ id: UUID, header: String) {
-//        print("update func called")
-//        if let headerURL = URL(string: header) {
-//            print("valid url")
-//            print(headerURL)
-//            URLSession.shared.dataTask(with: headerURL) { headerData, response, error in
-//                if let error = error {
-//                   print(error)
-//               }
-//                print("url task")
-//                if let headerData = headerData {
-//                    print("hedaerdata")
-//                    saveImageToFile(data: headerData, gameID: id, type: "header") { headerImage in
-//                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
-//                            print("found index")
-//                            gameViewModel.games[idx].metadata["header_img"] = headerImage
-//                            gameViewModel.saveGames()
-//                            print("games saved")
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     private func checkHeader() {
         Task {
@@ -323,8 +304,6 @@ struct GameDetailView: View {
             updateLastPlayedDate(currentDate: currentDate)
             if game.launcher != "" {
                 try shell(game.launcher)
-            } else if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", game.gameFile != "" {
-                try shell(String(format: currentPlatform.commandTemplate, game.gameFile))
             } else {
                 appViewModel.showFailureToast("\(String(localized: "toast_LaunchFailure")) \(gameViewModel.selectedGameName)")
             }

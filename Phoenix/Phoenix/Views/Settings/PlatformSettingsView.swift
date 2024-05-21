@@ -1,5 +1,5 @@
 //
-//  PlatformsSettingsView.swift
+//  PlatformSettingsView.swift
 //  Phoenix
 //
 //  Created by jxhug on 5/10/24.
@@ -9,28 +9,28 @@ import SwiftUI
 import CachedAsyncImage
 import SwiftyJSON
 
-struct PlatformsSettingsView: View {
+struct PlatformSettingsView: View {
     @State var selectedPlatform: Int = 0
     @State var searchingForIcon = false
     
     var body: some View {
         HStack(spacing: 20) {
-            PlatformsSettingsSidebar(selectedPlatform: $selectedPlatform)
-            PlatformsSettingsDetail(selectedPlatform: $selectedPlatform, searchingForIcon: $searchingForIcon)
+            PlatformSettingsSidebar(selectedPlatform: $selectedPlatform)
+            PlatformSettingsDetail(selectedPlatform: $selectedPlatform, searchingForIcon: $searchingForIcon)
         }
         .padding()
     }
 }
 
-struct PlatformsSettingsSidebar: View {
+struct PlatformSettingsSidebar: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
     @Binding var selectedPlatform: Int
     
     var body: some View {
         VStack(spacing: 0) {
             List(selection: $selectedPlatform) {
-                ForEach(Array(appViewModel.platforms.enumerated()), id: \.offset) { (index, element) in
+                ForEach(Array(platformViewModel.platforms.enumerated()), id: \.offset) { (index, element) in
                     HStack {
                         CachedAsyncImage(url: URL(string: element.iconURL)) { phase in
                             switch phase {
@@ -49,22 +49,22 @@ struct PlatformsSettingsSidebar: View {
                     }
                 }
                 .onMove { from, to in
-                    appViewModel.platforms.move(fromOffsets: from, toOffset: to)
+                    platformViewModel.platforms.move(fromOffsets: from, toOffset: to)
                 }
             }
             SystemToolbar(selectedPlatform: $selectedPlatform, plusAction: {
-                appViewModel.platforms.insert(Platform(name: "New Platform"), at: selectedPlatform + 1  )
+                platformViewModel.platforms.insert(Platform(name: "New Platform"), at: selectedPlatform + 1  )
                 selectedPlatform += 1
-                appViewModel.savePlatforms()
+                platformViewModel.savePlatforms()
             }, minusAction: {
-                if appViewModel.platforms.count > 1 {
-                    appViewModel.platforms.remove(at: selectedPlatform)
+                if platformViewModel.platforms.count > 1 {
+                    platformViewModel.platforms.remove(at: selectedPlatform)
                     if selectedPlatform != 0 {
                         selectedPlatform -= 1
                     } else {
                         selectedPlatform += 1
                     }
-                    appViewModel.savePlatforms()
+                    platformViewModel.savePlatforms()
                 }
             })
         }
@@ -78,8 +78,9 @@ struct PlatformsSettingsSidebar: View {
     }
 }
 
-struct PlatformsSettingsDetail: View {
+struct PlatformSettingsDetail: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
     @EnvironmentObject var gameViewModel: GameViewModel
     @Binding var selectedPlatform: Int
     @Binding var searchingForIcon: Bool
@@ -91,7 +92,7 @@ struct PlatformsSettingsDetail: View {
     
     var body: some View {
         VStack {
-            if appViewModel.platforms.count > 0 {
+            if platformViewModel.platforms.count > 0 {
                 VStack {
                     ScrollView {
                         TextBox(textBoxName: String(localized: "platforms_EditName"), input: $platform.name) // Name input
@@ -103,16 +104,20 @@ struct PlatformsSettingsDetail: View {
                     Spacer()
                     HStack {
                         Button(action: {
-                            if appViewModel.platforms[selectedPlatform].name != platform.name {
+                            if platformViewModel.platforms[selectedPlatform].name != platform.name {
                                 for index in gameViewModel.games.indices {
-                                    if gameViewModel.games[index].platformName == appViewModel.platforms[selectedPlatform].name {
+                                    if gameViewModel.games[index].platformName == platformViewModel.platforms[selectedPlatform].name {
                                         gameViewModel.games[index].platformName = platform.name
                                     }
                                 }
                             }
-                            appViewModel.platforms[selectedPlatform] = platform
-                            appViewModel.savePlatforms()
-                            appViewModel.showSettingsSuccessToast("Platform saved!")
+                            if platformViewModel.platforms.filter({ platform.name == $0.name }).count <= 1 {
+                                platformViewModel.platforms[selectedPlatform] = platform
+                                platformViewModel.savePlatforms()
+                                appViewModel.showSettingsSuccessToast("Platform saved!")
+                            } else {
+                                appViewModel.showSettingsFailureToast("Platform cannot be named the same as another platform.")
+                            }
                         }) {
                             Text(LocalizedStringKey("platforms_SavePlatform"))
                         }
@@ -146,14 +151,14 @@ struct PlatformsSettingsDetail: View {
             }
         }
         .onAppear {
-            platform = appViewModel.platforms[selectedPlatform]
+            platform = platformViewModel.platforms[selectedPlatform]
         }
         .onChange(of: selectedPlatform) { _ in
-            platform = appViewModel.platforms[selectedPlatform]
+            platform = platformViewModel.platforms[selectedPlatform]
         }
         .sheet(isPresented: $searchingForIcon, onDismiss: {
             if platform.iconURL != "" {
-                appViewModel.platforms[selectedPlatform].iconURL = platform.iconURL
+                platformViewModel.platforms[selectedPlatform].iconURL = platform.iconURL
             }
         }) {
             IconSearch(selectedIcon: $platform.iconURL)

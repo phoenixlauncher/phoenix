@@ -15,6 +15,7 @@ struct ContentView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @StateObject var supabaseViewModel = SupabaseViewModel()
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
     
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: SortBy
