@@ -90,22 +90,25 @@ struct GameListItem: View {
                 allowedContentTypes: [.image],
                 allowsMultipleSelection: false
             ) { result in
-                resultIntoData(result: result) { data in
-                    if importType == "icon" {
-                        saveIconToFile(iconData: data, gameID: game.id) { image in
-                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                gameViewModel.games[idx].icon = image
-                                gameViewModel.saveGames()
-                            }
-                        }
-                    } else {
-                        saveImageToFile(data: data, gameID: game.id, type: importType) { image in
-                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                gameViewModel.games[idx].metadata["header_img"] = image
-                                gameViewModel.saveGames()
+                do {
+                    if let path = try result.get().first {
+                        if let data = pathIntoData(path: path) {
+                            if importType == "icon" {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }), let icon = saveIconToFile(iconData: data, gameID: game.id) {
+                                    gameViewModel.games[idx].icon = icon
+                                    gameViewModel.saveGames()
+                                }
+                            } else {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }), let image = saveImageToFile(data: data, gameID: game.id, type: importType) {
+                                    gameViewModel.games[idx].metadata["header_img"] = image
+                                    gameViewModel.saveGames()
+                                }
                             }
                         }
                     }
+                }
+                catch {
+                    
                 }
             }
             .onAppear {

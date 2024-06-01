@@ -1,5 +1,5 @@
 //
-//  DragDropFilePicker.swift
+//  GameFilePickerButton.swift
 //  Phoenix
 //
 //  Created by Benammi Swift on 02/03/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct DragDropFilePickerButton: View {
+struct GameFilePickerButton: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
     var currentPlatform: Platform
@@ -20,7 +20,7 @@ struct DragDropFilePickerButton: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Game")
-                if game.gameFile != game.launcher && String(format: currentPlatform.commandTemplate, game.gameFile) != game.launcher {
+                if game.gameFile != game.launcher && String(format: currentPlatform.commandTemplate, "\"\(game.gameFile)\"") != game.launcher {
                     Text(String(localized: "editGame_Override"))
                         .foregroundColor(.secondary)
                         .font(.caption)
@@ -51,8 +51,8 @@ struct DragDropFilePickerButton: View {
             do {
                 let selectedFileURL: URL? = try result.get().first
                 if let selectedFileURL = selectedFileURL {
-                    game.gameFile = selectedFileURL.absoluteString
-                    game.launcher = String(format: currentPlatform.commandTemplate, game.gameFile)
+                    game.gameFile = selectedFileURL.path
+                    game.launcher = String(format: currentPlatform.commandTemplate, "\"\(game.gameFile)\"")
                 }
             }
             catch {
@@ -61,8 +61,8 @@ struct DragDropFilePickerButton: View {
                 appViewModel.showFailureToast.toggle()
             }
        }
-        .onDrop(of: [UTType(filenameExtension: currentPlatform.gameType) ?? .data], isTargeted: nil) { selectedApp in
-            handleDrop(providers: selectedApp)
+        .onDrop(of: [UTType(tag: currentPlatform.gameType, tagClass: .filenameExtension, conformingTo: nil) ?? .data], isTargeted: nil) { selectedFile in
+            handleDrop(providers: selectedFile)
             return true
         }
     }
@@ -71,7 +71,7 @@ struct DragDropFilePickerButton: View {
         for provider in providers {
             print(provider)
             // Check if the dropped item is a file URL
-            provider.loadItem(forTypeIdentifier: ".app", options: nil) { item, error in
+            provider.loadItem(forTypeIdentifier: currentPlatform.gameType, options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
                     appViewModel.failureToastText = "Unable to create application launch command: \(error)"
@@ -80,7 +80,7 @@ struct DragDropFilePickerButton: View {
                 }
                 if let url = (item as? URL) {
                     // Update the droppedURL state
-                    game.gameFile = url.absoluteString
+                    game.gameFile = "\"\(url.path)\""
                     game.launcher = String(format: currentPlatform.commandTemplate, game.gameFile)
                 }
             }

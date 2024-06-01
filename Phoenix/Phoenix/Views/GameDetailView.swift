@@ -94,7 +94,7 @@ struct GameDetailView: View {
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
                                     .frame(width: 300, height: 30)
-                                    .padding()
+                                    .padding(.horizontal)
                                     .onHover { _ in
                                         if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                                             gameViewModel.games[idx].metadata["rating"] = String(rating)
@@ -231,13 +231,11 @@ struct GameDetailView: View {
                     print("asking supabsae now!!")
                     let headerData = try await supabaseViewModel.fetchAndSaveHeaderOf(gameID: id, igdbID: igdbID)
                     if let headerData = headerData {
-                        saveImageToFile(data: headerData, gameID: id, type: "header") { headerImage in
-                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
-                                print("found index")
-                                gameViewModel.games[idx].metadata["header_img"] = headerImage
-                                gameViewModel.saveGames()
-                                print("games saved")
-                            }
+                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), let image = saveImageToFile(data: headerData, gameID: id, type: "header") {
+                            print("found index")
+                            gameViewModel.games[idx].metadata["header_img"] = image
+                            gameViewModel.saveGames()
+                            print("games saved")
                         }
                         headerFound = true
                     }

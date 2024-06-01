@@ -130,7 +130,9 @@ func loadPlatformsFromJSON() -> [Platform] {
                 iconURL: platform["iconURL"].stringValue,
                 name: platform["name"].stringValue,
                 gameType: platform["gameType"].stringValue,
-                commandTemplate: platform["commandTemplate"].stringValue
+                emulator: platform["emulator"].boolValue,
+                commandTemplate: platform["commandTemplate"].stringValue,
+                deletable: platform["deletable"].boolValue
             ))
         }
     } else {
@@ -139,9 +141,9 @@ func loadPlatformsFromJSON() -> [Platform] {
             Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", commandTemplate: "open steam://run/%@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
             Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC", deletable: false),
-            Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation"),
-            Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox"),
-            Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo"),
+            Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
+            Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", emulator: true),
+            Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", emulator: true),
             Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled", name: "Other", deletable: false)
         ]
         // create empty games.json if it doesn't exist

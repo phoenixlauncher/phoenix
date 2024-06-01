@@ -8,6 +8,7 @@
 import SwiftUI
 import CachedAsyncImage
 import SwiftyJSON
+import UniformTypeIdentifiers
 
 struct PlatformSettingsView: View {
     @State var selectedPlatform: Int = 0
@@ -95,10 +96,25 @@ struct PlatformSettingsDetail: View {
             if platformViewModel.platforms.count > 0 {
                 VStack {
                     ScrollView {
-                        TextBox(textBoxName: String(localized: "platforms_EditName"), input: $platform.name) // Name input
-                        IconSearchButton(isSearching: $searchingForIcon, icon: icon)
-                        TextBox(textBoxName: String(localized: "platforms_GameType"), caption: String(localized: "platforms_GameTypeDesc"), input: $platform.gameType) // Game type input
-                        TextBox(textBoxName: String(localized: "platforms_CommandTemplate"), caption: String(localized: "platforms_CommandTemplateDesc"), input: $platform.commandTemplate) // Command template input
+                        VStack(alignment: .leading) {
+                            TextBox(textBoxName: String(localized: "platforms_EditName"), input: $platform.name) // Name input
+                            IconSearchButton(isSearching: $searchingForIcon, icon: icon)
+                            TextBox(textBoxName: String(localized: "platforms_GameType"), caption: String(localized: "platforms_GameTypeDesc"), input: $platform.gameType) // Game type input
+                            Divider()
+                                .padding(.horizontal)
+                            Toggle(isOn: $platform.emulator) {
+                                Text("Platform is an emulator")
+                            }
+                            .padding()
+                            if platform.emulator {
+                                FileImportButton(type: .application, outputPath: $platform.emulatorExecutable, showOutput: true, title: String(localized: "platforms_SelectEmulator"), unselectedLabel: String(localized: "platforms_Select_Emulator_DragDrop"), selectedLabel: String(localized: "platforms_SelectedEmulator"), action: { url in
+                                    return "\(url.path)/Contents/MacOS/\(url.deletingPathExtension().lastPathComponent)"
+                                })
+                                TextBox(textBoxName: String(localized: "platforms_EmulatorArgs"), caption: String(localized: "platforms_EmulatorArgsDesc"), input: $platform.commandArgs) // Args input
+                            } else {
+                                TextBox(textBoxName: String(localized: "platforms_CommandTemplate"), caption: String(localized: "platforms_CommandTemplateDesc"), input: $platform.commandTemplate) // Command template input
+                            }
+                        }
                     }
                     .frame(alignment: .leading)
                     Spacer()
@@ -112,6 +128,9 @@ struct PlatformSettingsDetail: View {
                                 }
                             }
                             if platformViewModel.platforms.filter({ platform.name == $0.name }).count <= 1 {
+                                if platform.emulatorExecutable != "" && platform.emulator {
+                                    platform.commandTemplate = "\"\(platform.emulatorExecutable)\" %@ \(platform.commandArgs)"
+                                }
                                 platformViewModel.platforms[selectedPlatform] = platform
                                 platformViewModel.savePlatforms()
                                 appViewModel.showSettingsSuccessToast("Platform saved!")
@@ -154,6 +173,7 @@ struct PlatformSettingsDetail: View {
             platform = platformViewModel.platforms[selectedPlatform]
         }
         .onChange(of: selectedPlatform) { _ in
+            print(platformViewModel.platforms[selectedPlatform])
             platform = platformViewModel.platforms[selectedPlatform]
         }
         .sheet(isPresented: $searchingForIcon, onDismiss: {
@@ -163,6 +183,6 @@ struct PlatformSettingsDetail: View {
         }) {
             IconSearch(selectedIcon: $platform.iconURL)
         }
-        .frame(maxHeight: .infinity, alignment: .bottom)
+        .frame(idealHeight: 600, maxHeight: .infinity, alignment: .bottom)
     }
 }

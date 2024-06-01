@@ -81,16 +81,15 @@ func getBlurRadiusForImage(_ geometry: GeometryProxy) -> CGFloat {
     return blur * 10  // Values will range from 0 - 10
 }
 
-func resultIntoData(result: Result<[URL], Error>, completion: @escaping ((Data) -> Void)) {
+func pathIntoData(path: URL) -> Data? {
     do {
-        let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
-        
-        let data = try Data(contentsOf: selectedFile)
-        completion(data)
+        let data = try Data(contentsOf: path)
+        return data
     }
     catch {
         logger.write("Failed to convert file to data: \(error.localizedDescription)")
     }
+    return nil
 }
 
 func createCachedImagesDirectoryPath() -> (URL) {
@@ -113,44 +112,43 @@ func createCachedImagesDirectoryPath() -> (URL) {
     return cachedImagesDirectoryPath
 }
 
-func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String) -> Void)) {
-    do {
-        // Resize the image to 48x48 pixels
-        if let image = NSImage(data: iconData) {
-            let newSize = NSSize(width: 48, height: 48)
-            let newImage = NSImage(size: newSize)
-            
-            newImage.lockFocus()
-            image.draw(in: NSRect(origin: .zero, size: newSize),
-                       from: NSRect(origin: .zero, size: image.size),
-                       operation: .sourceOver,
-                       fraction: 1.0)
-            newImage.unlockFocus()
-            
-            if let tiffRepresentation = newImage.tiffRepresentation {
-                let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
-                if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
-                    saveImageToFile(data: pngData, gameID: gameID, type: "icon") { icon in
-                        completion(icon)
-                    }
-                }
+func saveIconToFile(iconData: Data, gameID: UUID) -> String? {
+    // Resize the image to 48x48 pixels
+    if let image = NSImage(data: iconData) {
+        let newSize = NSSize(width: 48, height: 48)
+        let newImage = NSImage(size: newSize)
+        
+        newImage.lockFocus()
+        image.draw(in: NSRect(origin: .zero, size: newSize),
+                   from: NSRect(origin: .zero, size: image.size),
+                   operation: .sourceOver,
+                   fraction: 1.0)
+        newImage.unlockFocus()
+        
+        if let tiffRepresentation = newImage.tiffRepresentation {
+            let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
+            if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
+                return saveImageToFile(data: pngData, gameID: gameID, type: "icon")
             }
         }
     }
+    
+    return nil
 }
 
-func saveImageToFile(data: Data, gameID: UUID, type: String, completion: @escaping ((String) -> Void)) {
+func saveImageToFile(data: Data, gameID: UUID, type: String) -> String? {
     do {
         let destinationURL: URL = createCachedImagesDirectoryPath().appendingPathComponent("\(gameID)_\(type.lowercased()).jpg")
         
         do {
             try data.write(to: destinationURL)
-            completion(destinationURL.relativeString)
             logger.write("Saved image to: \(destinationURL.path)")
+            return destinationURL.absoluteString
         } catch {
             logger.write("Failed to save image: \(error.localizedDescription)")
         }
     }
+    return nil
 }
 
 /// Loads an image from the file at the given file path.
@@ -166,6 +164,7 @@ func saveImageToFile(data: Data, gameID: UUID, type: String, completion: @escapi
 func loadImageFromFile(filePath: String) -> NSImage {
     do {
         if filePath != "" {
+            print(filePath)
             let imageData = try Data(contentsOf: URL(string: filePath)!)
             return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderImage")
         } else {
