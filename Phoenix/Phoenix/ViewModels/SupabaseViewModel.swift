@@ -116,10 +116,8 @@ class SupabaseViewModel: ObservableObject {
                     // Leave the dispatch group when the image fetch is done, regardless of success or failure
                     dispatchGroup.leave()
                 }
-                if let headerData = headerData {
-                    saveImageToFile(data: headerData, gameID: game.id, type: "header") { headerImage in
-                        game.metadata["header_img"] = headerImage
-                    }
+                if let headerData = headerData, let headerImage = saveImageToFile(data: headerData, gameID: game.id, type: "header") {
+                    game.metadata["header_img"] = headerImage
                 }
             }.resume()
         }

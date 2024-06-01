@@ -59,6 +59,7 @@
 "editGame_CommandOverride" = "Overrides the templated command for the game's platform.";
 "editGame_Override" = "This is currently overrided by the custom launch command.";
 "editGame_Command_DragDrop" = "Select or drag and drop a game";
+"editGame_File_DragDrop" = "Select or drag and drop a file";
 "editGame_Command_SelectedGame" = "Selected game";
 "editGame_Advanced" = "Advanced";
 "editGame_Desc" = "Description";
@@ -104,6 +105,11 @@
 "platforms_SelectedIcon" = "Selected icon";
 "platforms_GameType" = "Game Type";
 "platforms_GameTypeDesc" = "The file type of game (app, bin, exe, z64)";
+"platforms_Select_Emulator_DragDrop" = "Select or drag and drop an emulator app";
+"platforms_SelectEmulator" = "Select Emulator";
+"platforms_SelectedEmulator" = "Selected Emulator";
+"platforms_EmulatorArgs" = "Custom Arguments";
+"platforms_EmulatorArgsDesc" = "CLI Arguments (--fullscreen, --nogui)";
 "platforms_CommandTemplate" = "Command Template";
 "platforms_CommandTemplateDesc" = "Template for launching game \n(use %@ for the file path)";
 "platforms_SavePlatform" = "Save Platform";

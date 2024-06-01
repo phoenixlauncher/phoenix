@@ -35,7 +35,7 @@
 		AD2E38AB2B5785EA0068943E /* TextBoxAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2E38AA2B5785EA0068943E /* TextBoxAlert.swift */; };
 		AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */; };
 		AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287C92AC007CC001673F5 /* TextBox.swift */; };
-		AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */; };
+		AD5287CC2AC0093E001673F5 /* FileImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CB2AC0093E001673F5 /* FileImportButton.swift */; };
 		AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CD2AC00A1A001673F5 /* SlotInput.swift */; };
 		AD5287D22AC016AD001673F5 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D12AC016AD001673F5 /* DateUtils.swift */; };
 		AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D52AC018B8001673F5 /* HelpButton.swift */; };
@@ -68,7 +68,7 @@
 		ADE202082B5E04ED00047322 /* EnumContextButtonMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE202072B5E04ED00047322 /* EnumContextButtonMenu.swift */; };
 		B54BBA282BC0645300575AC2 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */; };
 		B54BBA2A2BC1137F00575AC2 /* RoundTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54BBA292BC1137F00575AC2 /* RoundTextEditor.swift */; };
-		B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */; };
+		B58A37742B93BF1200213A67 /* GameFilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A37732B93BF1200213A67 /* GameFilePickerButton.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		B5C147892BDE23C700F38CD3 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B5C147882BDE23C700F38CD3 /* SwiftyJSON */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
@@ -123,7 +123,7 @@
 		AD23F7472BF85A4E00FD221B /* SystemToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemToolbar.swift; sourceTree = "<group>"; };
 		AD2E38AA2B5785EA0068943E /* TextBoxAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBoxAlert.swift; sourceTree = "<group>"; };
 		AD5287C92AC007CC001673F5 /* TextBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBox.swift; sourceTree = "<group>"; };
-		AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageImportButton.swift; sourceTree = "<group>"; };
+		AD5287CB2AC0093E001673F5 /* FileImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImportButton.swift; sourceTree = "<group>"; };
 		AD5287CD2AC00A1A001673F5 /* SlotInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotInput.swift; sourceTree = "<group>"; };
 		AD5287D12AC016AD001673F5 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		AD5287D52AC018B8001673F5 /* HelpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpButton.swift; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 		ADE202072B5E04ED00047322 /* EnumContextButtonMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumContextButtonMenu.swift; sourceTree = "<group>"; };
 		ADF8FB3F2B57960800AFD38E /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B54BBA292BC1137F00575AC2 /* RoundTextEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundTextEditor.swift; sourceTree = "<group>"; };
-		B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropFilePickerButton.swift; sourceTree = "<group>"; };
+		B58A37732B93BF1200213A67 /* GameFilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFilePickerButton.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		C9435D262B594B6E0032DB7A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
@@ -273,9 +273,9 @@
 			children = (
 				AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */,
 				AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */,
-				B58A37732B93BF1200213A67 /* DragDropFilePickerButton.swift */,
+				B58A37732B93BF1200213A67 /* GameFilePickerButton.swift */,
 				AD5287D52AC018B8001673F5 /* HelpButton.swift */,
-				AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */,
+				AD5287CB2AC0093E001673F5 /* FileImportButton.swift */,
 				ADDE703E2B00546C00D006B8 /* FolderImportButton.swift */,
 				ADE202042B5DFF7400047322 /* ContextButton.swift */,
 				AD23F7432BF81B5400FD221B /* IconSearchButton.swift */,
@@ -594,7 +594,7 @@
 				ADB72D5E2AC1359100299AC0 /* ChooseGameView.swift in Sources */,
 				0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */,
 				ADE201FF2B5DF9A100047322 /* Status.swift in Sources */,
-				AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */,
+				AD5287CC2AC0093E001673F5 /* FileImportButton.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* ImageUtils.swift in Sources */,
 				AD23F7442BF81B5400FD221B /* IconSearchButton.swift in Sources */,
 				CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */,
@@ -617,7 +617,7 @@
 				ADB640002AF8391C006B39ED /* Defaults.swift in Sources */,
 				ADA8FB312BDECB8800BC5131 /* PlatformContextButtonMenu.swift in Sources */,
 				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
-				B58A37742B93BF1200213A67 /* DragDropFilePickerButton.swift in Sources */,
+				B58A37742B93BF1200213A67 /* GameFilePickerButton.swift in Sources */,
 				ADA0D8A32B3FA49F00487C4D /* SupabaseViewModel.swift in Sources */,
 				ADA7355C2B5B8A710001B9A7 /* OnboardingDetailView.swift in Sources */,
 				ADE202012B5DF9B200047322 /* Recency.swift in Sources */,

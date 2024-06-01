@@ -25,14 +25,8 @@ struct GameInputView: View {
     @State var fetchedGames: [SupabaseGame] = []
     
     @State private var game: Game = Game()
-    @State private var iconInput: String = ""
-    @State private var headerInput: String = ""
-    @State private var coverInput: String = ""
     @State private var dateInput: Date = .now
 
-    @State private var iconIsImporting: Bool = false
-    @State private var headIsImporting: Bool = false
-    @State private var coverIsImporting: Bool = false
     @State private var screenshotIsImporting: Bool = false
     var newScreenshot: String?
     
@@ -49,7 +43,12 @@ struct GameInputView: View {
                     Group {
                         TextBox(textBoxName: String(localized: "editGame_Name"), input: $game.name) // Name input
                         
-                        ImageImportButton(type: String(localized: "editGame_Icon"), input: $iconInput, output: $game.icon, gameID: game.id)
+                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                            if let data = pathIntoData(path: path) {
+                                return saveIconToFile(iconData: data, gameID: game.id)
+                            }
+                            return nil
+                        })
                         
                         SlotInput(contentName: String(localized: "editGame_Platform"), content: {
                             Picker("Platform", selection: $game.platformName) {
@@ -68,7 +67,7 @@ struct GameInputView: View {
                         })
                         
                         if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
-                            DragDropFilePickerButton(currentPlatform: currentPlatform, game: $game)
+                            GameFilePickerButton(currentPlatform: currentPlatform, game: $game)
                         }
                     }
                     DisclosureGroup(String(localized: "editGame_Advanced")) {
@@ -79,9 +78,19 @@ struct GameInputView: View {
                             
                             TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
                             
-                            ImageImportButton(type: String(localized: "editGame_Header"), input: $headerInput, output: binding(for: "header_img"), gameID: game.id)
+                            FileImportButton(type: .image, outputPath: binding(for: "header_img"), showOutput: false, title: String(localized: "editGame_Header"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                                if let data = pathIntoData(path: path) {
+                                    return saveImageToFile(data: data, gameID: game.id, type: "header")
+                                }
+                                return nil
+                            })
                             
-                            ImageImportButton(type: String(localized: "editGame_Cover"), input: $coverInput, output: binding(for: "cover"), gameID: game.id)
+                            FileImportButton(type: .image, outputPath: binding(for: "cover"), showOutput: false, title: String(localized: "editGame_Cover"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                                if let data = pathIntoData(path: path) {
+                                    return saveImageToFile(data: data, gameID: game.id, type: "cover")
+                                }
+                                return nil
+                            })
                             
                             DisclosureGroup(String(localized: "editGame_Screenshots")) {
                                 ScrollView([.horizontal]) {
@@ -107,10 +116,17 @@ struct GameInputView: View {
                                             .frame(width: 300, height: 175)
                                             .cornerRadius(7.5)
                                             .fileImporter(isPresented: $screenshotIsImporting, allowedContentTypes: [.image], allowsMultipleSelection: false) { result in
-                                                resultIntoData(result: result) { data in
-                                                    saveImageToFile(data: data, gameID: game.id, type: "screenshot_\(UUID())") { image in
-                                                        game.screenshots.insert(image, at: 0)
+                                                do {
+                                                    if let path = try result.get().first {
+                                                        if let data = pathIntoData(path: path) {
+                                                            game.screenshots.insert(saveImageToFile(data: data, gameID: game.id, type: "screenshot_\(UUID())"), at: 0)
+                                                        }
                                                     }
+                                                }
+                                                catch {
+                                                    logger.write(error.localizedDescription)
+                                                    appViewModel.failureToastText = "Unable to get file: \(error)"
+                                                    appViewModel.showFailureToast.toggle()
                                                 }
                                             }
                                         ForEach(game.screenshots, id: \.self) { screenshot in

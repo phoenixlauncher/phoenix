@@ -11,7 +11,10 @@ struct Platform: Identifiable, Encodable, Decodable, Hashable {
     var id: UUID = UUID() // Identifier for platform
     var iconURL: String = "" // Iconify icon URL
     var name: String = "" // Name of game
-    var gameType: String = "" // Type of game (.app, .bin, .exe, .z64)
+    var gameType: String = "" // Type of game (app, bin, exe, z64)
+    var emulator: Bool = false
+    var emulatorExecutable: String = ""
+    var commandArgs: String = ""
     var commandTemplate: String = "" // Command template for launching ("open %@")
     var deletable: Bool = true
 }
