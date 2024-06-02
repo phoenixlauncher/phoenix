@@ -67,7 +67,19 @@ struct GameInputView: View {
                         })
                         
                         if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
-                            GameFilePickerButton(currentPlatform: currentPlatform, game: $game)
+                            GameFilePickerButton(currentPlatform: currentPlatform, game: $game, extraAction: { url in
+                                if let resourcesURL = URL(string: "\(url.absoluteString)/Contents/Resources"), Defaults[.getIconFromApp] {
+                                    do {
+                                        let steamAppsFiles = try FileManager.default.contentsOfDirectory(at: resourcesURL, includingPropertiesForKeys: nil)
+                                        for fileName in steamAppsFiles.map({ $0.lastPathComponent }).filter({ $0.hasSuffix(".icns") }) {
+                                            game.icon = resourcesURL.appendingPathComponent(fileName).absoluteString
+                                        }
+                                    }
+                                    catch {
+                                        logger.write(error.localizedDescription)
+                                    }
+                                }
+                            })
                         }
                     }
                     DisclosureGroup(String(localized: "editGame_Advanced")) {
