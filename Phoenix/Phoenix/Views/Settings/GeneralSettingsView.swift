@@ -30,6 +30,7 @@ struct GeneralSettingsView: View {
                 }
                 Divider()
                 Defaults.Toggle(String(localized: "general_FetchMeta"), key: .isMetaDataFetchingEnabled)
+                Defaults.Toggle(String(localized: "general_GetIconFromApp"), key: .getIconFromApp)
             }
             .alert(String(localized: "alert_InvalidFolder"), isPresented: $invalidFolder) {
                 VStack {
@@ -40,5 +41,6 @@ struct GeneralSettingsView: View {
             }
             .padding(20)
         }
+        .frame(height: 225)
     }
 }

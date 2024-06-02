@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import AlertToast
 
 struct SettingsView: View {
+    @EnvironmentObject var appViewModel: AppViewModel
     var body: some View {
         TabView {
             GeneralSettingsView()
@@ -22,7 +24,16 @@ struct SettingsView: View {
                 .tabItem {
                     Label(String(localized: "prefs_Hidden"), systemImage: "eye.slash.fill")
                 }
+            PlatformSettingsView()
+                .tabItem {
+                    Label(String(localized: "prefs_Platforms"), systemImage: "gamecontroller")
+                }
         }
-        .frame(idealWidth: 400)
+        .toast(isPresenting: $appViewModel.showSettingsSuccessToast, tapToDismiss: true) {
+            AlertToast(type: .complete(Color.green), title: appViewModel.successToastText)
+        }
+        .toast(isPresenting: $appViewModel.showSettingsFailureToast, tapToDismiss: true) {
+            AlertToast(type: .error(Color.red), title: appViewModel.failureToastText)
+        }
     }
 }

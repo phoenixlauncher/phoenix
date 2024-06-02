@@ -15,6 +15,10 @@ class AppViewModel: ObservableObject {
     @Published var showFailureToast: Bool = false
     @Published var failureToastText: String = "Failure"
     
+    @Published var showSettingsSuccessToast: Bool = false
+    @Published var showSettingsFailureToast: Bool = false
+    
+    //statuses
     @Published var isAddingGame: Bool = false
     @Published var isEditingGame: Bool = false
     @Published var isPlayingGame: Bool = false
@@ -27,5 +31,15 @@ class AppViewModel: ObservableObject {
     func showFailureToast(_ message: String) {
         failureToastText = message
         showFailureToast = true
+    }
+    
+    func showSettingsSuccessToast(_ message: String) {
+        successToastText = message
+        showSettingsSuccessToast = true
+    }
+    
+    func showSettingsFailureToast(_ message: String) {
+        failureToastText = message
+        showSettingsFailureToast = true
     }
 }

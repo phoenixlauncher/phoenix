@@ -71,10 +71,10 @@ struct GameListItem: View {
                 Divider()
                 
                 //edit platform menu
-                ContextButtonMenu(forEachEnum: Platform.self, action: { editPlatform(thing: $0, id: game.id) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
+                PlatformContextButtonMenu(platforms: [], action: { editPlatform(platform: $0, id: game.id) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
         
                 //edit platform menu
-                ContextButtonMenu(forEachEnum: Status.self, action: { editStatus(thing: $0, id: game.id) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
+                EnumContextButtonMenu(forEachEnum: Status.self, action: { editStatus(status: $0, id: game.id) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
                 
             }
             .sheet(isPresented: $changeName) {
@@ -90,22 +90,25 @@ struct GameListItem: View {
                 allowedContentTypes: [.image],
                 allowsMultipleSelection: false
             ) { result in
-                resultIntoData(result: result) { data in
-                    if importType == "icon" {
-                        saveIconToFile(iconData: data, gameID: game.id) { image in
-                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                gameViewModel.games[idx].icon = image
-                                gameViewModel.saveGames()
-                            }
-                        }
-                    } else {
-                        saveImageToFile(data: data, gameID: game.id, type: importType) { image in
-                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
-                                gameViewModel.games[idx].metadata["header_img"] = image
-                                gameViewModel.saveGames()
+                do {
+                    if let path = try result.get().first {
+                        if let data = pathIntoData(path: path) {
+                            if importType == "icon" {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }), let icon = saveIconToFile(iconData: data, gameID: game.id) {
+                                    gameViewModel.games[idx].icon = icon
+                                    gameViewModel.saveGames()
+                                }
+                            } else {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }), let image = saveImageToFile(data: data, gameID: game.id, type: importType) {
+                                    gameViewModel.games[idx].metadata["header_img"] = image
+                                    gameViewModel.saveGames()
+                                }
                             }
                         }
                     }
+                }
+                catch {
+                    
                 }
             }
             .onAppear {
@@ -124,16 +127,16 @@ struct GameListItem: View {
         importType = "header"
     }
     
-    func editPlatform(thing: any CaseIterableEnum, id: UUID) {
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), thing is Platform {
-            gameViewModel.games[idx].platform = thing as! Platform
+    func editPlatform(platform: Platform, id: UUID) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            gameViewModel.games[idx].platformName = platform.name
         }
         gameViewModel.saveGames()
     }
     
-    func editStatus(thing: any CaseIterableEnum, id: UUID) {
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), thing is Status {
-            gameViewModel.games[idx].status = thing as! Status
+    func editStatus(status: Status, id: UUID) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+            gameViewModel.games[idx].status = status
         }
         gameViewModel.saveGames()
     }

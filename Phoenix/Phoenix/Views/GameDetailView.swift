@@ -7,6 +7,7 @@
 import AlertToast
 import StarRatingViewSwiftUI
 import SwiftUI
+import QuickLook
 
 extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
@@ -27,6 +28,7 @@ struct GameDetailView: View {
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
 
     @State var selectedGameName: String?
 
@@ -34,7 +36,15 @@ struct GameDetailView: View {
     
     var game: Game? {
         gameViewModel.getGameFromID(id: gameViewModel.selectedGame) ?? nil
-     }
+    }
+    
+    var currentPlatform: Platform? {
+        platformViewModel.platforms.first(where: {game?.platformName == $0.name})
+    }
+    
+    @State var headerFound = true
+    @State var animate = false
+    @State var selectedScreenshot: URL?
 
     @Default(.accentColorUI) var accentColorUI
     @Default(.showStarRating) var showStarRating
@@ -69,6 +79,9 @@ struct GameDetailView: View {
                     }
                 }
             }
+            .task {
+                checkHeader()
+            }
             .frame(height: 400)
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
@@ -81,7 +94,7 @@ struct GameDetailView: View {
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
                                     .frame(width: 300, height: 30)
-                                    .padding()
+                                    .padding(.horizontal)
                                     .onHover { _ in
                                         if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
                                             gameViewModel.games[idx].metadata["rating"] = String(rating)
@@ -115,6 +128,10 @@ struct GameDetailView: View {
                                                     .cornerRadius(7.5)
                                                     .aspectRatio(contentMode: .fill)
                                                     .frame(height: screenshotSize)
+                                                    .onTapGesture(count: 2) {
+                                                        selectedScreenshot = screenshotURL
+                                                    }
+                                                    .quickLookPreview($selectedScreenshot)
                                                 }
                                             }
                                         }
@@ -144,7 +161,7 @@ struct GameDetailView: View {
                                     if let game = game {
                                         VStack(alignment: .leading, spacing: 7.5) {
                                             GameMetadata(field: String(localized: "detail_LP"), value: game.metadata["last_played"] ?? String(localized: "recency_Never"))
-                                            GameMetadata(field: String(localized: "detail_Platform"), value: game.platform.displayName)
+                                            GameMetadata(field: String(localized: "detail_Platform"), value: game.platformName)
                                             GameMetadata(field: String(localized: "detail_Status"), value: game.status.displayName)
                                             if !showStarRating {
                                                 GameMetadata(field: String(localized: "detail_Rating"), value: game.metadata["rating"] ?? "")
@@ -189,11 +206,45 @@ struct GameDetailView: View {
             if let gameRating = game?.metadata["rating"] {
                 rating = Float(gameRating) ?? 0
             }
+            checkHeader()
             if showScreenshots { checkScreenshots() }
         }
     }
 
-    @MainActor
+    private func checkHeader() {
+        Task {
+            print("header check starting ‼️")
+            let fileManager = FileManager.default
+            if let headerImage = game?.metadata["header_img"], let headerURL = URL(string: headerImage), fileManager.fileExists(atPath: headerURL.path) {
+                print("header exists!!!!")
+            } else {
+                headerFound = false
+                if let name = game?.name, let id = game?.id {
+                    guard let igdbID = game?.igdbID, let igdbID = Int(igdbID) else {
+                        await supabaseViewModel.fetchIgdbIDFromName(name: name) { igdbID in
+                            updateGameIgdbID(id, igdbID: String(igdbID))
+                        }
+                        return
+                    }
+                    print("no header & valid id:")
+                    print(igdbID)
+                    print("asking supabsae now!!")
+                    let headerData = try await supabaseViewModel.fetchAndSaveHeaderOf(gameID: id, igdbID: igdbID)
+                    if let headerData = headerData {
+                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }), let image = saveImageToFile(data: headerData, gameID: id, type: "header") {
+                            print("found index")
+                            gameViewModel.games[idx].metadata["header_img"] = image
+                            gameViewModel.saveGames()
+                            print("games saved")
+                        }
+                        headerFound = true
+                    }
+                }
+            }
+        }
+    }
+
+//    @MainActor
     private func updateGameScreenshots(_ id: UUID, screenshots: [String?]) {
         print("update func called")
         if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
@@ -250,9 +301,9 @@ struct GameDetailView: View {
             // Update the last played date and write the updated information to the JSON file
             updateLastPlayedDate(currentDate: currentDate)
             if game.launcher != "" {
-                try shell(game)
+                try shell(game.launcher)
             } else {
-                appViewModel.showFailureToast("\(String(localized: "toast_Failure")) \(gameViewModel.selectedGameName)")
+                appViewModel.showFailureToast("\(String(localized: "toast_LaunchFailure")) \(gameViewModel.selectedGameName)")
             }
         } catch {
             logger.write("\(error)") // handle or silence the error here

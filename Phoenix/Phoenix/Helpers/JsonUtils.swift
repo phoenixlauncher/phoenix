@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 /// Returns the URL for the application support directory for the current user.
 ///
@@ -65,84 +66,162 @@ func parseACFFile(data: Data) -> [String: String] {
 ///
 /// - Throws: An error if there was a problem reading from the JSON file or
 /// decoding the data.
-func loadGamesFromJSON() -> GamesList {
+func loadGamesFromJSON() -> [Game] {
     let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/games.json")
-    var games: GamesList?
-    do {
-        let jsonData = try Data(contentsOf: url)
-        // Custom decoding strategy to convert "isDeleted" to "isHidden"
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
-            let key = keys.last!
-            if key.stringValue == "isDeleted" || key.stringValue == "is_deleted" {
-                return AnyCodingKey(stringValue: "isHidden")!
-            } else if key.stringValue == "appID" || key.stringValue == "steam_id" {
-                return AnyCodingKey(stringValue: "steamID")!
-            } else if key.stringValue == "is_favorite" {
-                return AnyCodingKey(stringValue: "isFavorite")!
+    var games: [Game] = []
+    if let json = try? JSON(data: Data(contentsOf: url)) {
+        let gamesArray = json["games"].arrayValue
+        for game in gamesArray {
+            var platformString = ""
+            if game["platform"].string == nil {
+                platformString = game["platformName"].stringValue
             } else {
-                return key
-            }
-        }
-        
-        games = try decoder.decode(GamesList.self, from: jsonData)
-        return games ?? GamesList(games: [])
-    } catch {
-        logger.write("[INFO]: Couldn't find games.json. Creating new one.")
-        let jsonFileURL = Bundle.main.url(forResource: "games", withExtension: "json")
-        do {
-            if let jsonFileURL = jsonFileURL {
-                let jsonData = try Data(contentsOf: jsonFileURL)
-                let jsonString = String(decoding: jsonData, as: UTF8.self)
-                writeGamesToJSON(data: jsonString)
-            }
-        } catch {
-            logger.write(
-                "[ERROR]: Something went wrong while trying to writeGamesToJSON() to 'games.json'"
-            )
-        }
-
-        do {
-            let jsonData = try Data(contentsOf: url)
-            // Custom decoding strategy to convert "isDeleted" to "isHidden"
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .custom { keys -> CodingKey in
-                let key = keys.last!
-                if key.stringValue == "isDeleted" {
-                    return AnyCodingKey(stringValue: "isHidden")!
+                platformString = game["platform"].stringValue
+                if platformString == "mac" {
+                    platformString = "Mac"
+                } else if platformString == "steam" {
+                    platformString = "Steam"
+                } else if platformString == "gog" {
+                    platformString = "GOG"
+                } else if platformString == "pc" {
+                    platformString = "PC"
+                } else if platformString == "ps" {
+                    platformString = "Playstation"
+                } else if platformString == "xbox" {
+                    platformString = "Xbox"
+                } else if platformString == "nin" {
+                    platformString = "Nintendo"
                 }
-                return key
             }
-            
-            games = try decoder.decode(GamesList.self, from: jsonData)
-            return games ?? GamesList(games: [])
-        } catch {
-            logger.write("[ERROR]: Couldn't read from new 'games.json'")
+            let gameFile = (game["gameFile"].stringValue != "" ? game["gameFile"].stringValue : (game["launcher"].stringValue.range(of: #""([^"]+)""#, options: .regularExpression) != nil) ? String(game["launcher"].stringValue[game["launcher"].stringValue.range(of: #""([^"]+)""#, options: .regularExpression)!].dropFirst().dropLast()) : "")
+            games.append(Game(
+                id: UUID(uuidString: (game["id"].stringValue)) ?? UUID(),
+                steamID: game["steamID"].stringValue,
+                igdbID: game["igdbID"].stringValue,
+                gameFile: gameFile,
+                launcher: game["launcher"].stringValue,
+                metadata: game["metadata"].dictionaryObject as? [String: String] ?? ["":""],
+                screenshots: game["screenshots"].arrayValue.map({ $0.stringValue }),
+                icon: game["icon"].stringValue,
+                name: game["name"].stringValue,
+                platformName: platformString,
+                status: Status(rawValue: game["status"].stringValue) ?? .none,
+                recency: Recency(rawValue: game["recency"].stringValue) ?? .never,
+                isHidden: game["isHidden"].boolValue,
+                isFavorite: game["isFavorite"].boolValue
+            ))
         }
+    } else {
+        // create empty games.json if it doesn't exist
+        logger.write("[INFO]: Couldn't find games.json. Creating new one.")
+        saveJSONData(to: "games", with: "{\"games\": }")
     }
-
-    return GamesList(games: [])
+    return games
 }
 
-/// Writes the given data to a JSON file named "games.json" in the "Phoenix"
-/// directory under the application support directory.
+func loadPlatformsFromJSON() -> [Platform] {
+    let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/platforms.json")
+    var platforms: [Platform] = []
+    if let json = try? JSON(data: Data(contentsOf: url)) {
+        let platformArray = json["platforms"].arrayValue
+        for platform in platformArray {
+            platforms.append(Platform(
+                id: UUID(uuidString: (platform["id"].stringValue)) ?? UUID(),
+                iconURL: platform["iconURL"].stringValue,
+                name: platform["name"].stringValue,
+                gameType: platform["gameType"].stringValue,
+                emulator: platform["emulator"].boolValue,
+                commandTemplate: platform["commandTemplate"].stringValue,
+                deletable: platform["deletable"].boolValue
+            ))
+        }
+    } else {
+        platforms = [
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", commandTemplate: "open steam://run/%@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
+            Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
+            Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", emulator: true),
+            Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", emulator: true),
+            Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled", name: "Other", deletable: false)
+        ]
+        // create empty games.json if it doesn't exist
+        logger.write("[INFO]: Couldn't find platforms.json. Creating new one.")
+        saveJSONData(to: "platforms", with: convertPlatformsToJSONString(platforms))
+    }
+    return platforms
+}
+
+func convertGamesToJSONString(_ games: [Game]) -> String {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    do {
+        let gamesJSON = try JSONEncoder().encode(games)
+        if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+            // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+            gamesJSONString = "{\"games\": \(gamesJSONString)}"
+            return gamesJSONString
+        } else {
+            return ""
+        }
+    } catch {
+        logger.write(error.localizedDescription)
+        return ""
+    }
+}
+
+func convertPlatformsToJSONString(_ platforms: [Platform]) -> String {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    do {
+        let platformsJSON = try JSONEncoder().encode(platforms)
+        if var platformsJSONString = String(data: platformsJSON, encoding: .utf8) {
+            // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+            platformsJSONString = "{\"platforms\": \(platformsJSONString)}"
+            return platformsJSONString
+        } else {
+            return ""
+        }
+    } catch {
+        logger.write(error.localizedDescription)
+        return ""
+    }
+}
+
+/// Writes the given data to a JSON file named "\(jsonName).json" in the "Phoenix"
+/// directory under the application support directory. If it doesn't exist, creates it.
 ///
 /// - Parameters:
+///    - jsonName: The data to write to the JSON file.
 ///    - data: The data to write to the JSON file.
 ///
 /// - Returns: Void.
 ///
 /// - Throws: An error if there was a problem creating the directory or file, or
 /// writing to the file.
-func writeGamesToJSON(data: String) {
+func saveJSONData(to jsonName: String, with data: String) {
+    let fileManager = FileManager.default
+    let jsonFile = getApplicationSupportDirectory().appendingPathComponent(
+        "Phoenix", isDirectory: true).appendingPathComponent("\(jsonName).json", conformingTo: .json)
+    
+    // Checks if ~/Library/Application Support/Phoenix directory exists
+    checkAppSupportDir()
+
+    // If .../Application Support/Phoenix/games.json file exists
+    if fileManager.fileExists(atPath: jsonFile.path) {
+        writeDataToJSON(named: jsonName, with: data)
+    } else {
+        createJSON(named: jsonName, with: data)
+    }
+}
+
+func checkAppSupportDir() {
     let fileManager = FileManager.default
     let phoenixDirectory = getApplicationSupportDirectory().appendingPathComponent(
         "Phoenix", isDirectory: true)
-    let gamesJSON = phoenixDirectory.appendingPathComponent("games.json", conformingTo: .json)
     let cachedImagesDirectory = phoenixDirectory.appendingPathComponent(
         "cachedImages", conformingTo: .directory)
-
-    // If .../Application Support/Phoenix directory doesn't exist
     if !fileManager.fileExists(atPath: phoenixDirectory.path) {
         do {
             try fileManager.createDirectory(
@@ -154,36 +233,27 @@ func writeGamesToJSON(data: String) {
             return
         }
     }
+}
 
-    // If .../Application Support/Phoenix/games.json file exists
-    if fileManager.fileExists(atPath: gamesJSON.path) {
-        do {
-            try data.write(to: gamesJSON, atomically: true, encoding: .utf8)
-            logger.write("[INFO]: 'games.json' updated successfully.")
-        } catch {
-            logger.write("[ERROR]: Could not write data to 'games.json'")
-        }
+func createJSON(named jsonName: String, with data: String) {
+    let fileManager = FileManager.default
+    let jsonFile = getApplicationSupportDirectory().appendingPathComponent(
+        "Phoenix", isDirectory: true)
+        .appendingPathComponent("\(jsonName).json", conformingTo: .json)
+    if fileManager.createFile(atPath: jsonFile.path, contents: Data(data.utf8)) {
+        logger.write("[INFO]: '\(jsonName).json' created successfully.")
     } else {
-        if fileManager.createFile(atPath: gamesJSON.path, contents: Data(data.utf8)) {
-            logger.write("[INFO]: 'games.json' created successfully.")
-        } else {
-            logger.write("[ERROR]: 'games.json' not created.")
-        }
+        logger.write("[ERROR]: '\(jsonName).json' not created.")
     }
 }
 
-// Helper struct to handle custom coding key
-struct AnyCodingKey: CodingKey {
-    var stringValue: String
-    var intValue: Int?
-    
-    init?(stringValue: String) {
-        self.stringValue = stringValue
-        self.intValue = nil
-    }
-    
-    init?(intValue: Int) {
-        self.stringValue = String(intValue)
-        self.intValue = intValue
+func writeDataToJSON(named jsonName: String, with data: String) {
+    let jsonFile = getApplicationSupportDirectory().appendingPathComponent(
+        "Phoenix", isDirectory: true).appendingPathComponent("\(jsonName).json", conformingTo: .json)
+    do {
+        try data.write(to: jsonFile, atomically: true, encoding: .utf8)
+        logger.write("[INFO]: '\(jsonName).json' updated successfully.")
+    } catch {
+        logger.write("[ERROR]: Could not write data to '\(jsonName).json'")
     }
 }
