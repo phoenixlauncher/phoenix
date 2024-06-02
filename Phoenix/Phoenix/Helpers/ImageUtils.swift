@@ -112,24 +112,34 @@ func createCachedImagesDirectoryPath() -> (URL) {
     return cachedImagesDirectoryPath
 }
 
-func saveIconToFile(iconData: Data, gameID: UUID) -> String? {
+func saveIconToFile(iconData: Data? = nil, iconNSImage: NSImage? = nil, gameID: UUID) -> String? {
+    // Use iconNSImage if provided, otherwise create NSImage from iconData
+    let image: NSImage
+    if let iconNSImage = iconNSImage {
+        print("using nsimage")
+        image = iconNSImage
+    } else if let data = iconData, let dataImage = NSImage(data: data) {
+        print("using data")
+        image = dataImage
+    } else {
+        return nil
+    }
+
     // Resize the image to 48x48 pixels
-    if let image = NSImage(data: iconData) {
-        let newSize = NSSize(width: 48, height: 48)
-        let newImage = NSImage(size: newSize)
-        
-        newImage.lockFocus()
-        image.draw(in: NSRect(origin: .zero, size: newSize),
-                   from: NSRect(origin: .zero, size: image.size),
-                   operation: .sourceOver,
-                   fraction: 1.0)
-        newImage.unlockFocus()
-        
-        if let tiffRepresentation = newImage.tiffRepresentation {
-            let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
-            if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
-                return saveImageToFile(data: pngData, gameID: gameID, type: "icon")
-            }
+    let newSize = NSSize(width: 48, height: 48)
+    let newImage = NSImage(size: newSize)
+    
+    newImage.lockFocus()
+    image.draw(in: NSRect(origin: .zero, size: newSize),
+               from: NSRect(origin: .zero, size: image.size),
+               operation: .sourceOver,
+               fraction: 1.0)
+    newImage.unlockFocus()
+    
+    if let tiffRepresentation = newImage.tiffRepresentation {
+        let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
+        if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
+            return saveImageToFile(data: pngData, gameID: gameID, type: "icon")
         }
     }
     

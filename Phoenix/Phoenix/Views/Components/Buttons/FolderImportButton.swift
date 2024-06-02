@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct FolderImportButton: View {
+    @EnvironmentObject var appViewModel: AppViewModel
     @State var isImporting: Bool = false
     let type: String
     
     @Binding var folder: URL
     
-    @Binding var lastPathComponent: String?
     var endPath: String?
-    @Binding var invalidFolder: Bool
     
     var body: some View {
         HStack {
@@ -43,13 +42,38 @@ struct FolderImportButton: View {
             do {
                 let selectedFolder: URL = try result.get().first ?? URL(fileURLWithPath: "")
                 if let endPath = endPath, selectedFolder.lastPathComponent != endPath {
-                    lastPathComponent = endPath
-                    invalidFolder = true
+                    appViewModel.failureToastText = "Folder must end with \"\(endPath)\"."
+                    appViewModel.showSettingsFailureToast.toggle()
                 } else {
                     folder = selectedFolder
                 }
             } catch {
                 logger.write("Error selecting folder: \(error)")
+            }
+        }
+        .onDrop(of: [type], isTargeted: nil) { selectedFile in
+            handleDrop(providers: selectedFile)
+            return true
+        }
+    }
+    
+    private func handleDrop(providers: [NSItemProvider]) {
+        for provider in providers {
+            provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
+                if let error = error {
+                    logger.write(error.localizedDescription)
+                    appViewModel.failureToastText = "Unable to create application launch command: \(error)"
+                    appViewModel.showSettingsFailureToast.toggle()
+                    return
+                }
+                if let selectedFolder = (item as? URL) {
+                    if let endPath = endPath, selectedFolder.lastPathComponent != endPath {
+                        appViewModel.failureToastText = "Folder must end with \"\(endPath)\"."
+                        appViewModel.showSettingsFailureToast.toggle()
+                    } else {
+                        folder = selectedFolder
+                    }
+                }
             }
         }
     }
