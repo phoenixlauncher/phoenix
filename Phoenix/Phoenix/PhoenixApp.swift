@@ -90,6 +90,7 @@ struct PhoenixApp: App {
                 .environmentObject(appViewModel)
                 .environmentObject(platformViewModel)
         }
+        .windowResizability(.contentSize)
     }
 }
 
