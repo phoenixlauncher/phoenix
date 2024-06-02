@@ -19,8 +19,7 @@ struct SystemToolbar: View {
             ListButton(imageName: "minus", action: minusAction, disabled: (platformViewModel.platforms[selectedPlatform].deletable == false))
             Spacer()
         }
-        .padding(.leading, 2)
-        .frame(height: 25)
+        .frame(height: 30)
     }
 }
 
@@ -37,14 +36,16 @@ struct ListButton: View {
             }
         }) {
             Image(systemName: imageName)
-                .font(.system(size: 15))
+                .frame(width: 30, height: 30)
+                .font(.system(size: 17))
                 .foregroundStyle((buttonHovered && !disabled) ? Color.primary.opacity(0.75) : .gray)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .contentShape(Rectangle())
         .onHover { hovered in
             buttonHovered = hovered
         }
-        .frame(width: 25, height: 25)
+        .frame(width: 30, height: 30)
     }
 }

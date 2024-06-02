@@ -41,5 +41,6 @@ struct GeneralSettingsView: View {
             }
             .padding(20)
         }
+        .frame(height: 225)
     }
 }

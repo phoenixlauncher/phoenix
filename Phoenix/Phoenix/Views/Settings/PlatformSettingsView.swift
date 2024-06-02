@@ -75,7 +75,7 @@ struct PlatformSettingsSidebar: View {
             RoundedRectangle(cornerRadius: 6)
                 .stroke(lineWidth: 1)
                 .foregroundStyle(Color(NSColor.gridColor).opacity(0.5))
-            )
+        )
     }
 }
 
@@ -183,6 +183,6 @@ struct PlatformSettingsDetail: View {
         }) {
             IconSearch(selectedIcon: $platform.iconURL)
         }
-        .frame(idealHeight: 600, maxHeight: .infinity, alignment: .bottom)
+        .frame(height: 600, alignment: .bottom)
     }
 }

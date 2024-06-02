@@ -29,7 +29,6 @@ struct SettingsView: View {
                     Label(String(localized: "prefs_Platforms"), systemImage: "gamecontroller")
                 }
         }
-        .frame(idealWidth: 600)
         .toast(isPresenting: $appViewModel.showSettingsSuccessToast, tapToDismiss: true) {
             AlertToast(type: .complete(Color.green), title: appViewModel.successToastText)
         }
