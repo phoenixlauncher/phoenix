@@ -13,7 +13,7 @@ struct GameFilePickerButton: View {
     
     var currentPlatform: Platform
     @Binding var game: Game
-    
+    let extraAction: ((URL) -> Void)?
     @State private var isImporting: Bool = false
     
     var body: some View {
@@ -51,6 +51,7 @@ struct GameFilePickerButton: View {
             do {
                 let selectedFileURL: URL? = try result.get().first
                 if let selectedFileURL = selectedFileURL {
+                    extraAction?(selectedFileURL)
                     game.gameFile = selectedFileURL.path
                     game.launcher = String(format: currentPlatform.commandTemplate, "\"\(game.gameFile)\"")
                 }
@@ -79,7 +80,7 @@ struct GameFilePickerButton: View {
                     return
                 }
                 if let url = (item as? URL) {
-                    // Update the droppedURL state
+                    extraAction?(url)
                     game.gameFile = "\"\(url.path)\""
                     game.launcher = String(format: currentPlatform.commandTemplate, game.gameFile)
                 }

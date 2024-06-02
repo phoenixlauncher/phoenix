@@ -83,6 +83,7 @@
 "general_Detect" = "Detect %@ games on launch"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
 "general_CustomFolder" = "Custom %@ folder"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
 "general_FetchMeta" = "Fetch game metadata automatically";
+"general_GetIconFromApp" = "Get app icon automatically";
 "prefs_Appearance" = "Appearance";
 "appearance_Accent" = "Accent color UI";
 "appearance_Gradient" = "Gradient UI";

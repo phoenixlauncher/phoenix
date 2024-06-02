@@ -164,7 +164,6 @@ func saveImageToFile(data: Data, gameID: UUID, type: String) -> String? {
 func loadImageFromFile(filePath: String) -> NSImage {
     do {
         if filePath != "" {
-            print(filePath)
             let imageData = try Data(contentsOf: URL(string: filePath)!)
             return NSImage(data: imageData) ?? NSImage(imageLiteralResourceName: "PlaceholderImage")
         } else {

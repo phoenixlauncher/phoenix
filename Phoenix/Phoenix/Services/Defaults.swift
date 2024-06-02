@@ -24,6 +24,7 @@ extension Defaults.Keys {
     static let crossOverFolder = Key<URL>("crossOverFolder", default: URL(fileURLWithPath: "~/Applications/CrossOver"))
     
     static let isMetaDataFetchingEnabled = Key<Bool>("isMetaDataFetchingEnabled", default: true)
+    static let getIconFromApp = Key<Bool>("getIconFromApp", default: true)
     
     //appearance
     static let accentColorUI = Key<Bool>("accentColorUI", default: true)
