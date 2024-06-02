@@ -144,7 +144,7 @@ func loadPlatformsFromJSON() -> [Platform] {
             Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
             Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", emulator: true),
             Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", emulator: true),
-            Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled", name: "Other", deletable: false)
+            Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled.svg", name: "Other", deletable: false)
         ]
         // create empty games.json if it doesn't exist
         logger.write("[INFO]: Couldn't find platforms.json. Creating new one.")
