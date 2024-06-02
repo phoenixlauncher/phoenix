@@ -62,7 +62,7 @@ struct GameFilePickerButton: View {
                 appViewModel.showFailureToast.toggle()
             }
        }
-        .onDrop(of: [UTType(tag: currentPlatform.gameType, tagClass: .filenameExtension, conformingTo: nil) ?? .data], isTargeted: nil) { selectedFile in
+        .onDrop(of: [UTType(tag: currentPlatform.gameType, tagClass: .filenameExtension, conformingTo: currentPlatform.gameType == "app" ? nil : .data) ?? .data], isTargeted: nil) { selectedFile in
             handleDrop(providers: selectedFile)
             return true
         }
@@ -70,9 +70,7 @@ struct GameFilePickerButton: View {
     
     private func handleDrop(providers: [NSItemProvider]) {
         for provider in providers {
-            print(provider)
-            // Check if the dropped item is a file URL
-            provider.loadItem(forTypeIdentifier: currentPlatform.gameType, options: nil) { item, error in
+            provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
                     appViewModel.failureToastText = "Unable to create application launch command: \(error)"
@@ -81,8 +79,8 @@ struct GameFilePickerButton: View {
                 }
                 if let url = (item as? URL) {
                     extraAction?(url)
-                    game.gameFile = "\"\(url.path)\""
-                    game.launcher = String(format: currentPlatform.commandTemplate, game.gameFile)
+                    game.gameFile = url.path
+                    game.launcher = String(format: currentPlatform.commandTemplate, "\"\(game.gameFile)\"")
                 }
             }
         }

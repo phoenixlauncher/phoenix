@@ -76,9 +76,7 @@ struct FileImportButton: View {
     
     private func handleDrop(providers: [NSItemProvider]) {
         for provider in providers {
-            print(provider)
-            // Check if the dropped item is a file URL
-            provider.loadItem(forTypeIdentifier: type.identifier, options: nil) { item, error in
+            provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
                     appViewModel.failureToastText = "Unable to create application launch command: \(error)"
