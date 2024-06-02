@@ -6,21 +6,26 @@
 //
 
 import SwiftUI
-import Colorful
+import FluidGradient
 
 struct OnboardingDetailView: View {
     var body: some View {
         ZStack {
-            ColorfulView(animated: true, animation: .smooth, colors: [.red, .orange, .red, .purple, .red, .orange], colorCount: 60)
+            FluidGradient(blobs: [.orange, .pink], highlights: [.pink, .yellow, .purple], speed: 0.5, blur: 1.25)
+                .background(.red)
             VStack(spacing: 20) {
                 Text("Welcome to Phoenix.")
                     .font(.system(size: 40))
                     .foregroundStyle(.white)
                     .fontWeight(.bold)
-                Text("Click the 􀅼 in the top left to get started.")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
-                    .fontWeight(.medium)
+                HStack {
+                    Text("Click the")
+                    Image(systemName: "plus.app")
+                    Text("in the top left to get started.")
+                }
+                .font(.system(size: 20))
+                .foregroundStyle(.white)
+                .fontWeight(.medium)
             }
         }
     }

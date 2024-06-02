@@ -1,5 +1,5 @@
 //
-//  ContextButtonMenu.swift
+//  EnumContextButtonMenu.swift
 //  Phoenix
 //
 //  Created by jxhug on 1/21/24.
@@ -12,7 +12,7 @@ protocol CaseIterableEnum: Identifiable {
     var displayName: String { get }
 }
 
-struct ContextButtonMenu<Enum: CaseIterableEnum>: View {
+struct EnumContextButtonMenu<Enum: CaseIterableEnum>: View {
     
     let forEachEnum: Enum.Type
     
@@ -39,7 +39,3 @@ struct ContextButtonMenu<Enum: CaseIterableEnum>: View {
         .accessibility(identifier: text)
     }
 }
-//
-//#Preview {
-//    ContextButtonMenu()
-//}

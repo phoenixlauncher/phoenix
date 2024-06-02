@@ -12,6 +12,7 @@ struct PhoenixApp: App {
     @Environment(\.openURL) var openURL
     @StateObject var gameViewModel = GameViewModel()
     @StateObject var appViewModel = AppViewModel()
+    @StateObject var platformViewModel = PlatformViewModel()
     @StateObject var updaterViewModel = UpdaterViewModel()
     
     @State var sortBy: SortBy = Defaults[.sortBy]
@@ -27,6 +28,7 @@ struct PhoenixApp: App {
                 )
                 .environmentObject(gameViewModel)
                 .environmentObject(appViewModel)
+                .environmentObject(platformViewModel)
         }.commands {
             CommandGroup(before: CommandGroupPlacement.newItem) {
                 Button(String(localized: "file_AddGame")) {
@@ -85,7 +87,10 @@ struct PhoenixApp: App {
         Settings {
             SettingsView()
                 .environmentObject(gameViewModel)
+                .environmentObject(appViewModel)
+                .environmentObject(platformViewModel)
         }
+        .windowResizability(.contentSize)
     }
 }
 

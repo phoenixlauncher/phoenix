@@ -75,20 +75,7 @@ class GameViewModel: ObservableObject {
     func saveGames() {
         print("Saving games")
         games = games.sorted()
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        
-        do {
-            let gamesJSON = try JSONEncoder().encode(games)
-            
-            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                writeGamesToJSON(data: gamesJSONString)
-            }
-        } catch {
-            logger.write(error.localizedDescription)
-        }
+        saveJSONData(to: "games", with: convertGamesToJSONString(games))
     }
     
     /// If varying game detection settings are enabled, run methods to check for those games
@@ -110,7 +97,7 @@ class GameViewModel: ObservableObject {
         }
         
         let res = loadGamesFromJSON()
-        return res.games
+        return res
     }
     
     /// Detects Steam games from application support directory
@@ -186,7 +173,7 @@ class GameViewModel: ObservableObject {
     }
 
     func compareSteamAndCrossoverGames(steamGameNames: Set<String>, crossoverGameNames: Set<String>) async {
-        let gameNames = Set(loadGamesFromJSON().games.map { $0.name })
+        let gameNames = Set(loadGamesFromJSON().map({ $0.name }))
         
         var steamGameNames = steamGameNames.subtracting(crossoverGameNames)
         var crossoverGameNames = crossoverGameNames
@@ -197,7 +184,7 @@ class GameViewModel: ObservableObject {
         var newGames: [Game] = []
 
         for steamName in steamGameNames {
-            await saveSupabaseGameFromName(steamName, platform: Platform.steam, launcher: "open steam: //run/%@") { gameFound, game in
+            await saveSupabaseGameFromName(steamName, platform: "Steam", launcher: "open steam: //run/%@") { gameFound, game in
                 if gameFound {
                     newGames.append(game)
                 }
@@ -205,7 +192,7 @@ class GameViewModel: ObservableObject {
         }
         
         for crossoverName in crossoverGameNames {
-            await saveSupabaseGameFromName(crossoverName, platform: Platform.pc, launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\"") { gameFound, game in
+            await saveSupabaseGameFromName(crossoverName, platform: "PC", launcher: "open \"\(Defaults[.crossOverFolder].relativePath + "/" + crossoverName).app\"") { gameFound, game in
                 if gameFound {
                     newGames.append(game)
                 }
@@ -215,11 +202,11 @@ class GameViewModel: ObservableObject {
         addGames(newGames)
     }
     
-    func saveSupabaseGameFromName(_ name: String, platform: Platform, launcher: String, completion: @escaping (Bool, Game) -> Void) async {
+    func saveSupabaseGameFromName(_ name: String, platform: String, launcher: String, completion: @escaping (Bool, Game) -> Void) async {
         // Create a set of the current game names to prevent duplicates
         await self.supabaseViewModel.fetchGamesFromName(name: name) { fetchedGames in
             if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
-                self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: UUID(), launcher: launcher, name: name, platform: platform)) { game in
+                self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: UUID(), launcher: launcher, name: name, platformName: platform)) { game in
                     completion(true, game)
                 }
             }
