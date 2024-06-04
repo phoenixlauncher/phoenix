@@ -26,7 +26,7 @@ struct GameInputView: View {
     
     @State private var game: Game = Game()
     @State private var dateInput: Date = .now
-
+    @State private var iconInput: String?
     @State private var screenshotIsImporting: Bool = false
     var newScreenshot: String?
     
@@ -43,7 +43,8 @@ struct GameInputView: View {
                     Group {
                         TextBox(textBoxName: String(localized: "editGame_Name"), input: $game.name) // Name input
                         
-                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), overrideLabel: String(localized: "editGame_IconOverride"), action: { path in
+                            iconInput = path.absoluteString
                             return saveIconToFile(iconData: pathIntoData(path: path), gameID: game.id)
                         })
                         
@@ -65,15 +66,17 @@ struct GameInputView: View {
                         
                         if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
                             GameFilePickerButton(currentPlatform: currentPlatform, game: $game, extraAction: { url in
-                                if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id) {
-                                    game.icon = icon
+                                if iconInput == nil {
+                                    if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id) {
+                                        game.icon = icon
+                                    }
                                 }
                             })
                         }
                     }
                     DisclosureGroup(String(localized: "editGame_Advanced")) {
                         VStack(alignment: .leading) {
-                            TextBox(textBoxName: String(localized: "editGame_Command"), caption: String(localized: "editGame_CommandOverride"), input: $game.launcher)
+                            TextBox(textBoxName: String(localized: "editGame_Command"), caption: String(localized: "editGame_CommandOverrideWarning"), input: $game.launcher)
                             
                             TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                             

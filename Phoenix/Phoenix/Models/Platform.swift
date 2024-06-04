@@ -17,4 +17,5 @@ struct Platform: Identifiable, Encodable, Decodable, Hashable {
     var commandArgs: String = ""
     var commandTemplate: String = "" // Command template for launching ("open %@")
     var deletable: Bool = true
+    var gameDirectory: String = ""
 }

@@ -51,13 +51,14 @@
 "detail_NoDesc" = "No description found.";
 "editGame_Name" = "Name";
 "editGame_Icon" = "Icon";
+"editGame_IconOverride" = "This is currently overrided by selected app icon.";
 "editGame_SelectedImage" = "Selected Image";
 "editGame_Browse" = "Browse";
 "editGame_Platform" = "Platform";
 "editGame_Status" = "Status";
 "editGame_Command" = "Command";
-"editGame_CommandOverride" = "Overrides the templated command for the game's platform.";
-"editGame_Override" = "This is currently overrided by the custom launch command.";
+"editGame_OverrideWarning" = "Overrides the templated command for the game's platform.";
+"editGame_CommandOverride" = "This is currently overrided by the custom launch command.";
 "editGame_Command_DragDrop" = "Select or drag and drop a game";
 "editGame_File_DragDrop" = "Select or drag and drop a file";
 "editGame_Command_SelectedGame" = "Selected game";
