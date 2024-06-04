@@ -21,7 +21,7 @@ struct GameFilePickerButton: View {
             VStack(alignment: .leading) {
                 Text("Game")
                 if game.gameFile != game.launcher && String(format: currentPlatform.commandTemplate, "\"\(game.gameFile)\"") != game.launcher {
-                    Text(String(localized: "editGame_Override"))
+                    Text(String(localized: "editGame_CommandOverride"))
                         .foregroundColor(.secondary)
                         .font(.caption)
                 } else if let url = URL(string: game.gameFile) {

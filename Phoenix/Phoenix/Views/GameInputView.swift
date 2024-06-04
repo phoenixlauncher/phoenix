@@ -26,7 +26,7 @@ struct GameInputView: View {
     
     @State private var game: Game = Game()
     @State private var dateInput: Date = .now
-
+    @State private var iconInput: String?
     @State private var screenshotIsImporting: Bool = false
     var newScreenshot: String?
     
@@ -43,11 +43,9 @@ struct GameInputView: View {
                     Group {
                         TextBox(textBoxName: String(localized: "editGame_Name"), input: $game.name) // Name input
                         
-                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
-                            if let data = pathIntoData(path: path) {
-                                return saveIconToFile(iconData: data, gameID: game.id)
-                            }
-                            return nil
+                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), overrideLabel: String(localized: "editGame_IconOverride"), action: { path in
+                            iconInput = path.absoluteString
+                            return saveIconToFile(iconData: pathIntoData(path: path), gameID: game.id)
                         })
                         
                         SlotInput(contentName: String(localized: "editGame_Platform"), content: {
@@ -68,15 +66,9 @@ struct GameInputView: View {
                         
                         if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
                             GameFilePickerButton(currentPlatform: currentPlatform, game: $game, extraAction: { url in
-                                if let resourcesURL = URL(string: "\(url.absoluteString)/Contents/Resources"), Defaults[.getIconFromApp] {
-                                    do {
-                                        let steamAppsFiles = try FileManager.default.contentsOfDirectory(at: resourcesURL, includingPropertiesForKeys: nil)
-                                        for fileName in steamAppsFiles.map({ $0.lastPathComponent }).filter({ $0.hasSuffix(".icns") }) {
-                                            game.icon = resourcesURL.appendingPathComponent(fileName).absoluteString
-                                        }
-                                    }
-                                    catch {
-                                        logger.write(error.localizedDescription)
+                                if iconInput == nil {
+                                    if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id) {
+                                        game.icon = icon
                                     }
                                 }
                             })
@@ -84,7 +76,7 @@ struct GameInputView: View {
                     }
                     DisclosureGroup(String(localized: "editGame_Advanced")) {
                         VStack(alignment: .leading) {
-                            TextBox(textBoxName: String(localized: "editGame_Command"), caption: String(localized: "editGame_CommandOverride"), input: $game.launcher)
+                            TextBox(textBoxName: String(localized: "editGame_Command"), caption: String(localized: "editGame_CommandOverrideWarning"), input: $game.launcher)
                             
                             TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                             

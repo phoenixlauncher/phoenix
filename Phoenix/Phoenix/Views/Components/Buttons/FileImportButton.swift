@@ -18,6 +18,7 @@ struct FileImportButton: View {
     let title: String
     let unselectedLabel: String
     let selectedLabel: String
+    var overrideLabel: String?
     let action: (URL) -> String?
 
     var body: some View {
@@ -30,6 +31,10 @@ struct FileImportButton: View {
                         .font(.caption)
                 } else if let input = input {
                     Text("\(selectedLabel): \(input)")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                } else if outputPath != "", !outputPath.contains("cachedImages"), let overrideLabel = overrideLabel {
+                    Text(overrideLabel)
                         .foregroundColor(.secondary)
                         .font(.caption)
                 } else {
