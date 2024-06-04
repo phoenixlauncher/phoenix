@@ -31,6 +31,24 @@ class SupabaseViewModel: ObservableObject {
         }
     }
     
+    func fetchGamesFromSteamID(steamID: String, completion: @escaping ([SupabaseGame]) -> Void) async {
+        // Create a select request from supabase and save it to games
+        if steamID != "" {
+            do {
+                let games: [SupabaseGame] = try await supabase.database
+                    .from("igdb_games")
+                    .select()
+                    .eq("steam_id", value: steamID)
+                    .execute()
+                    .value
+                completion(games)
+            } catch {
+                // Handle the error
+                logger.write("An error occurred: \(error)")
+            }
+        }
+    }
+    
     func fetchGameFromIgdbID(_ id: Int, completion: @escaping (SupabaseGame) -> Void) async {
         do {
             let games: [SupabaseGame] = try await supabase.database

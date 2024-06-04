@@ -130,17 +130,20 @@ func loadPlatformsFromJSON() -> [Platform] {
                 iconURL: platform["iconURL"].stringValue,
                 name: platform["name"].stringValue,
                 gameType: platform["gameType"].stringValue,
+                gameDirectory: platform["gameDirectory"].stringValue,
                 emulator: platform["emulator"].boolValue,
+                emulatorExecutable: platform["emulatorExecutable"].stringValue,
+                commandArgs: platform["commandArgs"].stringValue,
                 commandTemplate: platform["commandTemplate"].stringValue,
                 deletable: platform["deletable"].boolValue
             ))
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", commandTemplate: "open %@", deletable: false),
-            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", commandTemplate: "open steam://run/%@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectory: "/Applications", commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", gameDirectory: getApplicationSupportDirectory().appendingPathComponent("steam/steamapps").path, commandTemplate: "open steam://run/%@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
-            Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC"),
             Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
             Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", emulator: true),
             Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", emulator: true),

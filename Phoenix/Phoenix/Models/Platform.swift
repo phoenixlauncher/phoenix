@@ -12,10 +12,10 @@ struct Platform: Identifiable, Encodable, Decodable, Hashable {
     var iconURL: String = "" // Iconify icon URL
     var name: String = "" // Name of game
     var gameType: String = "" // Type of game (app, bin, exe, z64)
+    var gameDirectory: String = ""
     var emulator: Bool = false
     var emulatorExecutable: String = ""
     var commandArgs: String = ""
     var commandTemplate: String = "" // Command template for launching ("open %@")
     var deletable: Bool = true
-    var gameDirectory: String = ""
 }

@@ -66,8 +66,8 @@ struct GameInputView: View {
                         
                         if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
                             GameFilePickerButton(currentPlatform: currentPlatform, game: $game, extraAction: { url in
-                                if iconInput == nil {
-                                    if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id) {
+                                if iconInput == nil && Defaults[.getIconFromApp] {
+                                    if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id)   {
                                         game.icon = icon
                                     }
                                 }

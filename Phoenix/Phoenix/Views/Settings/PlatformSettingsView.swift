@@ -98,8 +98,11 @@ struct PlatformSettingsDetail: View {
                     ScrollView {
                         VStack(alignment: .leading) {
                             TextBox(textBoxName: String(localized: "platforms_EditName"), input: $platform.name) // Name input
-                            IconSearchButton(isSearching: $searchingForIcon, icon: icon)
+                            IconSearchButton(isSearching: $searchingForIcon, icon: icon) // Icon search
                             TextBox(textBoxName: String(localized: "platforms_GameType"), caption: String(localized: "platforms_GameTypeDesc"), input: $platform.gameType) // Game type input
+                            FileImportButton(type: .folder, outputPath: $platform.gameDirectory, showOutput: true, title: String(localized: "platforms_GameDirectory"), unselectedLabel: String(localized: "platforms_Select_GameDirectory"), selectedLabel: String(localized: "platforms_SelectedGameDirectory"), action: { url in
+                                return url.path
+                            })
                             Divider()
                                 .padding(.horizontal)
                             Toggle(isOn: $platform.emulator) {
