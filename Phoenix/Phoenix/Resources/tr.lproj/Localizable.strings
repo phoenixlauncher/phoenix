@@ -5,14 +5,14 @@
   Created by Kaleb Rosborough on 2024-01-11.
   
 */
-"category_SortBy" = "Sort by";
+"category_SortBy" = "Sırala";
 "category_Platform" = "Platform";
-"category_Status" = "Status";
-"category_Name" = "Name";
-"category_Recency" = "Recency";
-"gameList_Search" = "Search";
-"gameList_AddGame" = "Add new game";
-"platforms_Favorites" = "Favorites";
+"category_Status" = "Durum";
+"category_Name" = "Ad";
+"category_Recency" = "Son Oynanan";
+"gameList_Search" = "Arama";
+"gameList_AddGame" = "Yeni oyun ekle";
+"platforms_Favorites" = "Favoriler";
 "platforms_Mac" = "Mac";
 "platforms_Steam" = "Steam";
 "platforms_GOG" = "GOG";
@@ -22,21 +22,21 @@
 "platforms_Nintendo" = "Nintendo";
 "platforms_Sega" = "Sega";
 "platforms_Xbox" = "Xbox";
-"platforms_Other" = "Other";
-"status_Playing" = "Playing";
-"status_Shelved" = "Shelved";
-"status_Occasional" = "Occasional";
+"platforms_Other" = "Diğer";
+"status_Playing" = "Oynanıyor";
+"status_Shelved" = "Rafa kaldırıldı";
+"status_Occasional" = "Ara sıra";
 "status_Backlog" = "Backlog";
 "status_Beaten" = "Beaten";
 "status_Completed" = "Completed";
 "status_Abandoned" = "Abandoned";
-"status_Other" = "Other";
-"recency_Today" = "Today";
-"recency_ThisWeek" = "This Week";
-"recency_ThisMonth" = "This Month";
-"recency_Last3Months" = "Last 3 Months";
-"recency_Last6Months" = "Last 6 Months";
-"recency_ThisYear" = "This Year";
+"status_Other" = "Diğer";
+"recency_Today" = "Bugün";
+"recency_ThisWeek" = "Bu Hafta";
+"recency_ThisMonth" = "Bu Ay";
+"recency_Last3Months" = "Son 3 Ay";
+"recency_Last6Months" = "Son 6 Ay";
+"recency_ThisYear" = "Bu Yıl";
 "recency_Never" = "Never";
 "detail_Play" = "Play";
 "detail_LP" = "Last Played";
@@ -44,8 +44,8 @@
 "detail_Status" = "Status";
 "detail_Rating" = "Rating";
 "detail_Genres" = "Genres";
-"detail_Dev" = "Developer";
-"detail_Pub" = "Publisher";
+"detail_Dev" = "Geliştirici";
+"detail_Pub" = "Yayıncı";
 "detail_Release" = "Release Date";
 "detail_NoGame" = "No game selected";
 "detail_NoDesc" = "No description found.";
