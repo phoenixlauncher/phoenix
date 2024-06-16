@@ -97,7 +97,7 @@
 "appearance_IconSize" = "Simge boyutu";
 "appearance_GameCount" = "Kenar çubuğunda oyun sayısını göster";
 "appearance_ShowAdd" = "Kenar çubuğunda oyun ekle butonunu göster";
-"appearance_CategoryAnimation" = "Kategori seçiminde animasyon göster";
+"appearance_CategoryAnimation" = "Kategori seçicide animasyonu göster";
 "appearance_CategoryText" = "Kategori seçicide metni göster";
 "prefs_Hidden" = "Gizli oyunlar";
 "prefs_Platforms" = "Platformlar";
