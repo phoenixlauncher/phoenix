@@ -29,7 +29,7 @@
 "status_Backlog" = "Yığın";
 "status_Beaten" = "Bitirildi";
 "status_Completed" = "Tamamlandı";
-"status_Abandoned" = "Terk edilmiş";
+"status_Abandoned" = "Terk edildi";
 "status_Other" = "Diğer";
 "recency_Today" = "Bugün";
 "recency_ThisWeek" = "Bu Hafta";
