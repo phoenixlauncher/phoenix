@@ -86,12 +86,12 @@ class GameViewModel: ObservableObject {
         Task {
             for platform in platformViewModel.platforms {
                 print(platform.name)
-                if let directoryURL = URL(string: platform.gameDirectory), FileManager.default.fileExists(atPath: platform.gameDirectory) {
-                    print(platform.gameDirectory)
-                    platformGameSets[platform] = scanGames(ofName: platform.name, at: directoryURL, withType: platform.gameType)
+                for directory in platform.gameDirectories {
+                    if let directoryURL = URL(string: directory), FileManager.default.fileExists(atPath: directory) {
+                        platformGameSets[platform] = scanGames(ofName: platform.name, at: directoryURL, withType: platform.gameType)
+                    }
                 }
             }
-            
             await compareGamePaths(platformGameSets: platformGameSets)
         }
         
@@ -188,79 +188,6 @@ class GameViewModel: ObservableObject {
         
         addGames(newGames)
     }
-    
-    /// Detects Steam games from application support directory
-    /// using the appmanifest_<steamID>.acf files and writes them to the games.json file.
-    ///
-    ///   - Parameters: None.
-    ///
-    ///   - Returns: Void.
-    ///
-    ///   - Throws: An error if there was a problem writing to the file.
-//    func detectSteamGames() -> Set<String> {
-//        let fileManager = FileManager.default
-//
-//        /// Get ~/Library/Application Support/Steam/steamapps by default.
-//        /// Or when App Sandbox is enabled ~/Library/Containers/com.<username>.Phoenix/Data/Library/Application Support/Steam/steamapps
-//        /// The user may also set a custom directory of their choice, so we get that directory if they have.
-//
-//        let steamAppsDirectory = Defaults[.steamFolder]
-//        var steamGameNames: Set<String> = []
-//        
-//        // Find the appmanifest_<steamID>.acf files and parse data from them
-//        do {
-//            let steamAppsFiles = try fileManager.contentsOfDirectory(
-//                at: steamAppsDirectory, includingPropertiesForKeys: nil
-//            )
-//            for steamAppsFile in steamAppsFiles {
-//                let fileName = steamAppsFile.lastPathComponent
-//                if fileName.hasSuffix(".acf") {
-//                    let manifestFilePath = steamAppsFile
-//                    let manifestFileData = try Data(contentsOf: manifestFilePath)
-//                    let manifestDictionary = parseACFFile(data: manifestFileData)
-//                    let name = manifestDictionary["name"]
-//                    if let name = name {
-//                        steamGameNames.insert(name)
-//                        logger.write("\(name) detected in Steam directory.")
-//                    }
-//                }
-//            }
-//        } catch {
-//            logger.write("[ERROR]: Error adding to Steam games.")
-//        }
-//        return steamGameNames
-//    }
-//
-//    /// Detects Crossover games from the user Applications directory
-//    /// And writes them to the games.json file
-//    ///
-//    ///    - Parameters: None
-//    ///
-//    ///    - Returns: Void
-//    func detectCrossoverGames() -> Set<String> {
-//        let fileManager = FileManager.default
-//        
-//        /// Get ~/Applications/CrossOver by default.
-//        /// Or when App Sandbox is enabled ~/Library/Containers/com.<username>.Phoenix/Data/Applications/CrossOver
-//        /// The user may also set a custom directory of their choice, so we get that directory if they have.
-//        
-//        let crossoverDirectory = Defaults[.crossOverFolder]
-//        var crossoverGameNames: Set<String> = []
-//        
-//        // Find the <name>.app files and get name from them
-//        if let enumerator = fileManager.enumerator(at: crossoverDirectory, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-//            for case let fileURL as URL in enumerator {
-//                let fileName = fileURL.lastPathComponent
-//                if fileName.hasSuffix(".app") {
-//                    let name = String(fileName.dropLast(4))
-//                    crossoverGameNames.insert(name)
-//                    logger.write("\(name) detected in CrossOver directory.")
-//                }
-//            }
-//        }
-//        return crossoverGameNames
-//    }
-//
 
     
     func saveSupabaseGame(_ name: String, steamID: String? = nil, platform: String, launcher: String, completion: @escaping (Bool, Game) -> Void) async {

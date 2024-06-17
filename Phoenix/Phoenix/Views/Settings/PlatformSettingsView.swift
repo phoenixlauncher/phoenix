@@ -53,11 +53,11 @@ struct PlatformSettingsSidebar: View {
                     platformViewModel.platforms.move(fromOffsets: from, toOffset: to)
                 }
             }
-            SystemToolbar(selectedPlatform: $selectedPlatform, plusAction: {
+            SystemToolbar(plusAction: {
                 platformViewModel.platforms.insert(Platform(name: "New Platform"), at: selectedPlatform + 1  )
                 selectedPlatform += 1
                 platformViewModel.savePlatforms()
-            }, minusAction: {
+            }, plusDisabled: false, minusAction: {
                 if platformViewModel.platforms.count > 1 {
                     platformViewModel.platforms.remove(at: selectedPlatform)
                     if selectedPlatform != 0 {
@@ -67,7 +67,7 @@ struct PlatformSettingsSidebar: View {
                     }
                     platformViewModel.savePlatforms()
                 }
-            })
+            }, minusDisabled: (platformViewModel.platforms[selectedPlatform].deletable == false))
         }
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .frame(width: 160)
@@ -84,6 +84,8 @@ struct PlatformSettingsDetail: View {
     @EnvironmentObject var platformViewModel: PlatformViewModel
     @EnvironmentObject var gameViewModel: GameViewModel
     @Binding var selectedPlatform: Int
+    @State var selectedGameDir: Int = 0
+    @State var importingGameDir = false
     @Binding var searchingForIcon: Bool
     @State var platform: Platform = Platform()
     
@@ -100,9 +102,69 @@ struct PlatformSettingsDetail: View {
                             TextBox(textBoxName: String(localized: "platforms_EditName"), input: $platform.name) // Name input
                             IconSearchButton(isSearching: $searchingForIcon, icon: icon) // Icon search
                             TextBox(textBoxName: String(localized: "platforms_GameType"), caption: String(localized: "platforms_GameTypeDesc"), input: $platform.gameType) // Game type input
-                            FileImportButton(type: .folder, outputPath: $platform.gameDirectory, showOutput: true, title: String(localized: "platforms_GameDirectory"), unselectedLabel: String(localized: "platforms_Select_GameDirectory"), selectedLabel: String(localized: "platforms_SelectedGameDirectory"), action: { url in
-                                return url.path
-                            })
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading) {
+                                    Text(String(localized: "platforms_GameDirectories"))
+                                    Text(String(localized: "platforms_GameDirectoriesDesc"))
+                                        .foregroundColor(.secondary)
+                                        .font(.caption)
+                                }.frame(width: 150, alignment: .leading)
+                                Spacer()
+                                VStack {
+                                    List(selection: $selectedGameDir) {
+                                        ForEach(Array(platform.gameDirectories.enumerated()), id: \.offset) { (index, gameDirectory) in
+                                            Text(gameDirectory)
+                                        }.onAppear {
+                                            print(platform.gameDirectories)
+                                        }
+                                    }
+                                    .frame(height: 75)
+                                    SystemToolbar(plusAction: {
+                                        importingGameDir = true
+                                    }, plusDisabled: false, minusAction: {
+                                        if platform.gameDirectories.count > 1 {
+                                            platform.gameDirectories.remove(at: selectedGameDir)
+                                            if selectedGameDir != 0 {
+                                                selectedGameDir -= 1
+                                            } else {
+                                                selectedGameDir += 1
+                                            }
+                                        }
+                                    }, minusDisabled: false)
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                .frame(maxWidth: .infinity)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .stroke(lineWidth: 1)
+                                        .foregroundStyle(Color(NSColor.gridColor).opacity(0.5))
+                                )
+                            }
+                            .padding()
+                            .fileImporter(
+                                isPresented: $importingGameDir,
+                                allowedContentTypes: [.folder],
+                                allowsMultipleSelection: false
+                            ) { result in
+                                do {
+                                    let selectedFileURL: URL? = try result.get().first
+                                    if let selectedFileURL = selectedFileURL {
+                                        platform.gameDirectories.append(selectedFileURL.path)
+                                    }
+                                }
+                                catch {
+                                    logger.write(error.localizedDescription)
+                                    appViewModel.failureToastText = "Unable to get file: \(error)"
+                                    appViewModel.showFailureToast.toggle()
+                                }
+                            }
+                            .onDrop(of: [.folder], isTargeted: nil) { selectedFile in
+                                handleDrop(providers: selectedFile)
+                                return true
+                            }
+//                            FileImportButton(type: .folder, outputPath: $platform.gameDirectory, showOutput: true, title: String(localized: "platforms_GameDirectory"), unselectedLabel: String(localized: "platforms_Select_GameDirectory"), selectedLabel: String(localized: "platforms_SelectedGameDirectory"), action: { url in
+//                                return url.path
+//                            })
                             Divider()
                                 .padding(.horizontal)
                             Toggle(isOn: $platform.emulator) {
@@ -187,5 +249,21 @@ struct PlatformSettingsDetail: View {
             IconSearch(selectedIcon: $platform.iconURL)
         }
         .frame(height: 600, alignment: .bottom)
+    }
+    
+    private func handleDrop(providers: [NSItemProvider]) {
+        for provider in providers {
+            provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
+                if let error = error {
+                    logger.write(error.localizedDescription)
+                    appViewModel.failureToastText = "Unable to create application launch command: \(error)"
+                    appViewModel.showFailureToast.toggle()
+                    return
+                }
+                if let selectedFileURL = (item as? URL) {
+                    platform.gameDirectories.append(selectedFileURL.path)
+                }
+            }
+        }
     }
 }

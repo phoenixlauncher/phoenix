@@ -130,7 +130,7 @@ func loadPlatformsFromJSON() -> [Platform] {
                 iconURL: platform["iconURL"].stringValue,
                 name: platform["name"].stringValue,
                 gameType: platform["gameType"].stringValue,
-                gameDirectory: platform["gameDirectory"].stringValue,
+                gameDirectories: platform["gameDirectory"].string != nil ? [platform["gameDirectory"].stringValue] : platform["gameDirectories"].arrayValue.map({ $0.stringValue }),
                 emulator: platform["emulator"].boolValue,
                 emulatorExecutable: platform["emulatorExecutable"].stringValue,
                 commandArgs: platform["commandArgs"].stringValue,
@@ -140,8 +140,8 @@ func loadPlatformsFromJSON() -> [Platform] {
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectory: "/Applications", commandTemplate: "open %@", deletable: false),
-            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", gameDirectory: getApplicationSupportDirectory().appendingPathComponent("steam/steamapps").path, commandTemplate: "open steam://run/%@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: ["/Applications"], commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", gameDirectories: [getApplicationSupportDirectory().appendingPathComponent("steam/steamapps").path], commandTemplate: "open steam://run/%@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
             Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC"),
             Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
