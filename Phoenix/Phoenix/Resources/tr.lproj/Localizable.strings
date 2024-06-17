@@ -78,7 +78,7 @@
 "editGame_SelectGame" = "Oyun Seç";
 "editGame_Fetch" = "Metadatayı Getir";
 "editGame_NoGamesFailure" = "Oyun bulunamadı";
-"prefs_SonomaRequired" = "Bu özellik için macOS 14 (Sonoma) gerekir.";
+"prefs_SonomaRequired" = "Bu özellik için macOS 14 (Sonoma) veya üstü gerekir.";
 "prefs_General" = "Genel";
 "general_SelectedFolder" = "Seçilen klasör";
 "general_Detect" = "%@ oyunlarını tespit et"; // %@ Will be replaced with a platform like "Crossover" or "Steam"
@@ -86,8 +86,8 @@
 "general_FetchMeta" = "Oyun metadatasını otomatik al";
 "general_GetIconFromApp" = "Oyun simgesini otomatik ekle";
 "prefs_Appearance" = "Görünüm";
-"appearance_Accent" = "Vurgu rengini sistemin vurgu rengiyle eşitle";
-"appearance_Gradient" = "Degrade Arayüz";
+"appearance_Accent" = "Sistemin menü rengini arayüze uygula";
+"appearance_Gradient" = "Degrade arayüz";
 "appearance_Star" = "Yıldız derecelendirmesini göster";
 "appearance_GradientHeader" = "Arka planı soldur";
 "appearance_ShowScreenshots" = "Ekran görüntülerini göster";
