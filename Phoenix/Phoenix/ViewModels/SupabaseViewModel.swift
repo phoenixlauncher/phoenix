@@ -13,7 +13,7 @@ class SupabaseViewModel: ObservableObject {
     
     let supabase = SupabaseClient(supabaseURL: URL(string: "https://xcvgscmerrimxzykhwwj.supabase.co")!, supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdmdzY21lcnJpbXh6eWtod3dqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTY1NzI0MzQsImV4cCI6MjAxMjE0ODQzNH0.HQmy-ngtIcJxQmyopQ9xaRYlVXlCVwDNYwQ1WOxmMus")
         
-    func fetchGamesFromName(name: String, completion: @escaping ([SupabaseGame]) -> Void) async {
+    func fetchGamesFromName(name: String) async -> [SupabaseGame] {
         // Create a select request from supabase and save it to games
         if name != "" {
             do {
@@ -23,15 +23,16 @@ class SupabaseViewModel: ObservableObject {
                     .ilike("name", value: "%\(name)%")
                     .execute()
                     .value
-                completion(games)
+                return games
             } catch {
                 // Handle the error
                 logger.write("An error occurred: \(error)")
             }
         }
+        return []
     }
     
-    func fetchGamesFromSteamID(steamID: String, completion: @escaping ([SupabaseGame]) -> Void) async {
+    func fetchGamesFromSteamID(steamID: String) async -> [SupabaseGame] {
         // Create a select request from supabase and save it to games
         if steamID != "" {
             do {
@@ -41,12 +42,13 @@ class SupabaseViewModel: ObservableObject {
                     .eq("steam_id", value: steamID)
                     .execute()
                     .value
-                completion(games)
+                return games
             } catch {
                 // Handle the error
                 logger.write("An error occurred: \(error)")
             }
         }
+        return []
     }
     
     func fetchGameFromIgdbID(_ id: Int, completion: @escaping (SupabaseGame) -> Void) async {

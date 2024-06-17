@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 
 @MainActor
 class GameViewModel: ObservableObject {
@@ -85,7 +86,6 @@ class GameViewModel: ObservableObject {
         var platformGameSets: [Platform: Set<URL>] = [:]
         Task {
             for platform in platformViewModel.platforms {
-                print(platform.name)
                 for directory in platform.gameDirectories {
                     if let directoryURL = URL(string: directory), FileManager.default.fileExists(atPath: directory) {
                         platformGameSets[platform] = scanGames(ofName: platform.name, at: directoryURL, withType: platform.gameType)
@@ -107,7 +107,6 @@ class GameViewModel: ObservableObject {
                 while let fileURL = fileEnumerator?.nextObject() as? URL {
                     if fileURL.lastPathComponent.hasSuffix(type) {
                         gamePaths.insert(fileURL)
-                        print(fileURL)
                     }
                     let resourceValues = try fileURL.resourceValues(forKeys: [.isDirectoryKey])
                     if let isDirectory = resourceValues.isDirectory, isDirectory, fileURL.pathExtension == "app" {
@@ -115,11 +114,9 @@ class GameViewModel: ObservableObject {
                     }
                 }
             } else {
-                print("Steam time!")
                 while let fileURL = fileEnumerator?.nextObject() as? URL {
                     if fileURL.lastPathComponent.hasSuffix("acf") {
                         gamePaths.insert(fileURL)
-                        print(fileURL)
                     }
                 }
             }
@@ -143,7 +140,7 @@ class GameViewModel: ObservableObject {
                         let manifestDictionary = parseACFFile(data: try Data(contentsOf: acfFile))
                         if let name = manifestDictionary["name"], let id = manifestDictionary["appid"] {
                             steamGames[id] = name
-                            logger.write("\(name) detected in Steam directory.")
+                            logger.write("\(name) detected in Steam directories.")
                         }
                     }
                     catch {
@@ -153,7 +150,7 @@ class GameViewModel: ObservableObject {
             } else {
                 for file in gamePaths {
                     let name = String(file.lastPathComponent.dropLast(platform.gameType.contains(".") ? platform.gameType.count : platform.gameType.count + 1))
-                    print(name)
+                    logger.write("\(name) detected in \(platform.name) directories.")
                     nonSteamGames[[name: platform]] = file.path
                 }
             }
@@ -161,6 +158,8 @@ class GameViewModel: ObservableObject {
         
         var doneGames: Set<String> = startGameNames
         var newGames: [Game] = []
+        
+        logger.write("Starting fetch process. Currently done games are: \(doneGames.sorted())")
 
         for (id, name) in steamGames {
             if !doneGames.contains(name), let launcherTemplate = platformViewModel.platforms.first(where: { "Steam" == $0.name})?.commandTemplate {
@@ -173,40 +172,83 @@ class GameViewModel: ObservableObject {
             }
         }
         
+        //Prioritize non-Mac games so Automator shortcuts and aliases aren't added but the actual games are.
+        
+        var macGames: [(namePlatform: [String: Platform], urlPath: String)] = []
+        var otherGames: [(namePlatform: [String: Platform], urlPath: String)] = []
+
         for (namePlatform, urlPath) in nonSteamGames {
-            for (name, platform) in namePlatform {
-                if !doneGames.contains(name) {
-                    await saveSupabaseGame(name, platform: platform.name, launcher: String(format: platform.commandTemplate, urlPath)) { gameFound, game in
-                        if gameFound {
-                            newGames.append(game)
-                            doneGames.insert(name)
+            var isMacGame = false
+            for (_, platform) in namePlatform {
+                if platform.name == "Mac" {
+                    isMacGame = true
+                    break
+                }
+            }
+            if isMacGame {
+                macGames.append((namePlatform: namePlatform, urlPath: urlPath))
+            } else {
+                otherGames.append((namePlatform: namePlatform, urlPath: urlPath))
+            }
+        }
+
+        func saveGames(_ games: [(namePlatform: [String: Platform], urlPath: String)]) async {
+            for (namePlatform, urlPath) in games {
+                for (name, platform) in namePlatform {
+                    if !doneGames.contains(name) {
+                        await saveSupabaseGame(name, platform: platform.name, launcher: String(format: platform.commandTemplate, urlPath)) { gameFound, game in
+                            if gameFound {
+                                var icon: String?
+                                if platform.name == "Mac" {
+                                    if Defaults[.getIconFromApp] {
+                                        if let appIcon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: urlPath), gameID: game.id) {
+                                            icon = appIcon
+                                        }
+                                    }
+                                }
+                                var newGame = game
+                                newGame.icon = icon ?? ""
+                                newGames.append(newGame)
+                                doneGames.insert(name)
+                            }
                         }
                     }
                 }
             }
         }
+        await saveGames(otherGames)
+        await saveGames(macGames)
+        
         
         addGames(newGames)
     }
 
     
     func saveSupabaseGame(_ name: String, steamID: String? = nil, platform: String, launcher: String, completion: @escaping (Bool, Game) -> Void) async {
-        // Create a set of the current game names to prevent duplicates
+        var fetchedGames: [SupabaseGame] = []
         if let steamID = steamID {
-            await self.supabaseViewModel.fetchGamesFromSteamID(steamID: steamID) { fetchedGames in
-                if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
-                    self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: UUID(), steamID: steamID, launcher: launcher, name: name, platformName: platform)) { game in
-                        completion(true, game)
-                    }
+            fetchedGames = await self.supabaseViewModel.fetchGamesFromSteamID(steamID: steamID)
+        } else {
+            fetchedGames = await self.supabaseViewModel.fetchGamesFromName(name: name)
+        }
+        let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: { game in
+            if let gameName = game.name {
+                if gameName.lowercased() == name.lowercased() {
+                    return true
                 }
             }
-        } else {
-            await self.supabaseViewModel.fetchGamesFromName(name: name) { fetchedGames in
-                if let supabaseGame = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: {$0.name == name}) {
-                    self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: UUID(), launcher: launcher, name: name, platformName: platform)) { game in
-                        completion(true, game)
-                    }
+            return false
+        }) ?? fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: { game in
+            if let gameName = game.name {
+                if gameName.lowercased().contains(name.lowercased()) || name.lowercased().contains(gameName.lowercased()) {
+                    return true
                 }
+            }
+            return false
+        })
+        if let supabaseGame = supabaseGame {
+            self.supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: Game(id: UUID(), launcher: launcher, name: name, platformName: platform)) { game in
+                completion(true, game)
             }
         }
     }

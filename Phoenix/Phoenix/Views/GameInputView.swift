@@ -211,15 +211,13 @@ struct GameInputView: View {
                                     gameViewModel.saveGames()
                                 }
                                 Task {
-                                    await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
-                                        fetchedGames = result
-                                        gameViewModel.saveGames()
-                                        if fetchedGames.count != 0 {
-                                            showChooseGameView.toggle()
-                                        } else {
-                                            appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
-                                            dismiss()
-                                        }
+                                    fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
+                                    gameViewModel.saveGames()
+                                    if fetchedGames.count != 0 {
+                                        showChooseGameView.toggle()
+                                    } else {
+                                        appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
+                                        dismiss()
                                     }
                                 }
                                 gameViewModel.selectedGame = game.id
@@ -239,16 +237,14 @@ struct GameInputView: View {
                             if isNewGame {
                                 if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
-                                        await supabaseViewModel.fetchGamesFromName(name: game.name) { result in
-                                            fetchedGames = result
-                                            if fetchedGames.count != 0 {
-                                                showChooseGameView.toggle()
-                                            } else {
-                                                gameViewModel.games.append(game)
-                                                gameViewModel.selectedGame = game.id
-                                                appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
-                                                dismiss()
-                                            }
+                                        fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
+                                        if fetchedGames.count != 0 {
+                                            showChooseGameView.toggle()
+                                        } else {
+                                            gameViewModel.games.append(game)
+                                            gameViewModel.selectedGame = game.id
+                                            appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
+                                            dismiss()
                                         }
                                     }
                                 }

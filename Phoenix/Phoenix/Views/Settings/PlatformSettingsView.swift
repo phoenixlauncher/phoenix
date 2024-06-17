@@ -73,8 +73,7 @@ struct PlatformSettingsSidebar: View {
         .frame(width: 160)
         .overlay(
             RoundedRectangle(cornerRadius: 6)
-                .stroke(lineWidth: 1)
-                .foregroundStyle(Color(NSColor.gridColor).opacity(0.5))
+            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
         )
     }
 }
@@ -114,8 +113,6 @@ struct PlatformSettingsDetail: View {
                                     List(selection: $selectedGameDir) {
                                         ForEach(Array(platform.gameDirectories.enumerated()), id: \.offset) { (index, gameDirectory) in
                                             Text(gameDirectory)
-                                        }.onAppear {
-                                            print(platform.gameDirectories)
                                         }
                                     }
                                     .frame(height: 75)
@@ -130,14 +127,13 @@ struct PlatformSettingsDetail: View {
                                                 selectedGameDir += 1
                                             }
                                         }
-                                    }, minusDisabled: false)
+                                    }, minusDisabled: (selectedGameDir == 0))
                                 }
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                 .frame(maxWidth: .infinity)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 6)
-                                        .stroke(lineWidth: 1)
-                                        .foregroundStyle(Color(NSColor.gridColor).opacity(0.5))
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
                                 )
                             }
                             .padding()
@@ -238,7 +234,6 @@ struct PlatformSettingsDetail: View {
             platform = platformViewModel.platforms[selectedPlatform]
         }
         .onChange(of: selectedPlatform) { _ in
-            print(platformViewModel.platforms[selectedPlatform])
             platform = platformViewModel.platforms[selectedPlatform]
         }
         .sheet(isPresented: $searchingForIcon, onDismiss: {
