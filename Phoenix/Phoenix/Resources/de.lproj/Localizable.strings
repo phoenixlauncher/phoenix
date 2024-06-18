@@ -107,6 +107,8 @@
 "platforms_SelectedIcon" = "Selected icon";
 "platforms_GameType" = "Game Type";
 "platforms_GameTypeDesc" = "The file type of game (app, bin, exe, z64)";
+"platforms_GameDirectories" = "Game Directories";
+"platforms_GameDirectoriesDesc" = "Folders that will be scanned on launch for games of this platform.";
 "platforms_Select_Emulator_DragDrop" = "Select or drag and drop an emulator app";
 "platforms_SelectEmulator" = "Select Emulator";
 "platforms_SelectedEmulator" = "Selected Emulator";
