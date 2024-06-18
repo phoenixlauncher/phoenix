@@ -107,6 +107,8 @@
 "platforms_SelectedIcon" = "Seçili simge";
 "platforms_GameType" = "Oyun Türü";
 "platforms_GameTypeDesc" = "Oyunun dosya türü (app, bin, exe, z64)";
+"platforms_GameDirectories" = "Game Directories";
+"platforms_GameDirectoriesDesc" = "Folders that will be scanned on launch for games of this platform.";
 "platforms_Select_Emulator_DragDrop" = "Bir emülatörü seç ya da sürükle ve bırak";
 "platforms_SelectEmulator" = "Emülatör Seç";
 "platforms_SelectedEmulator" = "Seçili Emülatör";
