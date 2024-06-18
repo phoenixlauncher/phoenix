@@ -17,12 +17,6 @@ extension Defaults.Keys {
     static let sortBy = Key<SortBy>("sortBy", default: .platform)
     
     //general
-    static let steamDetection = Key<Bool>("steamDetection", default: true)
-    static let steamFolder = Key<URL>("steamFolder", default: getApplicationSupportDirectory().appendingPathComponent("steam/steamapps"))
-    
-    static let crossOverDetection = Key<Bool>("crossOverDetection", default: true)
-    static let crossOverFolder = Key<URL>("crossOverFolder", default: URL(fileURLWithPath: "~/Applications/CrossOver"))
-    
     static let isMetaDataFetchingEnabled = Key<Bool>("isMetaDataFetchingEnabled", default: true)
     static let getIconFromApp = Key<Bool>("getIconFromApp", default: true)
     

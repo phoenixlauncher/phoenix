@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct SystemToolbar: View {
-    @Binding var selectedPlatform: Int
-    @EnvironmentObject var platformViewModel: PlatformViewModel
     let plusAction: (() -> Void)
+    let plusDisabled: Bool
     let minusAction: (() -> Void)
+    let minusDisabled: Bool
     
     var body: some View {
         HStack(spacing: 0.5) {
-            ListButton(imageName: "plus", action: plusAction, disabled: false)
-            ListButton(imageName: "minus", action: minusAction, disabled: (platformViewModel.platforms[selectedPlatform].deletable == false))
+            ListButton(imageName: "plus", action: plusAction, disabled: plusDisabled)
+            ListButton(imageName: "minus", action: minusAction, disabled: minusDisabled)
             Spacer()
         }
         .frame(height: 30)
