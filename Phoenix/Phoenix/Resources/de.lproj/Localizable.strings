@@ -28,7 +28,7 @@
 "status_Occasional" = "Gelegentlich";
 "status_Backlog" = "Backlog";
 "status_Beaten" = "Abgeschlossen";
-"status_Completed" = "Abgeschlossen";
+"status_Completed" = "Komplettiert";
 "status_Abandoned" = "Zurückgelassenen";
 "status_Other" = "Andere";
 "recency_Today" = "Heute";
