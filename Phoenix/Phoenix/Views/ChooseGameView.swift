@@ -71,9 +71,13 @@ struct ChooseGameView: View {
     
     func chooseGame(_ supabaseGame: SupabaseGame) {
         done = true
-        supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game) { result in
-            gameViewModel.addGame(result)
-            gameViewModel.selectedGame = result.id
+        Task {
+            var (game, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
+            if let headerData = headerData {
+                game.metadata["header_img"] = saveImageToFile(data: headerData, gameID: game.id, type: "header")
+            }
+            gameViewModel.addGame(game)
+            gameViewModel.selectedGame = game.id
         }
     }
 }

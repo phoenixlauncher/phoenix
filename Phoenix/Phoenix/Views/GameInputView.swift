@@ -76,7 +76,7 @@ struct GameInputView: View {
                     }
                     DisclosureGroup(String(localized: "editGame_Advanced")) {
                         VStack(alignment: .leading) {
-                            TextBox(textBoxName: String(localized: "editGame_Command"), caption: String(localized: "editGame_CommandOverrideWarning"), input: $game.launcher)
+                            TextBox(textBoxName: String(localized: "editGame_Command"), caption: String(localized: "editGame_OverrideWarning"), input: $game.launcher)
                             
                             TextBox(textBoxName: String(localized: "editGame_Desc"), input: binding(for: "description"))
                             
@@ -250,22 +250,22 @@ struct GameInputView: View {
                                 }
                             } else {
                                 if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                    if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID) {
-                                        Task {
-                                            await supabaseViewModel.fetchGameFromIgdbID(igdbID) { response in
-                                                supabaseViewModel.convertSupabaseGame(supabaseGame: response, game: game) { newGame in
-                                                    gameViewModel.games[idx] = newGame
-                                                    gameViewModel.selectedGame = newGame.id
-                                                    gameViewModel.saveGames()
-                                                    appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
-                                                }
+                                    Task {
+                                        if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
+                                            var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
+                                            if let headerData = headerData {
+                                                newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
                                             }
+                                            gameViewModel.games[idx] = newGame
+                                            gameViewModel.selectedGame = newGame.id
+                                            gameViewModel.saveGames()
+                                            appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                        } else {
+                                            gameViewModel.games[idx] = game
+                                            gameViewModel.selectedGame = game.id
+                                            gameViewModel.saveGames()
+                                            appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                         }
-                                    } else {
-                                        gameViewModel.games[idx] = game
-                                        gameViewModel.selectedGame = game.id
-                                        gameViewModel.saveGames()
-                                        appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                     }
                                 } else {
                                     appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))

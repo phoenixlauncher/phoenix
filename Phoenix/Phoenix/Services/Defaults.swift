@@ -13,6 +13,7 @@ typealias Default = _Default
 
 extension Defaults.Keys {
     //app
+    static let firstOpen = Key<Bool>("firstOpen", default: true)
     static let selectedGame = Key<UUID>("selectedGame", default: UUID())
     static let sortBy = Key<SortBy>("sortBy", default: .platform)
     

@@ -140,7 +140,7 @@ func loadPlatformsFromJSON() -> [Platform] {
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: ["/Applications"], commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: [], commandTemplate: "open %@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", gameDirectories: [getApplicationSupportDirectory().appendingPathComponent("steam/steamapps").path], commandTemplate: "open steam://run/%@", deletable: false),
             Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
             Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC"),
@@ -149,11 +149,24 @@ func loadPlatformsFromJSON() -> [Platform] {
             Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", emulator: true),
             Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled.svg", name: "Other", deletable: false)
         ]
-        // create empty games.json if it doesn't exist
+        // create empty platforms.json if it doesn't exist
         logger.write("[INFO]: Couldn't find platforms.json. Creating new one.")
         saveJSONData(to: "platforms", with: convertPlatformsToJSONString(platforms))
     }
     return platforms
+}
+
+func loadNonGameNamesFromJSON() -> [String] {
+    let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/nonGameNames.json")
+    var nonGameNames: [String] = []
+    if let json = try? JSON(data: Data(contentsOf: url)) {
+        nonGameNames = json["nonGameNames"].arrayValue.map({ $0.stringValue })
+    } else {
+        // create empty nonGameNames.json if it doesn't exist
+        logger.write("[INFO]: Couldn't find nonGameNames.json. Creating new one.")
+        saveJSONData(to: "nonGameNames", with: convertNonGameNamesToJSONString(nonGameNames))
+    }
+    return nonGameNames
 }
 
 func convertGamesToJSONString(_ games: [Game]) -> String {
@@ -183,6 +196,24 @@ func convertPlatformsToJSONString(_ platforms: [Platform]) -> String {
             // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
             platformsJSONString = "{\"platforms\": \(platformsJSONString)}"
             return platformsJSONString
+        } else {
+            return ""
+        }
+    } catch {
+        logger.write(error.localizedDescription)
+        return ""
+    }
+}
+
+func convertNonGameNamesToJSONString(_ appNames: [String]) -> String {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    do {
+        let appJSON = try JSONEncoder().encode(appNames)
+        if var appJSONString = String(data: appJSON, encoding: .utf8) {
+            // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+            appJSONString = "{\"nonGameNames\": \(appJSONString)}"
+            return appJSONString
         } else {
             return ""
         }

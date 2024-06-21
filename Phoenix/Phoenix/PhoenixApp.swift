@@ -136,7 +136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         logger.write("[INFO]: Phoenix App finished launching.")
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
+    func applicationWillTerminate(_ notification: Notification) {
         // This method is called when the application is about to terminate. Save data if appropriate.
         logger.write("[INFO]: Phoenix App shutting down.")
     }
