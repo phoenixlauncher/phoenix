@@ -191,6 +191,9 @@ struct GameDetailView: View {
                 rating = Float(gameRating) ?? 0
             }
         }
+        .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false, offsetY: 25) {
+            AlertToast(displayMode: .hud, type: .loading, title: String(localized: "main_GamesLoading"), subTitle: String(localized: "main_GamesLoadingCaption"))
+        }
         .onChange(of: appViewModel.isPlayingGame) { _ in
             let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
             if let game = game {

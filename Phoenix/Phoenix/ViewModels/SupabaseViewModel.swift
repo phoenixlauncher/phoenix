@@ -32,7 +32,62 @@ class SupabaseViewModel: ObservableObject {
         return []
     }
     
-    func fetchGamesFromSteamID(steamID: String) async -> [SupabaseGame] {
+    func fetchIgbdIDsFromName(name: String) async -> [SupabaseGame] {
+        // Create a select request from supabase and save it to games
+        if name != "" {
+            do {
+                let igdbIDs: [SupabaseGame] = try await supabase.database
+                    .from("igdb_games")
+                    .select("igdb_id")
+                    .eq("name", value: name)
+                    .execute()
+                    .value
+                return igdbIDs
+            } catch {
+                // Handle the error
+                logger.write("An error occurred: \(error)")
+            }
+        }
+        return []
+    }
+    
+    func fetchIgbdIDsFromPatternName(name: String) async -> [SupabaseGame] {
+        // Create a select request from supabase and save it to games
+        if name != "" {
+            do {
+                let igdbIDs: [SupabaseGame] = try await supabase.database
+                    .from("igdb_games")
+                    .select("igdb_id, name")
+                    .ilike("name", value: "%\(name)%")
+                    .execute()
+                    .value
+                return igdbIDs
+            } catch {
+                // Handle the error
+                logger.write("An error occurred: \(error)")
+            }
+        }
+        return []
+    }
+    
+    func fetchGameFromIgdbID(_ igdbID: Int) async -> SupabaseGame? {
+        // Create a select request from supabase and save it to games
+        do {
+            let games: [SupabaseGame] = try await supabase.database
+                .from("igdb_games")
+                .select()
+                .eq("igdb_id", value: igdbID)
+                .execute()
+                .value
+            return games.first
+        } catch {
+            // Handle the error
+            logger.write("An error occurred: \(error)")
+        }
+        return nil
+    }
+    
+    func fetchGameFromSteamID(steamID: String) async -> SupabaseGame? {
         // Create a select request from supabase and save it to games
         if steamID != "" {
             do {
@@ -42,30 +97,13 @@ class SupabaseViewModel: ObservableObject {
                     .eq("steam_id", value: steamID)
                     .execute()
                     .value
-                return games
+                return games.first
             } catch {
                 // Handle the error
                 logger.write("An error occurred: \(error)")
             }
         }
-        return []
-    }
-    
-    func fetchGameFromIgdbID(_ id: Int, completion: @escaping (SupabaseGame) -> Void) async {
-        do {
-            let games: [SupabaseGame] = try await supabase.database
-                .from("igdb_games")
-                .select()
-                .eq("igdb_id", value: id)
-                .execute()
-                .value
-            if games.count > 0 {
-                completion(games[0])
-            }
-        } catch {
-            // Handle the error
-            logger.write("An error occurred: \(error)")
-        }
+        return nil
     }
     
     func fetchIgdbIDFromName(name: String, completion: @escaping (Int) -> Void) async {
@@ -89,8 +127,9 @@ class SupabaseViewModel: ObservableObject {
         }
     }
     
-    func convertSupabaseGame(supabaseGame: SupabaseGame, game: Game, completion: @escaping (Game) -> Void) {
+    func convertSupabaseGame(supabaseGame: SupabaseGame, game: Game) async -> (Game, Data?) {
         var game = game
+        var headerData: Data?
         
         game.igdbID = "\(supabaseGame.igdb_id)"
         
@@ -126,25 +165,17 @@ class SupabaseViewModel: ObservableObject {
         }
 
         // Create a dispatch group
-        let dispatchGroup = DispatchGroup()
 
         if let imageURL = supabaseGame.header_img, let url = URL(string: imageURL) {
-            // Enter the dispatch group before starting the image fetch
-            dispatchGroup.enter()
-            URLSession.shared.dataTask(with: url) { headerData, response, error in
-                defer {
-                    // Leave the dispatch group when the image fetch is done, regardless of success or failure
-                    dispatchGroup.leave()
-                }
-                if let headerData = headerData, let headerImage = saveImageToFile(data: headerData, gameID: game.id, type: "header") {
-                    game.metadata["header_img"] = headerImage
-                }
-            }.resume()
+            do {
+                headerData = try await URLSession.shared.data(from: url).0
+            }
+            catch {
+                logger.write("header fetch error: \(error.localizedDescription)")
+            }
         }
-        // When all tasks in the dispatch group are done
-        dispatchGroup.notify(queue: .main) {
-            completion(game)
-        }
+        
+        return (game, headerData)
     }
     
     func fetchAndSaveHeaderOf(gameID: UUID, igdbID: Int) async throws -> Data? {

@@ -14,14 +14,14 @@ struct OnboardingDetailView: View {
             FluidGradient(blobs: [.orange, .pink], highlights: [.pink, .yellow, .purple], speed: 0.5, blur: 1.25)
                 .background(.red)
             VStack(spacing: 20) {
-                Text("Welcome to Phoenix.")
+                Text(String(localized: "main_Welcome"))
                     .font(.system(size: 40))
                     .foregroundStyle(.white)
                     .fontWeight(.bold)
                 HStack {
-                    Text("Click the")
+                    Text(String(localized: "main_ClickInstruction"))
                     Image(systemName: "plus.app")
-                    Text("in the top left to get started.")
+                    Text(String(localized: "main_PlusInstruction"))
                 }
                 .font(.system(size: 20))
                 .foregroundStyle(.white)

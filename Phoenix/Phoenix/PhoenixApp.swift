@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WhatsNewKit
 
 @main
 struct PhoenixApp: App {
@@ -29,6 +30,13 @@ struct PhoenixApp: App {
                 .environmentObject(gameViewModel)
                 .environmentObject(appViewModel)
                 .environmentObject(platformViewModel)
+                .environment(
+                    \.whatsNew,
+                    WhatsNewEnvironment(
+                        versionStore: UserDefaultsWhatsNewVersionStore(),
+                        whatsNewCollection: WhatsNewConfiguration().whatsNewCollection
+                    )
+                )
         }.commands {
             CommandGroup(before: CommandGroupPlacement.newItem) {
                 Button(String(localized: "file_AddGame")) {
@@ -136,7 +144,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         logger.write("[INFO]: Phoenix App finished launching.")
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
+    func applicationWillTerminate(_ notification: Notification) {
         // This method is called when the application is about to terminate. Save data if appropriate.
         logger.write("[INFO]: Phoenix App shutting down.")
     }

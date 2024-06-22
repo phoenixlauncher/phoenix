@@ -25,6 +25,8 @@
 		0AF378772953AADE00978137 /* PhoenixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378762953AADE00978137 /* PhoenixTests.swift */; };
 		0AF378812953AADE00978137 /* PhoenixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378802953AADE00978137 /* PhoenixUITests.swift */; };
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
+		1A83BC7C2C26B97D00D1A031 /* WhatsNewKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A83BC7B2C26B97D00D1A031 /* WhatsNewKit */; };
+		1A83BC7E2C26B9DB00D1A031 /* WhatsNewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A83BC7D2C26B9DB00D1A031 /* WhatsNewConfiguration.swift */; };
 		AD0897FD2BFC38EF00C4820D /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = AD0897FC2BFC38EF00C4820D /* FluidGradient */; };
 		AD0897FF2BFC489F00C4820D /* PlatformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0897FE2BFC489F00C4820D /* PlatformViewModel.swift */; };
 		AD0971D92B60D8B1009F3742 /* ExpandableText in Frameworks */ = {isa = PBXBuildFile; productRef = AD0971D82B60D8B1009F3742 /* ExpandableText */; };
@@ -116,6 +118,7 @@
 		0AF3787C2953AADE00978137 /* PhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1A83BC7D2C26B9DB00D1A031 /* WhatsNewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewConfiguration.swift; sourceTree = "<group>"; };
 		AD0897FE2BFC489F00C4820D /* PlatformViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewModel.swift; sourceTree = "<group>"; };
 		AD0B643A2BEF02EA00C7FF28 /* PlatformSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSettingsView.swift; sourceTree = "<group>"; };
 		AD23F7432BF81B5400FD221B /* IconSearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconSearchButton.swift; sourceTree = "<group>"; };
@@ -172,6 +175,7 @@
 				AD5542E92BA935C300AE7F3E /* CachedAsyncImage in Frameworks */,
 				AD7AD2F02B09819E002DBDCD /* Supabase in Frameworks */,
 				AD0897FD2BFC38EF00C4820D /* FluidGradient in Frameworks */,
+				1A83BC7C2C26B97D00D1A031 /* WhatsNewKit in Frameworks */,
 				AD8718FD2AFDE14D0008F144 /* MarkdownUI in Frameworks */,
 				ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */,
 				AD0971D92B60D8B1009F3742 /* ExpandableText in Frameworks */,
@@ -330,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				ADB63FFF2AF8391C006B39ED /* Defaults.swift */,
+				1A83BC7D2C26B9DB00D1A031 /* WhatsNewConfiguration.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -442,6 +447,7 @@
 				B54BBA272BC0645300575AC2 /* SwiftUIIntrospect */,
 				B5C147882BDE23C700F38CD3 /* SwiftyJSON */,
 				AD0897FC2BFC38EF00C4820D /* FluidGradient */,
+				1A83BC7B2C26B97D00D1A031 /* WhatsNewKit */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -529,6 +535,7 @@
 				B54BBA262BC0645300575AC2 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				B5C147872BDE23C700F38CD3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */,
+				1A83BC7A2C26B97D00D1A031 /* XCRemoteSwiftPackageReference "WhatsNewKit" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -609,6 +616,7 @@
 				AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
 				AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */,
+				1A83BC7E2C26B9DB00D1A031 /* WhatsNewConfiguration.swift in Sources */,
 				ADE201FD2B5DF98800047322 /* Platform.swift in Sources */,
 				AD5FF2CB2B467C0B00C77C8B /* AppViewModel.swift in Sources */,
 				AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */,
@@ -803,7 +811,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
 				DEVELOPMENT_TEAM = SPWQRB7M9L;
@@ -818,7 +826,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.8;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shock9616.Phoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -838,7 +846,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Phoenix/Preview Content\"";
 				DEVELOPMENT_TEAM = SPWQRB7M9L;
@@ -853,7 +861,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.8;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shock9616.Phoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -981,6 +989,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A83BC7A2C26B97D00D1A031 /* XCRemoteSwiftPackageReference "WhatsNewKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SvenTiigi/WhatsNewKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.1;
+			};
+		};
 		AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Cindori/FluidGradient";
@@ -1072,6 +1088,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A83BC7B2C26B97D00D1A031 /* WhatsNewKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A83BC7A2C26B97D00D1A031 /* XCRemoteSwiftPackageReference "WhatsNewKit" */;
+			productName = WhatsNewKit;
+		};
 		AD0897FC2BFC38EF00C4820D /* FluidGradient */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */;

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import WhatsNewKit
 
 /// Returns the URL for the application support directory for the current user.
 ///
@@ -125,6 +126,14 @@ func loadPlatformsFromJSON() -> [Platform] {
     if let json = try? JSON(data: Data(contentsOf: url)) {
         let platformArray = json["platforms"].arrayValue
         for platform in platformArray {
+            var gameDirectories = platform["gameDirectories"].arrayValue.map({ $0.stringValue })
+            var commandTemplate = platform["commandTemplate"].stringValue
+            if commandTemplate == "open %@" {
+                commandTemplate = "open \"%@\""
+            }
+            if !UserDefaultsWhatsNewVersionStore().hasPresented("0.1.9") {
+                gameDirectories = gameDirectories.filter({ $0 != "/Applications" })
+            }
             platforms.append(Platform(
                 id: UUID(uuidString: (platform["id"].stringValue)) ?? UUID(),
                 iconURL: platform["iconURL"].stringValue,
@@ -134,26 +143,39 @@ func loadPlatformsFromJSON() -> [Platform] {
                 emulator: platform["emulator"].boolValue,
                 emulatorExecutable: platform["emulatorExecutable"].stringValue,
                 commandArgs: platform["commandArgs"].stringValue,
-                commandTemplate: platform["commandTemplate"].stringValue,
+                commandTemplate: commandTemplate,
                 deletable: platform["deletable"].boolValue
             ))
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: ["/Applications"], commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: [], commandTemplate: "open \"%@\"", deletable: false),
             Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", gameDirectories: [getApplicationSupportDirectory().appendingPathComponent("steam/steamapps").path], commandTemplate: "open steam://run/%@", deletable: false),
-            Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
+            Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open \"%@\""),
             Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC"),
             Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
             Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", emulator: true),
             Platform(iconURL: "https://api.iconify.design/cbi:nintendo-switch-logo.svg", name: "Nintendo", emulator: true),
             Platform(iconURL: "https://api.iconify.design/fluent:border-none-20-filled.svg", name: "Other", deletable: false)
         ]
-        // create empty games.json if it doesn't exist
+        // create empty platforms.json if it doesn't exist
         logger.write("[INFO]: Couldn't find platforms.json. Creating new one.")
         saveJSONData(to: "platforms", with: convertPlatformsToJSONString(platforms))
     }
     return platforms
+}
+
+func loadNonGamePathsFromJSON() -> [String] {
+    let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/nonGamePaths.json")
+    var nonGamePaths: [String] = []
+    if let json = try? JSON(data: Data(contentsOf: url)) {
+        nonGamePaths = json["nonGamePaths"].arrayValue.map({ $0.stringValue })
+    } else {
+        // create empty nonGamePaths.json if it doesn't exist
+        logger.write("[INFO]: Couldn't find nonGamePaths.json. Creating new one.")
+        saveJSONData(to: "nonGamePaths", with: convertnonGamePathsToJSONString(nonGamePaths))
+    }
+    return nonGamePaths
 }
 
 func convertGamesToJSONString(_ games: [Game]) -> String {
@@ -183,6 +205,24 @@ func convertPlatformsToJSONString(_ platforms: [Platform]) -> String {
             // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
             platformsJSONString = "{\"platforms\": \(platformsJSONString)}"
             return platformsJSONString
+        } else {
+            return ""
+        }
+    } catch {
+        logger.write(error.localizedDescription)
+        return ""
+    }
+}
+
+func convertnonGamePathsToJSONString(_ appNames: [String]) -> String {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    do {
+        let appJSON = try JSONEncoder().encode(appNames)
+        if var appJSONString = String(data: appJSON, encoding: .utf8) {
+            // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+            appJSONString = "{\"nonGamePaths\": \(appJSONString)}"
+            return appJSONString
         } else {
             return ""
         }
