@@ -127,6 +127,10 @@ func loadPlatformsFromJSON() -> [Platform] {
         let platformArray = json["platforms"].arrayValue
         for platform in platformArray {
             var gameDirectories = platform["gameDirectories"].arrayValue.map({ $0.stringValue })
+            var commandTemplate = platform["commandTemplate"].stringValue
+            if commandTemplate == "open %@" {
+                commandTemplate = "open \"%@\""
+            }
             if !UserDefaultsWhatsNewVersionStore().hasPresented("0.1.9") {
                 gameDirectories = gameDirectories.filter({ $0 != "/Applications" })
             }
@@ -139,15 +143,15 @@ func loadPlatformsFromJSON() -> [Platform] {
                 emulator: platform["emulator"].boolValue,
                 emulatorExecutable: platform["emulatorExecutable"].stringValue,
                 commandArgs: platform["commandArgs"].stringValue,
-                commandTemplate: platform["commandTemplate"].stringValue,
+                commandTemplate: commandTemplate,
                 deletable: platform["deletable"].boolValue
             ))
         }
     } else {
         platforms = [
-            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: [], commandTemplate: "open %@", deletable: false),
+            Platform(iconURL: "https://api.iconify.design/ic:baseline-apple.svg", name: "Mac", gameType: "app", gameDirectories: [], commandTemplate: "open \"%@\"", deletable: false),
             Platform(iconURL: "https://api.iconify.design/ri:steam-fill.svg", name: "Steam", gameDirectories: [getApplicationSupportDirectory().appendingPathComponent("steam/steamapps").path], commandTemplate: "open steam://run/%@", deletable: false),
-            Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open %@"),
+            Platform(iconURL: "https://api.iconify.design/mdi:gog.svg", name: "GOG", commandTemplate: "open \"%@\""),
             Platform(iconURL: "https://api.iconify.design/grommet-icons:windows-legacy.svg", name: "PC"),
             Platform(iconURL: "https://api.iconify.design/ri:playstation-fill.svg", name: "Playstation", emulator: true),
             Platform(iconURL: "https://api.iconify.design/ri:xbox-fill.svg", name: "Xbox", emulator: true),
