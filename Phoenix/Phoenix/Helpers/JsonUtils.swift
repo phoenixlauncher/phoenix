@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import WhatsNewKit
 
 /// Returns the URL for the application support directory for the current user.
 ///
@@ -125,6 +126,10 @@ func loadPlatformsFromJSON() -> [Platform] {
     if let json = try? JSON(data: Data(contentsOf: url)) {
         let platformArray = json["platforms"].arrayValue
         for platform in platformArray {
+            var gameDirectories = platform["gameDirectories"].arrayValue.map({ $0.stringValue })
+            if !UserDefaultsWhatsNewVersionStore().hasPresented("0.1.9") {
+                gameDirectories = gameDirectories.filter({ $0 != "/Applications" })
+            }
             platforms.append(Platform(
                 id: UUID(uuidString: (platform["id"].stringValue)) ?? UUID(),
                 iconURL: platform["iconURL"].stringValue,

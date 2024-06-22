@@ -113,7 +113,7 @@ struct ContentView: View {
         .toast(isPresenting: $appViewModel.showFailureToast, tapToDismiss: true) {
             AlertToast(type: .error(Color.red), title: appViewModel.failureToastText)
         }
-        .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false) {
+        .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false, offsetY: 25) {
             AlertToast(displayMode: .hud, type: .loading, title: String(localized: "main_GamesLoading"), subTitle: String(localized: "main_GamesLoadingCaption"))
         }
         .whatsNewSheet(
