@@ -113,9 +113,6 @@ struct ContentView: View {
         .toast(isPresenting: $appViewModel.showFailureToast, tapToDismiss: true) {
             AlertToast(type: .error(Color.red), title: appViewModel.failureToastText)
         }
-        .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false, offsetY: 25) {
-            AlertToast(displayMode: .hud, type: .loading, title: String(localized: "main_GamesLoading"), subTitle: String(localized: "main_GamesLoadingCaption"))
-        }
         .whatsNewSheet(
 //            layout: WhatsNew.Layout(
 //                contentPadding: EdgeInsets(top: 65, leading: 30, bottom: 0, trailing: 30),
