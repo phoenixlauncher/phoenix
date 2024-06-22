@@ -5,6 +5,11 @@
   Created by Kaleb Rosborough on 2024-01-11.
   
 */
+"main_Welcome" = "Welcome to Phoenix.";
+"main_ClickInstruction" = "Click the";
+"main_PlusInstruction" = "in the top left to get started.";
+"main_GamesLoading" = "Scanning your Mac for games!";
+"main_GamesLoadingCaption" = "This can take a minute 🙃";
 "category_SortBy" = "Ndaj sipas";
 "category_Platform" = "Platformës";
 "category_Status" = "Statusit";
