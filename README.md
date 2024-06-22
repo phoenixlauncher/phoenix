@@ -57,4 +57,4 @@ Big thanks to the creators of these dependencies for creating such great tools!
 
 ## Other Credits
 
-Thanks to [Austin Condiff](https://twitter.com/austincondiff) and the [CodeEdit app](https://codeedit.app) for `RoundedTextEditor.swift`.
+Thanks to [Austin Condiff](https://twitter.com/austincondiff) and the [CodeEdit app](https://codeedit.app) for parts of `RoundedTextEditor.swift`.
