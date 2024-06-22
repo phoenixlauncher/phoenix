@@ -156,17 +156,17 @@ func loadPlatformsFromJSON() -> [Platform] {
     return platforms
 }
 
-func loadNonGameNamesFromJSON() -> [String] {
-    let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/nonGameNames.json")
-    var nonGameNames: [String] = []
+func loadNonGamePathsFromJSON() -> [String] {
+    let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/nonGamePaths.json")
+    var nonGamePaths: [String] = []
     if let json = try? JSON(data: Data(contentsOf: url)) {
-        nonGameNames = json["nonGameNames"].arrayValue.map({ $0.stringValue })
+        nonGamePaths = json["nonGamePaths"].arrayValue.map({ $0.stringValue })
     } else {
-        // create empty nonGameNames.json if it doesn't exist
-        logger.write("[INFO]: Couldn't find nonGameNames.json. Creating new one.")
-        saveJSONData(to: "nonGameNames", with: convertNonGameNamesToJSONString(nonGameNames))
+        // create empty nonGamePaths.json if it doesn't exist
+        logger.write("[INFO]: Couldn't find nonGamePaths.json. Creating new one.")
+        saveJSONData(to: "nonGamePaths", with: convertnonGamePathsToJSONString(nonGamePaths))
     }
-    return nonGameNames
+    return nonGamePaths
 }
 
 func convertGamesToJSONString(_ games: [Game]) -> String {
@@ -205,14 +205,14 @@ func convertPlatformsToJSONString(_ platforms: [Platform]) -> String {
     }
 }
 
-func convertNonGameNamesToJSONString(_ appNames: [String]) -> String {
+func convertnonGamePathsToJSONString(_ appNames: [String]) -> String {
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted
     do {
         let appJSON = try JSONEncoder().encode(appNames)
         if var appJSONString = String(data: appJSON, encoding: .utf8) {
             // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-            appJSONString = "{\"nonGameNames\": \(appJSONString)}"
+            appJSONString = "{\"nonGamePaths\": \(appJSONString)}"
             return appJSONString
         } else {
             return ""

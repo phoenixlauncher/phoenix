@@ -177,7 +177,7 @@ class GameViewModel: ObservableObject {
         var doneGameNames: Set<String> = Set(loadGamesFromJSON().map({ $0.name })) // get the games that already are added to phoenix
         var newGames: [Game] = []
         
-        var nonGameNames: [String] = loadNonGameNamesFromJSON()
+        var nonGamePaths: [String] = loadNonGamePathsFromJSON()
         
         logger.write("Starting fetch process. Currently done games are: \(doneGameNames.sorted())")
         
@@ -192,15 +192,13 @@ class GameViewModel: ObservableObject {
             for steamGame in games {
                 let name = steamGame.name
                 let steamID = steamGame.steamID
-                if !doneGameNames.contains(name), !nonGameNames.contains(name), let launcherTemplate = platformViewModel.platforms.first(where: { "Steam" == $0.name})?.commandTemplate {
+                if !doneGameNames.contains(name), let launcherTemplate = platformViewModel.platforms.first(where: { "Steam" == $0.name})?.commandTemplate {
                     let game = await saveSupabaseGame(name, steamID: steamID, platform: "Steam", launcher: launcherTemplate)
                     if let game = game {
                         print("game found: " + game.name)
                         newGames.append(game)
                         addGame(game, save: false)
                         doneGameNames.insert(game.name)
-                    } else {
-                        nonGameNames.append(name)
                     }
                 }
             }
@@ -230,7 +228,7 @@ class GameViewModel: ObservableObject {
                 let name = nonSteamGame.name
                 let platform = nonSteamGame.platform
                 let urlPath = nonSteamGame.urlPath
-                if !doneGameNames.contains(name), !nonGameNames.contains(name) {
+                if !doneGameNames.contains(name), !nonGamePaths.contains(urlPath) {
                     let game = await saveSupabaseGame(name, platform: platform.name, launcher: String(format: platform.commandTemplate, urlPath))
                     if var game = game {
                         if platform.name == "Mac" && Defaults[.getIconFromApp], let appIcon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: urlPath), gameID: game.id) {
@@ -239,7 +237,7 @@ class GameViewModel: ObservableObject {
                         addGame(game, save: false)
                         doneGameNames.insert(name)
                     } else {
-                        nonGameNames.append(name)
+                        nonGamePaths.append(urlPath)
                     }
                 }
             }
@@ -250,7 +248,7 @@ class GameViewModel: ObservableObject {
         await saveNonSteamGames(otherGames)
         await saveNonSteamGames(macGames)
         //save the names of the apps that didn't return anything from supabase
-        saveJSONData(to: "nonGameNames", with: convertNonGameNamesToJSONString(nonGameNames))
+        saveJSONData(to: "nonGamePaths", with: convertnonGamePathsToJSONString(nonGamePaths))
         saveGames()
         isInitializing = false
     }
