@@ -5,7 +5,7 @@
         <item>
             <title>0.1.9</title>
             <pubDate>Sat, 22 Jun 2024 13:06:55 -0700</pubDate>
-            <sparkle:version>33</sparkle:version>
+            <sparkle:version>32</sparkle:version>
             <sparkle:shortVersionString>0.1.9</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/phoenixlauncher/phoenix/releases/download/v0.1.9-beta/Phoenix.dmg" type="application/octet-stream" sparkle:edSignature="vhjUoqGulow0MMO1eqq/VW8N7bq90PSzWQxZOFKPxZODNP/s9Xq8Q0zu5oUTrZl6mU3MMF9bEybX2urV1MuIBg==" length="7692845"/>
