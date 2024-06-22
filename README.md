@@ -43,20 +43,17 @@ folder and begin using it!
 
 Big thanks to the creators of these dependencies for creating such great tools!
 
-- [AlertToast](https://github.com/elai950/AlertToast) - Create Apple-like alerts
-  & toasts using SwiftUI
-- [Colorful](https://github.com/Lakr233/Colorful) - A SwiftUI implementation of
-  AppleCard's animated colorful blur background
-- [Defaults](https://github.com/sindresorhus/Defaults) - Swifty and modern
-  UserDefaults
-- [Sparkle](https://github.com/sparkle-project/Sparkle) - A software update
-  framework for macOS
-- [Supabase](https://github.com/supabase-community/supabase-swift) - A Swift
-  client for Supabase
-- [StarRatingView](https://github.com/magickworx/StarRatingViewSwiftUI) - A star
-  rating view for SwiftUI
-- [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) -
-  Display and customize Markdown text in SwiftUI
+- [AlertToast](https://github.com/elai950/AlertToast) - Create Apple-like alerts & toasts using SwiftUI
+- [CachedAsyncImage](https://github.com/lorenzofiamingo/swiftui-cached-async-image)- The simplest way to add cache to your AsyncImage
+- [Defaults](https://github.com/sindresorhus/Defaults) - Swifty and modern UserDefaults
+- [ExpandableText](https://github.com/jxhug/ExpandableText) - An expandable text view for SwiftUI
+- [FluidGradient](https://github.com/Cindori/FluidGradient) - A fluid, animated gradient implemented with CoreAnimation and SwiftUI
+- [Sparkle](https://github.com/sparkle-project/Sparkle) - A software update framework for macOS
+- [StarRatingView](https://github.com/magickworx/StarRatingViewSwiftUI) - A star rating view for SwiftUI
+- [Supabase](https://github.com/supabase-community/supabase-swift) - A Swift client for Supabase
+- [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) - The better way to deal with JSON data in Swift
+- [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) - Display and customize Markdown text in SwiftUI
+- [WhatsNewKit](https://github.com/SvenTiigi/WhatsNewKit) - Showcase your awesome new app features
 
 ## Other Credits
 
