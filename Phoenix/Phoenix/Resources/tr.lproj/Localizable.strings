@@ -5,11 +5,11 @@
   Created by Kaleb Rosborough on 2024-01-11.
   
 */
-"main_Welcome" = "Welcome to Phoenix.";
+"main_Welcome" = "Phoenix'e Hoşgeldin.";
 "main_ClickInstruction" = "Click the";
 "main_PlusInstruction" = "in the top left to get started.";
-"main_GamesLoading" = "Scanning your Mac for games!";
-"main_GamesLoadingCaption" = "This can take a minute 🙃";
+"main_GamesLoading" = "Mac'iniz oyunlar için taranıyor!";
+"main_GamesLoadingCaption" = "Bu bir dakika sürebilir 🙃";
 "category_SortBy" = "Sırala";
 "category_Platform" = "Platform";
 "category_Status" = "Durum";
@@ -112,7 +112,7 @@
 "platforms_SelectedIcon" = "Seçili simge";
 "platforms_GameType" = "Oyun Türü";
 "platforms_GameTypeDesc" = "Oyunun dosya türü (app, bin, exe, z64)";
-"platforms_GameDirectories" = "Game Directories";
+"platforms_GameDirectories" = "Oyun Dizinleri";
 "platforms_GameDirectoriesDesc" = "Folders that will be scanned on launch for games of this platform.";
 "platforms_Select_Emulator_DragDrop" = "Bir emülatörü seç ya da sürükle ve bırak";
 "platforms_SelectEmulator" = "Emülatör Seç";
