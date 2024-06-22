@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AlertToast
+import WhatsNewKit
 
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
@@ -115,5 +116,11 @@ struct ContentView: View {
         .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .loading, title: String(localized: "main_GamesLoading"), subTitle: String(localized: "main_GamesLoadingCaption"))
         }
+        .whatsNewSheet(
+//            layout: WhatsNew.Layout(
+//                contentPadding: EdgeInsets(top: 65, leading: 30, bottom: 0, trailing: 30),
+//                featureListPadding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+//            )
+        )
     }
 }

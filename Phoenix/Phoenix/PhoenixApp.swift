@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WhatsNewKit
 
 @main
 struct PhoenixApp: App {
@@ -29,6 +30,13 @@ struct PhoenixApp: App {
                 .environmentObject(gameViewModel)
                 .environmentObject(appViewModel)
                 .environmentObject(platformViewModel)
+                .environment(
+                    \.whatsNew,
+                    WhatsNewEnvironment(
+                        versionStore: UserDefaultsWhatsNewVersionStore(),
+                        whatsNewCollection: WhatsNewConfiguration().whatsNewCollection
+                    )
+                )
         }.commands {
             CommandGroup(before: CommandGroupPlacement.newItem) {
                 Button(String(localized: "file_AddGame")) {
