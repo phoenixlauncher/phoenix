@@ -16,18 +16,22 @@ struct SettingsView: View {
                 .tabItem {
                     Label(String(localized: "prefs_General"), systemImage: "gear")
                 }
+                .frame(width: 400)
             AppearanceSettingsView()
                 .tabItem {
                     Label(String(localized: "prefs_Appearance"), systemImage: "paintpalette")
                 }
+                .frame(width: 700)
             HiddenGamesSettingsView()
                 .tabItem {
                     Label(String(localized: "prefs_Hidden"), systemImage: "eye.slash.fill")
                 }
+                .frame(width: 700)
             PlatformSettingsView()
                 .tabItem {
                     Label(String(localized: "prefs_Platforms"), systemImage: "gamecontroller")
                 }
+                .frame(width: 800)
         }
         .toast(isPresenting: $appViewModel.showSettingsSuccessToast, tapToDismiss: true) {
             AlertToast(type: .complete(Color.green), title: appViewModel.successToastText)
