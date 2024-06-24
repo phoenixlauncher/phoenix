@@ -116,7 +116,7 @@ class GameViewModel: ObservableObject {
             return gamePaths
         }
         
-        for platform in platformViewModel.platforms {
+        for platform in platformViewModel.platforms.filter({ $0.commandTemplate != "" && $0.gameType != "" && $0.gameDirectories != [] }) {
             for directory in platform.gameDirectories {
                 if let directoryURL = URL(string: directory), FileManager.default.fileExists(atPath: directory) {
                     platformGameSets[platform] = scanGames(ofName: platform.name, at: directoryURL, withType: platform.gameType)
