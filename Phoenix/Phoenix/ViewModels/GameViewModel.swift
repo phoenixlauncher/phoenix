@@ -267,6 +267,11 @@ class GameViewModel: ObservableObject {
                 let fetchedGames = await self.supabaseViewModel.fetchIgbdIDsFromPatternName(name: name)
                 if let firstIgdbID = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: { $0.name?.localizedCaseInsensitiveContains(name) == true || name.localizedCaseInsensitiveContains($0.name ?? "") })?.igdb_id {
                     fetchedGame = await self.supabaseViewModel.fetchGameFromIgdbID(firstIgdbID)
+                } else {
+                    let fetchedGames = await self.supabaseViewModel.fetchIgbdIDsFromPatternNameWithSpaces(name: name)
+                    if let firstIgdbID = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first?.igdb_id {
+                        fetchedGame = await self.supabaseViewModel.fetchGameFromIgdbID(firstIgdbID)
+                    }
                 }
             }
         }
