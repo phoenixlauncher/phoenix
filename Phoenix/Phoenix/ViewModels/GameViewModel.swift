@@ -39,8 +39,12 @@ class GameViewModel: ObservableObject {
         if let idx = games.firstIndex(where: { $0.id == game.id }) {
             games[idx] = game
         } else {
-            games.append(game)
-        }
+            if let index = games.firstIndex(where: { $0 > game }) {
+                games.insert(game, at: index)
+            } else {
+                games.append(game)
+            }
+    }
         save ? saveGames() : ()
     }
     

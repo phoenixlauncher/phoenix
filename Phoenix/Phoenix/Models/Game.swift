@@ -45,7 +45,26 @@ struct Game: Codable, Comparable, Hashable, Sendable {
                 right-hand side, `false` otherwise.
      */
     static func < (lhs: Game, rhs: Game) -> Bool {
-        lhs.name < rhs.name
+        return lhs.name.compareSpecial(rhs.name) == .orderedAscending
+    }
+}
+
+extension String {
+    func compareSpecial(_ other: String) -> ComparisonResult {
+        let lhsCharacters = Array(self.lowercased())
+        let rhsCharacters = Array(other.lowercased())
+
+        for (lhsChar, rhsChar) in zip(lhsCharacters, rhsCharacters) {
+            if lhsChar.isNumber && rhsChar.isLetter {
+                return .orderedDescending
+            } else if lhsChar.isLetter && rhsChar.isNumber {
+                return .orderedAscending
+            } else if lhsChar != rhsChar {
+                return lhsChar < rhsChar ? .orderedAscending : .orderedDescending
+            }
+        }
+
+        return self.count < other.count ? .orderedAscending : (self.count > other.count ? .orderedDescending : .orderedSame)
     }
 }
 
