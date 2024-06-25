@@ -17,10 +17,6 @@ struct PlatformContextButtonMenu: View {
         Menu(content: {
             ForEach(platforms) { platform in
                 Button(action: { action(platform) }) {
-                    AsyncImage(url: URL(string: platform.iconURL)) { image in
-                        image.image?.resizable()
-                    }
-                    .frame(width: 24, height: 24)
                     Text(platform.name)
                 }
                 .accessibility(identifier: platform.name)

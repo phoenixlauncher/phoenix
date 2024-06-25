@@ -30,12 +30,14 @@ struct GameDetailView: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var platformViewModel: PlatformViewModel
 
-    @State var selectedGameName: String?
-
     @State var rating: Float = 0
     
     var game: Game? {
-        gameViewModel.getGameFromID(id: gameViewModel.selectedGame) ?? nil
+        if gameViewModel.selectedGameIDs.count == 1, let firstID = gameViewModel.selectedGameIDs.first {
+            gameViewModel.getGameFromID(id: firstID)
+        } else {
+            nil
+        }
     }
     
     var currentPlatform: Platform? {
@@ -54,9 +56,9 @@ struct GameDetailView: View {
     @Default(.fadeLeadingScreenshots) var fadeLeadingScreenshots
 
     var body: some View {
-        ScrollView {
-            GeometryReader { geometry in
-                if let game = game {
+        if let game = game {
+            ScrollView {
+                GeometryReader { geometry in
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
                         Image(nsImage: loadImageFromFile(filePath: headerImage.replacingOccurrences(of: "\\", with: ":")))
@@ -69,7 +71,7 @@ struct GameDetailView: View {
                                 view.mask(LinearGradient(gradient: Gradient(stops: [
                                     .init(color: Color.white, location: 0.3),
                                     .init(color: Color.clear, location: 0.97)
-                            ]), startPoint: .top, endPoint: .bottom))
+                                ]), startPoint: .top, endPoint: .bottom))
                             }
                             .if(!gradientHeader) { view in
                                 view.clipped()
@@ -78,87 +80,85 @@ struct GameDetailView: View {
                             .offset(x: 0, y: getOffsetForHeaderImage(geometry))
                     }
                 }
-            }
-            .task {
-                checkHeader()
-            }
-            .frame(height: 400)
-            VStack(alignment: .leading) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading) {
-                        HStack(alignment: .center) {
-                            // play button
-                            LargeToggleButton(toggle: $appViewModel.isPlayingGame, symbol: "play.fill", text: String(localized: "detail_Play"), textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
-                            // settings button
-                            SmallToggleButton(toggle: $appViewModel.isEditingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
-                            if showStarRating {
-                                StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
-                                    .frame(width: 300, height: 30)
-                                    .padding(.horizontal)
-                                    .onHover { _ in
-                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                            gameViewModel.games[idx].metadata["rating"] = String(rating)
-                                        }
-                                        gameViewModel.saveGames()
-                                    }
-                            }
-                        } // hstack
-                        .frame(alignment: .leading)
-                        HStack(alignment: .top) {
-                            // description
-                            VStack(alignment: .leading) {
-                                if let description = game?.metadata["description"] {
-                                    TextCard(text: description)
-                                } else {
-                                    TextCard(text: String(localized: "detail_NoDesc"))
+                .task {
+                    checkHeader()
+                }
+                .frame(height: 400)
+                VStack(alignment: .leading) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            HStack(alignment: .center) {
+                                // play button
+                                LargeToggleButton(toggle: $appViewModel.isPlayingGame, symbol: "play.fill", text: String(localized: "detail_Play"), textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
+                                // settings button
+                                SmallToggleButton(toggle: $appViewModel.isEditingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
+                                if showStarRating {
+                                    StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
+                                        .frame(width: 300, height: 30)
+                                        .padding(.horizontal)
+                                    //                                        .onHover { _ in
+                                    //                                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+                                    //                                                gameViewModel.games[idx].metadata["rating"] = String(rating)
+                                    //                                            }
+                                    //                                            gameViewModel.saveGames()
+                                    //                                        }
                                 }
-                                if showScreenshots {
-                                    ScrollView([.horizontal]) {
-                                        HStack {
-                                            ForEach(game?.screenshots ?? [], id: \.self) { screenshot in
-                                                if let screenshot = screenshot, let screenshotURL = URL(string: screenshot) {
-                                                    AsyncImage(url: screenshotURL) { phase in
-                                                        switch phase {
-                                                        case .success(let image):
-                                                            image.resizable()
-                                                        default:
-                                                            EmptyView()
+                            } // hstack
+                            .frame(alignment: .leading)
+                            HStack(alignment: .top) {
+                                // description
+                                VStack(alignment: .leading) {
+                                    if let description = game.metadata["description"] {
+                                        TextCard(text: description)
+                                    } else {
+                                        TextCard(text: String(localized: "detail_NoDesc"))
+                                    }
+                                    if showScreenshots {
+                                        ScrollView([.horizontal]) {
+                                            HStack {
+                                                ForEach(game.screenshots, id: \.self) { screenshot in
+                                                    if let screenshot = screenshot, let screenshotURL = URL(string: screenshot) {
+                                                        AsyncImage(url: screenshotURL) { phase in
+                                                            switch phase {
+                                                            case .success(let image):
+                                                                image.resizable()
+                                                            default:
+                                                                EmptyView()
+                                                            }
                                                         }
+                                                        .cornerRadius(7.5)
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .frame(height: screenshotSize)
+                                                        .onTapGesture(count: 2) {
+                                                            selectedScreenshot = URL(string: screenshotURL.absoluteString.replacingOccurrences(of: "med", with: "big"))
+                                                        }
+                                                        .quickLookPreview($selectedScreenshot)
                                                     }
-                                                    .cornerRadius(7.5)
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .frame(height: screenshotSize)
-                                                    .onTapGesture(count: 2) {
-                                                        selectedScreenshot = screenshotURL
-                                                    }
-                                                    .quickLookPreview($selectedScreenshot)
                                                 }
                                             }
                                         }
-                                    }
-                                    .mask(
-                                        LinearGradient(
-                                            gradient: Gradient(stops: [
-                                                .init(color: fadeLeadingScreenshots ? Color.clear : Color.white, location: 0.0),
-                                                .init(color: fadeLeadingScreenshots ? Color.white : Color.white, location: 0.15),
-                                                .init(color: Color.white, location: 0.85),
-                                                .init(color: Color.clear, location: 1.0)
-                                            ]),
-                                            startPoint: .leading,
-                                            endPoint: .trailing
+                                        .mask(
+                                            LinearGradient(
+                                                gradient: Gradient(stops: [
+                                                    .init(color: fadeLeadingScreenshots ? Color.clear : Color.white, location: 0.0),
+                                                    .init(color: fadeLeadingScreenshots ? Color.white : Color.white, location: 0.15),
+                                                    .init(color: Color.white, location: 0.85),
+                                                    .init(color: Color.clear, location: 1.0)
+                                                ]),
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
                                         )
-                                    )
-                                    .cornerRadius(7.5)
-                                    .frame(maxWidth: 1280)
-                                    .task {
-                                        checkScreenshots()
+                                        .cornerRadius(7.5)
+                                        .frame(maxWidth: 1280)
+                                        .task {
+                                            checkScreenshots()
+                                        }
                                     }
                                 }
-                            }
-                            .padding(.trailing, 7.5)
-                            VStack {
-                                SlotCard(content: {
-                                    if let game = game {
+                                .padding(.trailing, 7.5)
+                                VStack {
+                                    SlotCard(content: {
                                         VStack(alignment: .leading, spacing: 7.5) {
                                             GameMetadata(field: String(localized: "detail_LP"), value: game.metadata["last_played"] ?? String(localized: "recency_Never"))
                                             GameMetadata(field: String(localized: "detail_Platform"), value: game.platformName)
@@ -173,46 +173,109 @@ struct GameDetailView: View {
                                         }
                                         .padding(.trailing, 10)
                                         .frame(minWidth: 150, alignment: .leading)
-                                    }
-                                })
+                                    })
+                                }
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .padding(.top, 10)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                        .padding(.top, 10)
+                        .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 10, trailing: 17.5))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     }
-                    .padding(EdgeInsets(top: 10, leading: 17.5, bottom: 10, trailing: 17.5))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                }
+                .navigationTitle(game.name)
+                .onAppear {
+                    if let gameRating = game.metadata["rating"] {
+                        rating = Float(gameRating) ?? 0
+                    }
+                }
+                .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false, offsetY: 25) {
+                    AlertToast(displayMode: .hud, type: .loading, title: String(localized: "main_GamesLoading"), subTitle: String(localized: "main_GamesLoadingCaption"))
+                }
+                .onChange(of: appViewModel.isPlayingGame) { _ in
+                    playGame(game: game)
+                }
+                .onChange(of: gameViewModel.selectedGameIDs) { _ in
+                    Defaults[.selectedGameIDs] = gameViewModel.selectedGameIDs
+                    print(gameViewModel.selectedGameIDs)
+                    if let gameRating = game.metadata["rating"] {
+                        rating = Float(gameRating) ?? 0
+                    }
+                    checkHeader()
+                    showScreenshots ? checkScreenshots() : ()
                 }
             }
-        }
-        .navigationTitle(gameViewModel.selectedGameName)
-        .onAppear {
-            if let gameRating = game?.metadata["rating"] {
-                rating = Float(gameRating) ?? 0
+        } else if !gameViewModel.selectedGameIDs.isEmpty {
+            VStack {
+                Image("GameStackIcon")
+                    .font(.system(size: 80))
+                    .foregroundColor(.gray)
+                Text("Multiple games selected")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.gray)
+                HStack {
+                    Button(action: {
+                        for id in gameViewModel.selectedGameIDs {
+                            gameViewModel.toggleHiddenFromID(id)
+                        }
+                        gameViewModel.selectedGameIDs = []
+                        Defaults[.selectedGameIDs] = []
+                    }, label: {
+                        Text("Hide Games")
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 3)
+                            .foregroundStyle(.gray)
+                    })
+                    .buttonStyle(PlainButtonStyle())
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
+                    )
+                    Button(action: {
+                        for id in gameViewModel.selectedGameIDs {
+                            gameViewModel.deleteGameFromID(id)
+                        }
+                        gameViewModel.selectedGameIDs = []
+                        Defaults[.selectedGameIDs] = []
+                    }, label: {
+                        Text("Delete Games")
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 3)
+                            .foregroundStyle(.gray)
+                    })
+                    .buttonStyle(PlainButtonStyle())
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
+                    )
+                }
+                Button(action: {
+                    appViewModel.isEditingGame.toggle()
+                }, label: {
+                    Text("Edit Games")
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .foregroundStyle(.gray)
+                })
+                .buttonStyle(PlainButtonStyle())
+                .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
+                )
             }
-        }
-        .toast(isPresenting: $gameViewModel.isInitializing, tapToDismiss: false, offsetY: 25) {
-            AlertToast(displayMode: .hud, type: .loading, title: String(localized: "main_GamesLoading"), subTitle: String(localized: "main_GamesLoadingCaption"))
-        }
-        .onChange(of: appViewModel.isPlayingGame) { _ in
-            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
-            if let game = game {
-                playGame(game: game)
+            .navigationTitle("Games")
+            .onChange(of: gameViewModel.selectedGameIDs) { _ in
+                print(gameViewModel.selectedGameIDs)
             }
-        }
-        .onChange(of: gameViewModel.selectedGame) { _ in
-            if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                Defaults[.selectedGame] = gameViewModel.selectedGame
-                gameViewModel.selectedGameName = gameViewModel.games[idx].name
-            }
-            let game = gameViewModel.getGameFromID(id: gameViewModel.selectedGame)
-            if let gameRating = game?.metadata["rating"] {
-                rating = Float(gameRating) ?? 0
-            }
-            checkHeader()
-            if showScreenshots { checkScreenshots() }
+        } else {
+            Text("No game selected")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundColor(.gray)
         }
     }
+    
 
     private func checkHeader() {
         Task {
@@ -306,7 +369,7 @@ struct GameDetailView: View {
             if game.launcher != "" {
                 try shell(game.launcher)
             } else {
-                appViewModel.showFailureToast("\(String(localized: "toast_LaunchFailure")) \(gameViewModel.selectedGameName)")
+                appViewModel.showFailureToast("\(String(localized: "toast_LaunchFailure")) \(game.name)")
             }
         } catch {
             logger.write("\(error)") // handle or silence the error here
@@ -324,7 +387,7 @@ struct GameDetailView: View {
         let dateString = dateFormatter.string(from: currentDate)
 
         // Update the value of "last_played" in the game's metadata
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGameIDs.first }) {
             gameViewModel.games[idx].metadata["last_played"] = dateString
             gameViewModel.games[idx].recency = .day
             gameViewModel.saveGames()
