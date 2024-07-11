@@ -222,7 +222,7 @@ struct GameDetailView: View {
                         gameViewModel.selectedGameIDs = []
                         Defaults[.selectedGameIDs] = []
                     }, label: {
-                        Text("Hide Games")
+                        Text(String(localized: "multiple_HideGames"))
                             .padding(.horizontal, 5)
                             .padding(.vertical, 3)
                             .foregroundStyle(.gray)
@@ -239,7 +239,7 @@ struct GameDetailView: View {
                         gameViewModel.selectedGameIDs = []
                         Defaults[.selectedGameIDs] = []
                     }, label: {
-                        Text("Delete Games")
+                        Text(String(localized: "multiple_DeleteGames"))
                             .padding(.horizontal, 5)
                             .padding(.vertical, 3)
                             .foregroundStyle(.gray)
@@ -253,7 +253,7 @@ struct GameDetailView: View {
                 Button(action: {
                     appViewModel.isEditingGame.toggle()
                 }, label: {
-                    Text("Edit Games")
+                    Text(String(localized: "multiple_EditGames"))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 3)
                         .foregroundStyle(.gray)

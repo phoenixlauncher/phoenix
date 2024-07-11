@@ -150,13 +150,19 @@
 "context_Favorite" = "Favorite";
 "context_Unfavorite" = "Unfavorite";
 "context_Game" = "Game";
+"context_Games" = "Games";
 "context_FavoriteGame" = "Favorite game";
 "context_HideGame" = "Hide game";
 "context_DeleteGame" = "Delete game";
+"context_EditGame" = "Edit game";
 "context_EditName" = "Edit name";
 "context_EditIcon" = "Edit icon";
 "context_EditHeader" = "Edit header";
 "context_EditPlatform" = "Edit platform";
 "context_EditStatus" = "Edit status";
 "update_CheckForUpdates" = "Check for Updates";
-
+"multiple_FavoriteGames" = "Favorite Games";
+"multiple_UnfavoriteGames" = "Unfavorite Games";
+"multiple_HideGames" = "Hide Games";
+"multiple_DeleteGames" = "Delete Games";
+"multiple_EditGames" = "Edit Games";

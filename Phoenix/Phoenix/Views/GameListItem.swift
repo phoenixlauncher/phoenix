@@ -10,6 +10,7 @@ import SwiftUI
 struct GameListItem: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var platformViewModel: PlatformViewModel
 
     @State var gameID: UUID
@@ -40,29 +41,39 @@ struct GameListItem: View {
             .contextMenu {
                 //toggle favorite button
                 ContextButton(action: {
-                    gameViewModel.toggleFavoriteFromID(game.id)
-                }, symbol: game.isFavorite ? "star.slash" : "star", text: "\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(String(localized: "context_Game"))")
+                    for id in gameViewModel.selectedGameIDs {
+                        gameViewModel.toggleFavoriteFromID(id)
+                    }
+                }, symbol: game.isFavorite ? "star.slash" : "star", text: "\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_Game") : String(localized: "context_Games"))")
                 
                 //toggle hidden button
                 ContextButton(action: {
-                    hide(id: game.id)
-                }, symbol: "eye.slash", text: String(localized: ("context_HideGame")))
+                    for id in gameViewModel.selectedGameIDs {
+                        hide(id: id)
+                    }
+                }, symbol: "eye.slash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_HideGame") : String(localized: "multiple_HideGames"))
                 
-                //delete game button
+                //delete game(s) button
                 ContextButton(action: {
-                    delete(id: game.id)
-                }, symbol: "trash", text: String(localized: "context_DeleteGame"))
-
-                Divider()
+                    for id in gameViewModel.selectedGameIDs {
+                        delete(id: id)
+                    }
+                }, symbol: "trash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_DeleteGame") : String(localized: "multiple_DeleteGames"))
                 
-                //edit name button
-                ContextButton(action: { changeName.toggle() }, symbol: "character.cursor.ibeam", text: String(localized: "context_EditName"))
+                //edit game(s) button
+                ContextButton(action: {
+                    appViewModel.isEditingGame = true
+                }, symbol: "pencil", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_EditGame") : String(localized: "multiple_EditGames"))
                 
-                //edit icon button
-                ContextButton(action: editIcon, symbol: "app.dashed", text: String(localized: "context_EditIcon"))
-
-                //edit header button
-                ContextButton(action: editHeader, symbol: "photo", text: String(localized: "context_EditHeader"))
+                if gameViewModel.selectedGameIDs.count == 1 {
+                    Divider()
+                    //edit name button
+                    ContextButton(action: { changeName.toggle() }, symbol: "character.cursor.ibeam", text: String(localized: "context_EditName"))
+                    //edit icon button
+                    ContextButton(action: editIcon, symbol: "app.dashed", text: String(localized: "context_EditIcon"))
+                    //edit header button
+                    ContextButton(action: editHeader, symbol: "photo", text: String(localized: "context_EditHeader"))
+                }
                 
                 Divider()
                 
