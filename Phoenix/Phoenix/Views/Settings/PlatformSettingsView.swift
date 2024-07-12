@@ -85,7 +85,7 @@ struct PlatformSettingsDetail: View {
     @Binding var selectedPlatform: Int
     @State var selectedGameDir: Int = 0
     @State var importingGameDir = false
-    @State var applicationsImported = false
+    @State var applicationsImporting = false
     @Binding var searchingForIcon: Bool
     @State var platform: Platform = Platform()
     
@@ -128,7 +128,7 @@ struct PlatformSettingsDetail: View {
                                                 selectedGameDir += 1
                                             }
                                         }
-                                    }, minusDisabled: (selectedGameDir == 0))
+                                    }, minusDisabled: (platform.gameDirectories.count == 1))
                                 }
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                 .frame(maxWidth: .infinity)
@@ -147,7 +147,7 @@ struct PlatformSettingsDetail: View {
                                     let selectedFileURL: URL? = try result.get().first
                                     if let selectedFileURL = selectedFileURL {
                                         if selectedFileURL.path == "/Applications" {
-                                            applicationsImported = true
+                                            applicationsImporting = true
                                         } else {
                                             platform.gameDirectories.append(selectedFileURL.path)
                                         }
@@ -163,19 +163,17 @@ struct PlatformSettingsDetail: View {
                                 handleDrop(providers: selectedFile)
                                 return true
                             }
-                            .alert(isPresented: $applicationsImported) {
+                            .alert(isPresented: $applicationsImporting) {
                                 Alert(
                                     title: Text("Warning!"),
-                                    message: Text("Do you want to import the folder \n\"/Applications\"? Some games might be falsely detected."),
-                                    primaryButton: .default(Text("Import"), action: {
-                                        print("piss")
-                                    }),
+                                    message: Text("Are you sure you want to import Applications folder? Some games might be falsely detected."),
+                                    primaryButton: .default(
+                                        Text("Import"),
+                                        action: { platform.gameDirectories.append("/Applications") }
+                                    ),
                                     secondaryButton: .cancel()
                                 )
                             }
-//                            FileImportButton(type: .folder, outputPath: $platform.gameDirectory, showOutput: true, title: String(localized: "platforms_GameDirectory"), unselectedLabel: String(localized: "platforms_Select_GameDirectory"), selectedLabel: String(localized: "platforms_SelectedGameDirectory"), action: { url in
-//                                return url.path
-//                            })
                             Divider()
                                 .padding(.horizontal)
                             Toggle(isOn: $platform.emulator) {
