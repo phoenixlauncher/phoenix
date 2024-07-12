@@ -45,7 +45,7 @@ struct GameInputView: View {
                     Group {
                         TextBox(textBoxName: String(localized: "editGame_Name"), input: $game.name) // Name input
                         
-                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), overrideLabel: String(localized: "editGame_IconOverride"), action: { path in
+                        ImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), overrideLabel: String(localized: "editGame_IconOverride"), action: { path in
                             iconInput = path.absoluteString
                             return saveIconToFile(iconData: pathIntoData(path: path), gameID: game.id)
                         })
@@ -84,14 +84,14 @@ struct GameInputView: View {
                             
                             TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
                             
-                            FileImportButton(type: .image, outputPath: binding(for: "header_img"), showOutput: false, title: String(localized: "editGame_Header"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                            ImportButton(type: .image, outputPath: binding(for: "header_img"), showOutput: false, title: String(localized: "editGame_Header"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
                                 if let data = pathIntoData(path: path) {
                                     return saveImageToFile(data: data, gameID: game.id, type: "header")
                                 }
                                 return nil
                             })
                             
-                            FileImportButton(type: .image, outputPath: binding(for: "cover"), showOutput: false, title: String(localized: "editGame_Cover"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                            ImportButton(type: .image, outputPath: binding(for: "cover"), showOutput: false, title: String(localized: "editGame_Cover"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
                                 if let data = pathIntoData(path: path) {
                                     return saveImageToFile(data: data, gameID: game.id, type: "cover")
                                 }

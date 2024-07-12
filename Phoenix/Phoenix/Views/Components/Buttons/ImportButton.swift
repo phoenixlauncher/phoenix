@@ -1,5 +1,5 @@
 //
-//  FileImportButton.swift
+//  ImportButton.swift
 //  Phoenix
 //
 //  Created by James Hughes on 9/23/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct FileImportButton: View {
+struct ImportButton: View {
     @EnvironmentObject var appViewModel: AppViewModel
     let type: UTType
     @State var isImporting: Bool = false
@@ -68,7 +68,7 @@ struct FileImportButton: View {
             }
             catch {
                 logger.write(error.localizedDescription)
-                appViewModel.failureToastText = "Unable to get file: \(error)"
+                appViewModel.failureToastText = "\(String(localized: "toast_FileError")) \(error)"
                 appViewModel.showFailureToast.toggle()
             }
         }
@@ -84,7 +84,7 @@ struct FileImportButton: View {
             provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
-                    appViewModel.failureToastText = "Unable to create application launch command: \(error)"
+                    appViewModel.failureToastText = "\(String(localized: "toast_FileError")) \(error)"
                     appViewModel.showFailureToast.toggle()
                     return
                 }

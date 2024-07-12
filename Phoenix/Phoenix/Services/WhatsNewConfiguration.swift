@@ -47,5 +47,49 @@ struct WhatsNewConfiguration: WhatsNewCollectionProvider {
                 )
             )
         )
+        WhatsNew(
+            version: "0.1.10",
+            title: .init(
+                    text: .init(
+                        "What's New in "
+                        + AttributedString(
+                            "Phoenix",
+                            attributes: AttributeContainer().foregroundColor(.red)
+                        )
+                    )
+                ),
+            features: [
+                .init(
+                    image: .init(systemName: "sparkle.magnifyingglass"),
+                    title: "Rougher Game Scanning",
+                    subtitle: "Better searching of games in your folders!"
+                ),
+                .init(
+                    image: .init(systemName: "checklist"),
+                    title: "Multi-select in the Sidebar.",
+                    subtitle: "Easily hide, delete, favorite, and edit multiple games quickly."
+                ),
+                .init(
+                    image: .init(systemName: "square.grid.3x1.below.line.grid.1x2r"),
+                    title: "Better Game Sorting",
+                    subtitle: "Games in the sidebar are now sorted so that numbers come after letters."
+                )
+            ],
+            primaryAction: WhatsNew.PrimaryAction(
+                title: "Continue",
+                backgroundColor: .accentColor,
+                foregroundColor: .white,
+                onDismiss: {
+                    print("WhatsNewView has been dismissed")
+                }
+            ),
+            secondaryAction: WhatsNew.SecondaryAction(
+                title: "Learn more",
+                foregroundColor: .accentColor,
+                action: .openURL(
+                    .init(string: "https://github.com/phoenixlauncher/phoenix/releases/tag/v0.1.10-beta")
+                )
+            )
+        )
     }
 }
