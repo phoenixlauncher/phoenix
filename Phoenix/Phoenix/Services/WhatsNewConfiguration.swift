@@ -70,7 +70,7 @@ struct WhatsNewConfiguration: WhatsNewCollectionProvider {
                     subtitle: "Easily hide, delete, favorite, and edit multiple games quickly."
                 ),
                 .init(
-                    image: .init(systemName: "square.grid.3x1.below.line.grid.1x2r"),
+                    image: .init(systemName: "square.grid.3x1.below.line.grid.1x2"),
                     title: "Better Game Sorting",
                     subtitle: "Games in the sidebar are now sorted so that numbers come after letters."
                 )

@@ -251,7 +251,7 @@ struct GameDetailView: View {
                     )
                 }
                 Button(action: {
-                    appViewModel.isEditingGame.toggle()
+                    gameViewModel.selectedGameIDs.count == 1 ? appViewModel.isEditingGame.toggle() : ()
                 }, label: {
                     Text(String(localized: "multiple_EditGames"))
                         .padding(.horizontal, 10)

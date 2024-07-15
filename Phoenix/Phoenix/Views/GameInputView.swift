@@ -30,8 +30,6 @@ struct GameInputView: View {
     @State private var screenshotIsImporting: Bool = false
     var newScreenshot: String?
     
-    @State var editingMultiple: Bool = false
-    
     @State private var hoveredScreenshot: String?
     
     var currentPlatform: Platform? {
@@ -206,7 +204,7 @@ struct GameInputView: View {
                 Spacer()
                 HStack(spacing: 20) {
                     if let firstID = gameViewModel.selectedGameIDs.first {
-                        if !isNewGame && !editingMultiple {
+                        if !isNewGame {
                             Button (
                                 action: {
                                     if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
@@ -232,12 +230,10 @@ struct GameInputView: View {
                         }
                         Button(
                             action: {
-                                if !editingMultiple {
-                                    guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
-                                        appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
-                                        dismiss()
-                                        return
-                                    }
+                                guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
+                                    appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
+                                    dismiss()
+                                    return
                                 }
                                 if isNewGame {
                                     if Defaults[.isMetaDataFetchingEnabled] {
@@ -254,41 +250,28 @@ struct GameInputView: View {
                                         }
                                     }
                                 } else {
-                                    if editingMultiple == false {
-                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
-                                            Task {
-                                                if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
-                                                    var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
-                                                    if let headerData = headerData {
-                                                        newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
-                                                    }
-                                                    gameViewModel.games[idx] = newGame
-                                                    gameViewModel.selectedGameIDs = [newGame.id]
-                                                    gameViewModel.saveGames()
-                                                    appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
-                                                } else {
-                                                    gameViewModel.games[idx] = game
-                                                    gameViewModel.selectedGameIDs = [game.id]
-                                                    gameViewModel.saveGames()
-                                                    appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
+                                        Task {
+                                            if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
+                                                var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
+                                                if let headerData = headerData {
+                                                    newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
                                                 }
+                                                gameViewModel.games[idx] = newGame
+                                                gameViewModel.selectedGameIDs = [newGame.id]
+                                                gameViewModel.saveGames()
+                                                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                            } else {
+                                                gameViewModel.games[idx] = game
+                                                gameViewModel.selectedGameIDs = [game.id]
+                                                gameViewModel.saveGames()
+                                                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                             }
-                                        } else {
-                                            appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
                                         }
-                                        dismiss()
                                     } else {
-                                        let changedFields = game.changedFields()
-                                        for id in gameViewModel.selectedGameIDs {
-                                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
-                                                gameViewModel.games[idx].applyChanges(from: changedFields)
-                                            }
-                                        }
-                                        gameViewModel.selectedGameIDs = []
-                                        gameViewModel.saveGames()
-                                        appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
-                                        dismiss()
-                                   }
+                                        appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
+                                    }
+                                    dismiss()
                                 }
                             },
                             label: {
@@ -318,8 +301,6 @@ struct GameInputView: View {
                 game = currentGame
                 // Create Date Formatter
                 dateInput = convertIntoDate(input: currentGame.metadata["release_date"] ?? "")
-            } else if gameViewModel.selectedGameIDs.count > 1 && !isNewGame {
-                editingMultiple = true
             } else {
                 game.id = UUID()
             }

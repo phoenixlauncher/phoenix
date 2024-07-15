@@ -44,7 +44,7 @@ struct PhoenixApp: App {
                 }
                 .keyboardShortcut("n", modifiers: [.shift, .command])
                 Button(String(localized: "file_EditGame")) {
-                    appViewModel.isEditingGame.toggle()
+                    gameViewModel.selectedGameIDs.count == 1 ? appViewModel.isEditingGame.toggle() : ()
                 }
                 .keyboardShortcut("e", modifiers: [.shift, .command])
                 Button(String(localized: "file_PlayGame")) {
