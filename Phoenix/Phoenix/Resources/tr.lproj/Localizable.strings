@@ -1,10 +1,3 @@
-/* 
-  Localizable.strings
-  Phoenix
-
-  Created by Kaleb Rosborough on 2024-01-11.
-  
-*/
 "main_Welcome" = "Phoenix'e Hoşgeldin.";
 "main_ClickInstruction" = "Başlamak için sol üstteki";
 "main_PlusInstruction" = "'ya tıkla.";
@@ -122,6 +115,10 @@
 "platforms_CommandTemplate" = "Komut Şablonu";
 "platforms_CommandTemplateDesc" = "Oyunu başlatmak için komut \n(dosya yolu için %@ kullanın)";
 "platforms_SavePlatform" = "Platformu Kaydet";
+"platforms_NoPlatforms" = "Click the";
+"platforms_ClickInstruction" = "Click the";
+"platforms_PlusInstruction" = "to create one.";
+"platforms_NewPlatform" = "New Platform";
 "hidden_ShowGame" = "Oyunu göster";
 "hidden_NoGames" = "Gizli oyun bulunamadı.";
 "file_AddGame" = "Oyun Ekle";
@@ -142,20 +139,33 @@
 "toast_NoGamesFailure" = "Oyun bulunamadı.";
 "toast_GameNotFoundFailure" = "Oyun bulunamadı.";
 "toast_NoNameFailure" = "Oyunun bir adı olmalı.";
+"toast_FileError" = "Unable to get file: ";
+"toast_LaunchCreationFailure" = "Unable to create application launch command: ";
 "toast_LaunchFailure" = "Lütfen çalıştırmak için bir başlatma komutu yapılandırın.";
+"toast_PlatformSaved" = "Platform saved!";
+"toast_PlatformSaveFailure" = "Platform cannot be named the same as another platform.";
 "alert_InvalidFolder" = "Geçersiz klasör";
 "alert_InvalidFolderMsg" = "Klasör yolu şu şekilde bitmeli";
+"alert_ApplicationsWarning" = "Are you sure you want to import the Applications folder? Some games might be falsely detected.";
 "alert_Cancel" = "İptal et";
+"alert_Warning" = "Warning!";
 "alert_Save" = "Kaydet";
 "context_Favorite" = "Favori";
 "context_Unfavorite" = "Favorilerden kaldır";
 "context_Game" = "Oyun";
+"context_Games" = "Games";
 "context_FavoriteGame" = "Favorilere ekle";
 "context_HideGame" = "Oyunu gizle";
 "context_DeleteGame" = "Oyunu sil";
+"context_EditGame" = "Edit game";
 "context_EditName" = "Adı değiştir";
 "context_EditIcon" = "Simgeyi değiştir";
 "context_EditHeader" = "Arka planı değiştir";
 "context_EditPlatform" = "Platformu değiştir";
 "context_EditStatus" = "Durumu değiştir";
 "update_CheckForUpdates" = "Güncellemeleri kontrol et";
+"multiple_FavoriteGames" = "Favorite Games";
+"multiple_UnfavoriteGames" = "Unfavorite Games";
+"multiple_HideGames" = "Hide Games";
+"multiple_DeleteGames" = "Delete Games";
+"multiple_EditGames" = "Edit Games";
