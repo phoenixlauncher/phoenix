@@ -54,7 +54,7 @@ struct PlatformSettingsSidebar: View {
                 }
             }
             SystemToolbar(plusAction: {
-                platformViewModel.platforms.insert(Platform(name: "New Platform"), at: selectedPlatform + 1  )
+                platformViewModel.platforms.insert(Platform(name: String(localized: "platforms_NewPlatform")), at: selectedPlatform + 1)
                 selectedPlatform += 1
                 platformViewModel.savePlatforms()
             }, plusDisabled: false, minusAction: {
@@ -85,6 +85,7 @@ struct PlatformSettingsDetail: View {
     @Binding var selectedPlatform: Int
     @State var selectedGameDir: Int = 0
     @State var importingGameDir = false
+    @State var applicationsImporting = false
     @Binding var searchingForIcon: Bool
     @State var platform: Platform = Platform()
     
@@ -127,7 +128,7 @@ struct PlatformSettingsDetail: View {
                                                 selectedGameDir += 1
                                             }
                                         }
-                                    }, minusDisabled: (selectedGameDir == 0))
+                                    }, minusDisabled: (platform.gameDirectories.count == 1))
                                 }
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                 .frame(maxWidth: .infinity)
@@ -145,12 +146,16 @@ struct PlatformSettingsDetail: View {
                                 do {
                                     let selectedFileURL: URL? = try result.get().first
                                     if let selectedFileURL = selectedFileURL {
-                                        platform.gameDirectories.append(selectedFileURL.path)
+                                        if selectedFileURL.path == "/Applications" {
+                                            applicationsImporting = true
+                                        } else {
+                                            platform.gameDirectories.append(selectedFileURL.path)
+                                        }
                                     }
                                 }
                                 catch {
                                     logger.write(error.localizedDescription)
-                                    appViewModel.failureToastText = "Unable to get file: \(error)"
+                                    appViewModel.failureToastText = "\(String(localized: "toast_FileError")) \(error)"
                                     appViewModel.showFailureToast.toggle()
                                 }
                             }
@@ -158,9 +163,17 @@ struct PlatformSettingsDetail: View {
                                 handleDrop(providers: selectedFile)
                                 return true
                             }
-//                            FileImportButton(type: .folder, outputPath: $platform.gameDirectory, showOutput: true, title: String(localized: "platforms_GameDirectory"), unselectedLabel: String(localized: "platforms_Select_GameDirectory"), selectedLabel: String(localized: "platforms_SelectedGameDirectory"), action: { url in
-//                                return url.path
-//                            })
+                            .alert(isPresented: $applicationsImporting) {
+                                Alert(
+                                    title: Text(String(localized: "alert_Warning")),
+                                    message: Text(String(localized: "alert_ApplicationsWarning")),
+                                    primaryButton: .default(
+                                        Text("Import"),
+                                        action: { platform.gameDirectories.append("/Applications") }
+                                    ),
+                                    secondaryButton: .cancel()
+                                )
+                            }
                             Divider()
                                 .padding(.horizontal)
                             Toggle(isOn: $platform.emulator) {
@@ -168,7 +181,7 @@ struct PlatformSettingsDetail: View {
                             }
                             .padding()
                             if platform.emulator {
-                                FileImportButton(type: .application, outputPath: $platform.emulatorExecutable, showOutput: true, title: String(localized: "platforms_SelectEmulator"), unselectedLabel: String(localized: "platforms_Select_Emulator_DragDrop"), selectedLabel: String(localized: "platforms_SelectedEmulator"), action: { url in
+                                ImportButton(type: .application, outputPath: $platform.emulatorExecutable, showOutput: true, title: String(localized: "platforms_SelectEmulator"), unselectedLabel: String(localized: "platforms_Select_Emulator_DragDrop"), selectedLabel: String(localized: "platforms_SelectedEmulator"), action: { url in
                                     return "\(url.path)/Contents/MacOS/\(url.deletingPathExtension().lastPathComponent)"
                                 })
                                 TextBox(textBoxName: String(localized: "platforms_EmulatorArgs"), caption: String(localized: "platforms_EmulatorArgsDesc"), input: $platform.commandArgs) // Args input
@@ -194,9 +207,9 @@ struct PlatformSettingsDetail: View {
                                 }
                                 platformViewModel.platforms[selectedPlatform] = platform
                                 platformViewModel.savePlatforms()
-                                appViewModel.showSettingsSuccessToast("Platform saved!")
+                                appViewModel.showSettingsSuccessToast(String(localized: "toast_PlatformSaved"))
                             } else {
-                                appViewModel.showSettingsFailureToast("Platform cannot be named the same as another platform.")
+                                appViewModel.showSettingsFailureToast(String(localized: "toast_PlatformSaveFailure"))
                             }
                         }) {
                             Text(LocalizedStringKey("platforms_SavePlatform"))
@@ -209,11 +222,11 @@ struct PlatformSettingsDetail: View {
                     Spacer()
                     VStack {
                         Spacer()
-                        Text("No platform selected.")
+                        Text(String(localized: "platforms_NoPlatforms"))
                         HStack {
-                            Text("Click the")
+                            Text(String(localized: "platforms_ClickInstruction"))
                             Image(systemName: "plus")
-                            Text("to create one.")
+                            Text(String(localized: "platforms_PlusInstruction"))
                         }
                         Spacer()
                     }
@@ -251,11 +264,12 @@ struct PlatformSettingsDetail: View {
             provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
-                    appViewModel.failureToastText = "Unable to create application launch command: \(error)"
+                    appViewModel.failureToastText = "\(String(localized: "toast_FileError")) \(error)"
                     appViewModel.showFailureToast.toggle()
                     return
                 }
                 if let selectedFileURL = (item as? URL) {
+                    
                     platform.gameDirectories.append(selectedFileURL.path)
                 }
             }

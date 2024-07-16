@@ -168,7 +168,7 @@ func loadPlatformsFromJSON() -> [Platform] {
 func loadNonGamePathsFromJSON() -> [String] {
     let url = getApplicationSupportDirectory().appendingPathComponent("Phoenix/nonGamePaths.json")
     var nonGamePaths: [String] = []
-    if let json = try? JSON(data: Data(contentsOf: url)) {
+    if let json = try? JSON(data: Data(contentsOf: url)), UserDefaultsWhatsNewVersionStore().hasPresented("0.1.10") {
         nonGamePaths = json["nonGamePaths"].arrayValue.map({ $0.stringValue })
     } else {
         // create empty nonGamePaths.json if it doesn't exist

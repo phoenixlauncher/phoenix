@@ -104,6 +104,7 @@ struct ContentView: View {
         .environmentObject(supabaseViewModel)
         .environmentObject(appViewModel)
         .onChange(of: sortBy) { _ in
+            Defaults[.sortBy] = sortBy
             animate.toggle()
         }
         .searchable(text: $searchText, placement: .sidebar, prompt: String(localized: "gameList_Search"))

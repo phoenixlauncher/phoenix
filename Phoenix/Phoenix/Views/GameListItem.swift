@@ -10,12 +10,15 @@ import SwiftUI
 struct GameListItem: View {
     
     @EnvironmentObject var gameViewModel: GameViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var platformViewModel: PlatformViewModel
 
     @State var gameID: UUID
+    let filteredGames: [Game]
     
     var game: Game? {
         gameViewModel.getGameFromID(id: gameID) ?? nil
-     }
+    }
     
     @Default(.listIconSize) var iconSize
     @Default(.listIconsHidden) var iconsHidden
@@ -38,43 +41,43 @@ struct GameListItem: View {
             .contextMenu {
                 //toggle favorite button
                 ContextButton(action: {
-                    gameViewModel.toggleFavoriteFromID(game.id)
-                }, symbol: game.isFavorite ? "star.slash" : "star", text: "\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(String(localized: "context_Game"))")
+                    for id in gameViewModel.selectedGameIDs {
+                        gameViewModel.toggleFavoriteFromID(id)
+                    }
+                }, symbol: game.isFavorite ? "star.slash" : "star", text: "\(game.isFavorite ? String(localized: "context_Unfavorite") : String(localized: "context_Favorite")) \(gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_Game") : String(localized: "context_Games"))")
                 
                 //toggle hidden button
                 ContextButton(action: {
-                    gameViewModel.toggleHiddenFromID(game.id)
-                    if gameViewModel.games.indices.contains(0) {
-                        gameViewModel.selectedGame = gameViewModel.games[0].id
-                    }
-                }, symbol: "eye.slash", text: String(localized: ("context_HideGame")))
+                    hide()
+                }, symbol: "eye.slash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_HideGame") : String(localized: "multiple_HideGames"))
                 
-                //delete game button
+                //delete game(s) button
                 ContextButton(action: {
-                    gameViewModel.deleteGameFromID(game.id)
-                    if gameViewModel.games.indices.contains(0) {
-                        gameViewModel.selectedGame = gameViewModel.games[0].id
-                    }
-                }, symbol: "trash", text: String(localized: "context_DeleteGame"))
-
-                Divider()
+                    delete()
+                }, symbol: "trash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_DeleteGame") : String(localized: "multiple_DeleteGames"))
                 
-                //edit name button
-                ContextButton(action: { changeName.toggle() }, symbol: "character.cursor.ibeam", text: String(localized: "context_EditName"))
+                //edit game(s) button
+                ContextButton(action: {
+                    gameViewModel.selectedGameIDs.count == 1 ? appViewModel.isEditingGame.toggle() : ()
+                }, symbol: "pencil", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_EditGame") : String(localized: "multiple_EditGames"))
                 
-                //edit icon button
-                ContextButton(action: editIcon, symbol: "app.dashed", text: String(localized: "context_EditIcon"))
-
-                //edit header button
-                ContextButton(action: editHeader, symbol: "photo", text: String(localized: "context_EditHeader"))
+                if gameViewModel.selectedGameIDs.count == 1 {
+                    Divider()
+                    //edit name button
+                    ContextButton(action: { changeName.toggle() }, symbol: "character.cursor.ibeam", text: String(localized: "context_EditName"))
+                    //edit icon button
+                    ContextButton(action: editIcon, symbol: "app.dashed", text: String(localized: "context_EditIcon"))
+                    //edit header button
+                    ContextButton(action: editHeader, symbol: "photo", text: String(localized: "context_EditHeader"))
+                }
                 
                 Divider()
                 
                 //edit platform menu
-                PlatformContextButtonMenu(platforms: [], action: { editPlatform(platform: $0, id: game.id) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
+                PlatformContextButtonMenu(platforms: platformViewModel.platforms, action: { editPlatform(platform: $0) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
         
                 //edit platform menu
-                EnumContextButtonMenu(forEachEnum: Status.self, action: { editStatus(status: $0, id: game.id) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
+                EnumContextButtonMenu(forEachEnum: Status.self, action: { editStatus(status: $0) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
                 
             }
             .sheet(isPresented: $changeName) {
@@ -108,7 +111,7 @@ struct GameListItem: View {
                     }
                 }
                 catch {
-                    
+                    logger.write(error.localizedDescription)
                 }
             }
             .onAppear {
@@ -127,17 +130,39 @@ struct GameListItem: View {
         importType = "header"
     }
     
-    func editPlatform(platform: Platform, id: UUID) {
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
-            gameViewModel.games[idx].platformName = platform.name
+    func editPlatform(platform: Platform) {
+        for id in gameViewModel.selectedGameIDs {
+            if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+                gameViewModel.games[idx].platformName = platform.name
+            }
         }
+        gameViewModel.selectedGameIDs = []
         gameViewModel.saveGames()
     }
     
-    func editStatus(status: Status, id: UUID) {
-        if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
-            gameViewModel.games[idx].status = status
+    func editStatus(status: Status) {
+        for id in gameViewModel.selectedGameIDs {
+            if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
+                gameViewModel.games[idx].status = status
+            }
         }
+        gameViewModel.selectedGameIDs = []
+        gameViewModel.saveGames()
+    }
+    
+    func hide() {
+        for id in gameViewModel.selectedGameIDs {
+            gameViewModel.toggleHiddenFromID(id)
+        }
+        gameViewModel.selectedGameIDs = []
+        gameViewModel.saveGames()
+    }
+    
+    func delete() {
+        for id in gameViewModel.selectedGameIDs {
+            gameViewModel.deleteGameFromID(id)
+        }
+        gameViewModel.selectedGameIDs = []
         gameViewModel.saveGames()
     }
 }

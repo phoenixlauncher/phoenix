@@ -58,7 +58,7 @@ struct GameFilePickerButton: View {
             }
             catch {
                 logger.write(error.localizedDescription)
-                appViewModel.failureToastText = "Unable to create application launch command: \(error)"
+                appViewModel.failureToastText = "\(String(localized: "toast_LaunchCreationFailure")) \(error)"
                 appViewModel.showFailureToast.toggle()
             }
        }
@@ -73,7 +73,7 @@ struct GameFilePickerButton: View {
             provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { item, error in
                 if let error = error {
                     logger.write(error.localizedDescription)
-                    appViewModel.failureToastText = "Unable to create application launch command: \(error)"
+                    appViewModel.failureToastText = "\(String(localized: "toast_LaunchCreationFailure")) \(error)"
                     appViewModel.showFailureToast.toggle()
                     return
                 }

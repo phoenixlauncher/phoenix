@@ -5,25 +5,24 @@ import AppKit
 class GameViewModel: ObservableObject {
     @Published var isInitializing: Bool = false
     @Published var games: [Game] = []
-    @Published var selectedGame: UUID
-    @Published var selectedGameName: String
+    @Published var selectedGameIDs: Set<UUID>
     var supabaseViewModel = SupabaseViewModel()
     var platformViewModel = PlatformViewModel()
     
     init() {
-        logger.write("GameViewModel init starting.")
-        // Initialize selectedGame and selectedGameName
-        selectedGame = Defaults[.selectedGame]
-        selectedGameName = ""
+        // Initialize all stored properties
+        games = []
+        selectedGameIDs = []
         
-        // Load games and assign the value to the optional variable
+        // Now we can use self and call methods
         games = loadGames().sorted()
         
-        // Update selectedGameName using the loaded games
-        if let game = getGameFromID(id: Defaults[.selectedGame]) {
-            selectedGameName = game.name
+        // Safely initialize selectedGameIDs
+        if !Defaults[.selectedGameIDs].isEmpty, let firstDefaultID = Defaults[.selectedGameIDs].first, getGameFromID(id: firstDefaultID) != nil {
+            selectedGameIDs = [firstDefaultID]
+        } else if let firstGameID = games.first?.id {
+            selectedGameIDs = [firstGameID]
         }
-        logger.write("GameViewModel init finished.")
     }
     
     func getGameFromName(name: String) -> Game? {
@@ -39,8 +38,12 @@ class GameViewModel: ObservableObject {
         if let idx = games.firstIndex(where: { $0.id == game.id }) {
             games[idx] = game
         } else {
-            games.append(game)
-        }
+            if let index = games.firstIndex(where: { $0 > game }) {
+                games.insert(game, at: index)
+            } else {
+                games.append(game)
+            }
+    }
         save ? saveGames() : ()
     }
     
@@ -116,7 +119,9 @@ class GameViewModel: ObservableObject {
             return gamePaths
         }
         
-        for platform in platformViewModel.platforms {
+        for platform in platformViewModel.platforms.filter({
+            $0.name == "Steam" || ($0.commandTemplate != "" && $0.gameType != "" && $0.gameDirectories != [])
+            }) {
             for directory in platform.gameDirectories {
                 if let directoryURL = URL(string: directory), FileManager.default.fileExists(atPath: directory) {
                     platformGameSets[platform] = scanGames(ofName: platform.name, at: directoryURL, withType: platform.gameType)
@@ -188,7 +193,6 @@ class GameViewModel: ObservableObject {
         }
         
         func saveSteamGames(_ games: [SteamGame]) async {
-            print("saving steam games: \(games)")
             for steamGame in games {
                 let name = steamGame.name
                 let steamID = steamGame.steamID
@@ -223,7 +227,6 @@ class GameViewModel: ObservableObject {
         }
         
         func saveNonSteamGames(_ games: [NonSteamGame]) async {
-            print("saving non steam games: \(games)")
             for nonSteamGame in games {
                 let name = nonSteamGame.name
                 let platform = nonSteamGame.platform
@@ -267,9 +270,15 @@ class GameViewModel: ObservableObject {
                 let fetchedGames = await self.supabaseViewModel.fetchIgbdIDsFromPatternName(name: name)
                 if let firstIgdbID = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first(where: { $0.name?.localizedCaseInsensitiveContains(name) == true || name.localizedCaseInsensitiveContains($0.name ?? "") })?.igdb_id {
                     fetchedGame = await self.supabaseViewModel.fetchGameFromIgdbID(firstIgdbID)
+                } else {
+                    let fetchedGames = await self.supabaseViewModel.fetchIgbdIDsFromPatternNameWithSpaces(name: name)
+                    if let firstIgdbID = fetchedGames.sorted(by: { $0.igdb_id < $1.igdb_id }).first?.igdb_id {
+                        fetchedGame = await self.supabaseViewModel.fetchGameFromIgdbID(firstIgdbID)
+                    }
                 }
             }
         }
+        
         if let fetchedGame = fetchedGame {
             var (game, headerData) = await self.supabaseViewModel.convertSupabaseGame(supabaseGame: fetchedGame, game: Game(id: UUID(), launcher: launcher, name: name, platformName: platform))
             if let headerData = headerData {

@@ -77,7 +77,7 @@ struct ChooseGameView: View {
                 game.metadata["header_img"] = saveImageToFile(data: headerData, gameID: game.id, type: "header")
             }
             gameViewModel.addGame(game)
-            gameViewModel.selectedGame = game.id
+            gameViewModel.selectedGameIDs = [game.id]
         }
     }
 }

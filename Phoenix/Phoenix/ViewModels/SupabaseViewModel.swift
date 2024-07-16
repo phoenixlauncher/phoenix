@@ -70,6 +70,25 @@ class SupabaseViewModel: ObservableObject {
         return []
     }
     
+    func fetchIgbdIDsFromPatternNameWithSpaces(name: String) async -> [SupabaseGame] {
+        // Create a select request from supabase and save it to games
+        if name != "" {
+            do {
+                let igdbIDs: [SupabaseGame] = try await supabase.database
+                    .from("igdb_games")
+                    .select("igdb_id, name")
+                    .ilike("name", value: "%\(name.replacingOccurrences(of: " ", with: "%"))%")
+                    .execute()
+                    .value
+                return igdbIDs
+            } catch {
+                // Handle the error
+                logger.write("An error occurred: \(error)")
+            }
+        }
+        return []
+    }
+    
     func fetchGameFromIgdbID(_ igdbID: Int) async -> SupabaseGame? {
         // Create a select request from supabase and save it to games
         do {

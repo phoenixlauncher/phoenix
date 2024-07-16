@@ -43,7 +43,7 @@ struct GameInputView: View {
                     Group {
                         TextBox(textBoxName: String(localized: "editGame_Name"), input: $game.name) // Name input
                         
-                        FileImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), overrideLabel: String(localized: "editGame_IconOverride"), action: { path in
+                        ImportButton(type: .image, outputPath: $game.icon, showOutput: false, title: String(localized: "editGame_Icon"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), overrideLabel: String(localized: "editGame_IconOverride"), action: { path in
                             iconInput = path.absoluteString
                             return saveIconToFile(iconData: pathIntoData(path: path), gameID: game.id)
                         })
@@ -82,14 +82,14 @@ struct GameInputView: View {
                             
                             TextBox(textBoxName: String(localized: "editGame_Genres"), input: binding(for: "genre"))
                             
-                            FileImportButton(type: .image, outputPath: binding(for: "header_img"), showOutput: false, title: String(localized: "editGame_Header"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                            ImportButton(type: .image, outputPath: binding(for: "header_img"), showOutput: false, title: String(localized: "editGame_Header"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
                                 if let data = pathIntoData(path: path) {
                                     return saveImageToFile(data: data, gameID: game.id, type: "header")
                                 }
                                 return nil
                             })
                             
-                            FileImportButton(type: .image, outputPath: binding(for: "cover"), showOutput: false, title: String(localized: "editGame_Cover"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
+                            ImportButton(type: .image, outputPath: binding(for: "cover"), showOutput: false, title: String(localized: "editGame_Cover"), unselectedLabel: String(localized: "editGame_File_DragDrop"), selectedLabel: String(localized: "editGame_SelectedImage"), action: { path in
                                 if let data = pathIntoData(path: path) {
                                     return saveImageToFile(data: data, gameID: game.id, type: "cover")
                                 }
@@ -203,81 +203,83 @@ struct GameInputView: View {
             HStack {
                 Spacer()
                 HStack(spacing: 20) {
-                    if !isNewGame {
-                        Button (
-                            action: {
-                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                    gameViewModel.games[idx] = game
-                                    gameViewModel.saveGames()
-                                }
-                                Task {
-                                    fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
-                                    gameViewModel.saveGames()
-                                    if fetchedGames.count != 0 {
-                                        showChooseGameView.toggle()
-                                    } else {
-                                        appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
-                                        dismiss()
+                    if let firstID = gameViewModel.selectedGameIDs.first {
+                        if !isNewGame {
+                            Button (
+                                action: {
+                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
+                                        gameViewModel.games[idx] = game
+                                        gameViewModel.saveGames()
                                     }
-                                }
-                                gameViewModel.selectedGame = game.id
-                            },
-                            label: {
-                                Text(LocalizedStringKey("editGame_Fetch"))
-                            }
-                        )
-                    }
-                    Button(
-                        action: {
-                            guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
-                                appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
-                                dismiss()
-                                return
-                            }
-                            if isNewGame {
-                                if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
                                         fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
+                                        gameViewModel.saveGames()
                                         if fetchedGames.count != 0 {
                                             showChooseGameView.toggle()
                                         } else {
-                                            gameViewModel.games.append(game)
-                                            gameViewModel.selectedGame = game.id
-                                            appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
+                                            appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
                                             dismiss()
                                         }
                                     }
+                                    gameViewModel.selectedGameIDs = [game.id]
+                                },
+                                label: {
+                                    Text(LocalizedStringKey("editGame_Fetch"))
                                 }
-                            } else {
-                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                    Task {
-                                        if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
-                                            var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
-                                            if let headerData = headerData {
-                                                newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
+                            )
+                        }
+                        Button(
+                            action: {
+                                guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
+                                    appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
+                                    dismiss()
+                                    return
+                                }
+                                if isNewGame {
+                                    if Defaults[.isMetaDataFetchingEnabled] {
+                                        Task {
+                                            fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
+                                            if fetchedGames.count != 0 {
+                                                showChooseGameView.toggle()
+                                            } else {
+                                                gameViewModel.games.append(game)
+                                                gameViewModel.selectedGameIDs = [game.id]
+                                                appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
+                                                dismiss()
                                             }
-                                            gameViewModel.games[idx] = newGame
-                                            gameViewModel.selectedGame = newGame.id
-                                            gameViewModel.saveGames()
-                                            appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
-                                        } else {
-                                            gameViewModel.games[idx] = game
-                                            gameViewModel.selectedGame = game.id
-                                            gameViewModel.saveGames()
-                                            appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                         }
                                     }
                                 } else {
-                                    appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
+                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
+                                        Task {
+                                            if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
+                                                var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
+                                                if let headerData = headerData {
+                                                    newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
+                                                }
+                                                gameViewModel.games[idx] = newGame
+                                                gameViewModel.selectedGameIDs = [newGame.id]
+                                                gameViewModel.saveGames()
+                                                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                            } else {
+                                                gameViewModel.games[idx] = game
+                                                gameViewModel.selectedGameIDs = [game.id]
+                                                gameViewModel.saveGames()
+                                                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                            }
+                                        }
+                                    } else {
+                                        appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
+                                    }
+                                    dismiss()
                                 }
-                                dismiss()
+                            },
+                            label: {
+                                Text(LocalizedStringKey("editGame_SaveGame"))
                             }
-                        },
-                        label: {
-                            Text(LocalizedStringKey("editGame_SaveGame"))
-                        }
-                    )
-                    .accessibilityLabel(String(localized: "editGame_SaveGame"))
+                        )
+                        .accessibilityLabel(String(localized: "editGame_SaveGame"))
+                    }
                 }
                 Spacer()
                 HelpButton()
@@ -294,7 +296,7 @@ struct GameInputView: View {
             ChooseGameView(supabaseGames: $fetchedGames, game: game, done: $chooseGameViewDone)
         })
         .onAppear() {
-            if !isNewGame, let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
+            if !isNewGame, gameViewModel.selectedGameIDs.count == 1, let firstID = gameViewModel.selectedGameIDs.first, let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
                 let currentGame = gameViewModel.games[idx]
                 game = currentGame
                 // Create Date Formatter

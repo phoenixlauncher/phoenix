@@ -1,10 +1,3 @@
-/* 
-  Localizable.strings
-  Phoenix
-
-  Created by Kaleb Rosborough on 2024-01-11.
-  
-*/
 "main_Welcome" = "Welcome to Phoenix.";
 "main_ClickInstruction" = "Click the";
 "main_PlusInstruction" = "in the top left to get started.";
@@ -122,6 +115,10 @@
 "platforms_CommandTemplate" = "Command Template";
 "platforms_CommandTemplateDesc" = "Template for launching game \n(use %@ for the file path)";
 "platforms_SavePlatform" = "Save Platform";
+"platforms_NoPlatforms" = "Click the";
+"platforms_ClickInstruction" = "Click the";
+"platforms_PlusInstruction" = "to create one.";
+"platforms_NewPlatform" = "New Platform";
 "hidden_ShowGame" = "Show game";
 "hidden_NoGames" = "No hidden games found.";
 "file_AddGame" = "Add Game";
@@ -142,21 +139,33 @@
 "toast_NoGamesFailure" = "No games found.";
 "toast_GameNotFoundFailure" = "Game couldn't be found.";
 "toast_NoNameFailure" = "Game must have a name.";
+"toast_FileError" = "Unable to get file: ";
+"toast_LaunchCreationFailure" = "Unable to create application launch command: ";
 "toast_LaunchFailure" = "Please configure a launch command to run.";
+"toast_PlatformSaved" = "Platform saved!";
+"toast_PlatformSaveFailure" = "Platform cannot be named the same as another platform.";
 "alert_InvalidFolder" = "Invalid folder";
 "alert_InvalidFolderMsg" = "The folder path must end with";
+"alert_ApplicationsWarning" = "Are you sure you want to import the Applications folder? Some games might be falsely detected.";
 "alert_Cancel" = "Cancel";
+"alert_Warning" = "Warning!";
 "alert_Save" = "Save";
 "context_Favorite" = "Favorite";
 "context_Unfavorite" = "Unfavorite";
 "context_Game" = "Game";
+"context_Games" = "Games";
 "context_FavoriteGame" = "Favorite game";
 "context_HideGame" = "Hide game";
 "context_DeleteGame" = "Delete game";
+"context_EditGame" = "Edit game";
 "context_EditName" = "Edit name";
 "context_EditIcon" = "Edit icon";
 "context_EditHeader" = "Edit header";
 "context_EditPlatform" = "Edit platform";
 "context_EditStatus" = "Edit status";
 "update_CheckForUpdates" = "Check for Updates";
-
+"multiple_FavoriteGames" = "Favorite Games";
+"multiple_UnfavoriteGames" = "Unfavorite Games";
+"multiple_HideGames" = "Hide Games";
+"multiple_DeleteGames" = "Delete Games";
+"multiple_EditGames" = "Edit Games";

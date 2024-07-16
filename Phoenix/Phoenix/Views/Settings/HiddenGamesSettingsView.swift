@@ -16,7 +16,7 @@ struct HiddenGamesSettingsView: View {
     var body: some View {
         Form {
             VStack {
-                List(selection: $gameViewModel.selectedGame) {
+                List() {
                     let hiddenGames = gameViewModel.games.filter { $0.isHidden == true }
                     if !hiddenGames.isEmpty {
                         ForEach(hiddenGames, id: \.id) { game in
