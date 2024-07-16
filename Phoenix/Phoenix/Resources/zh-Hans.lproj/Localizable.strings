@@ -1,10 +1,3 @@
-/* 
-  Localizable.strings
-  Phoenix
-
-  Created by Kaleb Rosborough on 2024-01-11.
-  
-*/
 "main_Welcome" = "欢迎使用 Phoenix。";
 "main_ClickInstruction" = "单击左上方的";
 "main_PlusInstruction" = "即可开始。";
@@ -122,6 +115,10 @@
 "platforms_CommandTemplate" = "命令模板";
 "platforms_CommandTemplateDesc" = "启动游戏的模板\n（使用 %@ 作为文件路径）";
 "platforms_SavePlatform" = "保存平台";
+"platforms_NoPlatforms" = "Click the";
+"platforms_ClickInstruction" = "Click the";
+"platforms_PlusInstruction" = "to create one.";
+"platforms_NewPlatform" = "New Platform";
 "hidden_ShowGame" = "显示游戏";
 "hidden_NoGames" = "未找到隐藏的游戏。";
 "file_AddGame" = "添加游戏";
@@ -142,20 +139,33 @@
 "toast_NoGamesFailure" = "未找到游戏。";
 "toast_GameNotFoundFailure" = "找不到游戏。";
 "toast_NoNameFailure" = "游戏必须有名称。";
+"toast_FileError" = "Unable to get file: ";
+"toast_LaunchCreationFailure" = "Unable to create application launch command: ";
 "toast_LaunchFailure" = "请配置一个启动命令来运行。";
+"toast_PlatformSaved" = "Platform saved!";
+"toast_PlatformSaveFailure" = "Platform cannot be named the same as another platform.";
 "alert_InvalidFolder" = "文件夹无效";
 "alert_InvalidFolderMsg" = "文件夹路径末尾必须为";
+"alert_ApplicationsWarning" = "Are you sure you want to import the Applications folder? Some games might be falsely detected.";
 "alert_Cancel" = "取消";
+"alert_Warning" = "Warning!";
 "alert_Save" = "保存";
 "context_Favorite" = "收藏";
 "context_Unfavorite" = "取消收藏";
 "context_Game" = "游戏";
+"context_Games" = "Games";
 "context_FavoriteGame" = "收藏游戏";
 "context_HideGame" = "隐藏游戏";
 "context_DeleteGame" = "删除游戏";
+"context_EditGame" = "Edit game";
 "context_EditName" = "编辑名称";
 "context_EditIcon" = "编辑图标";
 "context_EditHeader" = "编辑标题";
 "context_EditPlatform" = "编辑平台";
 "context_EditStatus" = "编辑状态";
 "update_CheckForUpdates" = "检查更新";
+"multiple_FavoriteGames" = "Favorite Games";
+"multiple_UnfavoriteGames" = "Unfavorite Games";
+"multiple_HideGames" = "Hide Games";
+"multiple_DeleteGames" = "Delete Games";
+"multiple_EditGames" = "Edit Games";
