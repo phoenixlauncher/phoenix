@@ -48,12 +48,12 @@ struct GameListItem: View {
                 
                 //toggle hidden button
                 ContextButton(action: {
-                    hide()
+                    hide(Set(gameViewModel.selectedGameIDs + [game.id]))
                 }, symbol: "eye.slash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_HideGame") : String(localized: "multiple_HideGames"))
                 
                 //delete game(s) button
                 ContextButton(action: {
-                    delete()
+                    delete(Set(gameViewModel.selectedGameIDs + [game.id]))
                 }, symbol: "trash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_DeleteGame") : String(localized: "multiple_DeleteGames"))
                 
                 //edit game(s) button
@@ -74,10 +74,10 @@ struct GameListItem: View {
                 Divider()
                 
                 //edit platform menu
-                PlatformContextButtonMenu(platforms: platformViewModel.platforms, action: { editPlatform(platform: $0) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
+                PlatformContextButtonMenu(platforms: platformViewModel.platforms, action: { editPlatform(of: Set(gameViewModel.selectedGameIDs + [game.id]), to: $0) }, symbol: "gamecontroller", text: String(localized: "context_EditPlatform"))
         
                 //edit platform menu
-                EnumContextButtonMenu(forEachEnum: Status.self, action: { editStatus(status: $0) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
+                EnumContextButtonMenu(forEachEnum: Status.self, action: { editStatus(of: Set(gameViewModel.selectedGameIDs + [game.id]), to: $0) }, symbol: "trophy", text: String(localized: "context_EditStatus"))
                 
             }
             .sheet(isPresented: $changeName) {
@@ -130,8 +130,8 @@ struct GameListItem: View {
         importType = "header"
     }
     
-    func editPlatform(platform: Platform) {
-        for id in gameViewModel.selectedGameIDs {
+    func editPlatform(of ids: Set<UUID>, to platform: Platform) {
+        for id in ids {
             if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
                 gameViewModel.games[idx].platformName = platform.name
             }
@@ -140,8 +140,8 @@ struct GameListItem: View {
         gameViewModel.saveGames()
     }
     
-    func editStatus(status: Status) {
-        for id in gameViewModel.selectedGameIDs {
+    func editStatus(of ids: Set<UUID>, to status: Status) {
+        for id in ids {
             if let idx = gameViewModel.games.firstIndex(where: { $0.id == id }) {
                 gameViewModel.games[idx].status = status
             }
@@ -150,16 +150,16 @@ struct GameListItem: View {
         gameViewModel.saveGames()
     }
     
-    func hide() {
-        for id in gameViewModel.selectedGameIDs {
+    func hide(_ ids: Set<UUID>) {
+        for id in ids {
             gameViewModel.toggleHiddenFromID(id)
         }
         gameViewModel.selectedGameIDs = []
         gameViewModel.saveGames()
     }
     
-    func delete() {
-        for id in gameViewModel.selectedGameIDs {
+    func delete(_ ids: Set<UUID>) {
+        for id in ids {
             gameViewModel.deleteGameFromID(id)
         }
         gameViewModel.selectedGameIDs = []
