@@ -53,7 +53,7 @@ Big thanks to the creators of these dependencies for creating such great tools!
 - [Supabase](https://github.com/supabase-community/supabase-swift) - A Swift client for Supabase
 - [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) - The better way to deal with JSON data in Swift
 - [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) - Display and customize Markdown text in SwiftUI
-- [WhatsNewKit](https://github.com/SvenTiigi/WhatsNewKit) - Showcase your awesome new app features
+- [WhatsNewKit](https://github.com/SvenTiigi/WhatsNewKit) - Showcase your awesome new app features 
 
 ## Other Credits
 
