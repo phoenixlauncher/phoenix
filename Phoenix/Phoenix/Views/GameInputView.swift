@@ -203,83 +203,81 @@ struct GameInputView: View {
             HStack {
                 Spacer()
                 HStack(spacing: 20) {
-                    if let firstID = gameViewModel.selectedGameIDs.first {
-                        if !isNewGame {
-                            Button (
-                                action: {
-                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
-                                        gameViewModel.games[idx] = game
-                                        gameViewModel.saveGames()
+                    if let firstID = gameViewModel.selectedGameIDs.first, !isNewGame {
+                        Button (
+                            action: {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
+                                    gameViewModel.games[idx] = game
+                                    gameViewModel.saveGames()
+                                }
+                                Task {
+                                    fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
+                                    gameViewModel.saveGames()
+                                    if fetchedGames.count != 0 {
+                                        showChooseGameView.toggle()
+                                    } else {
+                                        appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
+                                        dismiss()
                                     }
+                                }
+                                gameViewModel.selectedGameIDs = [game.id]
+                            },
+                            label: {
+                                Text(LocalizedStringKey("editGame_Fetch"))
+                            }
+                        )
+                    }
+                    Button(
+                        action: {
+                            guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
+                                appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
+                                dismiss()
+                                return
+                            }
+                            if isNewGame {
+                                if Defaults[.isMetaDataFetchingEnabled] {
                                     Task {
                                         fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
-                                        gameViewModel.saveGames()
                                         if fetchedGames.count != 0 {
                                             showChooseGameView.toggle()
                                         } else {
-                                            appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
+                                            gameViewModel.games.append(game)
+                                            gameViewModel.selectedGameIDs = [game.id]
+                                            appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
                                             dismiss()
                                         }
                                     }
-                                    gameViewModel.selectedGameIDs = [game.id]
-                                },
-                                label: {
-                                    Text(LocalizedStringKey("editGame_Fetch"))
                                 }
-                            )
-                        }
-                        Button(
-                            action: {
-                                guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
-                                    appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
-                                    dismiss()
-                                    return
-                                }
-                                if isNewGame {
-                                    if Defaults[.isMetaDataFetchingEnabled] {
-                                        Task {
-                                            fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
-                                            if fetchedGames.count != 0 {
-                                                showChooseGameView.toggle()
-                                            } else {
-                                                gameViewModel.games.append(game)
-                                                gameViewModel.selectedGameIDs = [game.id]
-                                                appViewModel.showFailureToast(String(localized: "editGame_NoGamesFailure"))
-                                                dismiss()
+                            } else {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == game.id }) {
+                                    Task {
+                                        if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
+                                            var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
+                                            if let headerData = headerData {
+                                                newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
                                             }
+                                            gameViewModel.games[idx] = newGame
+                                            gameViewModel.selectedGameIDs = [newGame.id]
+                                            gameViewModel.saveGames()
+                                            appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
+                                        } else {
+                                            gameViewModel.games[idx] = game
+                                            gameViewModel.selectedGameIDs = [game.id]
+                                            gameViewModel.saveGames()
+                                            appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
                                         }
                                     }
                                 } else {
-                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
-                                        Task {
-                                            if game.igdbID != gameViewModel.games[idx].igdbID, let igdbID = Int(game.igdbID), let supabaseGame = await supabaseViewModel.fetchGameFromIgdbID(igdbID) {
-                                                var (newGame, headerData) = await supabaseViewModel.convertSupabaseGame(supabaseGame: supabaseGame, game: game)
-                                                if let headerData = headerData {
-                                                    newGame.metadata["header_img"] = saveImageToFile(data: headerData, gameID: newGame.id, type: "header")
-                                                }
-                                                gameViewModel.games[idx] = newGame
-                                                gameViewModel.selectedGameIDs = [newGame.id]
-                                                gameViewModel.saveGames()
-                                                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
-                                            } else {
-                                                gameViewModel.games[idx] = game
-                                                gameViewModel.selectedGameIDs = [game.id]
-                                                gameViewModel.saveGames()
-                                                appViewModel.showSuccessToast(String(localized: "toast_GameSavedSuccess"))
-                                            }
-                                        }
-                                    } else {
-                                        appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
-                                    }
-                                    dismiss()
+                                    appViewModel.showFailureToast(String(localized: "toast_GameNotFoundFailure"))
                                 }
-                            },
-                            label: {
-                                Text(LocalizedStringKey("editGame_SaveGame"))
+                                dismiss()
                             }
-                        )
-                        .accessibilityLabel(String(localized: "editGame_SaveGame"))
-                    }
+                        },
+                        label: {
+                            Text(LocalizedStringKey("editGame_SaveGame"))
+                        }
+                    )
+                    .accessibilityLabel(String(localized: "editGame_SaveGame"))
                 }
                 Spacer()
                 HelpButton()
