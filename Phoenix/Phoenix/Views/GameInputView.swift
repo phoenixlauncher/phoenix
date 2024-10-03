@@ -203,31 +203,29 @@ struct GameInputView: View {
             HStack {
                 Spacer()
                 HStack(spacing: 20) {
-                    if let firstID = gameViewModel.selectedGameIDs.first {
-                        if !isNewGame {
-                            Button (
-                                action: {
-                                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
-                                        gameViewModel.games[idx] = game
-                                        gameViewModel.saveGames()
-                                    }
-                                    Task {
-                                        fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
-                                        gameViewModel.saveGames()
-                                        if fetchedGames.count != 0 {
-                                            showChooseGameView.toggle()
-                                        } else {
-                                            appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
-                                            dismiss()
-                                        }
-                                    }
-                                    gameViewModel.selectedGameIDs = [game.id]
-                                },
-                                label: {
-                                    Text(LocalizedStringKey("editGame_Fetch"))
+                    if let firstID = gameViewModel.selectedGameIDs.first && !isNewGame {
+                        Button (
+                            action: {
+                                if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
+                                    gameViewModel.games[idx] = game
+                                    gameViewModel.saveGames()
                                 }
-                            )
-                        }
+                                Task {
+                                    fetchedGames = await supabaseViewModel.fetchGamesFromName(name: game.name)
+                                    gameViewModel.saveGames()
+                                    if fetchedGames.count != 0 {
+                                        showChooseGameView.toggle()
+                                    } else {
+                                        appViewModel.showFailureToast(String(localized: "toast_NoGamesFailure"))
+                                        dismiss()
+                                    }
+                                }
+                                gameViewModel.selectedGameIDs = [game.id]
+                            },
+                            label: {
+                                Text(LocalizedStringKey("editGame_Fetch"))
+                            }
+                        )
                     }
                     Button(
                         action: {
