@@ -1,5 +1,5 @@
 {
-  "originHash" : "be0f4ea3caba2a3ee14e33b67384b6aa339d337eda42df70f0171fd005d0f937",
+  "originHash" : "ad9fd3f58f3188cfec5b0aa9e8ad20993e350a58c292f97be8646f130fd3d090",
   "pins" : [
     {
       "identity" : "alerttoast",
@@ -67,10 +67,10 @@
     {
       "identity" : "starratingviewswiftui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jxhug/StarRatingViewSwiftUI.git",
+      "location" : "https://jxhug@github.com/jmshgs/StarRatingViewSwiftUI.git",
       "state" : {
         "branch" : "main",
-        "revision" : "a1d54fd7e238cda19c2d946ab5f83436578d2338"
+        "revision" : "8bb40c5ee4845c6bf674da1894206778265b2f4c"
       }
     },
     {

@@ -27,6 +27,7 @@
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
 		1A83BC7C2C26B97D00D1A031 /* WhatsNewKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A83BC7B2C26B97D00D1A031 /* WhatsNewKit */; };
 		1A83BC7E2C26B9DB00D1A031 /* WhatsNewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A83BC7D2C26B9DB00D1A031 /* WhatsNewConfiguration.swift */; };
+		1ADCA3652CAE710100100835 /* StarRatingViewSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADCA3642CAE710100100835 /* StarRatingViewSwiftUI */; };
 		AD0897FD2BFC38EF00C4820D /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = AD0897FC2BFC38EF00C4820D /* FluidGradient */; };
 		AD0897FF2BFC489F00C4820D /* PlatformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0897FE2BFC489F00C4820D /* PlatformViewModel.swift */; };
 		AD0971D92B60D8B1009F3742 /* ExpandableText in Frameworks */ = {isa = PBXBuildFile; productRef = AD0971D82B60D8B1009F3742 /* ExpandableText */; };
@@ -35,7 +36,6 @@
 		AD23F7462BF85A1E00FD221B /* IconSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23F7452BF85A1E00FD221B /* IconSearch.swift */; };
 		AD23F7482BF85A4E00FD221B /* SystemToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23F7472BF85A4E00FD221B /* SystemToolbar.swift */; };
 		AD2E38AB2B5785EA0068943E /* TextBoxAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2E38AA2B5785EA0068943E /* TextBoxAlert.swift */; };
-		AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */; };
 		AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287C92AC007CC001673F5 /* TextBox.swift */; };
 		AD5287CC2AC0093E001673F5 /* ImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CB2AC0093E001673F5 /* ImportButton.swift */; };
 		AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CD2AC00A1A001673F5 /* SlotInput.swift */; };
@@ -189,7 +189,7 @@
 			files = (
 				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
 				AD5A47BF2B93EC4C0037DFA2 /* Sparkle in Frameworks */,
-				AD3A046A2AFEC8B70090F3A8 /* StarRatingViewSwiftUI in Frameworks */,
+				1ADCA3652CAE710100100835 /* StarRatingViewSwiftUI in Frameworks */,
 				B54BBA282BC0645300575AC2 /* SwiftUIIntrospect in Frameworks */,
 				B5C147892BDE23C700F38CD3 /* SwiftyJSON in Frameworks */,
 				AD5542E92BA935C300AE7F3E /* CachedAsyncImage in Frameworks */,
@@ -458,7 +458,6 @@
 				AD5E91A52AAE33CB008097C4 /* AlertToast */,
 				ADB63FFD2AF7F248006B39ED /* Defaults */,
 				AD8718FC2AFDE14D0008F144 /* MarkdownUI */,
-				AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */,
 				AD7AD2EF2B09819E002DBDCD /* Supabase */,
 				AD0971D82B60D8B1009F3742 /* ExpandableText */,
 				AD5A47BE2B93EC4C0037DFA2 /* Sparkle */,
@@ -467,6 +466,7 @@
 				B5C147882BDE23C700F38CD3 /* SwiftyJSON */,
 				AD0897FC2BFC38EF00C4820D /* FluidGradient */,
 				1A83BC7B2C26B97D00D1A031 /* WhatsNewKit */,
+				1ADCA3642CAE710100100835 /* StarRatingViewSwiftUI */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -516,7 +516,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					0AF378602953AADD00978137 = {
 						CreatedOnToolsVersion = 14.2;
@@ -568,7 +568,6 @@
 				AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				ADB63FFC2AF7F247006B39ED /* XCRemoteSwiftPackageReference "Defaults" */,
 				AD8718FB2AFDE14D0008F144 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
-				AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
 				AD7AD2EE2B09819E002DBDCD /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */,
 				AD5A47BD2B93EC4C0037DFA2 /* XCRemoteSwiftPackageReference "Sparkle" */,
@@ -577,6 +576,7 @@
 				B5C147872BDE23C700F38CD3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */,
 				1A83BC7A2C26B97D00D1A031 /* XCRemoteSwiftPackageReference "WhatsNewKit" */,
+				1ADCA3632CAE710100100835 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -936,7 +936,6 @@
 		0AF3788A2953AADE00978137 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -955,7 +954,6 @@
 		0AF3788B2953AADE00978137 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -974,7 +972,6 @@
 		0AF3788D2953AADE00978137 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -993,7 +990,6 @@
 		0AF3788E2953AADE00978137 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -1059,6 +1055,14 @@
 				minimumVersion = 2.2.1;
 			};
 		};
+		1ADCA3632CAE710100100835 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://jxhug@github.com/jmshgs/StarRatingViewSwiftUI.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Cindori/FluidGradient";
@@ -1070,14 +1074,6 @@
 		AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jxhug/ExpandableText.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jxhug/StarRatingViewSwiftUI.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -1155,6 +1151,11 @@
 			package = 1A83BC7A2C26B97D00D1A031 /* XCRemoteSwiftPackageReference "WhatsNewKit" */;
 			productName = WhatsNewKit;
 		};
+		1ADCA3642CAE710100100835 /* StarRatingViewSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1ADCA3632CAE710100100835 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */;
+			productName = StarRatingViewSwiftUI;
+		};
 		AD0897FC2BFC38EF00C4820D /* FluidGradient */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AD0897FB2BFC38EF00C4820D /* XCRemoteSwiftPackageReference "FluidGradient" */;
@@ -1164,11 +1165,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD0971D72B60D8B1009F3742 /* XCRemoteSwiftPackageReference "ExpandableText" */;
 			productName = ExpandableText;
-		};
-		AD3A04692AFEC8B70090F3A8 /* StarRatingViewSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD3A04682AFEC8B70090F3A8 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */;
-			productName = StarRatingViewSwiftUI;
 		};
 		AD5542E82BA935C300AE7F3E /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
