@@ -250,19 +250,6 @@ struct GameDetailView: View {
                             .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
                     )
                 }
-                Button(action: {
-                    gameViewModel.selectedGameIDs.count == 1 ? appViewModel.isEditingGame.toggle() : ()
-                }, label: {
-                    Text(String(localized: "multiple_EditGames"))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 3)
-                        .foregroundStyle(.gray)
-                })
-                .buttonStyle(PlainButtonStyle())
-                .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
-                )
             }
             .navigationTitle("Games")
             .onChange(of: gameViewModel.selectedGameIDs) { _ in

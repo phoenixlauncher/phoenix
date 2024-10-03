@@ -64,13 +64,13 @@ struct GameListItem: View {
                 ContextButton(action: {
                     delete(contextGameIDs)
                 }, symbol: "trash", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_DeleteGame") : String(localized: "multiple_DeleteGames"))
-                
-                //edit game(s) button
-                ContextButton(action: {
-                    gameViewModel.selectedGameIDs.count == 1 ? appViewModel.isEditingGame.toggle() : ()
-                }, symbol: "pencil", text: gameViewModel.selectedGameIDs.count == 1 ? String(localized: "context_EditGame") : String(localized: "multiple_EditGames"))
+            
                 
                 if gameViewModel.selectedGameIDs.count == 1 {
+                    //edit game button
+                    ContextButton(action: {
+                        appViewModel.isEditingGame.toggle()
+                    }, symbol: "pencil", text: String(localized: "context_EditGame"))
                     Divider()
                     //edit name button
                     ContextButton(action: { changeName.toggle() }, symbol: "character.cursor.ibeam", text: String(localized: "context_EditName"))
