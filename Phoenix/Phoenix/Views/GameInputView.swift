@@ -203,7 +203,7 @@ struct GameInputView: View {
             HStack {
                 Spacer()
                 HStack(spacing: 20) {
-                    if let firstID = gameViewModel.selectedGameIDs.first && !isNewGame {
+                    if let firstID = gameViewModel.selectedGameIDs.first, !isNewGame {
                         Button (
                             action: {
                                 if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
