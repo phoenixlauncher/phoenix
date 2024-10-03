@@ -93,15 +93,16 @@ struct GameDetailView: View {
                                 // settings button
                                 SmallToggleButton(toggle: $appViewModel.isEditingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
                                 if showStarRating {
-                                    StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
-                                        .frame(width: 300, height: 30)
-                                        .padding(.horizontal)
-                                    //                                        .onHover { _ in
-                                    //                                            if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGame }) {
-                                    //                                                gameViewModel.games[idx].metadata["rating"] = String(rating)
-                                    //                                            }
-                                    //                                            gameViewModel.saveGames()
-                                    //                                        }
+                                    StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange) {
+                                        //called on swipe/tap
+                                        if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGameIDs.first }) {
+                                            print(rating)
+                                            gameViewModel.games[idx].metadata["rating"] = String(rating)
+                                        }
+                                        gameViewModel.saveGames()
+                                    }
+                                    .frame(width: 300, height: 30)
+                                    .padding(.horizontal)
                                 }
                             } // hstack
                             .frame(alignment: .leading)
@@ -195,10 +196,9 @@ struct GameDetailView: View {
                 .onChange(of: appViewModel.isPlayingGame) { _ in
                     playGame(game: game)
                 }
-                .onChange(of: gameViewModel.selectedGameIDs) { _ in
+                .onChange(of: gameViewModel.selectedGameIDs.first) { _ in
                     Defaults[.selectedGameIDs] = gameViewModel.selectedGameIDs
-                    print(gameViewModel.selectedGameIDs)
-                    if let gameRating = game.metadata["rating"] {
+                    if let idx = gameViewModel.games.firstIndex(where: { $0.id == gameViewModel.selectedGameIDs.first }), let gameRating = gameViewModel.games[idx].metadata["rating"] {
                         rating = Float(gameRating) ?? 0
                     }
                     checkHeader()
