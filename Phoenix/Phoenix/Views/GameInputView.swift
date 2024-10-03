@@ -4,11 +4,12 @@
 //
 //  Created by James Hughes on 2022-12-27.
 //
-import AlertToast
 import Foundation
 import SwiftUI
+import AlertToast
 
 struct GameInputView: View {
+    
     @EnvironmentObject var gameViewModel: GameViewModel
     @EnvironmentObject var supabaseViewModel: SupabaseViewModel
     @EnvironmentObject var appViewModel: AppViewModel
@@ -23,7 +24,7 @@ struct GameInputView: View {
     
     @State var fetchedGames: [SupabaseGame] = []
     
-    @State private var game: Game = .init()
+    @State private var game: Game = Game()
     @State private var dateInput: Date = .now
     @State private var iconInput: String?
     @State private var screenshotIsImporting: Bool = false
@@ -32,7 +33,7 @@ struct GameInputView: View {
     @State private var hoveredScreenshot: String?
     
     var currentPlatform: Platform? {
-        platformViewModel.platforms.first(where: { game.platformName == $0.name })
+        platformViewModel.platforms.first(where: {game.platformName == $0.name})
     }
 
     var body: some View {
@@ -49,7 +50,7 @@ struct GameInputView: View {
                         
                         SlotInput(contentName: String(localized: "editGame_Platform"), content: {
                             Picker("Platform", selection: $game.platformName) {
-                                ForEach(platformViewModel.platforms.map { $0.name }, id: \.self) { platformName in
+                                ForEach(platformViewModel.platforms.map({ $0.name }), id: \.self) { platformName in
                                     Text(platformName)
                                 }
                             }
@@ -65,8 +66,8 @@ struct GameInputView: View {
                         
                         if let currentPlatform = currentPlatform, currentPlatform.commandTemplate != "", currentPlatform.gameType != "" {
                             GameFilePickerButton(currentPlatform: currentPlatform, game: $game, extraAction: { url in
-                                if iconInput == nil, Defaults[.getIconFromApp] {
-                                    if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id) {
+                                if iconInput == nil && Defaults[.getIconFromApp] {
+                                    if let icon = saveIconToFile(iconNSImage: NSWorkspace.shared.icon(forFile: url.path), gameID: game.id)   {
                                         game.icon = icon
                                     }
                                 }
@@ -125,7 +126,8 @@ struct GameInputView: View {
                                                             game.screenshots.insert(saveImageToFile(data: data, gameID: game.id, type: "screenshot_\(UUID())"), at: 0)
                                                         }
                                                     }
-                                                } catch {
+                                                }
+                                                catch {
                                                     logger.write(error.localizedDescription)
                                                     appViewModel.failureToastText = "Unable to get file: \(error)"
                                                     appViewModel.showFailureToast.toggle()
@@ -164,7 +166,7 @@ struct GameInputView: View {
                                                         .cornerRadius(25)
                                                     }
                                                 }
-                                                .animation(.easeInOut(duration: 0.1), value: hoveredScreenshot == screenshot)
+                                                .animation(.easeInOut(duration: 0.1), value: (hoveredScreenshot == screenshot))
                                                 .onHover { hover in
                                                     if hover {
                                                         hoveredScreenshot = screenshot
@@ -203,7 +205,7 @@ struct GameInputView: View {
                 HStack(spacing: 20) {
                     if let firstID = gameViewModel.selectedGameIDs.first {
                         if !isNewGame {
-                            Button(
+                            Button (
                                 action: {
                                     if let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
                                         gameViewModel.games[idx] = game
@@ -229,7 +231,7 @@ struct GameInputView: View {
                     }
                     Button(
                         action: {
-                            guard !game.name.isEmpty, !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
+                            guard !game.name.isEmpty && !game.name.trimmingCharacters(in: .whitespaces).isEmpty else {
                                 appViewModel.showFailureToast(String(localized: "toast_NoNameFailure"))
                                 dismiss()
                                 return
@@ -293,7 +295,7 @@ struct GameInputView: View {
         }, content: {
             ChooseGameView(supabaseGames: $fetchedGames, game: game, done: $chooseGameViewDone)
         })
-        .onAppear {
+        .onAppear() {
             if !isNewGame, gameViewModel.selectedGameIDs.count == 1, let firstID = gameViewModel.selectedGameIDs.first, let idx = gameViewModel.games.firstIndex(where: { $0.id == firstID }) {
                 let currentGame = gameViewModel.games[idx]
                 game = currentGame
@@ -307,7 +309,7 @@ struct GameInputView: View {
     
     private func binding(for key: String) -> Binding<String> {
         return Binding(get: {
-            self.game.metadata[key] ?? ""
+            return self.game.metadata[key] ?? ""
         }, set: {
             self.game.metadata[key] = $0
         })
