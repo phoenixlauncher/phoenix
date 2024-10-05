@@ -1,4 +1,4 @@
-![Phoenix's Banner](/Images/phoenix-banner-small.jpg)
+![Phoenix's Banner](/Images/branding/phoenix-banner-wide-small.png)
 
 <div align="center">
 
@@ -11,8 +11,8 @@
 
 Phoenix is a lightweight game launcher built in SwiftUI for macOS.
 
-![Screenshot of Phoenix in light mode](/Images/phoenix-light-triple-compressed.webp#gh-light-mode-only)
-![Screenshot of Phoenix in dark mode](/Images/phoenix-dark-triple-compressed.webp#gh-dark-mode-only)
+![Screenshot of Phoenix in light mode](/Images/screenshots/phoenix-light-triple-compressed.webp#gh-light-mode-only)
+![Screenshot of Phoenix in dark mode](/Images/screenshots/phoenix-dark-triple-compressed.webp#gh-dark-mode-only)
 
 ## Setup
 
