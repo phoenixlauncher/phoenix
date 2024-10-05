@@ -1,4 +1,4 @@
-![Phoenix's Banner](/Images/branding/phoenix-banner-wide-small.png)
+![Phoenix's Banner](/Images/branding/phoenix-banner-wide-small.png) 
 
 <div align="center">
 
